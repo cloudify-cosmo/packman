@@ -24,6 +24,12 @@ import codecs
 
 here = os.path.abspath(os.path.dirname(__file__))
 
+try:
+    from pypandoc import convert
+    read_md = lambda f: convert(f, 'rst')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_md = lambda f: open(f, 'r').read()
 
 def read(*parts):
     # intentionally *not* adding an encoding option to open
@@ -52,17 +58,16 @@ class Tox(TestCommand):
         errcode = tox.cmdline(self.test_args)
         sys.exit(errcode)
 
-
 setup(
     name='packman',
     version=find_version('packman', '__init__.py'),
-    # version='0.1.0',
     url='https://github.com/cloudify-cosmo/cloudify-packager',
     author='nir0s',
     author_email='nir36g@gmail.com',
     license='LICENSE',
     platforms='Ubuntu',
     description='Package Generator',
+    long_description=read_md('README.md'),
     packages=['packman'],
     entry_points={
         'console_scripts': [

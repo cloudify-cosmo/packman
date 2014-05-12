@@ -66,7 +66,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pkm.html">pkm - packman&#8217;s CLI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pkm.html#cli-functionality">CLI Functionality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pkm.html#installing-packman">Installing Packman</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="component_config.html">Components File Configuration</a><ul>
@@ -121,29 +120,27 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="pre-requirements">
 <h2>Pre-Requirements<a class="headerlink" href="#pre-requirements" title="Permalink to this headline">¶</a></h2>
-<p>packman uses the following 3rd party components:</p>
+<p><tt class="docutils literal"><span class="pre">packman</span></tt> uses the following 3rd party components:</p>
 <ul class="simple">
-<li>make -<em>to... make?</em></li>
+<li>make -<em>to... make?</em> (DEPRACATE PLEASE!)</li>
 <li>python-dev -<em>for pycrypto (ARG!)</em></li>
-<li>python-setuptools -<em>also to install packages on the packager server</em></li>
+<li>python-setuptools -<em>also to install packages on the ``packman`` instance</em></li>
 <li>rubygems -<em>to download ruby gems</em></li>
-<li>git -<em>to clone the packager repo</em></li>
+<li>git -<em>to clone the packager repo, and maybe more! (Chandler Bing)</em></li>
 <li>fpm -<em>main packaging framework</em></li>
-<li>ruby-build -<em>to compile ruby</em></li>
 <li>fabric -<em>to run it all</em></li>
 <li>pip &gt;1.5 -<em>to download python modules</em></li>
 <li>virtualenv -<em>to create python virtual environments.</em></li>
 <li>jinja2 -<em>to create scripts and configuration files from templates</em></li>
 <li>pika -<em>to send events to rabbitmq if it&#8217;s installed on the packaging server (for testing purposes)</em></li>
 </ul>
-<p>a bootstrap script is provided to install the above packages.</p>
+<p>a <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh">script</a> is provided to install the above packages.</p>
 </div>
 <div class="section" id="installing-packman">
 <h2>Installing Packman<a class="headerlink" href="#installing-packman" title="Permalink to this headline">¶</a></h2>
-<p>You Can Install Packman by running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip</span></tt>.
+<p>You can install <tt class="docutils literal"><span class="pre">packman</span></tt> by running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip</span></tt>.
 Of course, you must have the prereqs installed for packman to fully utilize its potential...
-The vagrantfile provided in the github repo can supply you with a fully working packman machine.</p>
-<p>ADD INSTALL-PACKMAN.SH file here to download....</p>
+The <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile">vagrantfile</a> provided in the github repo can supply you with a fully working <tt class="docutils literal"><span class="pre">packman</span></tt> machine.</p>
 </div>
 </div>
 

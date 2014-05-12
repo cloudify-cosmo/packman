@@ -1,5 +1,5 @@
 packman
-==============
+=======
 
 packman creates packages.
 
@@ -7,24 +7,18 @@ The project was initally invented to create Cloudify (http://getcloudify.org/) p
 
 You can write a dict containing your package's configuration and packman will retrieve the resources and create a package accordingly.
 
-### PreReqs
-for a list of reqreqs, please see the docs.
-
 ### Installation
-NOTE: will be published in PyPi soon... for now..
+
+#### PreReqs
+see http://packman.readthedocs.org/en/latest/installation.html#pre-requirements
+
+#### Installing Packman
 ```shell
 pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/develop.tar.gz
 ```
 
-NOTE: you may use the vagrant file to get a boxed up complete installation of packman..
-
-#### packages.py
-packages.py contains the full configuration for all components. when running pkm, you can explicitly specify a packages.py file path. if you don't, a packages.py in your
-current working directory is expected.
-by applying different files to different directories or different packages.py paths, you can logically separate components and automate the process.
-(something like... for file in files_list, pkm make --components_file=file.... you know...)
-
-the packages.py file must contain a variable called *PACKAGES*. *PACKAGES* must be a dict containing the configuration for all relevant components as sub-dicts.
+NOTE: you may use the vagrant file provided to get a boxed up complete installation of packman..
+https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh
 
 ### Usage
 packman supplies a cli called "pkm" to run get and pack tasks.
@@ -93,7 +87,7 @@ NOTE: here's an example of a packages.py file:
 - ***dst_package_type*** is... well.. you know.
 
 ##### Additional params you might use:
-see the docs
+http://packman.readthedocs.org/en/latest/component_config.html#the-configuration-parameters
 
 #### Component handling:
 running *pkm **get** --components riemann*, packman will use wget to download the list of source_urls (only one in this case)

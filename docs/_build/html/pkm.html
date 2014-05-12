@@ -66,7 +66,6 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">pkm - packman&#8217;s CLI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#cli-functionality">CLI Functionality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-packman">Installing Packman</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="component_config.html">Components File Configuration</a><ul>
@@ -123,13 +122,32 @@
 <h2>CLI Functionality<a class="headerlink" href="#cli-functionality" title="Permalink to this headline">¶</a></h2>
 <p>packman&#8217;s cli provides a comprehensive interface to packman&#8217;s features.
 you can do anything from using the basic implementation of the get and pack methods for all components in a components file and specifying a list of components for packman to iterate over to getting and packing a component (or all components) in a single command.</p>
+<p>running:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pkm</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
 </div>
-<div class="section" id="installing-packman">
-<h2>Installing Packman<a class="headerlink" href="#installing-packman" title="Permalink to this headline">¶</a></h2>
-<p>you Can Install Packman by running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip</span></tt>.
-Of course, you must have the prereqs installed for packman to fully utilize its potential...
-The vagrantfile provided in the github repo can supply you with a fully working packman machine.</p>
-<p>ADD INSTALL-PACKMAN.SH file here to download....</p>
+<p>yeilds the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>Script to run packman via command line
+
+Usage:
+    pkm get [--components=&lt;list&gt; --components_file=&lt;path&gt;] [--verbose]
+    pkm pack [--components=&lt;list&gt; --components_file=&lt;path&gt;] [--verbose]
+    pkm make [--components=&lt;list&gt; --components_file=&lt;path&gt;] [--verbose]
+    pkm --version
+
+Arguments:
+    pack     Packs &quot;Component&quot; configured in packages.py
+    get      Gets &quot;Component&quot; configured in packages.py
+    make     Gets AND (yeah!) Packs.. don&#39;t ya kno!
+
+Options:
+    -h --help                   Show this screen.
+    -c --components=&lt;list&gt;      Comma Separated list of component names (if ommited, will run on all components)
+    --components_file=&lt;path&gt;
+    --verbose                   a LOT of output (NOT YET IMPLEMENTED)
+    -v --version                Display current version of sandman and exit
+</pre></div>
+</div>
 </div>
 </div>
 

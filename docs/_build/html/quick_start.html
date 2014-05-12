@@ -121,32 +121,31 @@
 <div class="section" id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
 <ul>
-<li><p class="first">install vagrant</p>
+<li><p class="first">install <a class="reference external" href="http://www.vagrantup.com/downloads.html">Vagrant</a>.</p>
 </li>
-<li><p class="first">install virtualbox</p>
+<li><p class="first">install <a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a>.</p>
 </li>
-<li><dl class="first docutils">
-<dt>clone the github repo::</dt>
-<dd><p class="first last">git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:cloudify-cosmo/cloudify-packager.git</p>
-</dd>
-</dl>
+<li><p class="first">clone the github repo:</p>
+<div class="highlight-python"><div class="highlight"><pre>git clone git@github.com:cloudify-cosmo/cloudify-packager.git
+</pre></div>
+</div>
 </li>
 <li><p class="first">go to the vagrant directory</p>
 </li>
-<li><dl class="first docutils">
-<dt>run::</dt>
-<dd><p class="first last">vagrant up packman
+<li><p class="first">run:</p>
+<div class="highlight-python"><div class="highlight"><pre>vagrant up packman
 vagrant ssh packman
 cd ~/examples
 sudo su
-pkm get
-pkm pack</p>
-</dd>
-</dl>
+pkm make
+</pre></div>
+</div>
+</li>
+<li><p class="first">review the retrieved resources in /sources</p>
+</li>
+<li><p class="first">review the created deb files in /packages</p>
 </li>
 </ul>
-<p>review the retrieved resources in /sources
-review the created deb files in /packages</p>
 </div>
 
 

@@ -12,4 +12,4 @@ let's look at the example:
 - this will override the get method when running ``pkm get -c riemann``
 - same goes for the ``pack`` method.
 
-for an example, see: #GITHUB GET FILE#
+for an example, see an example `get <https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/get.py>`_ file.

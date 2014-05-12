@@ -3,7 +3,8 @@ Components File Configuration
 =============================
 
 Configuration of all components is done via a python file containing a single dict with multiple (per component) sub-dicts.
-We will call it the "components file".
+We will call it the ``components file``.
+An example `components <https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/packages.py>`_ file can get your started...
 
 A Component's Structure
 -----------------------
@@ -35,4 +36,4 @@ The Configuration Parameters
 ----------------------------
 By default, a component can be comprised of a set of parameters, all of which (names) are configurable in the definitions.py file (This is currently only available by editing the module directly). The file is not currently directly available to the user (as most of the parameters names are self-explanatory) but at a future version, a user will be able to override the parameter names by supplying an overriding definitions.py file (to override all or some of the parameter names).
 
-TODO: ADD A LINK TO THE DEFINITIONS FILE.
+For the complete list of params, see the `defintions <https://github.com/cloudify-cosmo/packman/blob/develop/packman/definitions.py>`_ file.

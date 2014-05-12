@@ -66,7 +66,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pkm.html">pkm - packman&#8217;s CLI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pkm.html#cli-functionality">CLI Functionality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pkm.html#installing-packman">Installing Packman</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Components File Configuration</a><ul>
@@ -120,7 +119,8 @@
   <div class="section" id="components-file-configuration">
 <h1>Components File Configuration<a class="headerlink" href="#components-file-configuration" title="Permalink to this headline">¶</a></h1>
 <p>Configuration of all components is done via a python file containing a single dict with multiple (per component) sub-dicts.
-We will call it the &#8220;components file&#8221;.</p>
+We will call it the <tt class="docutils literal"><span class="pre">components</span> <span class="pre">file</span></tt>.
+An example <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/packages.py">components</a> file can get your started...</p>
 <div class="section" id="a-component-s-structure">
 <h2>A Component&#8217;s Structure<a class="headerlink" href="#a-component-s-structure" title="Permalink to this headline">¶</a></h2>
 <p>A component is comprised of a set of key:value pairs.
@@ -150,7 +150,7 @@ Obviously, after processing, a component becomes a package...</p>
 <div class="section" id="the-configuration-parameters">
 <h2>The Configuration Parameters<a class="headerlink" href="#the-configuration-parameters" title="Permalink to this headline">¶</a></h2>
 <p>By default, a component can be comprised of a set of parameters, all of which (names) are configurable in the definitions.py file (This is currently only available by editing the module directly). The file is not currently directly available to the user (as most of the parameters names are self-explanatory) but at a future version, a user will be able to override the parameter names by supplying an overriding definitions.py file (to override all or some of the parameter names).</p>
-<p>TODO: ADD A LINK TO THE DEFINITIONS FILE.</p>
+<p>For the complete list of params, see the <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/packman/definitions.py">defintions</a> file.</p>
 </div>
 </div>
 
