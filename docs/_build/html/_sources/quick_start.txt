@@ -1,5 +1,3 @@
-quick_start.rst
-
 ============
 Quick Start
 ============
