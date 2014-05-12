@@ -17,9 +17,7 @@
 from packman.packman import init_logger
 from packman.packman import get_component_config as get_conf
 from packman.packman import CommonHandler
-from packman.packman import PythonHandler
 from packman.packman import DownloadsHandler
-from packman.packman import AptHandler
 from packman.packman import do
 
 from fabric.api import *  # NOQA
