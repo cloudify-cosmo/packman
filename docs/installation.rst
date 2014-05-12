@@ -18,6 +18,7 @@ packman uses the following 3rd party components:
 - virtualenv -*to create python virtual environments.*
 - jinja2 -*to create scripts and configuration files from templates*
 - pika -*to send events to rabbitmq if it's installed on the packaging server (for testing purposes)*
+
 a bootstrap script is provided to install the above packages.
 
 Installing Packman
