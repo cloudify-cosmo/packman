@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; packman 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="packman 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="Components File Configuration" href="component_config.html"/>
+        <link rel="prev" title="Quick Start" href="quick_start.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> packman</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requirements">Pre-Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-packman">Installing Packman</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="component_config.html">Components File Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="component_config.html#a-component-s-structure">A Component&#8217;s Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_config.html#the-configuration-parameters">The Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Packman&#8217;s API</a><ul class="simple">
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">packman</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pre-requirements">
+<h2>Pre-Requirements<a class="headerlink" href="#pre-requirements" title="Permalink to this headline">¶</a></h2>
+<p>packman uses the following 3rd party components:</p>
+<ul class="simple">
+<li>make -<em>to... make?</em></li>
+<li>python-dev -<em>for pycrypto (ARG!)</em></li>
+<li>python-setuptools -<em>also to install packages on the packager server</em></li>
+<li>rubygems -<em>to download ruby gems</em></li>
+<li>git -<em>to clone the packager repo</em></li>
+<li>fpm -<em>main packaging framework</em></li>
+<li>ruby-build -<em>to compile ruby</em></li>
+<li>fabric -<em>to run it all</em></li>
+<li>pip &gt;1.5 -<em>to download python modules</em></li>
+<li>virtualenv -<em>to create python virtual environments.</em></li>
+<li>jinja2 -<em>to create scripts and configuration files from templates</em></li>
+<li>pika -<em>to send events to rabbitmq if it&#8217;s installed on the packaging server (for testing purposes)</em></li>
+</ul>
+<p>a bootstrap script is provided to install the above packages.</p>
+</div>
+<div class="section" id="installing-packman">
+<h2>Installing Packman<a class="headerlink" href="#installing-packman" title="Permalink to this headline">¶</a></h2>
+<p>You Can Install Packman by running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip</span></tt>.
+Of course, you must have the prereqs installed for packman to fully utilize its potential...
+The vagrantfile provided in the github repo can supply you with a fully working packman machine.</p>
+<p>ADD INSTALL-PACKMAN.SH file here to download....</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="component_config.html" class="btn btn-neutral float-right" title="Components File Configuration"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quick_start.html" class="btn btn-neutral" title="Quick Start"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, nir0s.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

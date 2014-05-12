@@ -1,0 +1,1796 @@
+2014-05-11 08:45:49,671 DEBUG - retrieving configuration for nodejs
+2014-05-11 08:45:49,671 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 08:45:49,672 DEBUG - nodejs config retrieved successfully
+2014-05-11 08:45:49,673 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 08:45:49,673 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 08:45:49,674 WARNING - dir doesn't exist
+2014-05-11 08:45:49,674 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 08:45:49,675 DEBUG - /cloudify-components/nodejs//archives does not exist
+2014-05-11 08:45:49,676 DEBUG - creating directory /cloudify-components/nodejs//archives
+2014-05-11 08:45:49,701 DEBUG - successfully executed: mkdir -p /cloudify-components/nodejs//archives
+2014-05-11 08:45:49,702 DEBUG - checking if /packages/nodejs exists
+2014-05-11 08:45:49,704 DEBUG - /packages/nodejs does not exist
+2014-05-11 08:45:49,705 DEBUG - creating directory /packages/nodejs
+2014-05-11 08:45:49,726 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 08:57:46,728 DEBUG - retrieving configuration for nodejs
+2014-05-11 08:57:46,730 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 08:57:46,730 DEBUG - nodejs config retrieved successfully
+2014-05-11 08:57:46,732 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 08:57:46,732 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 08:57:46,747 DEBUG - successfully executed: rm -rf /packages/nodejs
+2014-05-11 08:57:46,748 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 08:57:46,749 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 08:57:46,750 DEBUG - checking if /packages/nodejs exists
+2014-05-11 08:57:46,750 DEBUG - /packages/nodejs does not exist
+2014-05-11 08:57:46,751 DEBUG - creating directory /packages/nodejs
+2014-05-11 08:57:46,762 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 08:57:46,764 DEBUG - installing python-software-properties
+2014-05-11 08:57:51,099 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 08:57:51,101 DEBUG - installing g++
+2014-05-11 08:57:51,758 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 08:57:51,761 DEBUG - installing make
+2014-05-11 08:57:52,371 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 08:57:52,372 DEBUG - installing python
+2014-05-11 08:57:53,021 DEBUG - successfully executed: sudo apt-get -y install python
+2014-05-11 08:57:53,023 DEBUG - adding ppa repository ['ppa:chris-lea/node.js']
+2014-05-11 08:57:53,232 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (1/2)
+2014-05-11 08:57:56,326 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (2/2)
+2014-05-11 08:57:59,331 ERROR - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] even after 1 attempts with output:
+2014-05-11 08:59:35,038 DEBUG - retrieving configuration for nodejs
+2014-05-11 08:59:35,038 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 08:59:35,039 DEBUG - nodejs config retrieved successfully
+2014-05-11 08:59:35,041 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 08:59:35,043 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 08:59:35,060 DEBUG - successfully executed: rm -rf /packages/nodejs
+2014-05-11 08:59:35,061 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 08:59:35,062 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 08:59:35,062 DEBUG - checking if /packages/nodejs exists
+2014-05-11 08:59:35,063 DEBUG - /packages/nodejs does not exist
+2014-05-11 08:59:35,064 DEBUG - creating directory /packages/nodejs
+2014-05-11 08:59:35,074 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 08:59:35,076 DEBUG - installing python-software-properties
+2014-05-11 08:59:35,678 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 08:59:35,681 DEBUG - installing g++
+2014-05-11 08:59:36,273 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 08:59:36,276 DEBUG - installing make
+2014-05-11 08:59:36,923 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 08:59:36,925 DEBUG - installing python
+2014-05-11 08:59:37,530 DEBUG - successfully executed: sudo apt-get -y install python
+2014-05-11 08:59:37,532 DEBUG - adding ppa repository ['ppa:chris-lea/node.js']
+2014-05-11 08:59:37,613 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (1/2)
+2014-05-11 08:59:40,724 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (2/2)
+2014-05-11 08:59:43,729 ERROR - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] even after 1 attempts with output:
+2014-05-11 08:59:43,731 DEBUG - downloading nodejs to /packages/nodejs
+2014-05-11 09:00:00,359 DEBUG - retrieving configuration for nodejs
+2014-05-11 09:00:00,360 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:00:00,361 DEBUG - nodejs config retrieved successfully
+2014-05-11 09:00:00,361 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:00:00,362 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 09:00:00,387 DEBUG - successfully executed: rm -rf /packages/nodejs
+2014-05-11 09:00:00,388 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 09:00:00,389 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 09:00:00,390 DEBUG - checking if /packages/nodejs exists
+2014-05-11 09:00:00,390 DEBUG - /packages/nodejs does not exist
+2014-05-11 09:00:00,391 DEBUG - creating directory /packages/nodejs
+2014-05-11 09:00:00,405 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 09:00:00,407 DEBUG - installing python-software-properties
+2014-05-11 09:00:01,007 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 09:00:01,009 DEBUG - installing g++
+2014-05-11 09:00:01,616 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 09:00:01,618 DEBUG - installing make
+2014-05-11 09:00:02,219 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 09:00:02,220 DEBUG - installing python
+2014-05-11 09:00:02,866 DEBUG - successfully executed: sudo apt-get -y install python
+2014-05-11 09:00:02,867 DEBUG - adding ppa repository ['ppa:chris-lea/node.js']
+2014-05-11 09:00:03,092 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (1/2)
+2014-05-11 09:00:06,277 WARNING - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] -retrying (2/2)
+2014-05-11 09:00:09,284 ERROR - failed to run command: add-apt-repository -y ['ppa:chris-lea/node.js'] even after 1 attempts with output:
+2014-05-11 09:00:09,286 DEBUG - downloading nodejs to /packages/nodejs
+2014-05-11 09:02:00,133 DEBUG - retrieving configuration for nodejs
+2014-05-11 09:02:00,134 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:02:00,134 DEBUG - nodejs config retrieved successfully
+2014-05-11 09:02:00,135 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:02:00,135 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 09:02:00,160 DEBUG - successfully executed: rm -rf /packages/nodejs
+2014-05-11 09:02:00,161 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 09:02:00,162 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 09:02:00,162 DEBUG - checking if /packages/nodejs exists
+2014-05-11 09:02:00,163 DEBUG - /packages/nodejs does not exist
+2014-05-11 09:02:00,163 DEBUG - creating directory /packages/nodejs
+2014-05-11 09:02:00,174 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 09:02:00,175 DEBUG - installing python-software-properties
+2014-05-11 09:02:00,792 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 09:02:00,797 DEBUG - installing g++
+2014-05-11 09:02:01,392 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 09:02:01,393 DEBUG - installing make
+2014-05-11 09:02:02,044 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 09:02:02,046 DEBUG - installing python
+2014-05-11 09:02:02,709 DEBUG - successfully executed: sudo apt-get -y install python
+2014-05-11 09:02:02,710 DEBUG - adding ppa repository ppa:chris-lea/node.js
+2014-05-11 09:02:03,971 DEBUG - successfully executed: add-apt-repository -y ppa:chris-lea/node.js
+2014-05-11 09:02:03,972 DEBUG - downloading nodejs to /packages/nodejs
+2014-05-11 09:02:42,790 DEBUG - retrieving configuration for nodejs
+2014-05-11 09:02:42,791 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:02:42,792 DEBUG - nodejs config retrieved successfully
+2014-05-11 09:02:42,792 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:02:42,793 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 09:02:42,817 DEBUG - successfully executed: rm -rf /packages/nodejs
+2014-05-11 09:02:42,819 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 09:02:42,819 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 09:02:42,820 DEBUG - checking if /packages/nodejs exists
+2014-05-11 09:02:42,820 DEBUG - /packages/nodejs does not exist
+2014-05-11 09:02:42,820 DEBUG - creating directory /packages/nodejs
+2014-05-11 09:02:42,831 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 09:02:42,832 DEBUG - installing python-software-properties
+2014-05-11 09:02:45,731 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 09:02:45,734 DEBUG - installing g++
+2014-05-11 09:02:46,368 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 09:02:46,371 DEBUG - installing make
+2014-05-11 09:02:46,975 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 09:02:46,977 DEBUG - adding ppa repository ppa:chris-lea/node.js
+2014-05-11 09:02:48,089 DEBUG - successfully executed: add-apt-repository -y ppa:chris-lea/node.js
+2014-05-11 09:02:48,095 DEBUG - downloading nodejs to /packages/nodejs
+2014-05-11 09:02:59,892 DEBUG - successfully executed: sudo apt-get -y install nodejs -d -o=dir::cache=/packages/nodejs
+2014-05-11 09:02:59,895 DEBUG - retrieving configuration for manager
+2014-05-11 09:02:59,896 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:02:59,898 DEBUG - manager config retrieved successfully
+2014-05-11 09:02:59,898 DEBUG - attempting to remove directory /opt/manager
+2014-05-11 09:02:59,899 WARNING - dir doesn't exist
+2014-05-11 09:02:59,900 DEBUG - creating package directories
+2014-05-11 09:02:59,900 DEBUG - creating directory /opt/manager/archives
+2014-05-11 09:02:59,916 DEBUG - successfully executed: mkdir -p /opt/manager/archives
+2014-05-11 09:02:59,918 DEBUG - creating directory /cloudify-core/manager/
+2014-05-11 09:02:59,935 DEBUG - successfully executed: mkdir -p /cloudify-core/manager/
+2014-05-11 09:02:59,936 DEBUG - creating virtualenv in /opt/manager
+2014-05-11 09:03:01,392 DEBUG - successfully executed: virtualenv /opt/manager
+2014-05-11 09:03:01,394 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 09:03:03,513 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -O /opt/manager/manager.tar.gz
+2014-05-11 09:03:03,516 DEBUG - untar-ing /opt/manager/manager.tar.gz
+2014-05-11 09:03:03,604 DEBUG - successfully executed: tar -C /opt/manager -xzvf /opt/manager/manager.tar.gz
+2014-05-11 09:03:03,606 DEBUG - creating directory /opt/manager/resources
+2014-05-11 09:03:03,618 DEBUG - successfully executed: mkdir -p /opt/manager/resources
+2014-05-11 09:03:03,619 DEBUG - copying /opt/manager/cloudify-manager-develop/resources/rest-service/cloudify/ to /opt/manager/resources
+2014-05-11 09:03:03,633 DEBUG - successfully executed: cp -R /opt/manager/cloudify-manager-develop/resources/rest-service/cloudify/ /opt/manager/resources
+2014-05-11 09:03:03,635 DEBUG - installing module /opt/manager/cloudify-manager-develop/rest-service/
+2014-05-11 09:03:39,794 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/rest-service/ --process-dependency-links
+2014-05-11 09:03:39,796 DEBUG - installing module /opt/manager/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 09:04:15,744 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/plugins/agent-installer/ --process-dependency-links
+2014-05-11 09:04:15,746 DEBUG - installing module /opt/manager/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 09:04:16,324 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/plugins/plugin-installer/ --process-dependency-links
+2014-05-11 09:04:16,327 DEBUG - retrieving configuration for curl
+2014-05-11 09:04:16,327 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:04:16,328 DEBUG - curl config retrieved successfully
+2014-05-11 09:04:16,329 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:04:16,330 DEBUG - attempting to remove directory /packages/curl
+2014-05-11 09:04:16,331 WARNING - dir doesn't exist
+2014-05-11 09:04:16,332 DEBUG - checking if /cloudify-components/curl//archives exists
+2014-05-11 09:04:16,335 DEBUG - /cloudify-components/curl//archives does not exist
+2014-05-11 09:04:16,336 DEBUG - creating directory /cloudify-components/curl//archives
+2014-05-11 09:04:16,351 DEBUG - successfully executed: mkdir -p /cloudify-components/curl//archives
+2014-05-11 09:04:16,353 DEBUG - checking if /packages/curl exists
+2014-05-11 09:04:16,354 DEBUG - /packages/curl does not exist
+2014-05-11 09:04:16,355 DEBUG - creating directory /packages/curl
+2014-05-11 09:04:16,370 DEBUG - successfully executed: mkdir -p /packages/curl
+2014-05-11 09:04:16,371 DEBUG - downloading curl to /packages/curl
+2014-05-11 09:04:20,607 DEBUG - successfully executed: sudo apt-get -y install curl -d -o=dir::cache=/packages/curl
+2014-05-11 09:04:20,610 DEBUG - downloading libcurl3 to /packages/curl
+2014-05-11 09:04:21,254 DEBUG - successfully executed: sudo apt-get -y install libcurl3 -d -o=dir::cache=/packages/curl
+2014-05-11 09:04:21,255 DEBUG - retrieving configuration for virtualenv
+2014-05-11 09:04:21,256 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:04:21,256 DEBUG - virtualenv config retrieved successfully
+2014-05-11 09:04:21,258 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:04:21,259 DEBUG - attempting to remove directory /packages/virtualenv
+2014-05-11 09:04:21,260 WARNING - dir doesn't exist
+2014-05-11 09:04:21,261 DEBUG - checking if /cloudify-components/virtualenv//archives exists
+2014-05-11 09:04:21,263 DEBUG - /cloudify-components/virtualenv//archives does not exist
+2014-05-11 09:04:21,264 DEBUG - creating directory /cloudify-components/virtualenv//archives
+2014-05-11 09:04:21,283 DEBUG - successfully executed: mkdir -p /cloudify-components/virtualenv//archives
+2014-05-11 09:04:21,284 DEBUG - checking if /packages/virtualenv exists
+2014-05-11 09:04:21,286 DEBUG - /packages/virtualenv does not exist
+2014-05-11 09:04:21,289 DEBUG - creating directory /packages/virtualenv
+2014-05-11 09:04:21,302 DEBUG - successfully executed: mkdir -p /packages/virtualenv
+2014-05-11 09:04:21,304 DEBUG - downloading module virtualenv==1.11.4
+2014-05-11 09:04:23,546 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/packages/virtualenv/" virtualenv==1.11.4
+2014-05-11 09:04:23,547 DEBUG - retrieving configuration for windows-agent
+2014-05-11 09:04:23,548 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:04:23,548 DEBUG - windows-agent config retrieved successfully
+2014-05-11 09:04:23,549 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:04:23,550 DEBUG - attempting to remove directory /windows-agent/env
+2014-05-11 09:04:23,550 WARNING - dir doesn't exist
+2014-05-11 09:04:23,551 DEBUG - checking if /agents/windows-agent/archives exists
+2014-05-11 09:04:23,551 DEBUG - /agents/windows-agent/archives does not exist
+2014-05-11 09:04:23,552 DEBUG - creating directory /agents/windows-agent/archives
+2014-05-11 09:04:23,569 DEBUG - successfully executed: mkdir -p /agents/windows-agent/archives
+2014-05-11 09:04:23,571 DEBUG - checking if /windows-agent/env exists
+2014-05-11 09:04:23,573 DEBUG - /windows-agent/env does not exist
+2014-05-11 09:04:23,574 DEBUG - creating directory /windows-agent/env
+2014-05-11 09:04:23,591 DEBUG - successfully executed: mkdir -p /windows-agent/env
+2014-05-11 09:04:23,593 DEBUG - downloading ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz']
+2014-05-11 09:04:23,613 WARNING - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /windows-agent/env -retrying (1/2)
+2014-05-11 09:04:26,638 WARNING - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /windows-agent/env -retrying (2/2)
+2014-05-11 09:04:29,643 ERROR - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /windows-agent/env even after 1 attempts with output:
+2014-05-11 09:04:29,645 DEBUG - downloading module billiard==2.7.3.28
+2014-05-11 09:04:31,543 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" billiard==2.7.3.28
+2014-05-11 09:04:31,544 DEBUG - downloading module celery==3.0.24
+2014-05-11 09:04:36,685 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" celery==3.0.24
+2014-05-11 09:04:36,689 DEBUG - downloading module bernhard
+2014-05-11 09:04:40,196 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" bernhard
+2014-05-11 09:04:40,198 DEBUG - downloading module pika
+2014-05-11 09:04:41,220 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" pika
+2014-05-11 09:04:41,223 DEBUG - downloading module /windows-agent/env/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 09:04:41,501 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (1/2)
+2014-05-11 09:04:44,743 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (2/2)
+2014-05-11 09:04:47,748 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/agent-installer/ even after 1 attempts with output:
+2014-05-11 09:04:47,749 DEBUG - downloading module /windows-agent/env/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 09:04:48,015 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (1/2)
+2014-05-11 09:04:51,286 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (2/2)
+2014-05-11 09:04:54,292 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" /windows-agent/env/cloudify-manager-develop/plugins/plugin-installer/ even after 1 attempts with output:
+2014-05-11 09:04:54,293 DEBUG - downloading module https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 09:05:14,581 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/windows-agent/env/" https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 09:05:14,585 DEBUG - retrieving configuration for ubuntu-agent
+2014-05-11 09:05:14,587 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:05:14,587 DEBUG - ubuntu-agent config retrieved successfully
+2014-05-11 09:05:14,588 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:05:14,589 DEBUG - attempting to remove directory /agents/linux-agent
+2014-05-11 09:05:14,589 WARNING - dir doesn't exist
+2014-05-11 09:05:14,590 DEBUG - checking if /cloudify/archives exists
+2014-05-11 09:05:14,590 DEBUG - /cloudify/archives does not exist
+2014-05-11 09:05:14,591 DEBUG - creating directory /cloudify/archives
+2014-05-11 09:05:14,618 DEBUG - successfully executed: mkdir -p /cloudify/archives
+2014-05-11 09:05:14,620 DEBUG - checking if /agents/linux-agent exists
+2014-05-11 09:05:14,622 DEBUG - /agents/linux-agent does not exist
+2014-05-11 09:05:14,624 DEBUG - creating directory /agents/linux-agent
+2014-05-11 09:05:14,638 DEBUG - successfully executed: mkdir -p /agents/linux-agent
+2014-05-11 09:05:14,640 DEBUG - retrieving configuration for make
+2014-05-11 09:05:14,641 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:05:14,642 DEBUG - make config retrieved successfully
+2014-05-11 09:05:14,645 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:05:14,648 DEBUG - attempting to remove directory /packages/make
+2014-05-11 09:05:14,649 WARNING - dir doesn't exist
+2014-05-11 09:05:14,650 DEBUG - checking if /cloudify-components/make//archives exists
+2014-05-11 09:05:14,651 DEBUG - /cloudify-components/make//archives does not exist
+2014-05-11 09:05:14,651 DEBUG - creating directory /cloudify-components/make//archives
+2014-05-11 09:05:14,662 DEBUG - successfully executed: mkdir -p /cloudify-components/make//archives
+2014-05-11 09:05:14,663 DEBUG - checking if /packages/make exists
+2014-05-11 09:05:14,663 DEBUG - /packages/make does not exist
+2014-05-11 09:05:14,664 DEBUG - creating directory /packages/make
+2014-05-11 09:05:14,674 DEBUG - successfully executed: mkdir -p /packages/make
+2014-05-11 09:05:14,677 DEBUG - downloading make to /packages/make
+2014-05-11 09:05:17,568 DEBUG - successfully executed: sudo apt-get -y install make -d -o=dir::cache=/packages/make
+2014-05-11 09:05:17,570 DEBUG - retrieving configuration for kibana3
+2014-05-11 09:05:17,570 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:05:17,572 DEBUG - kibana3 config retrieved successfully
+2014-05-11 09:05:17,574 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:05:17,575 DEBUG - attempting to remove directory /packages/kibana3
+2014-05-11 09:05:17,575 WARNING - dir doesn't exist
+2014-05-11 09:05:17,576 DEBUG - checking if /cloudify-components/kibana3//archives exists
+2014-05-11 09:05:17,577 DEBUG - /cloudify-components/kibana3//archives does not exist
+2014-05-11 09:05:17,577 DEBUG - creating directory /cloudify-components/kibana3//archives
+2014-05-11 09:05:17,588 DEBUG - successfully executed: mkdir -p /cloudify-components/kibana3//archives
+2014-05-11 09:05:17,592 DEBUG - checking if /packages/kibana3 exists
+2014-05-11 09:05:17,592 DEBUG - /packages/kibana3 does not exist
+2014-05-11 09:05:17,593 DEBUG - creating directory /packages/kibana3
+2014-05-11 09:05:17,603 DEBUG - successfully executed: mkdir -p /packages/kibana3
+2014-05-11 09:05:17,604 DEBUG - downloading ['https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz']
+2014-05-11 09:05:17,619 WARNING - failed to run command: wget ['https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz'] --timeout=30 -P /packages/kibana3 -retrying (1/2)
+2014-05-11 09:05:20,641 WARNING - failed to run command: wget ['https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz'] --timeout=30 -P /packages/kibana3 -retrying (2/2)
+2014-05-11 09:05:23,646 ERROR - failed to run command: wget ['https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz'] --timeout=30 -P /packages/kibana3 even after 1 attempts with output:
+2014-05-11 09:05:23,651 DEBUG - retrieving configuration for celery
+2014-05-11 09:05:23,654 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:05:23,657 DEBUG - celery config retrieved successfully
+2014-05-11 09:05:23,659 DEBUG - attempting to remove directory /opt/celery/cloudify.management__worker/env
+2014-05-11 09:05:23,660 WARNING - dir doesn't exist
+2014-05-11 09:05:23,660 DEBUG - creating package directories
+2014-05-11 09:05:23,662 DEBUG - creating directory /opt/celery/cloudify.management__worker/env/archives
+2014-05-11 09:05:23,675 DEBUG - successfully executed: mkdir -p /opt/celery/cloudify.management__worker/env/archives
+2014-05-11 09:05:23,676 DEBUG - creating directory /cloudify-core/celery/
+2014-05-11 09:05:23,698 DEBUG - successfully executed: mkdir -p /cloudify-core/celery/
+2014-05-11 09:05:23,702 DEBUG - creating virtualenv in /opt/celery/cloudify.management__worker/env
+2014-05-11 09:05:25,186 DEBUG - successfully executed: virtualenv /opt/celery/cloudify.management__worker/env
+2014-05-11 09:05:25,187 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 09:05:27,532 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -O /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 09:05:27,535 DEBUG - untar-ing /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 09:05:27,604 DEBUG - successfully executed: tar -C /opt/celery/cloudify.management__worker/env -xzvf /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 09:05:27,605 DEBUG - installing module billiard==2.7.3.28
+2014-05-11 09:05:29,790 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install billiard==2.7.3.28 --process-dependency-links
+2014-05-11 09:05:29,791 DEBUG - installing module celery==3.0.24
+2014-05-11 09:05:36,844 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install celery==3.0.24 --process-dependency-links
+2014-05-11 09:05:36,846 DEBUG - installing module bernhard
+2014-05-11 09:05:38,708 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install bernhard --process-dependency-links
+2014-05-11 09:05:38,710 DEBUG - installing module pika
+2014-05-11 09:05:40,009 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install pika --process-dependency-links
+2014-05-11 09:05:40,011 DEBUG - installing module /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 09:06:10,894 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/agent-installer/ --process-dependency-links
+2014-05-11 09:06:10,895 DEBUG - installing module /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 09:06:11,507 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/plugin-installer/ --process-dependency-links
+2014-05-11 09:06:11,509 DEBUG - installing module https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 09:06:15,017 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz --process-dependency-links
+2014-05-11 09:06:15,019 DEBUG - retrieving configuration for linux-agent
+2014-05-11 09:06:15,020 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:06:15,020 DEBUG - linux-agent config retrieved successfully
+2014-05-11 09:06:15,022 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:06:15,023 DEBUG - attempting to remove directory /linux-agent/env
+2014-05-11 09:06:15,025 WARNING - dir doesn't exist
+2014-05-11 09:06:15,026 DEBUG - checking if /agents/linux-agent/archives exists
+2014-05-11 09:06:15,027 DEBUG - /agents/linux-agent/archives does not exist
+2014-05-11 09:06:15,031 DEBUG - creating directory /agents/linux-agent/archives
+2014-05-11 09:06:15,041 DEBUG - successfully executed: mkdir -p /agents/linux-agent/archives
+2014-05-11 09:06:15,042 DEBUG - checking if /linux-agent/env exists
+2014-05-11 09:06:15,043 DEBUG - /linux-agent/env does not exist
+2014-05-11 09:06:15,043 DEBUG - creating directory /linux-agent/env
+2014-05-11 09:06:15,057 DEBUG - successfully executed: mkdir -p /linux-agent/env
+2014-05-11 09:06:15,058 DEBUG - downloading ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz']
+2014-05-11 09:06:15,073 WARNING - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /linux-agent/env -retrying (1/2)
+2014-05-11 09:06:18,099 WARNING - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /linux-agent/env -retrying (2/2)
+2014-05-11 09:06:21,104 ERROR - failed to run command: wget ['https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz'] --timeout=30 -P /linux-agent/env even after 1 attempts with output:
+2014-05-11 09:06:21,106 DEBUG - downloading module billiard==2.7.3.28
+2014-05-11 09:06:22,749 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" billiard==2.7.3.28
+2014-05-11 09:06:22,751 DEBUG - downloading module celery==3.0.24
+2014-05-11 09:06:28,021 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" celery==3.0.24
+2014-05-11 09:06:28,023 DEBUG - downloading module bernhard
+2014-05-11 09:06:31,732 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" bernhard
+2014-05-11 09:06:31,733 DEBUG - downloading module pika
+2014-05-11 09:06:32,855 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" pika
+2014-05-11 09:06:32,856 DEBUG - downloading module /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 09:06:33,113 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (1/2)
+2014-05-11 09:06:36,376 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (2/2)
+2014-05-11 09:06:39,383 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ even after 1 attempts with output:
+2014-05-11 09:06:39,384 DEBUG - downloading module /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 09:06:39,632 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (1/2)
+2014-05-11 09:06:42,874 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (2/2)
+2014-05-11 09:06:45,879 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ even after 1 attempts with output:
+2014-05-11 09:06:45,882 DEBUG - downloading module https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 09:07:05,778 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 09:07:05,787 DEBUG - retrieving configuration for elasticsearch
+2014-05-11 09:07:05,787 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:07:05,788 DEBUG - elasticsearch config retrieved successfully
+2014-05-11 09:07:05,789 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:07:05,789 DEBUG - attempting to remove directory /packages/elasticsearch
+2014-05-11 09:07:05,790 WARNING - dir doesn't exist
+2014-05-11 09:07:05,792 DEBUG - checking if /cloudify-components/elasticsearch//archives exists
+2014-05-11 09:07:05,793 DEBUG - /cloudify-components/elasticsearch//archives does not exist
+2014-05-11 09:07:05,793 DEBUG - creating directory /cloudify-components/elasticsearch//archives
+2014-05-11 09:07:05,806 DEBUG - successfully executed: mkdir -p /cloudify-components/elasticsearch//archives
+2014-05-11 09:07:05,807 DEBUG - checking if /packages/elasticsearch exists
+2014-05-11 09:07:05,808 DEBUG - /packages/elasticsearch does not exist
+2014-05-11 09:07:05,809 DEBUG - creating directory /packages/elasticsearch
+2014-05-11 09:07:05,824 DEBUG - successfully executed: mkdir -p /packages/elasticsearch
+2014-05-11 09:07:05,825 DEBUG - downloading ['https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz']
+2014-05-11 09:07:05,844 WARNING - failed to run command: wget ['https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz'] --timeout=30 -P /packages/elasticsearch -retrying (1/2)
+2014-05-11 09:07:08,874 WARNING - failed to run command: wget ['https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz'] --timeout=30 -P /packages/elasticsearch -retrying (2/2)
+2014-05-11 09:07:11,879 ERROR - failed to run command: wget ['https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz'] --timeout=30 -P /packages/elasticsearch even after 1 attempts with output:
+2014-05-11 09:07:11,882 DEBUG - retrieving configuration for cloudify-core
+2014-05-11 09:07:11,883 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:07:11,884 DEBUG - cloudify-core config retrieved successfully
+2014-05-11 09:07:11,885 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:07:11,886 DEBUG - attempting to remove directory /cloudify-core
+2014-05-11 09:07:11,901 DEBUG - successfully executed: rm -rf /cloudify-core
+2014-05-11 09:07:11,902 DEBUG - checking if /cloudify/archives exists
+2014-05-11 09:07:11,903 DEBUG - /cloudify/archives exists
+2014-05-11 09:07:11,904 DEBUG - checking if /cloudify-core exists
+2014-05-11 09:07:11,904 DEBUG - /cloudify-core does not exist
+2014-05-11 09:07:11,905 DEBUG - creating directory /cloudify-core
+2014-05-11 09:07:11,917 DEBUG - successfully executed: mkdir -p /cloudify-core
+2014-05-11 09:07:11,919 DEBUG - retrieving configuration for nginx
+2014-05-11 09:07:11,920 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 09:07:11,921 DEBUG - nginx config retrieved successfully
+2014-05-11 09:07:11,922 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 09:07:11,922 DEBUG - attempting to remove directory /packages/nginx
+2014-05-11 09:07:11,923 WARNING - dir doesn't exist
+2014-05-11 09:07:11,924 DEBUG - checking if /cloudify-components/nginx//archives exists
+2014-05-11 09:07:11,924 DEBUG - /cloudify-components/nginx//archives does not exist
+2014-05-11 09:07:11,925 DEBUG - creating directory /cloudify-components/nginx//archives
+2014-05-11 09:07:11,936 DEBUG - successfully executed: mkdir -p /cloudify-components/nginx//archives
+2014-05-11 09:07:11,938 DEBUG - checking if /packages/nginx exists
+2014-05-11 09:07:11,938 DEBUG - /packages/nginx does not exist
+2014-05-11 09:07:11,939 DEBUG - creating directory /packages/nginx
+2014-05-11 09:07:11,952 DEBUG - successfully executed: mkdir -p /packages/nginx
+2014-05-11 09:07:11,953 DEBUG - adding source repository deb http://nginx.org/packages/mainline/ubuntu/ precise nginx
+2014-05-11 09:07:11,968 DEBUG - successfully executed: sudo sed -i "2i deb http://nginx.org/packages/mainline/ubuntu/ precise nginx" /etc/apt/sources.list
+2014-05-11 09:07:11,969 DEBUG - adding source repository deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
+2014-05-11 09:07:11,992 DEBUG - successfully executed: sudo sed -i "2i deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx" /etc/apt/sources.list
+2014-05-11 09:07:11,995 DEBUG - downloading http://nginx.org/keys/nginx_signing.key
+2014-05-11 09:07:11,995 WARNING - please specify either a directory or file to download to.
+2014-05-11 11:04:57,090 DEBUG - retrieving configuration for riemann
+2014-05-11 11:04:57,093 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:04:57,094 DEBUG - riemann config retrieved successfully
+2014-05-11 11:04:57,097 DEBUG - attempting to remove directory /packages/riemann
+2014-05-11 11:04:57,100 WARNING - dir doesn't exist
+2014-05-11 11:04:57,102 DEBUG - creating package directories
+2014-05-11 11:04:57,105 DEBUG - creating directory /packages/riemann/archives
+2014-05-11 11:04:57,182 DEBUG - successfully executed: mkdir -p /packages/riemann/archives
+2014-05-11 11:04:57,185 DEBUG - creating directory /cloudify-components/riemann/
+2014-05-11 11:04:57,250 DEBUG - successfully executed: mkdir -p /cloudify-components/riemann/
+2014-05-11 11:04:57,257 DEBUG - downloading http://aphyr.com/riemann/riemann_0.2.2_all.deb
+2014-05-11 11:05:41,862 DEBUG - successfully executed: wget http://aphyr.com/riemann/riemann_0.2.2_all.deb --timeout=30 -P /packages/riemann/archives
+2014-05-11 11:49:39,027 DEBUG - retrieving configuration for virtualenv
+2014-05-11 11:49:39,027 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:49:39,028 DEBUG - virtualenv config retrieved successfully
+2014-05-11 11:49:39,029 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 11:49:39,029 DEBUG - attempting to remove directory /packages/virtualenv
+2014-05-11 11:49:39,030 WARNING - dir doesn't exist
+2014-05-11 11:49:39,030 DEBUG - checking if /cloudify-components/virtualenv//archives exists
+2014-05-11 11:49:39,031 DEBUG - /cloudify-components/virtualenv//archives exists
+2014-05-11 11:49:39,032 DEBUG - checking if /packages/virtualenv exists
+2014-05-11 11:49:39,033 DEBUG - /packages/virtualenv does not exist
+2014-05-11 11:49:39,033 DEBUG - creating directory /packages/virtualenv
+2014-05-11 11:49:39,044 DEBUG - successfully executed: mkdir -p /packages/virtualenv
+2014-05-11 11:49:39,050 DEBUG - downloading module virtualenv==1.11.4
+2014-05-11 11:49:42,695 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/packages/virtualenv/" virtualenv==1.11.4
+2014-05-11 11:49:42,698 DEBUG - retrieving configuration for cloudify-core
+2014-05-11 11:49:42,699 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:49:42,700 DEBUG - cloudify-core config retrieved successfully
+2014-05-11 11:49:42,701 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 11:49:42,702 DEBUG - attempting to remove directory /cloudify-core
+2014-05-11 11:49:42,714 DEBUG - successfully executed: rm -rf /cloudify-core
+2014-05-11 11:49:42,715 DEBUG - checking if /cloudify/archives exists
+2014-05-11 11:49:42,716 DEBUG - /cloudify/archives exists
+2014-05-11 11:49:42,717 DEBUG - checking if /cloudify-core exists
+2014-05-11 11:49:42,718 DEBUG - /cloudify-core does not exist
+2014-05-11 11:49:42,718 DEBUG - creating directory /cloudify-core
+2014-05-11 11:49:42,729 DEBUG - successfully executed: mkdir -p /cloudify-core
+2014-05-11 11:49:42,730 DEBUG - retrieving configuration for riemann
+2014-05-11 11:49:42,730 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:49:42,732 DEBUG - riemann config retrieved successfully
+2014-05-11 11:49:42,735 DEBUG - attempting to remove directory /packages/riemann
+2014-05-11 11:49:42,755 DEBUG - successfully executed: rm -rf /packages/riemann
+2014-05-11 11:49:42,757 DEBUG - creating package directories
+2014-05-11 11:49:42,757 DEBUG - creating directory /packages/riemann/archives
+2014-05-11 11:49:42,772 DEBUG - successfully executed: mkdir -p /packages/riemann/archives
+2014-05-11 11:49:42,773 DEBUG - creating directory /cloudify-components/riemann/
+2014-05-11 11:49:42,774 DEBUG - directory already exists, skipping.
+2014-05-11 11:49:42,774 DEBUG - downloading http://aphyr.com/riemann/riemann_0.2.2_all.deb
+2014-05-11 11:53:32,184 ERROR - your components list and excluded components list contain the same items.
+2014-05-11 11:53:43,001 INFO - skipping component: riemann
+2014-05-11 11:54:22,994 INFO - skipping component: riemann
+2014-05-11 11:54:22,998 DEBUG - retrieving configuration for logstash
+2014-05-11 11:54:22,999 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:54:23,000 DEBUG - logstash config retrieved successfully
+2014-05-11 11:54:23,000 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 11:54:23,001 DEBUG - attempting to remove directory /packages/logstash
+2014-05-11 11:54:23,001 WARNING - dir doesn't exist
+2014-05-11 11:54:23,002 DEBUG - checking if /cloudify-components/logstash//archives exists
+2014-05-11 11:54:23,003 DEBUG - /cloudify-components/logstash//archives does not exist
+2014-05-11 11:54:23,003 DEBUG - creating directory /cloudify-components/logstash//archives
+2014-05-11 11:54:23,018 DEBUG - successfully executed: mkdir -p /cloudify-components/logstash//archives
+2014-05-11 11:54:23,019 DEBUG - checking if /packages/logstash exists
+2014-05-11 11:54:23,019 DEBUG - /packages/logstash does not exist
+2014-05-11 11:54:23,020 DEBUG - creating directory /packages/logstash
+2014-05-11 11:54:23,031 DEBUG - successfully executed: mkdir -p /packages/logstash
+2014-05-11 11:54:23,032 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-11 11:54:23,033 WARNING - please specify either a directory or file to download to.
+2014-05-11 11:58:34,363 INFO - skipping component: riemann
+2014-05-11 11:58:34,369 DEBUG - retrieving configuration for logstash
+2014-05-11 11:58:34,369 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 11:58:34,370 DEBUG - logstash config retrieved successfully
+2014-05-11 11:58:34,371 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 11:58:34,372 DEBUG - attempting to remove directory /packages/logstash
+2014-05-11 11:58:34,385 DEBUG - successfully executed: rm -rf /packages/logstash
+2014-05-11 11:58:34,386 DEBUG - checking if /cloudify-components/logstash//archives exists
+2014-05-11 11:58:34,387 DEBUG - /cloudify-components/logstash//archives exists
+2014-05-11 11:58:34,387 DEBUG - checking if /packages/logstash exists
+2014-05-11 11:58:34,388 DEBUG - /packages/logstash does not exist
+2014-05-11 11:58:34,388 DEBUG - creating directory /packages/logstash
+2014-05-11 11:58:34,403 DEBUG - successfully executed: mkdir -p /packages/logstash
+2014-05-11 11:58:34,404 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-11 11:59:15,098 DEBUG - successfully executed: wget https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar --timeout=30 -P /packages/logstash
+2014-05-11 12:01:47,717 DEBUG - retrieving configuration for virtualenv
+2014-05-11 12:01:47,718 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:01:47,719 DEBUG - virtualenv config retrieved successfully
+2014-05-11 12:01:47,720 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:01:47,720 DEBUG - attempting to remove directory /packages/virtualenv
+2014-05-11 12:01:47,734 DEBUG - successfully executed: rm -rf /packages/virtualenv
+2014-05-11 12:01:47,736 DEBUG - checking if /cloudify-components/virtualenv//archives exists
+2014-05-11 12:01:47,737 DEBUG - /cloudify-components/virtualenv//archives exists
+2014-05-11 12:01:47,737 DEBUG - checking if /packages/virtualenv exists
+2014-05-11 12:01:47,738 DEBUG - /packages/virtualenv does not exist
+2014-05-11 12:01:47,738 DEBUG - creating directory /packages/virtualenv
+2014-05-11 12:01:47,747 DEBUG - successfully executed: mkdir -p /packages/virtualenv
+2014-05-11 12:01:47,749 DEBUG - downloading module virtualenv==1.11.4
+2014-05-11 12:01:51,947 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/packages/virtualenv/" virtualenv==1.11.4
+2014-05-11 12:01:51,950 DEBUG - retrieving configuration for cloudify-core
+2014-05-11 12:01:51,950 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:01:51,951 DEBUG - cloudify-core config retrieved successfully
+2014-05-11 12:01:51,951 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:01:51,952 DEBUG - attempting to remove directory /cloudify-core
+2014-05-11 12:01:51,962 DEBUG - successfully executed: rm -rf /cloudify-core
+2014-05-11 12:01:51,963 DEBUG - checking if /cloudify/archives exists
+2014-05-11 12:01:51,964 DEBUG - /cloudify/archives exists
+2014-05-11 12:01:51,964 DEBUG - checking if /cloudify-core exists
+2014-05-11 12:01:51,965 DEBUG - /cloudify-core does not exist
+2014-05-11 12:01:51,965 DEBUG - creating directory /cloudify-core
+2014-05-11 12:01:51,977 DEBUG - successfully executed: mkdir -p /cloudify-core
+2014-05-11 12:01:51,979 DEBUG - retrieving configuration for riemann
+2014-05-11 12:01:51,980 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:01:51,980 DEBUG - riemann config retrieved successfully
+2014-05-11 12:01:51,981 DEBUG - attempting to remove directory /packages/riemann
+2014-05-11 12:01:51,995 DEBUG - successfully executed: rm -rf /packages/riemann
+2014-05-11 12:01:51,996 DEBUG - creating package directories
+2014-05-11 12:01:51,997 DEBUG - creating directory /packages/riemann/archives
+2014-05-11 12:01:52,012 DEBUG - successfully executed: mkdir -p /packages/riemann/archives
+2014-05-11 12:01:52,013 DEBUG - creating directory /cloudify-components/riemann/
+2014-05-11 12:01:52,013 DEBUG - directory already exists, skipping.
+2014-05-11 12:01:52,014 DEBUG - downloading http://aphyr.com/riemann/riemann_0.2.2_all.deb
+2014-05-11 12:02:48,884 DEBUG - successfully executed: wget http://aphyr.com/riemann/riemann_0.2.2_all.deb --timeout=30 -P /packages/riemann/archives
+2014-05-11 12:02:48,887 DEBUG - retrieving configuration for rabbitmq-server
+2014-05-11 12:02:48,887 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:02:48,888 DEBUG - rabbitmq-server config retrieved successfully
+2014-05-11 12:02:48,889 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:02:48,889 DEBUG - attempting to remove directory /packages/rabbitmq-server
+2014-05-11 12:02:48,890 WARNING - dir doesn't exist
+2014-05-11 12:02:48,891 DEBUG - checking if /cloudify-components/rabbitmq-server//archives exists
+2014-05-11 12:02:48,892 DEBUG - /cloudify-components/rabbitmq-server//archives does not exist
+2014-05-11 12:02:48,893 DEBUG - creating directory /cloudify-components/rabbitmq-server//archives
+2014-05-11 12:02:48,907 DEBUG - successfully executed: mkdir -p /cloudify-components/rabbitmq-server//archives
+2014-05-11 12:02:48,909 DEBUG - checking if /packages/rabbitmq-server exists
+2014-05-11 12:02:48,909 DEBUG - /packages/rabbitmq-server does not exist
+2014-05-11 12:02:48,910 DEBUG - creating directory /packages/rabbitmq-server
+2014-05-11 12:02:48,920 DEBUG - successfully executed: mkdir -p /packages/rabbitmq-server
+2014-05-11 12:02:48,921 DEBUG - adding source repository deb http://www.rabbitmq.com/debian/ testing main
+2014-05-11 12:02:48,937 DEBUG - successfully executed: sudo sed -i "2i deb http://www.rabbitmq.com/debian/ testing main" /etc/apt/sources.list
+2014-05-11 12:02:48,939 DEBUG - downloading http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+2014-05-11 12:02:49,522 DEBUG - successfully executed: wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc --timeout=30 -P /packages/rabbitmq-server
+2014-05-11 12:02:49,524 DEBUG - adding key /packages/rabbitmq-server/rabbitmq-signing-key-public.asc
+2014-05-11 12:02:49,602 DEBUG - successfully executed: sudo apt-key add /packages/rabbitmq-server/rabbitmq-signing-key-public.asc
+2014-05-11 12:02:49,604 DEBUG - updating local apt repo
+2014-05-11 12:02:57,660 DEBUG - successfully executed: sudo apt-get update
+2014-05-11 12:02:57,661 DEBUG - downloading rabbitmq-server to /packages/rabbitmq-server
+2014-05-11 12:03:27,738 DEBUG - successfully executed: sudo apt-get -y install rabbitmq-server -d -o=dir::cache=/packages/rabbitmq-server
+2014-05-11 12:03:27,744 DEBUG - downloading erlang-nox to /packages/rabbitmq-server
+2014-05-11 12:03:28,373 DEBUG - successfully executed: sudo apt-get -y install erlang-nox -d -o=dir::cache=/packages/rabbitmq-server
+2014-05-11 12:03:28,378 DEBUG - retrieving configuration for ubuntu-agent
+2014-05-11 12:03:28,379 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:03:28,380 DEBUG - ubuntu-agent config retrieved successfully
+2014-05-11 12:03:28,381 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:03:28,382 DEBUG - attempting to remove directory /agents/linux-agent
+2014-05-11 12:03:28,396 DEBUG - successfully executed: rm -rf /agents/linux-agent
+2014-05-11 12:03:28,397 DEBUG - checking if /cloudify/archives exists
+2014-05-11 12:03:28,399 DEBUG - /cloudify/archives exists
+2014-05-11 12:03:28,400 DEBUG - checking if /agents/linux-agent exists
+2014-05-11 12:03:28,401 DEBUG - /agents/linux-agent does not exist
+2014-05-11 12:03:28,402 DEBUG - creating directory /agents/linux-agent
+2014-05-11 12:03:28,413 DEBUG - successfully executed: mkdir -p /agents/linux-agent
+2014-05-11 12:03:28,414 DEBUG - retrieving configuration for graphite
+2014-05-11 12:03:28,415 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:03:28,416 DEBUG - graphite config retrieved successfully
+2014-05-11 12:03:28,418 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:03:28,418 DEBUG - attempting to remove directory /opt/graphite
+2014-05-11 12:03:28,422 WARNING - dir doesn't exist
+2014-05-11 12:03:28,423 DEBUG - checking if /cloudify-components/graphite//archives exists
+2014-05-11 12:03:28,425 DEBUG - /cloudify-components/graphite//archives does not exist
+2014-05-11 12:03:28,425 DEBUG - creating directory /cloudify-components/graphite//archives
+2014-05-11 12:03:28,438 DEBUG - successfully executed: mkdir -p /cloudify-components/graphite//archives
+2014-05-11 12:03:28,439 DEBUG - checking if /opt/graphite exists
+2014-05-11 12:03:28,440 DEBUG - /opt/graphite does not exist
+2014-05-11 12:03:28,441 DEBUG - creating directory /opt/graphite
+2014-05-11 12:03:28,449 DEBUG - successfully executed: mkdir -p /opt/graphite
+2014-05-11 12:03:28,451 DEBUG - downloading module carbon==0.9.10
+2014-05-11 12:03:36,407 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/opt/graphite/" carbon==0.9.10
+2014-05-11 12:03:36,409 DEBUG - downloading module whisper==0.9.12
+2014-05-11 12:03:38,013 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/opt/graphite/" whisper==0.9.12
+2014-05-11 12:03:38,015 DEBUG - downloading module graphite-web==0.9.12
+2014-05-11 12:03:40,733 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/opt/graphite/" graphite-web==0.9.12
+2014-05-11 12:03:40,737 DEBUG - retrieving configuration for nodejs
+2014-05-11 12:03:40,739 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:03:40,740 DEBUG - nodejs config retrieved successfully
+2014-05-11 12:03:40,741 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:03:40,741 DEBUG - attempting to remove directory /packages/nodejs
+2014-05-11 12:03:40,742 WARNING - dir doesn't exist
+2014-05-11 12:03:40,743 DEBUG - checking if /cloudify-components/nodejs//archives exists
+2014-05-11 12:03:40,743 DEBUG - /cloudify-components/nodejs//archives exists
+2014-05-11 12:03:40,744 DEBUG - checking if /packages/nodejs exists
+2014-05-11 12:03:40,744 DEBUG - /packages/nodejs does not exist
+2014-05-11 12:03:40,745 DEBUG - creating directory /packages/nodejs
+2014-05-11 12:03:40,759 DEBUG - successfully executed: mkdir -p /packages/nodejs
+2014-05-11 12:03:40,760 DEBUG - installing python-software-properties
+2014-05-11 12:03:41,428 DEBUG - successfully executed: sudo apt-get -y install python-software-properties
+2014-05-11 12:03:41,429 DEBUG - installing g++
+2014-05-11 12:03:42,041 DEBUG - successfully executed: sudo apt-get -y install g++
+2014-05-11 12:03:42,043 DEBUG - installing make
+2014-05-11 12:03:42,680 DEBUG - successfully executed: sudo apt-get -y install make
+2014-05-11 12:03:42,680 DEBUG - adding ppa repository ppa:chris-lea/node.js
+2014-05-11 12:03:44,036 DEBUG - successfully executed: add-apt-repository -y ppa:chris-lea/node.js
+2014-05-11 12:03:44,039 DEBUG - downloading nodejs to /packages/nodejs
+2014-05-11 12:03:53,522 DEBUG - successfully executed: sudo apt-get -y install nodejs -d -o=dir::cache=/packages/nodejs
+2014-05-11 12:03:53,530 DEBUG - retrieving configuration for kibana3
+2014-05-11 12:03:53,531 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:03:53,532 DEBUG - kibana3 config retrieved successfully
+2014-05-11 12:03:53,533 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:03:53,533 DEBUG - attempting to remove directory /packages/kibana3
+2014-05-11 12:03:53,534 WARNING - dir doesn't exist
+2014-05-11 12:03:53,535 DEBUG - checking if /cloudify-components/kibana3//archives exists
+2014-05-11 12:03:53,537 DEBUG - /cloudify-components/kibana3//archives exists
+2014-05-11 12:03:53,538 DEBUG - checking if /packages/kibana3 exists
+2014-05-11 12:03:53,540 DEBUG - /packages/kibana3 does not exist
+2014-05-11 12:03:53,541 DEBUG - creating directory /packages/kibana3
+2014-05-11 12:03:53,553 DEBUG - successfully executed: mkdir -p /packages/kibana3
+2014-05-11 12:03:53,554 DEBUG - downloading https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz
+2014-05-11 12:03:55,862 DEBUG - successfully executed: wget https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz --timeout=30 -P /packages/kibana3
+2014-05-11 12:03:55,867 DEBUG - retrieving configuration for openjdk-7-jdk
+2014-05-11 12:03:55,870 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:03:55,870 DEBUG - openjdk-7-jdk config retrieved successfully
+2014-05-11 12:03:55,872 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:03:55,872 DEBUG - attempting to remove directory /packages/openjdk-7-jdk
+2014-05-11 12:03:55,873 WARNING - dir doesn't exist
+2014-05-11 12:03:55,873 DEBUG - checking if /cloudify-components/openjdk-7-jdk//archives exists
+2014-05-11 12:03:55,874 DEBUG - /cloudify-components/openjdk-7-jdk//archives does not exist
+2014-05-11 12:03:55,875 DEBUG - creating directory /cloudify-components/openjdk-7-jdk//archives
+2014-05-11 12:03:55,886 DEBUG - successfully executed: mkdir -p /cloudify-components/openjdk-7-jdk//archives
+2014-05-11 12:03:55,887 DEBUG - checking if /packages/openjdk-7-jdk exists
+2014-05-11 12:03:55,888 DEBUG - /packages/openjdk-7-jdk does not exist
+2014-05-11 12:03:55,889 DEBUG - creating directory /packages/openjdk-7-jdk
+2014-05-11 12:03:55,900 DEBUG - successfully executed: mkdir -p /packages/openjdk-7-jdk
+2014-05-11 12:03:55,901 DEBUG - downloading openjdk-7-jdk to /packages/openjdk-7-jdk
+2014-05-11 12:05:38,646 DEBUG - successfully executed: sudo apt-get -y install openjdk-7-jdk -d -o=dir::cache=/packages/openjdk-7-jdk
+2014-05-11 12:05:38,652 DEBUG - retrieving configuration for celery
+2014-05-11 12:05:38,654 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:05:38,659 DEBUG - celery config retrieved successfully
+2014-05-11 12:05:38,660 DEBUG - attempting to remove directory /opt/celery/cloudify.management__worker/env
+2014-05-11 12:05:38,661 WARNING - dir doesn't exist
+2014-05-11 12:05:38,661 DEBUG - creating package directories
+2014-05-11 12:05:38,662 DEBUG - creating directory /opt/celery/cloudify.management__worker/env/archives
+2014-05-11 12:05:38,680 DEBUG - successfully executed: mkdir -p /opt/celery/cloudify.management__worker/env/archives
+2014-05-11 12:05:38,681 DEBUG - creating directory /cloudify-core/celery/
+2014-05-11 12:05:38,692 DEBUG - successfully executed: mkdir -p /cloudify-core/celery/
+2014-05-11 12:05:38,693 DEBUG - creating virtualenv in /opt/celery/cloudify.management__worker/env
+2014-05-11 12:05:40,093 DEBUG - successfully executed: virtualenv /opt/celery/cloudify.management__worker/env
+2014-05-11 12:05:40,095 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 12:05:42,938 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -O /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 12:05:42,939 DEBUG - untar-ing /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 12:05:43,006 DEBUG - successfully executed: tar -C /opt/celery/cloudify.management__worker/env -xzvf /opt/celery/cloudify.management__worker/env/celery.tar.gz
+2014-05-11 12:05:43,008 DEBUG - installing module billiard==2.7.3.28
+2014-05-11 12:05:45,648 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install billiard==2.7.3.28 --process-dependency-links
+2014-05-11 12:05:45,652 DEBUG - installing module celery==3.0.24
+2014-05-11 12:05:54,001 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install celery==3.0.24 --process-dependency-links
+2014-05-11 12:05:54,003 DEBUG - installing module bernhard
+2014-05-11 12:05:56,025 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install bernhard --process-dependency-links
+2014-05-11 12:05:56,028 DEBUG - installing module pika
+2014-05-11 12:05:57,407 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install pika --process-dependency-links
+2014-05-11 12:05:57,409 DEBUG - installing module /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 12:06:28,353 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/agent-installer/ --process-dependency-links
+2014-05-11 12:06:28,354 DEBUG - installing module /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 12:06:28,919 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install /opt/celery/cloudify.management__worker/env/cloudify-manager-develop/plugins/plugin-installer/ --process-dependency-links
+2014-05-11 12:06:28,921 DEBUG - installing module https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 12:06:31,040 DEBUG - successfully executed: /opt/celery/cloudify.management__worker/env/bin/pip --default-timeout=45 install https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz --process-dependency-links
+2014-05-11 12:06:31,042 DEBUG - retrieving configuration for nginx
+2014-05-11 12:06:31,042 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:06:31,043 DEBUG - nginx config retrieved successfully
+2014-05-11 12:06:31,046 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:06:31,046 DEBUG - attempting to remove directory /packages/nginx
+2014-05-11 12:06:31,046 WARNING - dir doesn't exist
+2014-05-11 12:06:31,047 DEBUG - checking if /cloudify-components/nginx//archives exists
+2014-05-11 12:06:31,048 DEBUG - /cloudify-components/nginx//archives exists
+2014-05-11 12:06:31,048 DEBUG - checking if /packages/nginx exists
+2014-05-11 12:06:31,049 DEBUG - /packages/nginx does not exist
+2014-05-11 12:06:31,050 DEBUG - creating directory /packages/nginx
+2014-05-11 12:06:31,062 DEBUG - successfully executed: mkdir -p /packages/nginx
+2014-05-11 12:06:31,066 DEBUG - adding source repository deb http://nginx.org/packages/mainline/ubuntu/ precise nginx
+2014-05-11 12:06:31,082 DEBUG - successfully executed: sudo sed -i "2i deb http://nginx.org/packages/mainline/ubuntu/ precise nginx" /etc/apt/sources.list
+2014-05-11 12:06:31,083 DEBUG - adding source repository deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
+2014-05-11 12:06:31,100 DEBUG - successfully executed: sudo sed -i "2i deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx" /etc/apt/sources.list
+2014-05-11 12:06:31,101 DEBUG - downloading http://nginx.org/keys/nginx_signing.key
+2014-05-11 12:06:31,712 DEBUG - successfully executed: wget http://nginx.org/keys/nginx_signing.key --timeout=30 -P /packages/nginx
+2014-05-11 12:06:31,715 DEBUG - adding key /packages/nginx/nginx_signing.key
+2014-05-11 12:06:31,812 DEBUG - successfully executed: sudo apt-key add /packages/nginx/nginx_signing.key
+2014-05-11 12:06:31,815 DEBUG - updating local apt repo
+2014-05-11 12:06:38,406 DEBUG - successfully executed: sudo apt-get update
+2014-05-11 12:06:38,408 DEBUG - downloading nginx to /packages/nginx
+2014-05-11 12:06:46,854 DEBUG - successfully executed: sudo apt-get -y install nginx -d -o=dir::cache=/packages/nginx
+2014-05-11 12:06:46,857 DEBUG - retrieving configuration for manager
+2014-05-11 12:06:46,858 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:06:46,859 DEBUG - manager config retrieved successfully
+2014-05-11 12:06:46,860 DEBUG - attempting to remove directory /opt/manager
+2014-05-11 12:06:46,860 WARNING - dir doesn't exist
+2014-05-11 12:06:46,861 DEBUG - creating package directories
+2014-05-11 12:06:46,861 DEBUG - creating directory /opt/manager/archives
+2014-05-11 12:06:46,875 DEBUG - successfully executed: mkdir -p /opt/manager/archives
+2014-05-11 12:06:46,876 DEBUG - creating directory /cloudify-core/manager/
+2014-05-11 12:06:46,886 DEBUG - successfully executed: mkdir -p /cloudify-core/manager/
+2014-05-11 12:06:46,887 DEBUG - creating virtualenv in /opt/manager
+2014-05-11 12:06:48,306 DEBUG - successfully executed: virtualenv /opt/manager
+2014-05-11 12:06:48,307 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 12:06:50,878 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -O /opt/manager/manager.tar.gz
+2014-05-11 12:06:50,879 DEBUG - untar-ing /opt/manager/manager.tar.gz
+2014-05-11 12:06:50,921 DEBUG - successfully executed: tar -C /opt/manager -xzvf /opt/manager/manager.tar.gz
+2014-05-11 12:06:50,922 DEBUG - creating directory /opt/manager/resources
+2014-05-11 12:06:50,932 DEBUG - successfully executed: mkdir -p /opt/manager/resources
+2014-05-11 12:06:50,934 DEBUG - copying /opt/manager/cloudify-manager-develop/resources/rest-service/cloudify/ to /opt/manager/resources
+2014-05-11 12:06:50,956 DEBUG - successfully executed: cp -R /opt/manager/cloudify-manager-develop/resources/rest-service/cloudify/ /opt/manager/resources
+2014-05-11 12:06:50,957 DEBUG - installing module /opt/manager/cloudify-manager-develop/rest-service/
+2014-05-11 12:07:30,452 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/rest-service/ --process-dependency-links
+2014-05-11 12:07:30,454 DEBUG - installing module /opt/manager/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 12:08:04,537 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/plugins/agent-installer/ --process-dependency-links
+2014-05-11 12:08:04,538 DEBUG - installing module /opt/manager/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 12:08:05,131 DEBUG - successfully executed: /opt/manager/bin/pip --default-timeout=45 install /opt/manager/cloudify-manager-develop/plugins/plugin-installer/ --process-dependency-links
+2014-05-11 12:08:05,137 DEBUG - retrieving configuration for elasticsearch
+2014-05-11 12:08:05,138 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:08:05,141 DEBUG - elasticsearch config retrieved successfully
+2014-05-11 12:08:05,143 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:08:05,144 DEBUG - attempting to remove directory /packages/elasticsearch
+2014-05-11 12:08:05,144 WARNING - dir doesn't exist
+2014-05-11 12:08:05,145 DEBUG - checking if /cloudify-components/elasticsearch//archives exists
+2014-05-11 12:08:05,148 DEBUG - /cloudify-components/elasticsearch//archives exists
+2014-05-11 12:08:05,149 DEBUG - checking if /packages/elasticsearch exists
+2014-05-11 12:08:05,149 DEBUG - /packages/elasticsearch does not exist
+2014-05-11 12:08:05,149 DEBUG - creating directory /packages/elasticsearch
+2014-05-11 12:08:05,159 DEBUG - successfully executed: mkdir -p /packages/elasticsearch
+2014-05-11 12:08:05,161 DEBUG - downloading https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz
+2014-05-11 12:08:13,315 DEBUG - successfully executed: wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz --timeout=30 -P /packages/elasticsearch
+2014-05-11 12:08:13,321 DEBUG - retrieving configuration for linux-agent
+2014-05-11 12:08:13,323 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:08:13,325 DEBUG - linux-agent config retrieved successfully
+2014-05-11 12:08:13,327 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:08:13,328 DEBUG - attempting to remove directory /linux-agent/env
+2014-05-11 12:08:13,355 DEBUG - successfully executed: rm -rf /linux-agent/env
+2014-05-11 12:08:13,358 DEBUG - checking if /agents/linux-agent/archives exists
+2014-05-11 12:08:13,360 DEBUG - /agents/linux-agent/archives does not exist
+2014-05-11 12:08:13,361 DEBUG - creating directory /agents/linux-agent/archives
+2014-05-11 12:08:13,371 DEBUG - successfully executed: mkdir -p /agents/linux-agent/archives
+2014-05-11 12:08:13,372 DEBUG - checking if /linux-agent/env exists
+2014-05-11 12:08:13,373 DEBUG - /linux-agent/env does not exist
+2014-05-11 12:08:13,373 DEBUG - creating directory /linux-agent/env
+2014-05-11 12:08:13,392 DEBUG - successfully executed: mkdir -p /linux-agent/env
+2014-05-11 12:08:13,393 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 12:08:15,945 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -P /linux-agent/env
+2014-05-11 12:08:15,946 DEBUG - downloading module billiard==2.7.3.28
+2014-05-11 12:08:17,853 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" billiard==2.7.3.28
+2014-05-11 12:08:17,854 DEBUG - downloading module celery==3.0.24
+2014-05-11 12:08:23,016 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" celery==3.0.24
+2014-05-11 12:08:23,017 DEBUG - downloading module bernhard
+2014-05-11 12:08:26,355 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" bernhard
+2014-05-11 12:08:26,356 DEBUG - downloading module pika
+2014-05-11 12:08:27,684 DEBUG - successfully executed: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" pika
+2014-05-11 12:08:27,690 DEBUG - downloading module /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/
+2014-05-11 12:08:27,944 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (1/2)
+2014-05-11 12:08:31,182 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ -retrying (2/2)
+2014-05-11 12:08:34,189 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/agent-installer/ even after 1 attempts with output:
+2014-05-11 12:08:34,191 DEBUG - downloading module /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/
+2014-05-11 12:08:34,516 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (1/2)
+2014-05-11 12:08:37,761 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ -retrying (2/2)
+2014-05-11 12:08:40,766 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" /linux-agent/env/cloudify-manager-develop/plugins/plugin-installer/ even after 1 attempts with output:
+2014-05-11 12:08:40,768 DEBUG - downloading module https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz
+2014-05-11 12:08:41,211 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz -retrying (1/2)
+2014-05-11 12:08:44,660 WARNING - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz -retrying (2/2)
+2014-05-11 12:08:47,664 ERROR - failed to run command: sudo /usr/local/bin/pip install --no-use-wheel --process-dependency-links --download "/linux-agent/env/" https://github.com/cloudify-cosmo/cloudify-plugins-common/archive/develop.tar.gz even after 1 attempts with output:
+2014-05-11 12:08:47,666 DEBUG - retrieving configuration for workflow-gems
+2014-05-11 12:08:47,666 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:08:47,667 DEBUG - workflow-gems config retrieved successfully
+2014-05-11 12:08:47,669 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:08:47,669 DEBUG - attempting to remove directory /packages/workflow-gems
+2014-05-11 12:08:47,670 WARNING - dir doesn't exist
+2014-05-11 12:08:47,671 DEBUG - checking if /cloudify-components/workflow-gems//archives exists
+2014-05-11 12:08:47,672 DEBUG - /cloudify-components/workflow-gems//archives does not exist
+2014-05-11 12:08:47,673 DEBUG - creating directory /cloudify-components/workflow-gems//archives
+2014-05-11 12:08:47,696 DEBUG - successfully executed: mkdir -p /cloudify-components/workflow-gems//archives
+2014-05-11 12:08:47,697 DEBUG - checking if /packages/workflow-gems exists
+2014-05-11 12:08:47,698 DEBUG - /packages/workflow-gems does not exist
+2014-05-11 12:08:47,698 DEBUG - creating directory /packages/workflow-gems
+2014-05-11 12:08:47,714 DEBUG - successfully executed: mkdir -p /packages/workflow-gems
+2014-05-11 12:08:47,715 DEBUG - downloading https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz
+2014-05-11 12:08:50,317 DEBUG - successfully executed: wget https://github.com/cloudify-cosmo/cloudify-manager/archive/develop.tar.gz --timeout=30 -P /packages/workflow-gems
+2014-05-11 12:08:50,321 DEBUG - downloading make to /packages/workflow-gems
+2014-05-11 12:08:53,346 DEBUG - successfully executed: sudo apt-get -y install make -d -o=dir::cache=/packages/workflow-gems
+2014-05-11 12:08:53,348 DEBUG - retrieving configuration for cloudify-ui
+2014-05-11 12:08:53,348 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:08:53,348 DEBUG - cloudify-ui config retrieved successfully
+2014-05-11 12:08:53,349 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:08:53,350 DEBUG - attempting to remove directory /packages/cloudify-ui
+2014-05-11 12:08:53,350 WARNING - dir doesn't exist
+2014-05-11 12:08:53,351 DEBUG - checking if /cloudify/archives exists
+2014-05-11 12:08:53,353 DEBUG - /cloudify/archives exists
+2014-05-11 12:08:53,354 DEBUG - checking if /packages/cloudify-ui exists
+2014-05-11 12:08:53,355 DEBUG - /packages/cloudify-ui does not exist
+2014-05-11 12:08:53,355 DEBUG - creating directory /packages/cloudify-ui
+2014-05-11 12:08:53,366 DEBUG - successfully executed: mkdir -p /packages/cloudify-ui
+2014-05-11 12:08:53,366 DEBUG - downloading http://builds.gsdev.info/cosmo-ui/1.0.0/cosmo-ui-1.0.0-latest.tgz
+2014-05-11 12:08:58,581 DEBUG - successfully executed: wget http://builds.gsdev.info/cosmo-ui/1.0.0/cosmo-ui-1.0.0-latest.tgz --timeout=30 -P /packages/cloudify-ui
+2014-05-11 12:08:58,583 DEBUG - retrieving configuration for curl
+2014-05-11 12:08:58,584 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:08:58,585 DEBUG - curl config retrieved successfully
+2014-05-11 12:08:58,588 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:08:58,589 DEBUG - attempting to remove directory /packages/curl
+2014-05-11 12:08:58,589 WARNING - dir doesn't exist
+2014-05-11 12:08:58,590 DEBUG - checking if /cloudify-components/curl//archives exists
+2014-05-11 12:08:58,594 DEBUG - /cloudify-components/curl//archives exists
+2014-05-11 12:08:58,596 DEBUG - checking if /packages/curl exists
+2014-05-11 12:08:58,602 DEBUG - /packages/curl does not exist
+2014-05-11 12:08:58,602 DEBUG - creating directory /packages/curl
+2014-05-11 12:08:58,637 DEBUG - successfully executed: mkdir -p /packages/curl
+2014-05-11 12:08:58,638 DEBUG - downloading curl to /packages/curl
+2014-05-11 12:09:05,476 DEBUG - successfully executed: sudo apt-get -y install curl -d -o=dir::cache=/packages/curl
+2014-05-11 12:09:05,476 DEBUG - downloading libcurl3 to /packages/curl
+2014-05-11 12:09:06,074 DEBUG - successfully executed: sudo apt-get -y install libcurl3 -d -o=dir::cache=/packages/curl
+2014-05-11 12:09:06,081 DEBUG - retrieving configuration for cloudify-components
+2014-05-11 12:09:06,083 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:09:06,084 DEBUG - cloudify-components config retrieved successfully
+2014-05-11 12:09:06,085 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:09:06,086 DEBUG - attempting to remove directory /cloudify-components
+2014-05-11 12:09:06,110 DEBUG - successfully executed: rm -rf /cloudify-components
+2014-05-11 12:09:06,112 DEBUG - checking if /cloudify/archives exists
+2014-05-11 12:09:06,113 DEBUG - /cloudify/archives exists
+2014-05-11 12:09:06,113 DEBUG - checking if /cloudify-components exists
+2014-05-11 12:09:06,114 DEBUG - /cloudify-components does not exist
+2014-05-11 12:09:06,115 DEBUG - creating directory /cloudify-components
+2014-05-11 12:09:06,127 DEBUG - successfully executed: mkdir -p /cloudify-components
+2014-05-11 12:09:06,129 DEBUG - retrieving configuration for ruby
+2014-05-11 12:09:06,129 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:09:06,129 DEBUG - ruby config retrieved successfully
+2014-05-11 12:09:06,130 DEBUG - attempting to remove directory /opt/ruby
+2014-05-11 12:09:06,130 WARNING - dir doesn't exist
+2014-05-11 12:09:06,130 DEBUG - creating package directories
+2014-05-11 12:09:06,131 DEBUG - creating directory /opt/ruby/archives
+2014-05-11 12:09:06,146 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-11 12:09:06,148 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-11 12:09:06,157 DEBUG - successfully executed: mkdir -p /cloudify-components/ruby/
+2014-05-11 12:14:19,944 DEBUG - successfully executed: sudo /opt/ruby-build/bin/ruby-build -v 2.1.0 /opt/ruby
+2014-05-11 12:14:19,951 DEBUG - retrieving configuration for logstash
+2014-05-11 12:14:19,952 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:14:19,953 DEBUG - logstash config retrieved successfully
+2014-05-11 12:14:19,956 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:14:19,957 DEBUG - attempting to remove directory /packages/logstash
+2014-05-11 12:14:20,026 DEBUG - successfully executed: rm -rf /packages/logstash
+2014-05-11 12:14:20,027 DEBUG - checking if /cloudify-components/logstash//archives exists
+2014-05-11 12:14:20,028 DEBUG - /cloudify-components/logstash//archives does not exist
+2014-05-11 12:14:20,029 DEBUG - creating directory /cloudify-components/logstash//archives
+2014-05-11 12:14:20,043 DEBUG - successfully executed: mkdir -p /cloudify-components/logstash//archives
+2014-05-11 12:14:20,044 DEBUG - checking if /packages/logstash exists
+2014-05-11 12:14:20,049 DEBUG - /packages/logstash does not exist
+2014-05-11 12:14:20,050 DEBUG - creating directory /packages/logstash
+2014-05-11 12:14:20,066 DEBUG - successfully executed: mkdir -p /packages/logstash
+2014-05-11 12:14:20,067 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-11 12:15:02,353 DEBUG - successfully executed: wget https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar --timeout=30 -P /packages/logstash
+2014-05-11 12:15:02,355 DEBUG - retrieving configuration for make
+2014-05-11 12:15:02,355 DEBUG - components file is: /vagrant/packages.py
+2014-05-11 12:15:02,356 DEBUG - make config retrieved successfully
+2014-05-11 12:15:02,356 INFO - overwrite enabled. removing directory before retrieval
+2014-05-11 12:15:02,357 DEBUG - attempting to remove directory /packages/make
+2014-05-11 12:15:02,357 WARNING - dir doesn't exist
+2014-05-11 12:15:02,358 DEBUG - checking if /cloudify-components/make//archives exists
+2014-05-11 12:15:02,358 DEBUG - /cloudify-components/make//archives does not exist
+2014-05-11 12:15:02,359 DEBUG - creating directory /cloudify-components/make//archives
+2014-05-11 12:15:02,373 DEBUG - successfully executed: mkdir -p /cloudify-components/make//archives
+2014-05-11 12:15:02,374 DEBUG - checking if /packages/make exists
+2014-05-11 12:15:02,374 DEBUG - /packages/make does not exist
+2014-05-11 12:15:02,375 DEBUG - creating directory /packages/make
+2014-05-11 12:15:02,388 DEBUG - successfully executed: mkdir -p /packages/make
+2014-05-11 12:15:02,390 DEBUG - downloading make to /packages/make
+2014-05-11 12:15:05,734 DEBUG - successfully executed: sudo apt-get -y install make -d -o=dir::cache=/packages/make
+2014-05-12 13:09:30,813 DEBUG - retrieving configuration for logstash
+2014-05-12 13:09:30,818 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:09:30,820 DEBUG - logstash config retrieved successfully
+2014-05-12 13:09:30,821 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:09:30,822 DEBUG - attempting to remove directory /packages/logstash
+2014-05-12 13:09:30,823 WARNING - dir doesn't exist
+2014-05-12 13:09:30,825 DEBUG - checking if /cloudify-components/logstash//archives exists
+2014-05-12 13:09:30,826 DEBUG - /cloudify-components/logstash//archives does not exist
+2014-05-12 13:09:30,829 DEBUG - creating directory /cloudify-components/logstash//archives
+2014-05-12 13:09:30,842 DEBUG - successfully executed: mkdir -p /cloudify-components/logstash//archives
+2014-05-12 13:09:30,844 DEBUG - checking if /packages/logstash exists
+2014-05-12 13:09:30,844 DEBUG - /packages/logstash does not exist
+2014-05-12 13:09:30,845 DEBUG - creating directory /packages/logstash
+2014-05-12 13:09:30,859 DEBUG - successfully executed: mkdir -p /packages/logstash
+2014-05-12 13:09:30,861 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-12 13:09:47,767 DEBUG - retrieving configuration for ruby
+2014-05-12 13:09:47,768 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:09:47,768 DEBUG - ruby config retrieved successfully
+2014-05-12 13:09:47,769 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:09:47,770 WARNING - dir doesn't exist
+2014-05-12 13:09:47,771 DEBUG - creating package directories
+2014-05-12 13:09:47,771 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:09:47,788 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:09:47,789 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:09:47,802 DEBUG - successfully executed: mkdir -p /cloudify-components/ruby/
+2014-05-12 13:09:51,206 DEBUG - successfully executed: cd /opt && sudo git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build
+2014-05-12 13:09:51,218 WARNING - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh -retrying (1/2)
+2014-05-12 13:09:54,242 WARNING - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh -retrying (2/2)
+2014-05-12 13:09:57,248 ERROR - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh even after 1 attempts with output: 
+2014-05-12 13:13:06,724 DEBUG - retrieving configuration for ruby
+2014-05-12 13:13:06,724 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:13:06,725 DEBUG - ruby config retrieved successfully
+2014-05-12 13:13:06,726 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:13:06,735 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:13:06,736 DEBUG - creating package directories
+2014-05-12 13:13:06,736 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:13:06,753 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:13:06,755 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:13:06,755 DEBUG - directory already exists, skipping.
+2014-05-12 13:13:06,771 WARNING - failed to run command: cd /opt && sudo git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (1/2)
+2014-05-12 13:13:18,331 DEBUG - retrieving configuration for ruby
+2014-05-12 13:13:18,331 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:13:18,332 DEBUG - ruby config retrieved successfully
+2014-05-12 13:13:18,332 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:13:18,342 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:13:18,343 DEBUG - creating package directories
+2014-05-12 13:13:18,344 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:13:18,359 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:13:18,360 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:13:18,360 DEBUG - directory already exists, skipping.
+2014-05-12 13:13:18,374 WARNING - failed to run command: cd /opt && sudo git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (1/2)
+2014-05-12 13:13:21,394 WARNING - failed to run command: cd /opt && sudo git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (2/2)
+2014-05-12 13:13:24,399 ERROR - failed to run command: cd /opt && sudo git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build even after 1 attempts with output: 
+2014-05-12 13:13:24,416 WARNING - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh -retrying (1/2)
+2014-05-12 13:13:27,439 WARNING - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh -retrying (2/2)
+2014-05-12 13:13:30,444 ERROR - failed to run command: export PREFIX=/opt/ruby-build && sudo ./install.sh even after 1 attempts with output: 
+2014-05-12 13:15:35,970 DEBUG - retrieving configuration for ruby
+2014-05-12 13:15:35,971 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:15:35,971 DEBUG - ruby config retrieved successfully
+2014-05-12 13:15:35,971 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:15:35,982 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:15:35,983 DEBUG - creating package directories
+2014-05-12 13:15:35,984 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:15:35,995 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:15:35,996 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:15:35,996 DEBUG - directory already exists, skipping.
+2014-05-12 13:15:36,002 WARNING - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (1/2)
+2014-05-12 13:15:39,014 WARNING - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (2/2)
+2014-05-12 13:15:42,020 ERROR - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build even after 1 attempts with output: 
+2014-05-12 13:15:42,031 DEBUG - successfully executed: export PREFIX=/opt/ruby-build
+2014-05-12 13:15:42,044 WARNING - failed to run command: ./install.sh -retrying (1/2)
+2014-05-12 13:15:45,062 WARNING - failed to run command: ./install.sh -retrying (2/2)
+2014-05-12 13:16:25,403 DEBUG - retrieving configuration for ruby
+2014-05-12 13:16:25,403 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:16:25,404 DEBUG - ruby config retrieved successfully
+2014-05-12 13:16:25,404 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:16:25,418 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:16:25,420 DEBUG - creating package directories
+2014-05-12 13:16:25,421 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:16:25,434 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:16:25,435 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:16:25,435 DEBUG - directory already exists, skipping.
+2014-05-12 13:16:25,441 WARNING - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (1/2)
+2014-05-12 13:16:28,453 WARNING - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build -retrying (2/2)
+2014-05-12 13:16:31,457 ERROR - failed to run command: git clone https://github.com/sstephenson/ruby-build.git && cd /opt/ruby-build even after 1 attempts with output: 
+2014-05-12 13:16:31,479 DEBUG - successfully executed: /opt/ruby-build/install.sh
+2014-05-12 13:16:49,901 DEBUG - retrieving configuration for ruby
+2014-05-12 13:16:49,902 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:16:49,902 DEBUG - ruby config retrieved successfully
+2014-05-12 13:16:49,904 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:16:49,915 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:16:49,916 DEBUG - creating package directories
+2014-05-12 13:16:49,916 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:16:49,937 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:16:49,938 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:16:49,939 DEBUG - directory already exists, skipping.
+2014-05-12 13:16:49,970 DEBUG - successfully executed: /opt/ruby-build/install.sh
+2014-05-12 13:17:32,841 DEBUG - retrieving configuration for ruby
+2014-05-12 13:17:32,841 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:17:32,841 DEBUG - ruby config retrieved successfully
+2014-05-12 13:17:32,842 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:17:32,853 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:17:32,854 DEBUG - creating package directories
+2014-05-12 13:17:32,854 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:17:32,864 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:17:32,865 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:17:32,866 DEBUG - directory already exists, skipping.
+2014-05-12 13:17:32,893 DEBUG - successfully executed: /opt/ruby-build/install.sh
+2014-05-12 13:18:24,506 DEBUG - retrieving configuration for ruby
+2014-05-12 13:18:24,506 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:18:24,507 DEBUG - ruby config retrieved successfully
+2014-05-12 13:18:24,507 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:18:24,508 WARNING - dir doesn't exist
+2014-05-12 13:18:24,508 DEBUG - creating package directories
+2014-05-12 13:18:24,509 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:18:24,525 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:18:24,527 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:18:24,528 DEBUG - directory already exists, skipping.
+2014-05-12 13:18:24,534 DEBUG - successfully executed: export PREFIX=/opt/ruby-build
+2014-05-12 13:18:24,535 DEBUG - retrieving configuration for kibana3
+2014-05-12 13:18:24,536 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:18:24,537 DEBUG - kibana3 config retrieved successfully
+2014-05-12 13:18:24,538 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:18:24,539 DEBUG - attempting to remove directory /packages/kibana3
+2014-05-12 13:18:24,539 WARNING - dir doesn't exist
+2014-05-12 13:18:24,540 DEBUG - checking if /cloudify-components/kibana3//archives exists
+2014-05-12 13:18:24,540 DEBUG - /cloudify-components/kibana3//archives does not exist
+2014-05-12 13:18:24,541 DEBUG - creating directory /cloudify-components/kibana3//archives
+2014-05-12 13:18:24,552 DEBUG - successfully executed: mkdir -p /cloudify-components/kibana3//archives
+2014-05-12 13:18:24,553 DEBUG - checking if /packages/kibana3 exists
+2014-05-12 13:18:24,554 DEBUG - /packages/kibana3 does not exist
+2014-05-12 13:18:24,555 DEBUG - creating directory /packages/kibana3
+2014-05-12 13:18:24,568 DEBUG - successfully executed: mkdir -p /packages/kibana3
+2014-05-12 13:18:24,568 DEBUG - downloading https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz
+2014-05-12 13:18:26,757 DEBUG - successfully executed: wget https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz --timeout=30 -P /packages/kibana3
+2014-05-12 13:18:26,759 DEBUG - retrieving configuration for elasticsearch
+2014-05-12 13:18:26,759 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:18:26,760 DEBUG - elasticsearch config retrieved successfully
+2014-05-12 13:18:26,761 DEBUG - attempting to remove directory /packages/elasticsearch
+2014-05-12 13:18:26,762 WARNING - dir doesn't exist
+2014-05-12 13:18:26,763 DEBUG - creating package directories
+2014-05-12 13:18:26,764 DEBUG - creating directory /packages/elasticsearch/archives
+2014-05-12 13:18:26,784 DEBUG - successfully executed: mkdir -p /packages/elasticsearch/archives
+2014-05-12 13:18:26,785 DEBUG - creating directory /cloudify-components/elasticsearch/
+2014-05-12 13:18:26,799 DEBUG - successfully executed: mkdir -p /cloudify-components/elasticsearch/
+2014-05-12 13:18:26,800 DEBUG - downloading https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz
+2014-05-12 13:18:42,258 DEBUG - retrieving configuration for ruby
+2014-05-12 13:18:42,258 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:18:42,259 DEBUG - ruby config retrieved successfully
+2014-05-12 13:18:42,259 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:18:42,271 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:18:42,272 DEBUG - creating package directories
+2014-05-12 13:18:42,273 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:18:42,290 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:18:42,292 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:18:42,292 DEBUG - directory already exists, skipping.
+2014-05-12 13:18:42,298 DEBUG - successfully executed: export PREFIX=/opt/ruby-build
+2014-05-12 13:18:53,454 DEBUG - retrieving configuration for ruby
+2014-05-12 13:18:53,457 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:18:53,459 DEBUG - ruby config retrieved successfully
+2014-05-12 13:18:53,461 DEBUG - attempting to remove directory /opt/ruby
+2014-05-12 13:18:53,477 DEBUG - successfully executed: rm -rf /opt/ruby
+2014-05-12 13:18:53,478 DEBUG - creating package directories
+2014-05-12 13:18:53,479 DEBUG - creating directory /opt/ruby/archives
+2014-05-12 13:18:53,493 DEBUG - successfully executed: mkdir -p /opt/ruby/archives
+2014-05-12 13:18:53,494 DEBUG - creating directory /cloudify-components/ruby/
+2014-05-12 13:18:53,495 DEBUG - directory already exists, skipping.
+2014-05-12 13:18:57,109 DEBUG - successfully executed: git clone https://github.com/sstephenson/ruby-build.git
+2014-05-12 13:18:57,114 DEBUG - successfully executed: export PREFIX=/opt/ruby-build
+2014-05-12 13:18:57,144 DEBUG - successfully executed: /opt/ruby-build/install.sh
+2014-05-12 13:25:34,330 DEBUG - successfully executed: /opt/ruby-build/bin/ruby-build -v 2.1.0 /opt/ruby
+2014-05-12 13:25:51,456 INFO - skipping component: ruby
+2014-05-12 13:25:51,482 DEBUG - retrieving configuration for kibana3
+2014-05-12 13:25:51,485 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:25:51,487 DEBUG - kibana3 config retrieved successfully
+2014-05-12 13:25:51,491 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:25:51,493 DEBUG - attempting to remove directory /packages/kibana3
+2014-05-12 13:25:51,553 DEBUG - successfully executed: rm -rf /packages/kibana3
+2014-05-12 13:25:51,556 DEBUG - checking if /cloudify-components/kibana3//archives exists
+2014-05-12 13:25:51,558 DEBUG - /cloudify-components/kibana3//archives exists
+2014-05-12 13:25:51,561 DEBUG - checking if /packages/kibana3 exists
+2014-05-12 13:25:51,563 DEBUG - /packages/kibana3 does not exist
+2014-05-12 13:25:51,566 DEBUG - creating directory /packages/kibana3
+2014-05-12 13:25:51,603 DEBUG - successfully executed: mkdir -p /packages/kibana3
+2014-05-12 13:25:51,607 DEBUG - downloading https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz
+2014-05-12 13:25:54,707 DEBUG - successfully executed: wget https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz --timeout=30 -P /packages/kibana3
+2014-05-12 13:25:54,716 DEBUG - retrieving configuration for elasticsearch
+2014-05-12 13:25:54,718 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:25:54,721 DEBUG - elasticsearch config retrieved successfully
+2014-05-12 13:25:54,724 DEBUG - attempting to remove directory /packages/elasticsearch
+2014-05-12 13:25:54,761 DEBUG - successfully executed: rm -rf /packages/elasticsearch
+2014-05-12 13:25:54,766 DEBUG - creating package directories
+2014-05-12 13:25:54,769 DEBUG - creating directory /packages/elasticsearch/archives
+2014-05-12 13:25:54,815 DEBUG - successfully executed: mkdir -p /packages/elasticsearch/archives
+2014-05-12 13:25:54,820 DEBUG - creating directory /cloudify-components/elasticsearch/
+2014-05-12 13:25:54,824 DEBUG - directory already exists, skipping.
+2014-05-12 13:25:54,826 DEBUG - downloading https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz
+2014-05-12 13:26:02,866 DEBUG - successfully executed: wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz --timeout=30 -P /packages/elasticsearch
+2014-05-12 13:26:02,872 DEBUG - retrieving configuration for logstash
+2014-05-12 13:26:02,874 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:26:02,879 DEBUG - logstash config retrieved successfully
+2014-05-12 13:26:02,884 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:26:02,887 DEBUG - attempting to remove directory /packages/logstash
+2014-05-12 13:26:02,926 DEBUG - successfully executed: rm -rf /packages/logstash
+2014-05-12 13:26:02,929 DEBUG - checking if /cloudify-components/logstash//archives exists
+2014-05-12 13:26:02,932 DEBUG - /cloudify-components/logstash//archives exists
+2014-05-12 13:26:02,934 DEBUG - checking if /packages/logstash exists
+2014-05-12 13:26:02,938 DEBUG - /packages/logstash does not exist
+2014-05-12 13:26:02,940 DEBUG - creating directory /packages/logstash
+2014-05-12 13:26:02,980 DEBUG - successfully executed: mkdir -p /packages/logstash
+2014-05-12 13:26:02,984 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-12 13:26:40,643 DEBUG - successfully executed: wget https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar --timeout=30 -P /packages/logstash
+2014-05-12 13:31:21,848 INFO - skipping component: ruby
+2014-05-12 13:31:21,860 DEBUG - retrieving configuration for kibana3
+2014-05-12 13:31:21,863 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:31:21,866 DEBUG - kibana3 config retrieved successfully
+2014-05-12 13:31:21,869 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:31:21,871 DEBUG - attempting to remove directory /sources/kibana3
+2014-05-12 13:31:21,874 WARNING - dir doesn't exist
+2014-05-12 13:31:21,876 DEBUG - checking if /packages/kibana3//archives exists
+2014-05-12 13:31:21,878 DEBUG - /packages/kibana3//archives does not exist
+2014-05-12 13:31:21,880 DEBUG - creating directory /packages/kibana3//archives
+2014-05-12 13:31:21,922 DEBUG - successfully executed: mkdir -p /packages/kibana3//archives
+2014-05-12 13:31:21,927 DEBUG - checking if /sources/kibana3 exists
+2014-05-12 13:31:21,930 DEBUG - /sources/kibana3 does not exist
+2014-05-12 13:31:21,933 DEBUG - creating directory /sources/kibana3
+2014-05-12 13:31:21,977 DEBUG - successfully executed: mkdir -p /sources/kibana3
+2014-05-12 13:31:21,980 DEBUG - downloading https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz
+2014-05-12 13:31:24,410 DEBUG - successfully executed: wget https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz --timeout=30 -P /sources/kibana3
+2014-05-12 13:31:24,416 DEBUG - retrieving configuration for elasticsearch
+2014-05-12 13:31:24,418 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:31:24,419 DEBUG - elasticsearch config retrieved successfully
+2014-05-12 13:31:24,421 DEBUG - attempting to remove directory /sources/elasticsearch
+2014-05-12 13:31:24,427 WARNING - dir doesn't exist
+2014-05-12 13:31:24,430 DEBUG - creating package directories
+2014-05-12 13:31:24,433 DEBUG - creating directory /sources/elasticsearch/archives
+2014-05-12 13:31:24,482 DEBUG - successfully executed: mkdir -p /sources/elasticsearch/archives
+2014-05-12 13:31:24,486 DEBUG - creating directory /packages/elasticsearch/
+2014-05-12 13:31:24,527 DEBUG - successfully executed: mkdir -p /packages/elasticsearch/
+2014-05-12 13:31:24,530 DEBUG - downloading https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz
+2014-05-12 13:31:32,477 DEBUG - successfully executed: wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.tar.gz --timeout=30 -P /sources/elasticsearch
+2014-05-12 13:31:32,481 DEBUG - retrieving configuration for logstash
+2014-05-12 13:31:32,483 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:31:32,485 DEBUG - logstash config retrieved successfully
+2014-05-12 13:31:32,490 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:31:32,493 DEBUG - attempting to remove directory /sources/logstash
+2014-05-12 13:31:32,495 WARNING - dir doesn't exist
+2014-05-12 13:31:32,498 DEBUG - checking if /packages/logstash//archives exists
+2014-05-12 13:31:32,499 DEBUG - /packages/logstash//archives does not exist
+2014-05-12 13:31:32,502 DEBUG - creating directory /packages/logstash//archives
+2014-05-12 13:31:32,539 DEBUG - successfully executed: mkdir -p /packages/logstash//archives
+2014-05-12 13:31:32,542 DEBUG - checking if /sources/logstash exists
+2014-05-12 13:31:32,545 DEBUG - /sources/logstash does not exist
+2014-05-12 13:31:32,548 DEBUG - creating directory /sources/logstash
+2014-05-12 13:31:32,590 DEBUG - successfully executed: mkdir -p /sources/logstash
+2014-05-12 13:31:32,593 DEBUG - downloading https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar
+2014-05-12 13:32:00,490 DEBUG - successfully executed: wget https://download.elasticsearch.org/logstash/logstash/logstash-1.3.2-flatjar.jar --timeout=30 -P /sources/logstash
+2014-05-12 13:32:00,502 INFO - skipping component: ruby
+2014-05-12 13:32:00,505 DEBUG - retrieving configuration for kibana3
+2014-05-12 13:32:00,507 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:32:00,519 DEBUG - kibana3 config retrieved successfully
+2014-05-12 13:32:00,523 INFO - cleaning up before packaging...
+2014-05-12 13:32:00,526 INFO - overwrite enabled. removing directory before packaging
+2014-05-12 13:32:00,528 INFO - removing files /packages/kibana3//kibana3*
+2014-05-12 13:32:00,530 WARNING - file(s) do(es)n't exist
+2014-05-12 13:32:00,532 DEBUG - attempting to remove directory /sources/kibana3/archives
+2014-05-12 13:32:00,534 WARNING - dir doesn't exist
+2014-05-12 13:32:00,535 DEBUG - creating directory /sources/kibana3/archives
+2014-05-12 13:32:00,570 DEBUG - successfully executed: mkdir -p /sources/kibana3/archives
+2014-05-12 13:32:00,572 INFO - generating package scripts and config files...
+2014-05-12 13:32:00,574 DEBUG - creating bootstrap script...
+2014-05-12 13:32:00,576 DEBUG - checking if package-templates/ exists
+2014-05-12 13:32:00,582 DEBUG - package-templates/ exists
+2014-05-12 13:32:00,584 DEBUG - checking if package-templates//kibana-bootstrap.template exists
+2014-05-12 13:32:00,589 DEBUG - package-templates//kibana-bootstrap.template exists
+2014-05-12 13:32:00,617 DEBUG - generating template from package-templates//kibana-bootstrap.template
+2014-05-12 13:32:00,620 DEBUG - creating file: package-scripts/kibana-bootstrap.sh with content: 
+#!/usr/bin/env bash
+
+function state_error
+{
+	echo "ERROR: ${1:-UNKNOWN} (status $?)" 1>&2
+	exit 1
+}
+
+function check_pkg
+{
+	echo "checking to see if package $1 is installed..."
+	dpkg -s $1 || state_error "package $1 is not installed"
+	echo "package $1 is installed"
+}
+
+function check_user
+{
+	echo "checking to see if user $1 exists..."
+	id -u $1 || state_error "user $1 doesn't exists"
+	echo "user $1 exists"
+}
+
+function check_port
+{
+	echo "checking to see if port $1 is opened..."
+	nc -z $1 $2 || state_error "port $2 is closed"
+	echo "port $2 on $1 is opened"
+}
+
+function check_dir
+{
+	echo "checking to see if dir $1 exists..."
+	if [ -d $1 ]; then
+		echo "dir $1 exists"
+	else
+		state_error "dir $1 doesn't exist"
+	fi
+}
+
+function check_file
+{
+	echo "checking to see if file $1 exists..."
+	if [ -f $1 ]; then
+		echo "file $1 exists"
+		# if [ -$2 $1 ]; then
+			# echo "$1 exists and contains the right attribs"
+		# else
+			# state_error "$1 exists but does not contain the right attribs"
+		# fi
+	else
+		state_error "file $1 doesn't exists"
+	fi
+}
+
+function check_upstart
+{
+	echo "checking to see if $1 daemon is running..."
+	sudo status $1 || state_error "daemon $1 is not running"
+	echo "daemon $1 is running"
+}
+
+function check_service
+{
+    echo "checking to see if $1 service is running..."
+    sudo service $1 status || state_error "service $1 is not running"
+    echo "service $1 is running"
+}
+
+
+PKG_NAME="kibana3"
+PKG_DIR="/sources/kibana3"
+BOOTSTRAP_LOG="/var/log/cloudify3-bootstrap.log"
+
+BASE_DIR="/opt"
+HOME_DIR="${BASE_DIR}/${PKG_NAME}"
+
+
+echo "unpacking ${PKG_NAME}..."
+sudo tar -C ${BASE_DIR}/ -xvf ${PKG_DIR}/kibana-*.tar.gz
+check_dir "${BASE_DIR}/kibana-3.0.0milestone4"
+
+echo "creating ${PKG_NAME} app link..."
+sudo ln -s ${BASE_DIR}/kibana-*/ ${HOME_DIR}
+# check_dir symlink
+2014-05-12 13:32:00,643 ERROR - could not write to file
+2014-05-12 13:33:37,580 INFO - skipping component: ruby
+2014-05-12 13:33:37,583 DEBUG - retrieving configuration for kibana3
+2014-05-12 13:33:37,584 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:33:37,586 DEBUG - kibana3 config retrieved successfully
+2014-05-12 13:33:37,592 INFO - cleaning up before packaging...
+2014-05-12 13:33:37,594 INFO - overwrite enabled. removing directory before packaging
+2014-05-12 13:33:37,598 INFO - removing files /packages/kibana3//kibana3*
+2014-05-12 13:33:37,600 WARNING - file(s) do(es)n't exist
+2014-05-12 13:33:37,602 DEBUG - attempting to remove directory /sources/kibana3/archives
+2014-05-12 13:33:37,635 DEBUG - successfully executed: rm -rf /sources/kibana3/archives
+2014-05-12 13:33:37,638 DEBUG - creating directory /sources/kibana3/archives
+2014-05-12 13:33:37,673 DEBUG - successfully executed: mkdir -p /sources/kibana3/archives
+2014-05-12 13:33:37,676 INFO - generating package scripts and config files...
+2014-05-12 13:33:37,679 DEBUG - creating bootstrap script...
+2014-05-12 13:33:37,681 DEBUG - checking if package-templates/ exists
+2014-05-12 13:33:37,686 DEBUG - package-templates/ exists
+2014-05-12 13:33:37,689 DEBUG - checking if package-templates//kibana-bootstrap.template exists
+2014-05-12 13:33:37,693 DEBUG - package-templates//kibana-bootstrap.template exists
+2014-05-12 13:33:37,718 DEBUG - generating template from package-templates//kibana-bootstrap.template
+2014-05-12 13:33:37,722 DEBUG - creating file: package-scripts/kibana-bootstrap.sh with content: 
+#!/usr/bin/env bash
+
+function state_error
+{
+	echo "ERROR: ${1:-UNKNOWN} (status $?)" 1>&2
+	exit 1
+}
+
+function check_pkg
+{
+	echo "checking to see if package $1 is installed..."
+	dpkg -s $1 || state_error "package $1 is not installed"
+	echo "package $1 is installed"
+}
+
+function check_user
+{
+	echo "checking to see if user $1 exists..."
+	id -u $1 || state_error "user $1 doesn't exists"
+	echo "user $1 exists"
+}
+
+function check_port
+{
+	echo "checking to see if port $1 is opened..."
+	nc -z $1 $2 || state_error "port $2 is closed"
+	echo "port $2 on $1 is opened"
+}
+
+function check_dir
+{
+	echo "checking to see if dir $1 exists..."
+	if [ -d $1 ]; then
+		echo "dir $1 exists"
+	else
+		state_error "dir $1 doesn't exist"
+	fi
+}
+
+function check_file
+{
+	echo "checking to see if file $1 exists..."
+	if [ -f $1 ]; then
+		echo "file $1 exists"
+		# if [ -$2 $1 ]; then
+			# echo "$1 exists and contains the right attribs"
+		# else
+			# state_error "$1 exists but does not contain the right attribs"
+		# fi
+	else
+		state_error "file $1 doesn't exists"
+	fi
+}
+
+function check_upstart
+{
+	echo "checking to see if $1 daemon is running..."
+	sudo status $1 || state_error "daemon $1 is not running"
+	echo "daemon $1 is running"
+}
+
+function check_service
+{
+    echo "checking to see if $1 service is running..."
+    sudo service $1 status || state_error "service $1 is not running"
+    echo "service $1 is running"
+}
+
+
+PKG_NAME="kibana3"
+PKG_DIR="/sources/kibana3"
+BOOTSTRAP_LOG="/var/log/cloudify3-bootstrap.log"
+
+BASE_DIR="/opt"
+HOME_DIR="${BASE_DIR}/${PKG_NAME}"
+
+
+echo "unpacking ${PKG_NAME}..."
+sudo tar -C ${BASE_DIR}/ -xvf ${PKG_DIR}/kibana-*.tar.gz
+check_dir "${BASE_DIR}/kibana-3.0.0milestone4"
+
+echo "creating ${PKG_NAME} app link..."
+sudo ln -s ${BASE_DIR}/kibana-*/ ${HOME_DIR}
+# check_dir symlink
+2014-05-12 13:33:37,742 INFO - packing up component...
+2014-05-12 13:33:37,743 INFO - packing kibana3
+2014-05-12 13:33:37,746 DEBUG - checking if /sources/kibana3 exists
+2014-05-12 13:33:37,748 DEBUG - /sources/kibana3 exists
+2014-05-12 13:33:37,752 DEBUG - package dependencies are: openjdk-7-jdk, logstash, elasticsearch
+2014-05-12 13:33:39,347 DEBUG - successfully executed: sudo fpm -s dir -t deb --after-install /home/vagrant/examples/package-scripts/kibana-bootstrap.sh -d openjdk-7-jdk -d logstash -d elasticsearch -n kibana3 -v 3.0.0milestone4 -f /sources/kibana3
+2014-05-12 13:33:39,350 DEBUG - checking if /packages/kibana3/ exists
+2014-05-12 13:33:39,354 DEBUG - /packages/kibana3/ exists
+2014-05-12 13:33:39,358 INFO - isolating archives...
+2014-05-12 13:33:39,360 DEBUG - copying /sources/kibana3/archives/*.deb to /packages/kibana3/
+2014-05-12 13:33:39,422 DEBUG - successfully executed: cp -R /sources/kibana3/archives/*.deb /packages/kibana3/
+2014-05-12 13:33:39,425 INFO - package creation completed successfully!
+2014-05-12 13:33:39,428 DEBUG - retrieving configuration for elasticsearch
+2014-05-12 13:33:39,430 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:33:39,433 DEBUG - elasticsearch config retrieved successfully
+2014-05-12 13:33:39,435 INFO - cleaning up before packaging...
+2014-05-12 13:33:39,439 INFO - overwrite enabled. removing directory before packaging
+2014-05-12 13:33:39,442 INFO - removing files /packages/elasticsearch//elasticsearch*
+2014-05-12 13:33:39,444 WARNING - file(s) do(es)n't exist
+2014-05-12 13:33:39,447 DEBUG - attempting to remove directory /sources/elasticsearch/archives
+2014-05-12 13:33:39,498 DEBUG - successfully executed: rm -rf /sources/elasticsearch/archives
+2014-05-12 13:33:39,502 DEBUG - creating directory /sources/elasticsearch/archives
+2014-05-12 13:33:39,538 DEBUG - successfully executed: mkdir -p /sources/elasticsearch/archives
+2014-05-12 13:33:39,541 INFO - generating package scripts and config files...
+2014-05-12 13:33:39,543 DEBUG - creating directory /sources/elasticsearch/config/conf
+2014-05-12 13:33:39,578 DEBUG - successfully executed: mkdir -p /sources/elasticsearch/config/conf
+2014-05-12 13:33:39,582 DEBUG - generating config file...
+2014-05-12 13:33:39,583 DEBUG - checking if package-configuration/elasticsearch/init exists
+2014-05-12 13:33:39,587 DEBUG - package-configuration/elasticsearch/init exists
+2014-05-12 13:33:39,589 DEBUG - checking if package-configuration/elasticsearch/init/elasticsearch.conf.template exists
+2014-05-12 13:33:39,593 DEBUG - package-configuration/elasticsearch/init/elasticsearch.conf.template exists
+2014-05-12 13:33:39,608 DEBUG - generating template from package-configuration/elasticsearch/init/elasticsearch.conf.template
+2014-05-12 13:33:39,610 DEBUG - creating file: /sources/elasticsearch/config/conf/elasticsearch.conf with content: 
+# ElasticSearch Service
+ 
+description     "ElasticSearch"
+ 
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+ 
+stop on runlevel [016]
+ 
+respawn limit 10 5
+ 
+env ES_HOME=/usr/share/elasticsearch/home
+env ES_MIN_MEM=1g
+env ES_MAX_MEM=1g
+env DAEMON="${ES_HOME}/bin/elasticsearch"
+env DATA_DIR=/data/elasticsearch/data
+env CONFIG_DIR=/etc/elasticsearch
+ 
+console output
+ 
+script
+  if [ -f /etc/default/elasticsearch ]; then
+    . /etc/default/elasticsearch
+  fi
+ 
+  su -s /bin/sh -c 'exec "$0" "$@"' root -- /opt/elasticsearch/bin/elasticsearch -f -Xms${ES_MIN_MEM} -Xmx${ES_MAX_MEM}
+end script
+2014-05-12 13:33:39,618 DEBUG - creating directory /sources/elasticsearch/config/init
+2014-05-12 13:33:39,654 DEBUG - successfully executed: mkdir -p /sources/elasticsearch/config/init
+2014-05-12 13:33:39,658 DEBUG - generating config file...
+2014-05-12 13:33:39,660 DEBUG - checking if package-configuration/elasticsearch/init exists
+2014-05-12 13:33:39,664 DEBUG - package-configuration/elasticsearch/init exists
+2014-05-12 13:33:39,667 DEBUG - checking if package-configuration/elasticsearch/init/elasticsearch.conf.template exists
+2014-05-12 13:33:39,670 DEBUG - package-configuration/elasticsearch/init/elasticsearch.conf.template exists
+2014-05-12 13:33:39,692 DEBUG - generating template from package-configuration/elasticsearch/init/elasticsearch.conf.template
+2014-05-12 13:33:39,694 DEBUG - creating file: /sources/elasticsearch/config/init/elasticsearch.conf with content: 
+# ElasticSearch Service
+ 
+description     "ElasticSearch"
+ 
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+ 
+stop on runlevel [016]
+ 
+respawn limit 10 5
+ 
+env ES_HOME=/usr/share/elasticsearch/home
+env ES_MIN_MEM=1g
+env ES_MAX_MEM=1g
+env DAEMON="${ES_HOME}/bin/elasticsearch"
+env DATA_DIR=/data/elasticsearch/data
+env CONFIG_DIR=/etc/elasticsearch
+ 
+console output
+ 
+script
+  if [ -f /etc/default/elasticsearch ]; then
+    . /etc/default/elasticsearch
+  fi
+ 
+  su -s /bin/sh -c 'exec "$0" "$@"' root -- /opt/elasticsearch/bin/elasticsearch -f -Xms${ES_MIN_MEM} -Xmx${ES_MAX_MEM}
+end script
+2014-05-12 13:33:39,699 DEBUG - creating bootstrap script...
+2014-05-12 13:33:39,701 DEBUG - checking if package-templates/ exists
+2014-05-12 13:33:39,705 DEBUG - package-templates/ exists
+2014-05-12 13:33:39,707 DEBUG - checking if package-templates//elasticsearch-bootstrap.template exists
+2014-05-12 13:33:39,714 DEBUG - package-templates//elasticsearch-bootstrap.template exists
+2014-05-12 13:33:39,746 DEBUG - generating template from package-templates//elasticsearch-bootstrap.template
+2014-05-12 13:33:39,750 DEBUG - creating file: package-scripts/elasticsearch-bootstrap.sh with content: 
+#!/usr/bin/env bash
+
+function state_error
+{
+	echo "ERROR: ${1:-UNKNOWN} (status $?)" 1>&2
+	exit 1
+}
+
+function check_pkg
+{
+	echo "checking to see if package $1 is installed..."
+	dpkg -s $1 || state_error "package $1 is not installed"
+	echo "package $1 is installed"
+}
+
+function check_user
+{
+	echo "checking to see if user $1 exists..."
+	id -u $1 || state_error "user $1 doesn't exists"
+	echo "user $1 exists"
+}
+
+function check_port
+{
+	echo "checking to see if port $1 is opened..."
+	nc -z $1 $2 || state_error "port $2 is closed"
+	echo "port $2 on $1 is opened"
+}
+
+function check_dir
+{
+	echo "checking to see if dir $1 exists..."
+	if [ -d $1 ]; then
+		echo "dir $1 exists"
+	else
+		state_error "dir $1 doesn't exist"
+	fi
+}
+
+function check_file
+{
+	echo "checking to see if file $1 exists..."
+	if [ -f $1 ]; then
+		echo "file $1 exists"
+		# if [ -$2 $1 ]; then
+			# echo "$1 exists and contains the right attribs"
+		# else
+			# state_error "$1 exists but does not contain the right attribs"
+		# fi
+	else
+		state_error "file $1 doesn't exists"
+	fi
+}
+
+function check_upstart
+{
+	echo "checking to see if $1 daemon is running..."
+	sudo status $1 || state_error "daemon $1 is not running"
+	echo "daemon $1 is running"
+}
+
+function check_service
+{
+    echo "checking to see if $1 service is running..."
+    sudo service $1 status || state_error "service $1 is not running"
+    echo "service $1 is running"
+}
+
+
+PKG_NAME="elasticsearch"
+PKG_DIR="/sources/elasticsearch"
+BOOTSTRAP_LOG="/var/log/cloudify3-bootstrap.log"
+
+BASE_DIR="/opt"
+HOME_DIR="${BASE_DIR}/${PKG_NAME}"
+
+PKG_INIT_DIR="${PKG_DIR}/config/init"
+INIT_DIR="/etc/init"
+INIT_FILE="elasticsearch.conf"
+
+PKG_CONF_DIR="${PKG_DIR}/config/conf"
+CONF_DIR="/etc/init"
+CONF_FILE="elasticsearch.conf"
+
+
+echo "creating ${PKG_NAME} home dir..."
+sudo mkdir -p /home/${PKG_NAME}
+
+echo "unpacking ${PKG_NAME}"
+sudo tar -C ${BASE_DIR}/ -xvf ${PKG_DIR}/${PKG_NAME}-*.tar.gz
+
+echo "creating ${PKG_NAME} app link..."
+sudo ln -sf ${BASE_DIR}/${PKG_NAME}-*/ ${HOME_DIR}
+# check_file symlink
+
+echo "moving some stuff around..."
+sudo cp ${PKG_INIT_DIR}/${INIT_FILE} ${INIT_DIR}
+check_file "${INIT_DIR}/${INIT_FILE}"
+
+# sudo cp ${PKG_CONF_DIR}/${CONF_FILE} ${CONF_DIR}
+# check_file "${CONF_DIR}/${CONF_FILE}"
+
+echo "starting ${PKG_NAME}..."
+sudo start elasticsearch
+check_upstart "elasticsearch"
+
+sleep 5
+c=0
+while ! echo exit | curl http://localhost:9200;
+do
+        if [[ $c -gt 24 ]]; then
+                state_error "failed to connect to elasticsearch..."
+        fi
+        echo "elasticsearch host not up yet... retrying... ($c/24)"
+        sleep 5;
+        c=$((c+1))
+done
+2014-05-12 13:33:39,766 INFO - packing up component...
+2014-05-12 13:33:39,768 INFO - packing elasticsearch
+2014-05-12 13:33:39,771 DEBUG - checking if /sources/elasticsearch exists
+2014-05-12 13:33:39,778 DEBUG - /sources/elasticsearch exists
+2014-05-12 13:33:39,782 DEBUG - package dependencies are: openjdk-7-jdk
+2014-05-12 13:33:44,004 DEBUG - successfully executed: sudo fpm -s dir -t deb --after-install /home/vagrant/examples/package-scripts/elasticsearch-bootstrap.sh -d openjdk-7-jdk -n elasticsearch -v 1.0.1 -f /sources/elasticsearch
+2014-05-12 13:33:44,011 DEBUG - checking if /packages/elasticsearch/ exists
+2014-05-12 13:33:44,014 DEBUG - /packages/elasticsearch/ exists
+2014-05-12 13:33:44,016 INFO - isolating archives...
+2014-05-12 13:33:44,018 DEBUG - copying /sources/elasticsearch/archives/*.deb to /packages/elasticsearch/
+2014-05-12 13:33:44,103 DEBUG - successfully executed: cp -R /sources/elasticsearch/archives/*.deb /packages/elasticsearch/
+2014-05-12 13:33:44,106 INFO - package creation completed successfully!
+2014-05-12 13:33:44,109 DEBUG - retrieving configuration for logstash
+2014-05-12 13:33:44,111 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:33:44,113 DEBUG - logstash config retrieved successfully
+2014-05-12 13:33:44,115 INFO - cleaning up before packaging...
+2014-05-12 13:33:44,118 INFO - overwrite enabled. removing directory before packaging
+2014-05-12 13:33:44,125 INFO - removing files /packages/logstash//logstash*
+2014-05-12 13:33:44,127 WARNING - file(s) do(es)n't exist
+2014-05-12 13:33:44,130 DEBUG - attempting to remove directory /sources/logstash/archives
+2014-05-12 13:33:44,132 WARNING - dir doesn't exist
+2014-05-12 13:33:44,135 DEBUG - creating directory /sources/logstash/archives
+2014-05-12 13:33:44,172 DEBUG - successfully executed: mkdir -p /sources/logstash/archives
+2014-05-12 13:33:44,175 INFO - generating package scripts and config files...
+2014-05-12 13:33:44,179 DEBUG - creating directory /sources/logstash/config/conf
+2014-05-12 13:33:44,216 DEBUG - successfully executed: mkdir -p /sources/logstash/config/conf
+2014-05-12 13:33:44,220 DEBUG - generating config file...
+2014-05-12 13:33:44,221 DEBUG - checking if package-configuration/logstash/conf exists
+2014-05-12 13:33:44,226 DEBUG - package-configuration/logstash/conf exists
+2014-05-12 13:33:44,229 DEBUG - checking if package-configuration/logstash/conf/logstash.conf.template exists
+2014-05-12 13:33:44,236 DEBUG - package-configuration/logstash/conf/logstash.conf.template exists
+2014-05-12 13:33:44,256 DEBUG - generating template from package-configuration/logstash/conf/logstash.conf.template
+2014-05-12 13:33:44,258 DEBUG - creating file: /sources/logstash/config/conf/logstash.conf with content: 
+input {
+    tcp {
+        port => 9999
+    }
+}
+
+output {
+    elasticsearch_http {
+        host => "localhost"
+        index => "cloudify_events"
+    }
+}
+2014-05-12 13:33:44,264 DEBUG - creating directory /sources/logstash/config/init
+2014-05-12 13:33:44,300 DEBUG - successfully executed: mkdir -p /sources/logstash/config/init
+2014-05-12 13:33:44,304 DEBUG - generating config file...
+2014-05-12 13:33:44,308 DEBUG - checking if package-configuration/logstash/init exists
+2014-05-12 13:33:44,312 DEBUG - package-configuration/logstash/init exists
+2014-05-12 13:33:44,315 DEBUG - checking if package-configuration/logstash/init/logstash.conf.template exists
+2014-05-12 13:33:44,318 DEBUG - package-configuration/logstash/init/logstash.conf.template exists
+2014-05-12 13:33:44,343 DEBUG - generating template from package-configuration/logstash/init/logstash.conf.template
+2014-05-12 13:33:44,348 DEBUG - creating file: /sources/logstash/config/init/logstash.conf with content: 
+# logstash - agent instance
+#
+
+description     "logstash agent instance"
+
+start on virtual-filesystems
+stop on runlevel [06]
+
+# Respawn it if the process exits
+respawn
+respawn limit 5 30
+limit nofile 65550 65550
+expect fork
+
+# You need to chdir somewhere writable because logstash needs to unpack a few
+# temporary files on startup.
+chdir /home/logstash
+
+script
+
+  # This runs logstash agent as the 'root' user
+  su -s /bin/sh -c 'exec "$0" "$@"' root -- /usr/bin/java -jar /opt/logstash/logstash.jar agent -f /etc/logstash.conf & #--log /var/log/logstash.out &
+  emit logstash-agent-running
+end script
+2014-05-12 13:33:44,356 DEBUG - creating bootstrap script...
+2014-05-12 13:33:44,359 DEBUG - checking if package-templates/ exists
+2014-05-12 13:33:44,363 DEBUG - package-templates/ exists
+2014-05-12 13:33:44,365 DEBUG - checking if package-templates//logstash-bootstrap.template exists
+2014-05-12 13:33:44,370 DEBUG - package-templates//logstash-bootstrap.template exists
+2014-05-12 13:33:44,391 DEBUG - generating template from package-templates//logstash-bootstrap.template
+2014-05-12 13:33:44,395 DEBUG - creating file: package-scripts/logstash-bootstrap.sh with content: 
+#!/usr/bin/env bash
+
+function state_error
+{
+	echo "ERROR: ${1:-UNKNOWN} (status $?)" 1>&2
+	exit 1
+}
+
+function check_pkg
+{
+	echo "checking to see if package $1 is installed..."
+	dpkg -s $1 || state_error "package $1 is not installed"
+	echo "package $1 is installed"
+}
+
+function check_user
+{
+	echo "checking to see if user $1 exists..."
+	id -u $1 || state_error "user $1 doesn't exists"
+	echo "user $1 exists"
+}
+
+function check_port
+{
+	echo "checking to see if port $1 is opened..."
+	nc -z $1 $2 || state_error "port $2 is closed"
+	echo "port $2 on $1 is opened"
+}
+
+function check_dir
+{
+	echo "checking to see if dir $1 exists..."
+	if [ -d $1 ]; then
+		echo "dir $1 exists"
+	else
+		state_error "dir $1 doesn't exist"
+	fi
+}
+
+function check_file
+{
+	echo "checking to see if file $1 exists..."
+	if [ -f $1 ]; then
+		echo "file $1 exists"
+		# if [ -$2 $1 ]; then
+			# echo "$1 exists and contains the right attribs"
+		# else
+			# state_error "$1 exists but does not contain the right attribs"
+		# fi
+	else
+		state_error "file $1 doesn't exists"
+	fi
+}
+
+function check_upstart
+{
+	echo "checking to see if $1 daemon is running..."
+	sudo status $1 || state_error "daemon $1 is not running"
+	echo "daemon $1 is running"
+}
+
+function check_service
+{
+    echo "checking to see if $1 service is running..."
+    sudo service $1 status || state_error "service $1 is not running"
+    echo "service $1 is running"
+}
+
+
+PKG_NAME="logstash"
+PKG_DIR="/sources/logstash"
+BOOTSTRAP_LOG="/var/log/cloudify3-bootstrap.log"
+
+BASE_DIR="/opt"
+HOME_DIR="${BASE_DIR}/${PKG_NAME}"
+
+LOG_DIR="/var/log"
+
+PKG_INIT_DIR="${PKG_DIR}/config/init"
+INIT_DIR="/etc/init"
+INIT_FILE="logstash.conf"
+
+PKG_CONF_DIR="${PKG_DIR}/config/conf"
+CONF_DIR="/etc"
+CONF_FILE="logstash.conf"
+
+
+echo "creating ${PKG_NAME} application dir..."
+sudo mkdir -p ${HOME_DIR}
+check_dir "${HOME_DIR}"
+
+echo "creating ${PKG_NAME} home dir..."
+sudo mkdir -p /home/logstash
+check_dir "/home/logstash"
+
+echo "placing jar file..."
+sudo cp ${PKG_DIR}/logstash-*-flatjar.jar ${HOME_DIR}
+check_file "${HOME_DIR}/logstash-*-flatjar.jar"
+
+echo "moving some stuff around..."
+sudo cp ${PKG_INIT_DIR}/${INIT_FILE} ${INIT_DIR}
+check_file "${INIT_DIR}/${INIT_FILE}"
+
+sudo cp ${PKG_CONF_DIR}/${CONF_FILE} ${CONF_DIR}
+check_file "${CONF_DIR}/${CONF_FILE}"
+
+echo "creating logstash user..."
+sudo useradd --shell /usr/sbin/nologin --create-home --home-dir ${HOME_DIR} --groups adm logstash
+check_user "logstash"
+
+echo "pwning ${PKG_NAME} file by logstash user..."
+sudo chown logstash:logstash ${HOME_DIR}/logstash-*-flatjar.jar
+echo "creating ${PKG_NAME} file link..."
+sudo ln -sf ${HOME_DIR}/logstash-*-flatjar.jar ${HOME_DIR}/logstash.jar
+#TODO: check if file link exists
+# echo "creating ${PKG_NAME} logfile..."
+# sudo touch ${LOG_DIR}/logstash.out
+# echo "pwning logstash logfile by ${PKG_NAME} user..."
+# sudo chown logstash:adm ${LOG_DIR}/logstash.out
+
+echo "starting ${PKG_NAME}..."
+sudo start logstash
+check_upstart "logstash"
+2014-05-12 13:33:44,418 INFO - packing up component...
+2014-05-12 13:33:44,420 INFO - packing logstash
+2014-05-12 13:33:44,430 DEBUG - checking if /sources/logstash exists
+2014-05-12 13:33:44,433 DEBUG - /sources/logstash exists
+2014-05-12 13:33:44,436 DEBUG - package dependencies are: openjdk-7-jdk
+2014-05-12 13:33:59,122 DEBUG - successfully executed: sudo fpm -s dir -t deb --after-install /home/vagrant/examples/package-scripts/logstash-bootstrap.sh -d openjdk-7-jdk -n logstash -v 1.3.2 -f /sources/logstash
+2014-05-12 13:33:59,128 DEBUG - checking if /packages/logstash/ exists
+2014-05-12 13:33:59,133 DEBUG - /packages/logstash/ exists
+2014-05-12 13:33:59,140 INFO - isolating archives...
+2014-05-12 13:33:59,155 DEBUG - copying /sources/logstash/archives/*.deb to /packages/logstash/
+2014-05-12 13:33:59,458 DEBUG - successfully executed: cp -R /sources/logstash/archives/*.deb /packages/logstash/
+2014-05-12 13:33:59,460 INFO - package creation completed successfully!
+2014-05-12 13:35:10,379 DEBUG - retrieving configuration for openjdk-7-jdk
+2014-05-12 13:35:10,381 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:35:10,385 DEBUG - openjdk-7-jdk config retrieved successfully
+2014-05-12 13:35:10,388 INFO - overwrite enabled. removing directory before retrieval
+2014-05-12 13:35:10,391 DEBUG - attempting to remove directory /sources/openjdk-7-jdk
+2014-05-12 13:35:10,392 WARNING - dir doesn't exist
+2014-05-12 13:35:10,395 DEBUG - checking if /packages/openjdk-7-jdk//archives exists
+2014-05-12 13:35:10,396 DEBUG - /packages/openjdk-7-jdk//archives does not exist
+2014-05-12 13:35:10,398 DEBUG - creating directory /packages/openjdk-7-jdk//archives
+2014-05-12 13:35:10,434 DEBUG - successfully executed: mkdir -p /packages/openjdk-7-jdk//archives
+2014-05-12 13:35:10,438 DEBUG - checking if /sources/openjdk-7-jdk exists
+2014-05-12 13:35:10,441 DEBUG - /sources/openjdk-7-jdk does not exist
+2014-05-12 13:35:10,443 DEBUG - creating directory /sources/openjdk-7-jdk
+2014-05-12 13:35:10,479 DEBUG - successfully executed: mkdir -p /sources/openjdk-7-jdk
+2014-05-12 13:35:10,483 DEBUG - downloading openjdk-7-jdk to /sources/openjdk-7-jdk
+2014-05-12 13:36:33,700 DEBUG - successfully executed: sudo apt-get -y install openjdk-7-jdk -d -o=dir::cache=/sources/openjdk-7-jdk
+2014-05-12 13:38:02,587 DEBUG - retrieving configuration for openjdk-7-jdk
+2014-05-12 13:38:02,590 DEBUG - components file is: /home/vagrant/examples/packages.py
+2014-05-12 13:38:02,594 DEBUG - openjdk-7-jdk config retrieved successfully
+2014-05-12 13:38:02,602 INFO - cleaning up before packaging...
+2014-05-12 13:38:02,605 INFO - overwrite enabled. removing directory before packaging
+2014-05-12 13:38:02,608 INFO - removing files /packages/openjdk-7-jdk//openjdk-7-jdk*
+2014-05-12 13:38:02,611 WARNING - file(s) do(es)n't exist
+2014-05-12 13:38:02,614 INFO - generating package scripts and config files...
+2014-05-12 13:38:02,616 INFO - packing up component...
+2014-05-12 13:38:02,618 DEBUG - checking if /packages/openjdk-7-jdk/ exists
+2014-05-12 13:38:02,620 DEBUG - /packages/openjdk-7-jdk/ exists
+2014-05-12 13:38:02,622 INFO - isolating archives...
+2014-05-12 13:38:02,626 DEBUG - copying /sources/openjdk-7-jdk/archives/*.deb to /packages/openjdk-7-jdk/
+2014-05-12 13:38:03,001 DEBUG - successfully executed: cp -R /sources/openjdk-7-jdk/archives/*.deb /packages/openjdk-7-jdk/
+2014-05-12 13:38:03,006 INFO - package creation completed successfully!

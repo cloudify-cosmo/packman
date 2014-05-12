@@ -1,0 +1,53 @@
+# flake8: NOQA
+
+# packman base definitions
+PACKAGER_TEMPLATE_PATH = "package-templates/"  # directory which contains config for all modules
+
+# packman base params
+PARAM_NAME = 'name'  # a mandatory 'string' representing the package's name
+PARAM_VERSION = 'version'  # a mandatory 'string' representing the package's version
+PARAM_DEPENDS = 'depends'  # an optional [list] of the dependencies of the package
+PARAM_REQUIRES = 'reqs'  # an optional [list] of the requirements to download
+PARAM_PACKAGE_PATH = 'package_path'  # a mandatory 'string' representing the destination path to be used in the packaging process
+PARAM_SOURCES_PATH = 'sources_path'  # a mandatory 'string' representing the source path to which files will be downloaded
+PARAM_SOURCE_PACKAGE_TYPE = 'src_package_type'  # an optional 'string' representing the source type of the package (as supported by fpm)
+PARAM_DESTINATION_PACKAGE_TYPE = 'dst_package_type'  # a mandatory 'string' representing the destination type of the package (as supported by fpm)
+PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH = 'bootstrap_script_in_pkg'  # an optional 'string' representing a bootstrap script path to be appended to a tar (copied into)
+PARAM_BOOTSTRAP_SCRIPT_PATH = 'bootstrap_script'  # an optional 'string' representing a path to which the bootstrap script (generated from the template) will be written
+PARAM_BOOTSTRAP_TEMPLATE_PATH = 'bootstrap_template'  # an optional 'string' representing a bootstrap script path to be appended to a deb or rpm (appended)
+PARAM_OVERWRITE_OUTPUT_PACKAGE = 'overwrite_package'  # an optional bool representing whether to overwrite a destination package by default
+PARAM_OVERWRITE_SOURCES = 'overwrite_sources'  # an optional bool representing whether to overwrite sources when retrieving package sources
+PARAM_MOCK = 'mock'  # an optional bool representing whether a mock package will be created instead of a real one (for testing purposes)
+PARAM_CONFIG_TEMPLATE_CONFIG = 'config_templates'  # an optional {dict} of config files and templates
+PARAM_MODULES = 'modules'  # an optional [list] of python modules to install into a virtualenv
+PARAM_GEMS = 'gems'  # an optional [list] of ruby gems to download
+PARAM_SOURCE_URLS = 'source_urls'  # an optional 'string' representing the sources to download # TOOD: REPLACE WIT [LIST]!
+PARAM_SOURCE_REPOS = 'source_repos'  # an optional 'string' representing repos to add to the repos list
+PARAM_SOURCE_PPAS = 'source_ppas'  # an optional 'string' representing a ppa repository to add
+PARAM_SOURCE_KEYS = 'source_keys'  # an optional 'string' representing a key to download
+PARAM_KEY_FILES_PATH = 'key_files'  # an optional 'string' representing a key to add
+PARAM_REQS = 'reqs'  # an optional [list] of requirements to download from the local distributions repos
+PARAM_PREREQS = 'prereqs'  # an optional [list] of prerequirements to install from before retrieving the sources or packgaging
+
+# TODO: DEPRACATE!
+PARAM_AUTO_GET = 'auto_get'  # bool representing whether the package is automatically retrieved by packman or if there's an external logic for retrieving it
+PARAM_AUTO_PACK = 'auto_pack'  # bool representing whether the package is automatically packaged by packman or if there's an external logic for packaging it
+
+# packman configuration files generation params
+PARAM_CONFIG_TEMPLATE_DIR = '__template_dir'  # an optional 'dict' containing config for generating config files from a templates directory
+# if PARAM_CONFIG_TEPMLATE_DIR is used:
+PARAM_CONFIG_TEMPALTES_DIR_TEMPLATES_PATH = 'templates'  # a mandatory 'string' stating where the template files reside
+PARAM_CONFIG_TEMPALTES_DIR_CONFIG_DIR = 'config_dir'  # a mandatory 'string' stating where to in the package dir the processed files should reside.
+
+PARAM_CONFIG_TEMPLATE_FILE = '__template_file'  # an optional 'dict' containing config  for generating a config file from a template file
+# if PARAM_CONFIG_TEMPLATE_FILE is used:
+PARAM_CONFIG_TEMPALTES_FILE_TEMPLATE_FILE = 'template'  # a mandatory 'string' stating where the specific template file resides
+PARAM_CONFIG_TEMPALTES_FILE_OUTPUT_FILE = 'output_file'  # a mandatory 'string' stating the name of the output config file.
+PARAM_CONFIG_TEMPALTES_FILE_CONFIG_DIR = 'config_dir'  # a mandatory 'string' stating where to in the package dir the processed file should reside.
+
+PARAM_CONFIG_CONFIG_DIR = '__config_dir'  # an optional 'dict' containing config for copying config files from a config files directory
+# if PARAM_CONFIG_CONFIG_DIR is used:
+PARAM_CONFIG_FILES_CONFIGS_PATH = 'files'  # a mandatory 'string' stating where the origin config files reside.
+PARAM_CONFIG_FILES_CONFIGS_DIR = 'config_dir'  # a mandatory 'string' stating where to in the package dir the processed file should reside.
+
+PARAM_CONFIG_CONFIG_FILE = '__config_file'  # an optional 'dict' containing config from copying a config file from a directory. (NOT IMPLEMENTED)

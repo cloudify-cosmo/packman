@@ -1,0 +1,549 @@
+[33m086e2ac[m[33m ([1;36mHEAD[m[33m, [1;31morigin/feature/CFY-505-packager-opensource-project[m[33m, [1;32mfeature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 added CHANGELOG.md
+[33mc33e37d[m CFY-505 added todo files and a todo generator (not working yet)
+[33m66d99b7[m CFY-505 more documentation, bug fixes and some minor feature additions..
+[33m6709e9e[m CFY-505 replaced source url string with source urls list, lots of visual code improvements and documentation
+[33m241ef65[m CFY-505 more doc...
+[33mbd474b6[m CFY-505 doc cp method
+[33m06695da[m CFY-505 doc cp method
+[33m4bdab4b[m CFY-505 ... documenting...
+[33m58b1eef[m CFY-505 ... documenting...
+[33m0152ad4[m CFY-505 started documenting...
+[33m20d6c47[m CFY-505 added some todos
+[33m4837aaa[m CFY-505 more code optimization... jeez
+[33m19a7c10[m CFY-505 mostly code optimization
+[33mffb7c8f[m CFY-505 all action class now receive the FileAndDirectoryHandler class and fixed some runner logic
+[33maa9acf0[m CFY-505 lots of code refactoring. both visual and logical
+[33mb61d6ee[m CFY-505 added docs dir for sphinx
+[33md3b6e2d[m CFY-505 minor visual alterations
+[33m93aab07[m CFY-505 revamped configuration and code placement, vagrantfile optimizations snd new definitions file
+[33m7843e53[m[33m ([1;31morigin/develop[m[33m, [1;31morigin/HEAD[m[33m, [1;32mdevelop[m[33m)[m started adding documentation handling and arranged some file locations
+[33mf4cc60d[m Merge branch 'develop' into feature/CFY-179-create-agent-package
+[33mc40222f[m fixed some config and added process-dep-links to pip
+[33md3bee30[m Merge pull request #5 from CloudifySource/feature/CFY-179-create-agent-package
+[33mfd049fc[m CFY-179 added package creation to packager
+[33m265854e[m CFY-179 added agent config to config.py
+[33mc7c3a36[m hotfix(es)
+[33mf7aba35[m hotfix(es)
+[33m55a74d2[m add celery and rieman to init.d startup
+[33m47031a1[m Update manager.conf.template
+[33m965d319[m Update celeryd-cloudify.management.template
+[33m95a416a[m Merge pull request #4 from CloudifySource/feature/CFY-467_add_missing_dirs
+[33m29b1f02[m Update packager.py
+[33m188c0cb[m Update config.py
+[33m62ffbd9[m Create mockfile
+[33mc8ed3a6[m added missing dirs and changed .gitignore
+[33m4f00fcd[m last minute changes for continuous integration + code cleanup + naming conventions
+[33m59fda6c[m .gitignore changes
+[33mf87866c[m .gitignore changes
+[33me1e1c94[m fixes and configuration changes
+[33mc90a147[m Merge pull request #3 from CloudifySource/feature/CFY-287-add-fileserver-url-to-celery-env
+[33m1a20c3f[m CFY-287 added manager file server url  env variable to celery template
+[33m0078529[m[33m ([1;31morigin/feature/CLOUDIFY-2643-replace-config-files-with-templates[m[33m)[m CLOUDIFY-2643 config changes
+[33m358e151[m CLOUDIFY-2643 some fixes for continuous integration
+[33m0d6347b[m CLOUDIFY-2643 minor bug fixes in bootstrap scripts and code
+[33m981e133[m CLOUDIFY-2643 removed some unnecessary code from scripts, added overwrite option when creating a package, move more config to templates
+[33mafa5fd2[m CLOUDIFY-2643 last changes - sanity test OK
+[33m99d14a2[m CLOUDIFY-2643 still fixing problematic configuration...
+[33mc047d8f[m CLOUDIFY-2643 hotfix(es)
+[33m11ca152[m CLOUDIfY-2643 added some untracked files
+[33m29c9ad2[m CLOUDIFY-2643 finalizations...
+[33m5cfc195[m CLOUDIFY-2643 changed logic to better support dymanic templating
+[33maecbd1e[m CLOUDIFY-2643 due to some dymanic templating issue - a change is required in the logic. testing.
+[33m1ef23b1[m CLOUDIFY-2643 replaced all config files with template files, added config template creation logic and added all template variables to main config file
+[33m720bf04[m last minute changes
+[33m12b797c[m Merge branch 'master' into develop
+[33mcb60883[m removed irrelevant files and directories
+[33m53d049b[m lots of internal changes for latest stable release. now moving on to branching
+[33m98af37f[m added install flag for continuous integration options
+[33m057485d[m replaced string formatting, added verbosity flag in config, small fixes..
+[33m5b6356b[m added file server configuration in nginx and manager virtualenv and fixed some packaging bugs
+[33m4cbef8c[m previous revamp fixes
+[33m664ec72[m packager revamp to ease development and configuration
+[33mbe2ec56[m revamped agent config, deleted some unnecessary scripts and cleaned some code
+[33m799fc41[m fixed agent configuration, on going...
+[33m55d1ab0[m fixed agent configuration, ongoing...
+[33me44d418[m hotfix
+[33m449eb7b[m hotfix
+[33mc835be6[m added vagrant file, fixed some UX stuff
+[33maac8419[m fixes, configuration changes, added agent package base
+[33m76a9b23[m minor fixes
+[33m8cbc36e[m changed ruby installation method to be precompiled (partially tested) and rearranged some code
+[33m170cf70[m removed unnecessary package config, completely cleaned up bootstrap scripts from unnecessary code, revamped bootstrap console logging
+[33m264d8d3[m finished celery modifications and tested that it is working, removed some unnecessary logging
+[33m5e17a30[m started work on celery agent, changed celery config to match new design (not tested yet)
+[33m313762e[m revamped elasticsearch config, deleted unnecessary code and package config...
+[33m684562c[m replaced jruby with ruby, separated ruby from gems, some syntax fixes
+[33m5c2d6af[m fixed a bug with one of the bootstrap tests
+[33mfd309b4[m loads of bug fixes, lots of bootstrap output changes
+[33m0a88313[m added gunicorn support to manager (not to nginx, yet), added port checks, fixed lots of bugs, added OS checks, added basic package installation check to see if a package is installed before attemping to install it... and more
+[33m967145a[m fixed lots of bugs, added more logging, more organized bootstrap event stream...
+[33macfc709[m fixed bugs in error handling and bootstrap scripts prior to full installation test...
+[33m7870c7a[m added error handling to all bootstrap scripts - not debugged yet..
+[33m7d16eb0[m added more logging and error handling to Cloudify installation script, modified nginx config, modified manager init script and added workflow init script
+[33m43954b1[m prepared the entire package for testing. from now on, bug iterations...
+[33m8688706[m added cloudify3 packaging with a mockup of the cloudify3 bootstrap script, fixed some bugs...
+[33m97fddb4[m revamped installation of python modules, jruby and jruby gems to install everything into the venv before packaging. fixed lots of bugs...
+[33mdf244ac[m fixed some event handling issues, added nginx config, redid logstash conf to match rabbitmq, added kibana pkg
+[33m3d93bed[m added event handling support for rabbitmq
+[33mb155a14[m more documentation and bug fixes. changed virtualenv's packaging process. added java pkg existance check before running pkg_manager to make sure maven does not fail
+[33m4c4b0d0[m added pip, added maven build for orchestrator jar to manager package, added tar/untar functions...
+[33mdbee9f5[m added basic documentation (more to come)
+[33mb5ce3d6[m added cosmo-ui with init scripts. finalized bootstrap script template generation. tested get and pkg of all components and fixed bugs - NOT COMPLETE.
+[33m2c6c6ad[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m9ba0d38[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m5afd18c[m lots of changes... forget about it
+[33m7f5e725[m more fixes, more changes, more package configuration...
+[33mad292ca[m added cosmo packages, some fixes..
+[33m4aa7b98[m added lots of logging and base function fabric checks. cleared unnecessary fabric tasks and optimized get tasks cide
+[33m4d18c98[m minor fixes and code optimizations
+[33m747e69e[m script fixes, code prettifying and more...
+[33m3ccbaba[m 1.0.0 - total remake of downloaders and packagers. moved from shell scripts to fabric tasks
+[33m9725ccd[m building up packager tasks with fabric, yo.
+[33m8249088[m PACKAGER COMMENCE. HA.
+[33m1977f7a[m 0.0.2 - starting to add packager, plus some sh script fixes
+[33mbf01865[m v1.0.0 - initial commit with packging scripts
+[33m6a7bd4b[m v0.0.1 - initial commit with basic packaging scripts
+[33m91f9b86[m Initial commit
+[33m3f8fde6[m[33m ([1;36mHEAD[m[33m, [1;31morigin/feature/CFY-505-packager-opensource-project[m[33m, [1;32mfeature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 added empty .travis.yml before writing tests
+[33m0190390[m CFY-505 removed CHANGELOG.md
+[33mb0e1587[m CFY-505 added CHANGELOG instead of CHANGELOG.md.. due to bad view
+[33m086e2ac[m CFY-505 added CHANGELOG.md
+[33mc33e37d[m CFY-505 added todo files and a todo generator (not working yet)
+[33m66d99b7[m CFY-505 more documentation, bug fixes and some minor feature additions..
+[33m6709e9e[m CFY-505 replaced source url string with source urls list, lots of visual code improvements and documentation
+[33m241ef65[m CFY-505 more doc...
+[33mbd474b6[m CFY-505 doc cp method
+[33m06695da[m CFY-505 doc cp method
+[33m4bdab4b[m CFY-505 ... documenting...
+[33m58b1eef[m CFY-505 ... documenting...
+[33m0152ad4[m CFY-505 started documenting...
+[33m20d6c47[m CFY-505 added some todos
+[33m4837aaa[m CFY-505 more code optimization... jeez
+[33m19a7c10[m CFY-505 mostly code optimization
+[33mffb7c8f[m CFY-505 all action class now receive the FileAndDirectoryHandler class and fixed some runner logic
+[33maa9acf0[m CFY-505 lots of code refactoring. both visual and logical
+[33mb61d6ee[m CFY-505 added docs dir for sphinx
+[33md3b6e2d[m CFY-505 minor visual alterations
+[33m93aab07[m CFY-505 revamped configuration and code placement, vagrantfile optimizations snd new definitions file
+[33m7843e53[m[33m ([1;31morigin/develop[m[33m, [1;31morigin/HEAD[m[33m, [1;32mdevelop[m[33m)[m started adding documentation handling and arranged some file locations
+[33mf4cc60d[m Merge branch 'develop' into feature/CFY-179-create-agent-package
+[33mc40222f[m fixed some config and added process-dep-links to pip
+[33md3bee30[m Merge pull request #5 from CloudifySource/feature/CFY-179-create-agent-package
+[33mfd049fc[m CFY-179 added package creation to packager
+[33m265854e[m CFY-179 added agent config to config.py
+[33mc7c3a36[m hotfix(es)
+[33mf7aba35[m hotfix(es)
+[33m55a74d2[m add celery and rieman to init.d startup
+[33m47031a1[m Update manager.conf.template
+[33m965d319[m Update celeryd-cloudify.management.template
+[33m95a416a[m Merge pull request #4 from CloudifySource/feature/CFY-467_add_missing_dirs
+[33m29b1f02[m Update packager.py
+[33m188c0cb[m Update config.py
+[33m62ffbd9[m Create mockfile
+[33mc8ed3a6[m added missing dirs and changed .gitignore
+[33m4f00fcd[m last minute changes for continuous integration + code cleanup + naming conventions
+[33m59fda6c[m .gitignore changes
+[33mf87866c[m .gitignore changes
+[33me1e1c94[m fixes and configuration changes
+[33mc90a147[m Merge pull request #3 from CloudifySource/feature/CFY-287-add-fileserver-url-to-celery-env
+[33m1a20c3f[m CFY-287 added manager file server url  env variable to celery template
+[33m0078529[m[33m ([1;31morigin/feature/CLOUDIFY-2643-replace-config-files-with-templates[m[33m)[m CLOUDIFY-2643 config changes
+[33m358e151[m CLOUDIFY-2643 some fixes for continuous integration
+[33m0d6347b[m CLOUDIFY-2643 minor bug fixes in bootstrap scripts and code
+[33m981e133[m CLOUDIFY-2643 removed some unnecessary code from scripts, added overwrite option when creating a package, move more config to templates
+[33mafa5fd2[m CLOUDIFY-2643 last changes - sanity test OK
+[33m99d14a2[m CLOUDIFY-2643 still fixing problematic configuration...
+[33mc047d8f[m CLOUDIFY-2643 hotfix(es)
+[33m11ca152[m CLOUDIfY-2643 added some untracked files
+[33m29c9ad2[m CLOUDIFY-2643 finalizations...
+[33m5cfc195[m CLOUDIFY-2643 changed logic to better support dymanic templating
+[33maecbd1e[m CLOUDIFY-2643 due to some dymanic templating issue - a change is required in the logic. testing.
+[33m1ef23b1[m CLOUDIFY-2643 replaced all config files with template files, added config template creation logic and added all template variables to main config file
+[33m720bf04[m last minute changes
+[33m12b797c[m Merge branch 'master' into develop
+[33mcb60883[m removed irrelevant files and directories
+[33m53d049b[m lots of internal changes for latest stable release. now moving on to branching
+[33m98af37f[m added install flag for continuous integration options
+[33m057485d[m replaced string formatting, added verbosity flag in config, small fixes..
+[33m5b6356b[m added file server configuration in nginx and manager virtualenv and fixed some packaging bugs
+[33m4cbef8c[m previous revamp fixes
+[33m664ec72[m packager revamp to ease development and configuration
+[33mbe2ec56[m revamped agent config, deleted some unnecessary scripts and cleaned some code
+[33m799fc41[m fixed agent configuration, on going...
+[33m55d1ab0[m fixed agent configuration, ongoing...
+[33me44d418[m hotfix
+[33m449eb7b[m hotfix
+[33mc835be6[m added vagrant file, fixed some UX stuff
+[33maac8419[m fixes, configuration changes, added agent package base
+[33m76a9b23[m minor fixes
+[33m8cbc36e[m changed ruby installation method to be precompiled (partially tested) and rearranged some code
+[33m170cf70[m removed unnecessary package config, completely cleaned up bootstrap scripts from unnecessary code, revamped bootstrap console logging
+[33m264d8d3[m finished celery modifications and tested that it is working, removed some unnecessary logging
+[33m5e17a30[m started work on celery agent, changed celery config to match new design (not tested yet)
+[33m313762e[m revamped elasticsearch config, deleted unnecessary code and package config...
+[33m684562c[m replaced jruby with ruby, separated ruby from gems, some syntax fixes
+[33m5c2d6af[m fixed a bug with one of the bootstrap tests
+[33mfd309b4[m loads of bug fixes, lots of bootstrap output changes
+[33m0a88313[m added gunicorn support to manager (not to nginx, yet), added port checks, fixed lots of bugs, added OS checks, added basic package installation check to see if a package is installed before attemping to install it... and more
+[33m967145a[m fixed lots of bugs, added more logging, more organized bootstrap event stream...
+[33macfc709[m fixed bugs in error handling and bootstrap scripts prior to full installation test...
+[33m7870c7a[m added error handling to all bootstrap scripts - not debugged yet..
+[33m7d16eb0[m added more logging and error handling to Cloudify installation script, modified nginx config, modified manager init script and added workflow init script
+[33m43954b1[m prepared the entire package for testing. from now on, bug iterations...
+[33m8688706[m added cloudify3 packaging with a mockup of the cloudify3 bootstrap script, fixed some bugs...
+[33m97fddb4[m revamped installation of python modules, jruby and jruby gems to install everything into the venv before packaging. fixed lots of bugs...
+[33mdf244ac[m fixed some event handling issues, added nginx config, redid logstash conf to match rabbitmq, added kibana pkg
+[33m3d93bed[m added event handling support for rabbitmq
+[33mb155a14[m more documentation and bug fixes. changed virtualenv's packaging process. added java pkg existance check before running pkg_manager to make sure maven does not fail
+[33m4c4b0d0[m added pip, added maven build for orchestrator jar to manager package, added tar/untar functions...
+[33mdbee9f5[m added basic documentation (more to come)
+[33mb5ce3d6[m added cosmo-ui with init scripts. finalized bootstrap script template generation. tested get and pkg of all components and fixed bugs - NOT COMPLETE.
+[33m2c6c6ad[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m9ba0d38[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m5afd18c[m lots of changes... forget about it
+[33m7f5e725[m more fixes, more changes, more package configuration...
+[33mad292ca[m added cosmo packages, some fixes..
+[33m4aa7b98[m added lots of logging and base function fabric checks. cleared unnecessary fabric tasks and optimized get tasks cide
+[33m4d18c98[m minor fixes and code optimizations
+[33m747e69e[m script fixes, code prettifying and more...
+[33m3ccbaba[m 1.0.0 - total remake of downloaders and packagers. moved from shell scripts to fabric tasks
+[33m9725ccd[m building up packager tasks with fabric, yo.
+[33m8249088[m PACKAGER COMMENCE. HA.
+[33m1977f7a[m 0.0.2 - starting to add packager, plus some sh script fixes
+[33mbf01865[m v1.0.0 - initial commit with packging scripts
+[33m6a7bd4b[m v0.0.1 - initial commit with basic packaging scripts
+[33m91f9b86[m Initial commit
+[33m92f87f7[m[33m ([1;36mHEAD[m[33m, [1;31morigin/feature/CFY-505-packager-opensource-project[m[33m, [1;32mfeature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 added the mistakingly unadded .travis.yml, replaced documentation theme, completed initial docstring documentation
+[33m3f8fde6[m CFY-505 added empty .travis.yml before writing tests
+[33m0190390[m CFY-505 removed CHANGELOG.md
+[33mb0e1587[m CFY-505 added CHANGELOG instead of CHANGELOG.md.. due to bad view
+[33m086e2ac[m CFY-505 added CHANGELOG.md
+[33mc33e37d[m CFY-505 added todo files and a todo generator (not working yet)
+[33m66d99b7[m CFY-505 more documentation, bug fixes and some minor feature additions..
+[33m6709e9e[m CFY-505 replaced source url string with source urls list, lots of visual code improvements and documentation
+[33m241ef65[m CFY-505 more doc...
+[33mbd474b6[m CFY-505 doc cp method
+[33m06695da[m CFY-505 doc cp method
+[33m4bdab4b[m CFY-505 ... documenting...
+[33m58b1eef[m CFY-505 ... documenting...
+[33m0152ad4[m CFY-505 started documenting...
+[33m20d6c47[m CFY-505 added some todos
+[33m4837aaa[m CFY-505 more code optimization... jeez
+[33m19a7c10[m CFY-505 mostly code optimization
+[33mffb7c8f[m CFY-505 all action class now receive the FileAndDirectoryHandler class and fixed some runner logic
+[33maa9acf0[m CFY-505 lots of code refactoring. both visual and logical
+[33mb61d6ee[m CFY-505 added docs dir for sphinx
+[33md3b6e2d[m CFY-505 minor visual alterations
+[33m93aab07[m CFY-505 revamped configuration and code placement, vagrantfile optimizations snd new definitions file
+[33m7843e53[m[33m ([1;31morigin/develop[m[33m, [1;31morigin/HEAD[m[33m, [1;32mdevelop[m[33m)[m started adding documentation handling and arranged some file locations
+[33mf4cc60d[m Merge branch 'develop' into feature/CFY-179-create-agent-package
+[33mc40222f[m fixed some config and added process-dep-links to pip
+[33md3bee30[m Merge pull request #5 from CloudifySource/feature/CFY-179-create-agent-package
+[33mfd049fc[m CFY-179 added package creation to packager
+[33m265854e[m CFY-179 added agent config to config.py
+[33mc7c3a36[m hotfix(es)
+[33mf7aba35[m hotfix(es)
+[33m55a74d2[m add celery and rieman to init.d startup
+[33m47031a1[m Update manager.conf.template
+[33m965d319[m Update celeryd-cloudify.management.template
+[33m95a416a[m Merge pull request #4 from CloudifySource/feature/CFY-467_add_missing_dirs
+[33m29b1f02[m Update packager.py
+[33m188c0cb[m Update config.py
+[33m62ffbd9[m Create mockfile
+[33mc8ed3a6[m added missing dirs and changed .gitignore
+[33m4f00fcd[m last minute changes for continuous integration + code cleanup + naming conventions
+[33m59fda6c[m .gitignore changes
+[33mf87866c[m .gitignore changes
+[33me1e1c94[m fixes and configuration changes
+[33mc90a147[m Merge pull request #3 from CloudifySource/feature/CFY-287-add-fileserver-url-to-celery-env
+[33m1a20c3f[m CFY-287 added manager file server url  env variable to celery template
+[33m0078529[m[33m ([1;31morigin/feature/CLOUDIFY-2643-replace-config-files-with-templates[m[33m)[m CLOUDIFY-2643 config changes
+[33m358e151[m CLOUDIFY-2643 some fixes for continuous integration
+[33m0d6347b[m CLOUDIFY-2643 minor bug fixes in bootstrap scripts and code
+[33m981e133[m CLOUDIFY-2643 removed some unnecessary code from scripts, added overwrite option when creating a package, move more config to templates
+[33mafa5fd2[m CLOUDIFY-2643 last changes - sanity test OK
+[33m99d14a2[m CLOUDIFY-2643 still fixing problematic configuration...
+[33mc047d8f[m CLOUDIFY-2643 hotfix(es)
+[33m11ca152[m CLOUDIfY-2643 added some untracked files
+[33m29c9ad2[m CLOUDIFY-2643 finalizations...
+[33m5cfc195[m CLOUDIFY-2643 changed logic to better support dymanic templating
+[33maecbd1e[m CLOUDIFY-2643 due to some dymanic templating issue - a change is required in the logic. testing.
+[33m1ef23b1[m CLOUDIFY-2643 replaced all config files with template files, added config template creation logic and added all template variables to main config file
+[33m720bf04[m last minute changes
+[33m12b797c[m Merge branch 'master' into develop
+[33mcb60883[m removed irrelevant files and directories
+[33m53d049b[m lots of internal changes for latest stable release. now moving on to branching
+[33m98af37f[m added install flag for continuous integration options
+[33m057485d[m replaced string formatting, added verbosity flag in config, small fixes..
+[33m5b6356b[m added file server configuration in nginx and manager virtualenv and fixed some packaging bugs
+[33m4cbef8c[m previous revamp fixes
+[33m664ec72[m packager revamp to ease development and configuration
+[33mbe2ec56[m revamped agent config, deleted some unnecessary scripts and cleaned some code
+[33m799fc41[m fixed agent configuration, on going...
+[33m55d1ab0[m fixed agent configuration, ongoing...
+[33me44d418[m hotfix
+[33m449eb7b[m hotfix
+[33mc835be6[m added vagrant file, fixed some UX stuff
+[33maac8419[m fixes, configuration changes, added agent package base
+[33m76a9b23[m minor fixes
+[33m8cbc36e[m changed ruby installation method to be precompiled (partially tested) and rearranged some code
+[33m170cf70[m removed unnecessary package config, completely cleaned up bootstrap scripts from unnecessary code, revamped bootstrap console logging
+[33m264d8d3[m finished celery modifications and tested that it is working, removed some unnecessary logging
+[33m5e17a30[m started work on celery agent, changed celery config to match new design (not tested yet)
+[33m313762e[m revamped elasticsearch config, deleted unnecessary code and package config...
+[33m684562c[m replaced jruby with ruby, separated ruby from gems, some syntax fixes
+[33m5c2d6af[m fixed a bug with one of the bootstrap tests
+[33mfd309b4[m loads of bug fixes, lots of bootstrap output changes
+[33m0a88313[m added gunicorn support to manager (not to nginx, yet), added port checks, fixed lots of bugs, added OS checks, added basic package installation check to see if a package is installed before attemping to install it... and more
+[33m967145a[m fixed lots of bugs, added more logging, more organized bootstrap event stream...
+[33macfc709[m fixed bugs in error handling and bootstrap scripts prior to full installation test...
+[33m7870c7a[m added error handling to all bootstrap scripts - not debugged yet..
+[33m7d16eb0[m added more logging and error handling to Cloudify installation script, modified nginx config, modified manager init script and added workflow init script
+[33m43954b1[m prepared the entire package for testing. from now on, bug iterations...
+[33m8688706[m added cloudify3 packaging with a mockup of the cloudify3 bootstrap script, fixed some bugs...
+[33m97fddb4[m revamped installation of python modules, jruby and jruby gems to install everything into the venv before packaging. fixed lots of bugs...
+[33mdf244ac[m fixed some event handling issues, added nginx config, redid logstash conf to match rabbitmq, added kibana pkg
+[33m3d93bed[m added event handling support for rabbitmq
+[33mb155a14[m more documentation and bug fixes. changed virtualenv's packaging process. added java pkg existance check before running pkg_manager to make sure maven does not fail
+[33m4c4b0d0[m added pip, added maven build for orchestrator jar to manager package, added tar/untar functions...
+[33mdbee9f5[m added basic documentation (more to come)
+[33mb5ce3d6[m added cosmo-ui with init scripts. finalized bootstrap script template generation. tested get and pkg of all components and fixed bugs - NOT COMPLETE.
+[33m2c6c6ad[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m9ba0d38[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m5afd18c[m lots of changes... forget about it
+[33m7f5e725[m more fixes, more changes, more package configuration...
+[33mad292ca[m added cosmo packages, some fixes..
+[33m4aa7b98[m added lots of logging and base function fabric checks. cleared unnecessary fabric tasks and optimized get tasks cide
+[33m4d18c98[m minor fixes and code optimizations
+[33m747e69e[m script fixes, code prettifying and more...
+[33m3ccbaba[m 1.0.0 - total remake of downloaders and packagers. moved from shell scripts to fabric tasks
+[33m9725ccd[m building up packager tasks with fabric, yo.
+[33m8249088[m PACKAGER COMMENCE. HA.
+[33m1977f7a[m 0.0.2 - starting to add packager, plus some sh script fixes
+[33mbf01865[m v1.0.0 - initial commit with packging scripts
+[33m6a7bd4b[m v0.0.1 - initial commit with basic packaging scripts
+[33m91f9b86[m Initial commit
+[33md5d3d56[m[33m ([1;36mHEAD[m[33m, [1;32mfeature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 added default logging levels to init_logger (for external use), arranged setup.py a bit
+[33mff3ecb1[m[33m ([1;31morigin/feature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 changed module name to packman, added documentation automation
+[33m92f87f7[m CFY-505 added the mistakingly unadded .travis.yml, replaced documentation theme, completed initial docstring documentation
+[33m3f8fde6[m CFY-505 added empty .travis.yml before writing tests
+[33m0190390[m CFY-505 removed CHANGELOG.md
+[33mb0e1587[m CFY-505 added CHANGELOG instead of CHANGELOG.md.. due to bad view
+[33m086e2ac[m CFY-505 added CHANGELOG.md
+[33mc33e37d[m CFY-505 added todo files and a todo generator (not working yet)
+[33m66d99b7[m CFY-505 more documentation, bug fixes and some minor feature additions..
+[33m6709e9e[m CFY-505 replaced source url string with source urls list, lots of visual code improvements and documentation
+[33m241ef65[m CFY-505 more doc...
+[33mbd474b6[m CFY-505 doc cp method
+[33m06695da[m CFY-505 doc cp method
+[33m4bdab4b[m CFY-505 ... documenting...
+[33m58b1eef[m CFY-505 ... documenting...
+[33m0152ad4[m CFY-505 started documenting...
+[33m20d6c47[m CFY-505 added some todos
+[33m4837aaa[m CFY-505 more code optimization... jeez
+[33m19a7c10[m CFY-505 mostly code optimization
+[33mffb7c8f[m CFY-505 all action class now receive the FileAndDirectoryHandler class and fixed some runner logic
+[33maa9acf0[m CFY-505 lots of code refactoring. both visual and logical
+[33mb61d6ee[m CFY-505 added docs dir for sphinx
+[33md3b6e2d[m CFY-505 minor visual alterations
+[33m93aab07[m CFY-505 revamped configuration and code placement, vagrantfile optimizations snd new definitions file
+[33m7843e53[m[33m ([1;31morigin/develop[m[33m, [1;31morigin/HEAD[m[33m, [1;32mdevelop[m[33m)[m started adding documentation handling and arranged some file locations
+[33mf4cc60d[m Merge branch 'develop' into feature/CFY-179-create-agent-package
+[33mc40222f[m fixed some config and added process-dep-links to pip
+[33md3bee30[m Merge pull request #5 from CloudifySource/feature/CFY-179-create-agent-package
+[33mfd049fc[m CFY-179 added package creation to packager
+[33m265854e[m CFY-179 added agent config to config.py
+[33mc7c3a36[m hotfix(es)
+[33mf7aba35[m hotfix(es)
+[33m55a74d2[m add celery and rieman to init.d startup
+[33m47031a1[m Update manager.conf.template
+[33m965d319[m Update celeryd-cloudify.management.template
+[33m95a416a[m Merge pull request #4 from CloudifySource/feature/CFY-467_add_missing_dirs
+[33m29b1f02[m Update packager.py
+[33m188c0cb[m Update config.py
+[33m62ffbd9[m Create mockfile
+[33mc8ed3a6[m added missing dirs and changed .gitignore
+[33m4f00fcd[m last minute changes for continuous integration + code cleanup + naming conventions
+[33m59fda6c[m .gitignore changes
+[33mf87866c[m .gitignore changes
+[33me1e1c94[m fixes and configuration changes
+[33mc90a147[m Merge pull request #3 from CloudifySource/feature/CFY-287-add-fileserver-url-to-celery-env
+[33m1a20c3f[m CFY-287 added manager file server url  env variable to celery template
+[33m0078529[m[33m ([1;31morigin/feature/CLOUDIFY-2643-replace-config-files-with-templates[m[33m)[m CLOUDIFY-2643 config changes
+[33m358e151[m CLOUDIFY-2643 some fixes for continuous integration
+[33m0d6347b[m CLOUDIFY-2643 minor bug fixes in bootstrap scripts and code
+[33m981e133[m CLOUDIFY-2643 removed some unnecessary code from scripts, added overwrite option when creating a package, move more config to templates
+[33mafa5fd2[m CLOUDIFY-2643 last changes - sanity test OK
+[33m99d14a2[m CLOUDIFY-2643 still fixing problematic configuration...
+[33mc047d8f[m CLOUDIFY-2643 hotfix(es)
+[33m11ca152[m CLOUDIfY-2643 added some untracked files
+[33m29c9ad2[m CLOUDIFY-2643 finalizations...
+[33m5cfc195[m CLOUDIFY-2643 changed logic to better support dymanic templating
+[33maecbd1e[m CLOUDIFY-2643 due to some dymanic templating issue - a change is required in the logic. testing.
+[33m1ef23b1[m CLOUDIFY-2643 replaced all config files with template files, added config template creation logic and added all template variables to main config file
+[33m720bf04[m last minute changes
+[33m12b797c[m Merge branch 'master' into develop
+[33mcb60883[m removed irrelevant files and directories
+[33m53d049b[m lots of internal changes for latest stable release. now moving on to branching
+[33m98af37f[m added install flag for continuous integration options
+[33m057485d[m replaced string formatting, added verbosity flag in config, small fixes..
+[33m5b6356b[m added file server configuration in nginx and manager virtualenv and fixed some packaging bugs
+[33m4cbef8c[m previous revamp fixes
+[33m664ec72[m packager revamp to ease development and configuration
+[33mbe2ec56[m revamped agent config, deleted some unnecessary scripts and cleaned some code
+[33m799fc41[m fixed agent configuration, on going...
+[33m55d1ab0[m fixed agent configuration, ongoing...
+[33me44d418[m hotfix
+[33m449eb7b[m hotfix
+[33mc835be6[m added vagrant file, fixed some UX stuff
+[33maac8419[m fixes, configuration changes, added agent package base
+[33m76a9b23[m minor fixes
+[33m8cbc36e[m changed ruby installation method to be precompiled (partially tested) and rearranged some code
+[33m170cf70[m removed unnecessary package config, completely cleaned up bootstrap scripts from unnecessary code, revamped bootstrap console logging
+[33m264d8d3[m finished celery modifications and tested that it is working, removed some unnecessary logging
+[33m5e17a30[m started work on celery agent, changed celery config to match new design (not tested yet)
+[33m313762e[m revamped elasticsearch config, deleted unnecessary code and package config...
+[33m684562c[m replaced jruby with ruby, separated ruby from gems, some syntax fixes
+[33m5c2d6af[m fixed a bug with one of the bootstrap tests
+[33mfd309b4[m loads of bug fixes, lots of bootstrap output changes
+[33m0a88313[m added gunicorn support to manager (not to nginx, yet), added port checks, fixed lots of bugs, added OS checks, added basic package installation check to see if a package is installed before attemping to install it... and more
+[33m967145a[m fixed lots of bugs, added more logging, more organized bootstrap event stream...
+[33macfc709[m fixed bugs in error handling and bootstrap scripts prior to full installation test...
+[33m7870c7a[m added error handling to all bootstrap scripts - not debugged yet..
+[33m7d16eb0[m added more logging and error handling to Cloudify installation script, modified nginx config, modified manager init script and added workflow init script
+[33m43954b1[m prepared the entire package for testing. from now on, bug iterations...
+[33m8688706[m added cloudify3 packaging with a mockup of the cloudify3 bootstrap script, fixed some bugs...
+[33m97fddb4[m revamped installation of python modules, jruby and jruby gems to install everything into the venv before packaging. fixed lots of bugs...
+[33mdf244ac[m fixed some event handling issues, added nginx config, redid logstash conf to match rabbitmq, added kibana pkg
+[33m3d93bed[m added event handling support for rabbitmq
+[33mb155a14[m more documentation and bug fixes. changed virtualenv's packaging process. added java pkg existance check before running pkg_manager to make sure maven does not fail
+[33m4c4b0d0[m added pip, added maven build for orchestrator jar to manager package, added tar/untar functions...
+[33mdbee9f5[m added basic documentation (more to come)
+[33mb5ce3d6[m added cosmo-ui with init scripts. finalized bootstrap script template generation. tested get and pkg of all components and fixed bugs - NOT COMPLETE.
+[33m2c6c6ad[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m9ba0d38[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m5afd18c[m lots of changes... forget about it
+[33m7f5e725[m more fixes, more changes, more package configuration...
+[33mad292ca[m added cosmo packages, some fixes..
+[33m4aa7b98[m added lots of logging and base function fabric checks. cleared unnecessary fabric tasks and optimized get tasks cide
+[33m4d18c98[m minor fixes and code optimizations
+[33m747e69e[m script fixes, code prettifying and more...
+[33m3ccbaba[m 1.0.0 - total remake of downloaders and packagers. moved from shell scripts to fabric tasks
+[33m9725ccd[m building up packager tasks with fabric, yo.
+[33m8249088[m PACKAGER COMMENCE. HA.
+[33m1977f7a[m 0.0.2 - starting to add packager, plus some sh script fixes
+[33mbf01865[m v1.0.0 - initial commit with packging scripts
+[33m6a7bd4b[m v0.0.1 - initial commit with basic packaging scripts
+[33m91f9b86[m Initial commit
+[33md5d3d56[m[33m ([1;36mHEAD[m[33m, [1;31morigin/feature/CFY-505-packager-opensource-project[m[33m, [1;32mfeature/CFY-505-packager-opensource-project[m[33m)[m CFY-505 added default logging levels to init_logger (for external use), arranged setup.py a bit
+[33mff3ecb1[m CFY-505 changed module name to packman, added documentation automation
+[33m92f87f7[m CFY-505 added the mistakingly unadded .travis.yml, replaced documentation theme, completed initial docstring documentation
+[33m3f8fde6[m CFY-505 added empty .travis.yml before writing tests
+[33m0190390[m CFY-505 removed CHANGELOG.md
+[33mb0e1587[m CFY-505 added CHANGELOG instead of CHANGELOG.md.. due to bad view
+[33m086e2ac[m CFY-505 added CHANGELOG.md
+[33mc33e37d[m CFY-505 added todo files and a todo generator (not working yet)
+[33m66d99b7[m CFY-505 more documentation, bug fixes and some minor feature additions..
+[33m6709e9e[m CFY-505 replaced source url string with source urls list, lots of visual code improvements and documentation
+[33m241ef65[m CFY-505 more doc...
+[33mbd474b6[m CFY-505 doc cp method
+[33m06695da[m CFY-505 doc cp method
+[33m4bdab4b[m CFY-505 ... documenting...
+[33m58b1eef[m CFY-505 ... documenting...
+[33m0152ad4[m CFY-505 started documenting...
+[33m20d6c47[m CFY-505 added some todos
+[33m4837aaa[m CFY-505 more code optimization... jeez
+[33m19a7c10[m CFY-505 mostly code optimization
+[33mffb7c8f[m CFY-505 all action class now receive the FileAndDirectoryHandler class and fixed some runner logic
+[33maa9acf0[m CFY-505 lots of code refactoring. both visual and logical
+[33mb61d6ee[m CFY-505 added docs dir for sphinx
+[33md3b6e2d[m CFY-505 minor visual alterations
+[33m93aab07[m CFY-505 revamped configuration and code placement, vagrantfile optimizations snd new definitions file
+[33m7843e53[m[33m ([1;31morigin/develop[m[33m, [1;31morigin/HEAD[m[33m, [1;32mdevelop[m[33m)[m started adding documentation handling and arranged some file locations
+[33mf4cc60d[m Merge branch 'develop' into feature/CFY-179-create-agent-package
+[33mc40222f[m fixed some config and added process-dep-links to pip
+[33md3bee30[m Merge pull request #5 from CloudifySource/feature/CFY-179-create-agent-package
+[33mfd049fc[m CFY-179 added package creation to packager
+[33m265854e[m CFY-179 added agent config to config.py
+[33mc7c3a36[m hotfix(es)
+[33mf7aba35[m hotfix(es)
+[33m55a74d2[m add celery and rieman to init.d startup
+[33m47031a1[m Update manager.conf.template
+[33m965d319[m Update celeryd-cloudify.management.template
+[33m95a416a[m Merge pull request #4 from CloudifySource/feature/CFY-467_add_missing_dirs
+[33m29b1f02[m Update packager.py
+[33m188c0cb[m Update config.py
+[33m62ffbd9[m Create mockfile
+[33mc8ed3a6[m added missing dirs and changed .gitignore
+[33m4f00fcd[m last minute changes for continuous integration + code cleanup + naming conventions
+[33m59fda6c[m .gitignore changes
+[33mf87866c[m .gitignore changes
+[33me1e1c94[m fixes and configuration changes
+[33mc90a147[m Merge pull request #3 from CloudifySource/feature/CFY-287-add-fileserver-url-to-celery-env
+[33m1a20c3f[m CFY-287 added manager file server url  env variable to celery template
+[33m0078529[m[33m ([1;31morigin/feature/CLOUDIFY-2643-replace-config-files-with-templates[m[33m)[m CLOUDIFY-2643 config changes
+[33m358e151[m CLOUDIFY-2643 some fixes for continuous integration
+[33m0d6347b[m CLOUDIFY-2643 minor bug fixes in bootstrap scripts and code
+[33m981e133[m CLOUDIFY-2643 removed some unnecessary code from scripts, added overwrite option when creating a package, move more config to templates
+[33mafa5fd2[m CLOUDIFY-2643 last changes - sanity test OK
+[33m99d14a2[m CLOUDIFY-2643 still fixing problematic configuration...
+[33mc047d8f[m CLOUDIFY-2643 hotfix(es)
+[33m11ca152[m CLOUDIfY-2643 added some untracked files
+[33m29c9ad2[m CLOUDIFY-2643 finalizations...
+[33m5cfc195[m CLOUDIFY-2643 changed logic to better support dymanic templating
+[33maecbd1e[m CLOUDIFY-2643 due to some dymanic templating issue - a change is required in the logic. testing.
+[33m1ef23b1[m CLOUDIFY-2643 replaced all config files with template files, added config template creation logic and added all template variables to main config file
+[33m720bf04[m last minute changes
+[33m12b797c[m Merge branch 'master' into develop
+[33mcb60883[m removed irrelevant files and directories
+[33m53d049b[m lots of internal changes for latest stable release. now moving on to branching
+[33m98af37f[m added install flag for continuous integration options
+[33m057485d[m replaced string formatting, added verbosity flag in config, small fixes..
+[33m5b6356b[m added file server configuration in nginx and manager virtualenv and fixed some packaging bugs
+[33m4cbef8c[m previous revamp fixes
+[33m664ec72[m packager revamp to ease development and configuration
+[33mbe2ec56[m revamped agent config, deleted some unnecessary scripts and cleaned some code
+[33m799fc41[m fixed agent configuration, on going...
+[33m55d1ab0[m fixed agent configuration, ongoing...
+[33me44d418[m hotfix
+[33m449eb7b[m hotfix
+[33mc835be6[m added vagrant file, fixed some UX stuff
+[33maac8419[m fixes, configuration changes, added agent package base
+[33m76a9b23[m minor fixes
+[33m8cbc36e[m changed ruby installation method to be precompiled (partially tested) and rearranged some code
+[33m170cf70[m removed unnecessary package config, completely cleaned up bootstrap scripts from unnecessary code, revamped bootstrap console logging
+[33m264d8d3[m finished celery modifications and tested that it is working, removed some unnecessary logging
+[33m5e17a30[m started work on celery agent, changed celery config to match new design (not tested yet)
+[33m313762e[m revamped elasticsearch config, deleted unnecessary code and package config...
+[33m684562c[m replaced jruby with ruby, separated ruby from gems, some syntax fixes
+[33m5c2d6af[m fixed a bug with one of the bootstrap tests
+[33mfd309b4[m loads of bug fixes, lots of bootstrap output changes
+[33m0a88313[m added gunicorn support to manager (not to nginx, yet), added port checks, fixed lots of bugs, added OS checks, added basic package installation check to see if a package is installed before attemping to install it... and more
+[33m967145a[m fixed lots of bugs, added more logging, more organized bootstrap event stream...
+[33macfc709[m fixed bugs in error handling and bootstrap scripts prior to full installation test...
+[33m7870c7a[m added error handling to all bootstrap scripts - not debugged yet..
+[33m7d16eb0[m added more logging and error handling to Cloudify installation script, modified nginx config, modified manager init script and added workflow init script
+[33m43954b1[m prepared the entire package for testing. from now on, bug iterations...
+[33m8688706[m added cloudify3 packaging with a mockup of the cloudify3 bootstrap script, fixed some bugs...
+[33m97fddb4[m revamped installation of python modules, jruby and jruby gems to install everything into the venv before packaging. fixed lots of bugs...
+[33mdf244ac[m fixed some event handling issues, added nginx config, redid logstash conf to match rabbitmq, added kibana pkg
+[33m3d93bed[m added event handling support for rabbitmq
+[33mb155a14[m more documentation and bug fixes. changed virtualenv's packaging process. added java pkg existance check before running pkg_manager to make sure maven does not fail
+[33m4c4b0d0[m added pip, added maven build for orchestrator jar to manager package, added tar/untar functions...
+[33mdbee9f5[m added basic documentation (more to come)
+[33mb5ce3d6[m added cosmo-ui with init scripts. finalized bootstrap script template generation. tested get and pkg of all components and fixed bugs - NOT COMPLETE.
+[33m2c6c6ad[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m9ba0d38[m fixed formatting according to flake8, added virtualenv and cosmo packages, added base functions for templating, lots of minor fixes
+[33m5afd18c[m lots of changes... forget about it
+[33m7f5e725[m more fixes, more changes, more package configuration...
+[33mad292ca[m added cosmo packages, some fixes..
+[33m4aa7b98[m added lots of logging and base function fabric checks. cleared unnecessary fabric tasks and optimized get tasks cide
+[33m4d18c98[m minor fixes and code optimizations
+[33m747e69e[m script fixes, code prettifying and more...
+[33m3ccbaba[m 1.0.0 - total remake of downloaders and packagers. moved from shell scripts to fabric tasks
+[33m9725ccd[m building up packager tasks with fabric, yo.
+[33m8249088[m PACKAGER COMMENCE. HA.
+[33m1977f7a[m 0.0.2 - starting to add packager, plus some sh script fixes
+[33mbf01865[m v1.0.0 - initial commit with packging scripts
+[33m6a7bd4b[m v0.0.1 - initial commit with basic packaging scripts
+[33m91f9b86[m Initial commit

@@ -1,0 +1,28 @@
+# ElasticSearch Service
+ 
+description     "ElasticSearch"
+ 
+start on (net-device-up
+          and local-filesystems
+          and runlevel [2345])
+ 
+stop on runlevel [016]
+ 
+respawn limit 10 5
+ 
+env ES_HOME=/usr/share/elasticsearch/home
+env ES_MIN_MEM=1g
+env ES_MAX_MEM=1g
+env DAEMON="${ES_HOME}/bin/elasticsearch"
+env DATA_DIR=/data/elasticsearch/data
+env CONFIG_DIR=/etc/elasticsearch
+ 
+console output
+ 
+script
+  if [ -f /etc/default/elasticsearch ]; then
+    . /etc/default/elasticsearch
+  fi
+ 
+  su -s /bin/sh -c 'exec "$0" "$@"' {{ config_templates.__params_init.user }} -- {{ config_templates.__params_init.run_dir }}/bin/elasticsearch -f -Xms${ES_MIN_MEM} -Xmx${ES_MAX_MEM}
+end script

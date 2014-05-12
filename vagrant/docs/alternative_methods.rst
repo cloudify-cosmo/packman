@@ -1,0 +1,15 @@
+========================================================
+Using alternative implementations of get or pack methods
+========================================================
+
+packman provides a way to override the basic implementations for the get and pack methods for each component.
+
+let's look at the example:
+
+- we have a components file in our cwd with a ``riemann`` component.
+- we want to run a different ``get`` method than the default one.
+- we create a get.py file in our cwd with a function called ``get_riemann``.
+- this will override the get method when running ``pkm get -c riemann``
+- same goes for the ``pack`` method.
+
+for an example, see: #GITHUB GET FILE#

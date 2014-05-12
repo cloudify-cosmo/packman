@@ -1,0 +1,105 @@
+
+########
+# Copyright (c) 2014 GigaSpaces Technologies Ltd. All rights reserved
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    * See the License for the specific language governing permissions and
+#    * limitations under the License.
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+BASE_UBUNTU_BOX_NAME = 'precise64'
+BASE_UBUNTU_BOX_URI = 'http://files.vagrantup.com/precise64.box'
+
+BASE_CENTOS_BOX_NAME = 'centos6point4'
+BASE_CENTOS_BOX_URI = 'https://github.com/2creatives/vagrant-centos/releases/download/v0.1.0/centos64-x86_64-20131030.box'
+
+Vagrant.configure('2') do |config|
+
+  config.vm.define :packman do |packman|
+
+    packman_ip = '10.0.0.2'
+
+    packman.vm.provider :virtualbox do |vb|
+      vb.customize ['modifyvm', :id, '--memory', '1024']
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end
+    packman.vm.box = BASE_UBUNTU_BOX_NAME
+    packman.vm.box_url = BASE_UBUNTU_BOX_URI
+    packman.vm.network :private_network, ip: packman_ip
+    packman.vm.hostname = 'packman'
+    packman.vm.synced_folder "../packman/examples", "/home/vagrant/examples", create: true
+    packman.vm.provision "shell", path: "provision.sh", privileged: true
+  end
+
+  config.vm.define :centos do |centos|
+
+    centos_ip = '10.0.0.3'
+
+    centos.vm.provider :virtualbox do |vb|
+      vb.customize ['modifyvm', :id, '--memory', '1024']
+      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end
+    centos.vm.box = BASE_CENTOS_BOX_NAME
+    centos.vm.box_url = BASE_CENTOS_BOX_URI
+    centos.vm.network :private_network, ip: centos_ip
+    centos.vm.hostname = 'packman'
+    centos.vm.synced_folder "../packman/examples", "/home/vagrant/examples", create: true
+
+    command = "
+      echo bootstrapping...
+
+      sudo yum -y update
+      sudo yum install wget -y
+      sudo yum install yum-downloadonly -y
+      sudo yum install mlocate -y
+      sudo yum install git -y
+      sudo wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+      sudo python get-pip.py
+      # http://people.redhat.com/bkabrda/scl_python27.repo
+
+      echo bootstrap done
+      echo NOTE: currently, using some of the packman's features requires that they're run as sudo.
+      "
+
+    centos.vm.provision "shell", path: "provision_centos.sh", privileged: false
+    centos.vm.provision :shell, :inline => command
+  end
+
+  config.vm.define :tester do |tester|
+
+    tester_ip = '10.0.0.10'
+
+    tester.vm.provider :virtualbox do |vb|
+      vb.customize ['modifyvm', :id, '--memory', '2048']
+    end
+    tester.vm.box = BASE_BOX_NAME
+    tester.vm.box_url = BASE_BOX_URI
+    tester.vm.network :private_network, ip: tester_ip
+    tester.vm.hostname = 'tester'
+
+    command = "
+      echo bootstrapping... &&
+
+      # update - (optional) if you want to install additional packages on the testing server.
+      # sudo apt-get -y update &&
+
+      # install prereqs
+      # sudo apt-get install -y vim
+
+      echo bootstrap done
+      "
+
+    tester.vm.provision :shell, :inline => command
+  end
+
+end

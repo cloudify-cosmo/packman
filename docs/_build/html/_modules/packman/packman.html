@@ -1,0 +1,1467 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>packman.packman &mdash; packman 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="packman 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> packman</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#pre-requirements">Pre-Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#installing-packman">Installing Packman</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../pkm.html">pkm - packman&#8217;s CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pkm.html#cli-functionality">CLI Functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pkm.html#installing-packman">Installing Packman</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../component_config.html">Components File Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../component_config.html#a-component-s-structure">A Component&#8217;s Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../component_config.html#the-configuration-parameters">The Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Packman&#8217;s API</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../alternative_methods.html">Using alternative implementations of get or pack methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_file_struct.html">Packman File Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../module_file_struct.html#module">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../module_file_struct.html#user">User</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">packman</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>packman.packman</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for packman.packman</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">########</span>
+<span class="c"># Copyright (c) 2014 GigaSpaces Technologies Ltd. All rights reserved</span>
+<span class="c">#</span>
+<span class="c"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c"># you may not use this file except in compliance with the License.</span>
+<span class="c"># You may obtain a copy of the License at</span>
+<span class="c">#</span>
+<span class="c">#        http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c">#</span>
+<span class="c"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c">#    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c">#    * See the License for the specific language governing permissions and</span>
+<span class="c">#    * limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">logging.config</span>
+
+<span class="kn">import</span> <span class="nn">packman_config</span> <span class="kn">as</span> <span class="nn">pkm_conf</span>
+<span class="kn">import</span> <span class="nn">definitions</span> <span class="kn">as</span> <span class="nn">defs</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">fabric.api</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c"># NOQA</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
+<span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">dist</span>
+
+<span class="c"># __all__ = [&#39;list&#39;]</span>
+
+
+<div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../../api.html#packman.packman.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">base_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+                <span class="n">config</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    initializes a base logger</span>
+
+<span class="sd">    you can use this to init a logger in any of your files.</span>
+<span class="sd">    this will use config.py&#39;s LOGGER param and logging.dictConfig to configure</span>
+<span class="sd">    the logger for you.</span>
+
+<span class="sd">    :param int|logging.LEVEL base_level: desired base logging level</span>
+<span class="sd">    :param int|logging.LEVEL verbose_level: desired verbose logging level</span>
+<span class="sd">    :param dict logging_dict: dictConfig based configuration.</span>
+<span class="sd">     used to override the default configuration from config.py</span>
+<span class="sd">    :rtype: `python logger`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">LOGGER</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span> <span class="k">else</span> <span class="n">config</span>
+    <span class="c"># TODO: only perform file related actions if file handler is defined</span>
+    <span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+            <span class="n">pkm_conf</span><span class="o">.</span><span class="n">LOGGER</span><span class="p">[</span><span class="s">&#39;handlers&#39;</span><span class="p">][</span><span class="s">&#39;file&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">log_dir</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;file {0} exists - log directory cannot be created &#39;</span>
+                 <span class="s">&#39;there. please remove the file and try again.&#39;</span>
+                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_dir</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">LOGGER</span><span class="p">[</span><span class="s">&#39;handlers&#39;</span><span class="p">][</span><span class="s">&#39;file&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">lgr</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">base_level</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">VERBOSE</span> \
+            <span class="k">else</span> <span class="n">lgr</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">verbose_level</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lgr</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;could not initialize logger.&#39;</span>
+                 <span class="s">&#39; verify your logger config&#39;</span>
+                 <span class="s">&#39; and permissions to write to {0}&#39;</span>
+                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">logfile</span><span class="p">))</span>
+</div>
+<span class="n">lgr</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_component_config"><a class="viewcode-back" href="../../api.html#packman.packman.get_component_config">[docs]</a><span class="k">def</span> <span class="nf">get_component_config</span><span class="p">(</span><span class="n">component_name</span><span class="p">,</span> <span class="n">components_dict</span><span class="o">=</span><span class="p">{},</span>
+                         <span class="n">components_file</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns a component&#39;s configuration</span>
+
+<span class="sd">    if `components_dict` is not supplied, a packages.py file in the cwd will be</span>
+<span class="sd">    assumed unless `components_file` is explicitly given.</span>
+<span class="sd">    after a `components_dict` is defined, a `component_config` will be returned</span>
+<span class="sd">    for the specific component_name.</span>
+
+<span class="sd">    :param string component: component name to retrieve config for.</span>
+<span class="sd">    :rtype: `dict` representing package configuration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;retrieving configuration for {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">components_dict</span><span class="p">:</span>
+            <span class="n">components_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="s">&#39;packages.py&#39;</span> \
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components_file</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">components_file</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">components_dict</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+                    <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">PACKAGES</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;missing components file&#39;</span><span class="p">)</span>
+        <span class="n">component_config</span> <span class="o">=</span> <span class="n">components_dict</span><span class="p">[</span><span class="n">component_name</span><span class="p">]</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} config retrieved successfully&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">component_config</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;package configuration for&#39;</span>
+                  <span class="s">&#39; {0} was not found, terminating...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;no config found for package&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="packman_runner"><a class="viewcode-back" href="../../api.html#packman.packman.packman_runner">[docs]</a><span class="k">def</span> <span class="nf">packman_runner</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s">&#39;pack&#39;</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                   <span class="n">excluded</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    logic for running packman. mainly called from the cli (pkm.py)</span>
+
+<span class="sd">    if no `components_file` is supplied, we will assume a local packages.py</span>
+<span class="sd">    as `components_file`.</span>
+
+<span class="sd">    if `components` are supplied, they will be iterated over.</span>
+
+<span class="sd">    if a pack.py or get.py files are present, and an action_component</span>
+<span class="sd">    function exists in the files, those functions will be used.</span>
+<span class="sd">    else, the base get and pack methods supplied with packman will be used.</span>
+<span class="sd">    so for instance, if you have a component named `x`</span>
+
+<span class="sd">    :param string action: action to perform (get, pack)</span>
+<span class="sd">    :param string components_file: path to file containing component config</span>
+<span class="sd">    :param string components: comma delimited list of components to perform</span>
+<span class="sd">     `action` on.</span>
+<span class="sd">    :rtype: `None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># get packages.py file path</span>
+    <span class="n">components_file</span> <span class="o">=</span> <span class="n">components_file</span> <span class="k">if</span> <span class="n">components_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> \
+        <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="s">&#39;packages.py&#39;</span>
+    <span class="c"># append to path for importing</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
+    <span class="c"># import</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">packages</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+            <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;could not import packages.py file. please verify that &#39;</span>
+                  <span class="s">&#39;it exists in the specified path&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span><span class="p">(</span><span class="s">&#39;Unknown Error when trying to import packages.py file&#39;</span><span class="p">)</span>
+    <span class="c"># append components list to list</span>
+    <span class="n">components_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+            <span class="n">components_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">packages</span><span class="o">.</span><span class="n">PACKAGES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">components_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+    <span class="n">excluded_components_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">excluded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">excluded_component</span> <span class="ow">in</span> <span class="n">excluded</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+            <span class="n">excluded_components_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">excluded_component</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">components_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">excluded_components_list</span><span class="p">):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;your components list and excluded components list contain&#39;</span>
+                  <span class="s">&#39; the same items.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components list and excluded list are the same&#39;</span><span class="p">)</span>
+    <span class="c"># if at least 1 component exists</span>
+    <span class="k">if</span> <span class="n">components_list</span><span class="p">:</span>
+        <span class="c"># iterate and run action</span>
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_components_list</span><span class="p">:</span>
+                <span class="c"># looks for the overriding methods file in the current path</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">)):</span>
+                    <span class="c"># imports the overriding methods file</span>
+                    <span class="n">overr_methods</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">))[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="c"># if the method was found in the overriding file, run it.</span>
+                    <span class="k">if</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">overr_methods</span><span class="p">):</span>
+                        <span class="nb">getattr</span><span class="p">(</span>
+                            <span class="n">overr_methods</span><span class="p">,</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">action</span><span class="p">,</span> <span class="n">component</span><span class="p">))()</span>
+                    <span class="c"># else run the default action method</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+                <span class="c"># else run the default action method</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;skipping component: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;no components to handle&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../api.html#packman.packman.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    retrieves resources for packaging</span>
+
+<span class="sd">    .. note:: component params are defined in packages.py</span>
+
+<span class="sd">    .. note:: param names in packages.py can be overriden by editing</span>
+<span class="sd">     definitions.py which also has an explanation on each param.</span>
+
+<span class="sd">    :param dict package: dict representing package config</span>
+<span class="sd">     as configured in packages.py</span>
+<span class="sd">    :param string name: package&#39;s name</span>
+<span class="sd">     will be appended to the filename and to the package</span>
+<span class="sd">     depending on its type</span>
+<span class="sd">    :param string version: version to append to package</span>
+<span class="sd">    :param string source_url: source url to download</span>
+<span class="sd">    :param string source_repo: source repo to add for package retrieval</span>
+<span class="sd">    :param string source_ppa: source ppa to add for package retrieval</span>
+<span class="sd">    :param string source_key: source key to download</span>
+<span class="sd">    :param string key_file: key file path</span>
+<span class="sd">    :param list reqs: list of apt requirements</span>
+<span class="sd">    :param string dst_path: path where downloaded source are placed</span>
+<span class="sd">    :param string package_path: path where final package is placed</span>
+<span class="sd">    :param list modules: list of python modules to download</span>
+<span class="sd">    :param list gems: list of ruby gems to download</span>
+<span class="sd">    :param bool overwrite: indicated whether the sources directory be</span>
+<span class="sd">     erased before creating a new package</span>
+<span class="sd">    :rtype: `None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># you can send the component dict directly, or retrieve it from</span>
+    <span class="c"># the packages.py file by sending its name</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">component</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span> \
+        <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+
+    <span class="c"># define params for packaging</span>
+    <span class="n">auto_get</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span><span class="p">]</span> \
+        <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">auto_get</span><span class="p">:</span>
+        <span class="n">source_repos</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_REPOS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_REPOS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">source_ppas</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PPAS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PPAS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">source_keys</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_KEYS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_KEYS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">source_urls</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_URLS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_URLS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">key_files</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_KEY_FILES_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_KEY_FILES_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">reqs</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_REQS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_REQS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">prereqs</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PREREQS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PREREQS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">dst_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">package_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_MODULES</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_MODULES</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">gems</span> <span class="o">=</span> <span class="n">pakcage</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_GEMS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_GEMS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">overwrite</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_SOURCES</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_SOURCES</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
+
+        <span class="n">common</span> <span class="o">=</span> <span class="n">CommonHandler</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;CentOS&#39;</span><span class="p">):</span>
+            <span class="n">repo_handler</span> <span class="o">=</span> <span class="n">YumHandler</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;Ubuntu&#39;</span><span class="p">,</span> <span class="s">&#39;debian&#39;</span><span class="p">):</span>
+            <span class="n">repo_handler</span> <span class="o">=</span> <span class="n">AptHandler</span><span class="p">()</span>
+        <span class="n">dl_handler</span> <span class="o">=</span> <span class="n">DownloadsHandler</span><span class="p">()</span>
+        <span class="n">py_handler</span> <span class="o">=</span> <span class="n">PythonHandler</span><span class="p">()</span>
+        <span class="n">ruby_handler</span> <span class="o">=</span> <span class="n">RubyHandler</span><span class="p">()</span>
+
+        <span class="c"># should the source dir be removed before retrieving package contents?</span>
+        <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;overwrite enabled. removing directory before retrieval&#39;</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">):</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;the destination directory for this package already &#39;</span>
+                          <span class="s">&#39;exists and overwrite is disabled.&#39;</span><span class="p">)</span>
+        <span class="c"># create the directories required for package creation...</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">package_path</span> <span class="o">+</span> <span class="s">&#39;/archives&#39;</span><span class="p">):</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">package_path</span> <span class="o">+</span> <span class="s">&#39;/archives&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">):</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prereqs</span><span class="p">:</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">installs</span><span class="p">(</span><span class="n">prereqs</span><span class="p">)</span>
+        <span class="c"># if there&#39;s a source repo to add... add it.</span>
+        <span class="k">if</span> <span class="n">source_repos</span><span class="p">:</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_src_repos</span><span class="p">(</span><span class="n">source_repos</span><span class="p">)</span>
+        <span class="c"># if there&#39;s a source ppa to add... add it?</span>
+        <span class="k">if</span> <span class="n">source_ppas</span><span class="p">:</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_ppa_repos</span><span class="p">(</span><span class="n">source_ppas</span><span class="p">)</span>
+        <span class="c"># get a key for the repo if it&#39;s required..</span>
+        <span class="k">if</span> <span class="n">source_keys</span><span class="p">:</span>
+            <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_keys</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+        <span class="c"># retrieve the source for the package</span>
+        <span class="k">if</span> <span class="n">source_urls</span><span class="p">:</span>
+            <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_urls</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+        <span class="c"># add the repo key</span>
+        <span class="k">if</span> <span class="n">key_files</span><span class="p">:</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_keys</span><span class="p">(</span><span class="n">key_files</span><span class="p">)</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="c"># download any other requirements if they exist</span>
+        <span class="k">if</span> <span class="n">reqs</span><span class="p">:</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">downloads</span><span class="p">(</span><span class="n">reqs</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+        <span class="c"># download relevant python modules...</span>
+        <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="n">py_handler</span><span class="o">.</span><span class="n">get_python_modules</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+        <span class="c"># download relevant ruby gems...</span>
+        <span class="k">if</span> <span class="n">gems</span><span class="p">:</span>
+            <span class="n">ruby_handler</span><span class="o">.</span><span class="n">get_ruby_gems</span><span class="p">(</span><span class="n">gems</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;component is set to manual retrieval&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="pack"><a class="viewcode-back" href="../../api.html#packman.packman.pack">[docs]</a><span class="k">def</span> <span class="nf">pack</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    creates a package according to the provided package configuration</span>
+<span class="sd">    in packages.py</span>
+<span class="sd">    uses fpm (https://github.com/jordansissel/fpm/wiki) to create packages.</span>
+
+<span class="sd">    .. note:: component params are defined in packages.py but can be passed</span>
+<span class="sd">     directly to the pack function as a dict.</span>
+
+<span class="sd">    .. note:: param names in packages.py can be overriden by editing</span>
+<span class="sd">     definitions.py which also has an explanation on each param.</span>
+
+<span class="sd">    :param string|dict component: string or dict representing component</span>
+<span class="sd">     name or params (coorespondingly) as configured in packages.py</span>
+<span class="sd">    :param string name: package&#39;s name</span>
+<span class="sd">     will be appended to the filename and to the package</span>
+<span class="sd">     depending on its type</span>
+<span class="sd">    :param string version: version to append to package</span>
+<span class="sd">    :param string src_pkg_type: package source type (as supported by fpm)</span>
+<span class="sd">    :param string dst_pkg_type: package destination type (as supported by fpm)</span>
+<span class="sd">    :param string src_path: path containing sources</span>
+<span class="sd">     from which package will be created</span>
+<span class="sd">    :param string tmp_pkg_path: path where temp package is placed</span>
+<span class="sd">    :param string package_path: path where final package is placed</span>
+<span class="sd">    :param string bootstrap_script: path to place generated script</span>
+<span class="sd">    :param string bootstrap_script_in_pkg:</span>
+<span class="sd">    :param dict config_templates: configuration dict for the package&#39;s</span>
+<span class="sd">     config files</span>
+<span class="sd">    :param bool overwrite: indicates whether the destination directory be</span>
+<span class="sd">     erased before creating a new package</span>
+<span class="sd">    :param bool mock: indicates whether a mock pack will be created</span>
+<span class="sd">     (for testing purposes. does not use fpm)</span>
+<span class="sd">    :rtype: `None`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># get the cwd since fpm will later change it.</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="c"># you can send the component dict directly, or retrieve it from</span>
+    <span class="c"># the packages.py file by sending its name</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">component</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span> \
+        <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+
+    <span class="c"># define params for packaging</span>
+    <span class="n">auto_pack</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span><span class="p">]</span> \
+        <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">auto_pack</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_VERSION</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_VERSION</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">bootstrap_template</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_TEMPLATE_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_TEMPLATE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">bootstrap_script</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">bootstrap_script_in_pkg</span> <span class="o">=</span> <span class="n">cwd</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> \
+            <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">src_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">sources_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="c"># TODO: JEEZ... this archives thing is dumb...</span>
+        <span class="c"># replace it with a normal destination path</span>
+        <span class="n">tmp_pkg_path</span> <span class="o">=</span> <span class="s">&#39;{0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">])</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">package_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">depends</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DEPENDS</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DEPENDS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">config_templates</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPLATE_CONFIG</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPLATE_CONFIG</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="n">overwrite</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_OUTPUT_PACKAGE</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_OUTPUT_PACKAGE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
+        <span class="n">mock</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_MOCK</span><span class="p">]</span> <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_MOCK</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+
+        <span class="n">common</span> <span class="o">=</span> <span class="n">CommonHandler</span><span class="p">()</span>
+        <span class="n">tmp_handler</span> <span class="o">=</span> <span class="n">TemplateHandler</span><span class="p">()</span>
+
+        <span class="c"># can&#39;t use sources_path == tmp_pkg_path for the package... duh!</span>
+        <span class="k">if</span> <span class="n">sources_path</span> <span class="o">==</span> <span class="n">tmp_pkg_path</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;source and destination paths must&#39;</span>
+                      <span class="s">&#39; be different to avoid conflicts!&#39;</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;cleaning up before packaging...&#39;</span><span class="p">)</span>
+
+        <span class="c"># should the packaging process overwrite the previous packages?</span>
+        <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;overwrite enabled. removing directory before packaging&#39;</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="s">&#39;{0}/{1}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="c"># if the package is ...</span>
+        <span class="k">if</span> <span class="n">src_pkg_type</span><span class="p">:</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">)</span>
+
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;generating package scripts and config files...&#39;</span><span class="p">)</span>
+        <span class="c"># if there are configuration templates to generate configs from...</span>
+        <span class="k">if</span> <span class="n">config_templates</span><span class="p">:</span>
+            <span class="n">tmp_handler</span><span class="o">.</span><span class="n">generate_configs</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="c"># if bootstrap scripts are required, generate them.</span>
+        <span class="k">if</span> <span class="n">bootstrap_script</span> <span class="ow">or</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
+            <span class="c"># TODO: handle cases where a bootstrap script is not a template.</span>
+            <span class="c"># bootstrap_script - bootstrap script to be attached to the package</span>
+            <span class="c"># bootstrap_script_in_pkg - same but for putting inside the package</span>
+            <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script</span><span class="p">:</span>
+                <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
+                                                    <span class="n">bootstrap_script</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
+                <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
+                                                    <span class="n">bootstrap_script_in_pkg</span><span class="p">)</span>
+                <span class="c"># if it&#39;s in_pkg, grant it exec permissions and copy it to the</span>
+                <span class="c"># package&#39;s path.</span>
+                <span class="k">if</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
+                    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;granting execution permissions&#39;</span><span class="p">)</span>
+                    <span class="n">do</span><span class="p">(</span><span class="s">&#39;chmod +x {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">))</span>
+                    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copying bootstrap script to package directory&#39;</span><span class="p">)</span>
+                    <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;packing up component...&#39;</span><span class="p">)</span>
+        <span class="c"># if a package needs to be created (not just files copied)...</span>
+        <span class="k">if</span> <span class="n">src_pkg_type</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;packing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="c"># if the source dir for the package exists</span>
+            <span class="k">if</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">sources_path</span><span class="p">):</span>
+                <span class="c"># change the path to the destination path, since fpm doesn&#39;t</span>
+                <span class="c"># accept (for now) a dst dir, but rather creates the package in</span>
+                <span class="c"># the cwd.</span>
+                <span class="k">with</span> <span class="n">lcd</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">):</span>
+                    <span class="c"># these will handle the different packaging cases based on</span>
+                    <span class="c"># the requirement. for instance, if a bootstrap script</span>
+                    <span class="c"># exists, and there are dependencies for the package, run</span>
+                    <span class="c"># fpm with the relevant flags.</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">mock</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">bootstrap_script_in_pkg</span> <span class="ow">and</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar&quot;</span><span class="p">:</span>
+                            <span class="n">do</span><span class="p">(</span>
+                                <span class="s">&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}&#39;</span>
+                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src_pkg_type</span><span class="p">,</span> <span class="s">&quot;tar&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span>
+                                        <span class="n">sources_path</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">bootstrap_script</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">depends</span><span class="p">:</span>
+                            <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo fpm -s {0} -t {1} --after-install {2}&#39;</span>
+                               <span class="s">&#39; -n {3} -v {4} -f {5}&#39;</span>
+                               <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+                                       <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">bootstrap_script</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span>
+                                       <span class="n">sources_path</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">bootstrap_script</span> <span class="ow">and</span> <span class="n">depends</span><span class="p">:</span>
+                            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;package dependencies are: {0}&#39;</span>
+                                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">depends</span><span class="p">)))</span>
+                            <span class="n">dep_str</span> <span class="o">=</span> <span class="s">&quot;-d &quot;</span> <span class="o">+</span> <span class="s">&quot; -d &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">depends</span><span class="p">)</span>
+                            <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo fpm -s {0} -t {1} --after-install {2} {3}&#39;</span>
+                               <span class="s">&#39; -n {4} -v {5} -f {6}&#39;</span>
+                               <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+                                       <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">bootstrap_script</span><span class="p">,</span> <span class="n">dep_str</span><span class="p">,</span>
+                                       <span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">))</span>
+                        <span class="c"># else just create a package with default flags...</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">dst_pkg_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;tar&quot;</span><span class="p">):</span>
+                                <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}&#39;</span>  <span class="c"># NOQA</span>
+                                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src_pkg_type</span><span class="p">,</span> <span class="s">&quot;tar&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span>
+                                           <span class="n">sources_path</span><span class="p">))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">do</span><span class="p">(</span>
+                                    <span class="s">&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} &#39;</span>
+                                    <span class="s">&#39;-f {4}&#39;</span>
+                                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                                            <span class="n">version</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">))</span>
+                            <span class="k">if</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar.gz&quot;</span><span class="p">:</span>
+                                <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gzip {0}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                        <span class="c"># and check if the packaging process succeeded.</span>
+                        <span class="c"># TODO: actually test the package itself.</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c"># TODO: create mock package</span>
+                        <span class="k">return</span>
+            <span class="c"># apparently, the src for creation the package doesn&#39;t exist...</span>
+            <span class="c"># what can you do?</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;sources dir {0} does</span><span class="se">\&#39;</span><span class="s">nt exist, termintating...&#39;</span>
+                          <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sources_path</span><span class="p">))</span>
+                <span class="c"># maybe bluntly exit since this is all irrelevant??</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># make sure the final destination for the package exists..</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">package_path</span><span class="p">):</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">package_path</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;isolating archives...&quot;</span><span class="p">)</span>
+        <span class="c"># and then copy the final package over..</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package creation completed successfully!&#39;</span><span class="p">)</span>
+        <span class="c"># TODO: remove temporary package</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package is set to be packaged manually&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="do"><a class="viewcode-back" href="../../api.html#packman.packman.do">[docs]</a><span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+       <span class="n">capture</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">combine_stderr</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    executes a command locally with retries on failure.</span>
+
+<span class="sd">    if a `command` execution is successful, it will return a fabric</span>
+<span class="sd">    object with the output (x.stdout, x.stderr, x.succeeded, etc..)</span>
+
+<span class="sd">    else, it will retry an `attempts` number of attempts and if all fails</span>
+<span class="sd">    it will return the fabric output object.</span>
+<span class="sd">    obviously, `attempts` must be larger than 0...</span>
+
+<span class="sd">    :param string command: shell command to be executed</span>
+<span class="sd">    :param int attempts: number of attempts to perform on failure</span>
+<span class="sd">    :param int sleep_time: sleeptime between attempts</span>
+<span class="sd">    :param bool capture: should the output be captured for parsing?</span>
+<span class="sd">    :param bool combine_stderr: combine stdout and stderr (NOT YET IMPL)</span>
+<span class="sd">    :param bool sudo: run as sudo</span>
+<span class="sd">    :rtype: `responseObject` (for fabric operation)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">attempts</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;attempts must be at least 1&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sleep_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;sleep_time must be larger than 0&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_execute</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">execution</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">attempts</span><span class="p">):</span>
+            <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">local</span><span class="p">(</span><span class="s">&#39;sudo {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">),</span> <span class="n">capture</span><span class="p">)</span> <span class="k">if</span> <span class="n">sudo</span> \
+                    <span class="k">else</span> <span class="n">local</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span><span class="p">:</span>
+                    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;successfully executed: &#39;</span> <span class="o">+</span> <span class="n">command</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">x</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;failed to run command: {0} -retrying ({1}/{2})&#39;</span>
+                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">execution</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">attempts</span><span class="p">))</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;failed to run command: {0} even after {1} attempts&#39;</span>
+                  <span class="s">&#39; with output: {2}&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="c"># TODO: apply verbosity according to the verbose flag in pkm</span>
+    <span class="c"># instead of a verbose flag in the config.</span>
+    <span class="k">if</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_execute</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;running&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">_execute</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="CommonHandler"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler">[docs]</a><span class="k">class</span> <span class="nc">CommonHandler</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    common class to handle files and directories</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CommonHandler.find_in_dir"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.find_in_dir">[docs]</a>    <span class="k">def</span> <span class="nf">find_in_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        finds file/s in a dir</span>
+
+<span class="sd">        :param string dir: directory to look in</span>
+<span class="sd">        :param string patten: what to look for</span>
+<span class="sd">        :rtype: ``stdout`` `string` if found, else `None`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;looking for {0} in {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;find {0} -iname &quot;{1}&quot; -exec echo {{}} \;&#39;</span>
+               <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">),</span> <span class="n">capture</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">stdout</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span> <span class="k">else</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.is_dir"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.is_dir">[docs]</a>    <span class="k">def</span> <span class="nf">is_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checks if a directory exists</span>
+
+<span class="sd">        :param string dir: directory to check</span>
+<span class="sd">        :rtype: `bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">):</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.is_file"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.is_file">[docs]</a>    <span class="k">def</span> <span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checks if a file exists</span>
+
+<span class="sd">        :param string file: file to check</span>
+<span class="sd">        :rtype: `bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.touch"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.touch">[docs]</a>    <span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a file</span>
+
+<span class="sd">        :param string file: file to touch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating file {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;touch {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.mkdir"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.mkdir">[docs]</a>    <span class="k">def</span> <span class="nf">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates (recursively) a directory</span>
+
+<span class="sd">        :param string dir: directory to create</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating directory {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;mkdir -p {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> \
+            <span class="k">else</span> <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;directory already exists, skipping.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.rmdir"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.rmdir">[docs]</a>    <span class="k">def</span> <span class="nf">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        deletes a directory</span>
+
+<span class="sd">        :param string dir: directory to remove</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;attempting to remove directory {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;rm -rf {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="k">else</span> <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;dir doesn</span><span class="se">\&#39;</span><span class="s">t exist&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="c"># TODO: handle multiple files differently</span></div>
+<div class="viewcode-block" id="CommonHandler.rm"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.rm">[docs]</a>    <span class="k">def</span> <span class="nf">rm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        deletes a file or a set of files</span>
+
+<span class="sd">        :param string file(s): file(s) to remove</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;removing files {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;rm {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> \
+            <span class="k">else</span> <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;file(s) do(es)n</span><span class="se">\&#39;</span><span class="s">t exist&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.cp"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.cp">[docs]</a>    <span class="k">def</span> <span class="nf">cp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        copies (recuresively or not) files or directories</span>
+
+<span class="sd">        :param string src: source to copy</span>
+<span class="sd">        :param string dst: destination to copy to</span>
+<span class="sd">        :param bool recurse: should the copying process be recursive?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copying {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp -R {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> <span class="k">if</span> <span class="n">recurse</span> \
+            <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+
+    <span class="c"># TODO: depracate this useless thing...</span></div>
+<div class="viewcode-block" id="CommonHandler.make_package_paths"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.make_package_paths">[docs]</a>    <span class="k">def</span> <span class="nf">make_package_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg_dir</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEPRACATED!</span>
+<span class="sd">        creates directories for managing packages</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># this is stupid... remove it soon...</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating package directories&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/archives&#39;</span> <span class="o">%</span> <span class="n">tmp_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">pkg_dir</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.tar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.tar">[docs]</a>    <span class="k">def</span> <span class="nf">tar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        tars an input file or directory</span>
+
+<span class="sd">        :param string chdir: change to this dir before archiving</span>
+<span class="sd">        :param string output_file: tar output file path</span>
+<span class="sd">        :param string input: input path to create tar from</span>
+<span class="sd">        :param string opts: tar opts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;tar-ing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -c{1} {2} {3}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">input_path</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CommonHandler.untar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.untar">[docs]</a>    <span class="k">def</span> <span class="nf">untar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        untars a file</span>
+
+<span class="sd">        :param string chdir: change to this dir before extracting</span>
+<span class="sd">        :param string input_file: file to untar</span>
+<span class="sd">        :param string opts: tar opts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;untar-ing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -x{1} {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">input_file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="PythonHandler"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler">[docs]</a><span class="k">class</span> <span class="nc">PythonHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    python operations handler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PythonHandler.pips"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.pips">[docs]</a>    <span class="k">def</span> <span class="nf">pips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modules</span><span class="p">,</span> <span class="n">venv</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pip installs a list of modules</span>
+
+<span class="sd">        :param list modules: python modules to ``pip install``</span>
+<span class="sd">        :param string venv: (optional) if ommited, will use system python</span>
+<span class="sd">         else, will use `venv` (for virtualenvs and such)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pip</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">venv</span><span class="p">,</span> <span class="n">attempts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PythonHandler.pip"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.pip">[docs]</a>    <span class="k">def</span> <span class="nf">pip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">venv</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="s">&#39;45&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pip installs a module</span>
+
+<span class="sd">        :param string module: python module to ``pip install``</span>
+<span class="sd">        :param string venv: (optional) if ommited, will use system python</span>
+<span class="sd">         else, will use `venv` (for virtualenvs and such)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;installing module {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;{0}/bin/pip --default-timeout={2} install {1}&#39;</span>
+                  <span class="s">&#39; --process-dependency-links&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">venv</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">timeout</span><span class="p">),</span>
+                  <span class="n">attempts</span><span class="o">=</span><span class="n">attempts</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="n">venv</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;pip --default-timeout={2} install {1}&#39;</span>
+                            <span class="s">&#39; --process-dependency-links&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">venv</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">timeout</span><span class="p">),</span>
+                            <span class="n">attempts</span><span class="o">=</span><span class="n">attempts</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PythonHandler.get_python_modules"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.get_python_modules">[docs]</a>    <span class="k">def</span> <span class="nf">get_python_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modules</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">venv</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads python modules</span>
+
+<span class="sd">        :param list modules: python modules to download</span>
+<span class="sd">        :param string dir: dir to download modules to</span>
+<span class="sd">        :param string venv: (optional) if ommited, will use system python</span>
+<span class="sd">         else, will use `dir` (for virtualenvs and such)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_python_module</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">venv</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PythonHandler.get_python_module"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.get_python_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_python_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">venv</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads a python module</span>
+
+<span class="sd">        :param string module: python module to download</span>
+<span class="sd">        :param string dir: dir to download module to</span>
+<span class="sd">        :param string venv: (optional) if ommited, will use system python</span>
+<span class="sd">         else, will use `dir` (for virtualenvs and such)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading module {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo {0}/pip install --no-use-wheel&#39;</span>
+                  <span class="s">&#39; --process-dependency-links --download &quot;{1}/&quot; {2}&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">venv</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span> \
+            <span class="k">if</span> <span class="n">venv</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo /usr/local/bin/pip install --no-use-wheel&#39;</span>
+                            <span class="s">&#39; --process-dependency-links --download &quot;{0}/&quot; {1}&#39;</span>
+                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="PythonHandler.check_module_installed"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.check_module_installed">[docs]</a>    <span class="k">def</span> <span class="nf">check_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checks to see that a module is installed</span>
+
+<span class="sd">        :param string name: module to check for</span>
+<span class="sd">        :param string dir: (optional) if ommited, will use system python</span>
+<span class="sd">         else, will use `dir` (for virtualenvs and such)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking whether {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;pip freeze&#39;</span><span class="p">,</span> <span class="n">capture</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">dir</span> <span class="k">else</span> \
+            <span class="n">do</span><span class="p">(</span><span class="s">&#39;{0}/pip freeze&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">),</span> <span class="n">capture</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;module {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;module {0} is not installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="c"># TODO: support virtualenv --relocate OR</span>
+    <span class="c"># TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA</span></div>
+<div class="viewcode-block" id="PythonHandler.venv"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.venv">[docs]</a>    <span class="k">def</span> <span class="nf">venv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">venv_dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a virtualenv</span>
+
+<span class="sd">        :param string venv_dir: venv path to create</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating virtualenv in {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">venv_dir</span><span class="p">))</span>
+        <span class="c"># if self.check_module_installed(&#39;virtualenv&#39;):</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;virtualenv {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">venv_dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+        <span class="c"># else:</span>
+        <span class="c">#     lgr.error(&#39;virtualenv is not installed. terminating&#39;)</span>
+        <span class="c">#     raise PackagerError(&#39;h0!&#39;)</span>
+
+</div></div>
+<div class="viewcode-block" id="RubyHandler"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler">[docs]</a><span class="k">class</span> <span class="nc">RubyHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+    <span class="c"># TODO: remove static paths for ruby installations..</span>
+    <span class="c"># TODO: add support for ruby in different environments</span>
+<div class="viewcode-block" id="RubyHandler.get_ruby_gems"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler.get_ruby_gems">[docs]</a>    <span class="k">def</span> <span class="nf">get_ruby_gems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gem</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads a list of ruby gems</span>
+
+<span class="sd">        :param list gems: gems to download</span>
+<span class="sd">        :param string dir: directory to download gems to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">gem</span> <span class="ow">in</span> <span class="n">gems</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_ruby_gem</span><span class="p">(</span><span class="n">gem</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RubyHandler.get_ruby_gem"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler.get_ruby_gem">[docs]</a>    <span class="k">def</span> <span class="nf">get_ruby_gem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gem</span><span class="p">,</span> <span class="n">rbenv</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads a ruby gem</span>
+
+<span class="sd">        :param string gem: gem to download</span>
+<span class="sd">        :param string dir: directory to download gem to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading gem {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gem</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gem install --no-ri --no-rdoc&#39;</span>
+                  <span class="s">&#39; --install-dir {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">gem</span><span class="p">))</span>
+
+</div></div>
+<div class="viewcode-block" id="YumHandler"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler">[docs]</a><span class="k">class</span> <span class="nc">YumHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="YumHandler.update"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        runs yum update</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;updating local yum repo&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum update&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="YumHandler.downloads"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.downloads">[docs]</a>    <span class="k">def</span> <span class="nf">downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reqs</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads component requirements</span>
+
+<span class="sd">        :param list reqs: list of requirements to download</span>
+<span class="sd">        :param sources_path: path to download requirements to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="YumHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        uses yum to download package debs from ubuntu&#39;s repo</span>
+
+<span class="sd">        :param string pkg: package to download</span>
+<span class="sd">        :param string dir: dir to download to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install --downloadonly --downloaddir={1} {0}&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="YumHandler.installs"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.installs">[docs]</a>    <span class="k">def</span> <span class="nf">installs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        yum installs a list of packages</span>
+
+<span class="sd">        :param list package: packages to install</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="YumHandler.install"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.install">[docs]</a>    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        yum installs a package</span>
+
+<span class="sd">        :param string package: package to install</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;installing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+
+</div></div>
+<div class="viewcode-block" id="AptHandler"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler">[docs]</a><span class="k">class</span> <span class="nc">AptHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+<div class="viewcode-block" id="AptHandler.dpkg_name"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.dpkg_name">[docs]</a>    <span class="k">def</span> <span class="nf">dpkg_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        renames deb files to conventional names</span>
+
+<span class="sd">        :param string dir: dir to review</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;renaming deb files...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;dpkg-name {0}/*.deb&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
+
+    <span class="c"># TODO: fix this... (it should dig a bit deeper)</span></div>
+<div class="viewcode-block" id="AptHandler.check_if_package_is_installed"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.check_if_package_is_installed">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_package_is_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checks if a package is installed</span>
+
+<span class="sd">        :param string package: package name to check</span>
+<span class="sd">        :rtype: `bool` representing whether package is installed or not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo dpkg -s {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;{0} is not installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="AptHandler.downloads"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.downloads">[docs]</a>    <span class="k">def</span> <span class="nf">downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reqs</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        downloads component requirements</span>
+
+<span class="sd">        :param list reqs: list of requirements to download</span>
+<span class="sd">        :param sources_path: path to download requirements to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        uses apt to download package debs from ubuntu&#39;s repo</span>
+
+<span class="sd">        :param string pkg: package to download</span>
+<span class="sd">        :param string dir: dir to download to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AptHandler.autoremove"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.autoremove">[docs]</a>    <span class="k">def</span> <span class="nf">autoremove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        autoremoves package dependencies</span>
+
+<span class="sd">        :param string pkg: package to remove</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;removing unnecessary dependencies...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y autoremove {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_src_repos"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_src_repos">[docs]</a>    <span class="k">def</span> <span class="nf">add_src_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_repos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a list of source repos to the apt repo</span>
+
+<span class="sd">        :param list source_repos: repos to add to sources list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">source_repo</span> <span class="ow">in</span> <span class="n">source_repos</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_src_repo</span><span class="p">(</span><span class="n">source_repo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_src_repo"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_src_repo">[docs]</a>    <span class="k">def</span> <span class="nf">add_src_repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_repo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a source repo to the apt repo</span>
+
+<span class="sd">        :param string source_repo: repo to add to sources list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding source repository {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo sed -i &quot;2i {0}&quot; /etc/apt/sources.list&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_ppa_repos"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_ppa_repos">[docs]</a>    <span class="k">def</span> <span class="nf">add_ppa_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_ppas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a list of ppa repos to the apt repo</span>
+
+<span class="sd">        :param list source_ppas: ppa urls to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">source_ppa</span> <span class="ow">in</span> <span class="n">source_ppas</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_ppa_repo</span><span class="p">(</span><span class="n">source_ppa</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_ppa_repo"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_ppa_repo">[docs]</a>    <span class="k">def</span> <span class="nf">add_ppa_repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_ppa</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a ppa repo to the apt repo</span>
+
+<span class="sd">        :param string source_ppa: ppa url to add</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding ppa repository {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_ppa</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;add-apt-repository -y {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_ppa</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_keys"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_keys">[docs]</a>    <span class="k">def</span> <span class="nf">add_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a list of keys to the local repo</span>
+
+<span class="sd">        :param string key_files: key files paths</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key_file</span> <span class="ow">in</span> <span class="n">key_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_key</span><span class="p">(</span><span class="n">key_file</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.add_key"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.add_key">[docs]</a>    <span class="k">def</span> <span class="nf">add_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a key to the local repo</span>
+
+<span class="sd">        :param string key_file: key file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding key {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-key add {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="AptHandler.update"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        runs apt-get update</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;updating local apt repo&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get update&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.installs"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.installs">[docs]</a>    <span class="k">def</span> <span class="nf">installs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        apt-get installs a list of packages</span>
+
+<span class="sd">        :param list packages: packages to install</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.install"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.install">[docs]</a>    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        apt-get installs a package</span>
+
+<span class="sd">        :param string package: package to install</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;installing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="AptHandler.purges"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.purges">[docs]</a>    <span class="k">def</span> <span class="nf">purges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        completely purges a list of packages from the local repo</span>
+
+<span class="sd">        :param list packages: packages name to purge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">purge</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AptHandler.purge"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.purge">[docs]</a>    <span class="k">def</span> <span class="nf">purge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        completely purges a package from the local repo</span>
+
+<span class="sd">        :param string package: package name to purge</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;attemping to purge {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y purge {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+
+</div></div>
+<div class="viewcode-block" id="DownloadsHandler"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler">[docs]</a><span class="k">class</span> <span class="nc">DownloadsHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+<div class="viewcode-block" id="DownloadsHandler.wgets"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.wgets">[docs]</a>    <span class="k">def</span> <span class="nf">wgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        wgets a list of urls to a destination directory</span>
+
+<span class="sd">        :param list urls: a list of urls to download</span>
+<span class="sd">        :param string dir: download to dir...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DownloadsHandler.wget"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.wget">[docs]</a>    <span class="k">def</span> <span class="nf">wget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        wgets a url to a destination directory or file</span>
+
+<span class="sd">        :param string url: url to wget?</span>
+<span class="sd">        :param string dir: download to dir....</span>
+<span class="sd">        :param string file: download to file...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;--timeout=30&#39;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">file</span> <span class="ow">and</span> <span class="nb">dir</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">dir</span><span class="p">):</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;please specify either a directory&#39;</span>
+                        <span class="s">&#39; or file to download to.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;please specify either a directory&#39;</span>
+                                <span class="s">&#39; or file to download to.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -O {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="nb">file</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -P {2}&#39;</span>
+                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+
+    <span class="c"># TODO: implement?</span></div>
+<div class="viewcode-block" id="DownloadsHandler.curls"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.curls">[docs]</a>    <span class="k">def</span> <span class="nf">curls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        curls a list of urls</span>
+
+<span class="sd">        :param list url: urls to curl?</span>
+<span class="sd">        :param string dir: curl to dir....</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curl</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DownloadsHandler.curl"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.curl">[docs]</a>    <span class="k">def</span> <span class="nf">curl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        curls a url</span>
+
+<span class="sd">        :param string url: url to curl?</span>
+<span class="sd">        :param string dir: download to dir....</span>
+<span class="sd">        :param string file: download to file...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;not implemented!&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="TemplateHandler"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler">[docs]</a><span class="k">class</span> <span class="nc">TemplateHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+    <span class="c"># TODO: replace this with method generate_from_template()..</span>
+<div class="viewcode-block" id="TemplateHandler.create_bootstrap_script"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler.create_bootstrap_script">[docs]</a>    <span class="k">def</span> <span class="nf">create_bootstrap_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">script_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a script file from a template file</span>
+
+<span class="sd">        :param dict component: contains the params to use in the template</span>
+<span class="sd">        :param string template_file: template file path</span>
+<span class="sd">        :param string script_file: output path for generated script</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating bootstrap script...&#39;</span><span class="p">)</span>
+        <span class="n">formatted_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template_formatter</span><span class="p">(</span>
+            <span class="n">defs</span><span class="o">.</span><span class="n">PACKAGER_TEMPLATE_PATH</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_file</span><span class="p">(</span><span class="n">script_file</span><span class="p">,</span> <span class="n">formatted_text</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TemplateHandler.generate_configs"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler.generate_configs">[docs]</a>    <span class="k">def</span> <span class="nf">generate_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generates configuration files from templates</span>
+
+<span class="sd">        for every key in the configuration templates sub-dict, if a key</span>
+<span class="sd">        corresponds with a templates/configs key (as defined in definitions.py)</span>
+<span class="sd">        the relevant method for creating configuration files will be applied.</span>
+
+<span class="sd">        :param dict component: contains the params to use in the template</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># iterate over the config_templates dict in the package&#39;s config</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> \
+                <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPLATE_CONFIG</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c"># we&#39;ll make some assumptions regarding the structure of the config</span>
+            <span class="c"># placement. spliting and joining to make up the positions.</span>
+
+            <span class="c"># and find something to mark that you should generate a template</span>
+            <span class="c"># from a file</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPLATE_FILE</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generate_config_from_file</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+            <span class="c"># or generate templates from a dir, where the difference</span>
+            <span class="c"># would be that the name of the output files will correspond</span>
+            <span class="c"># to the names of the template files (removing .template)</span>
+            <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPLATE_DIR</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generate_configs_from_dir</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+            <span class="c"># or just copy static config files...</span>
+            <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_CONFIG_DIR</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generate_static_configs_from_dir</span><span class="p">(</span>
+                    <span class="n">component</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># you can define arbitrary keys in the config_templates</span>
+                <span class="c"># dict.. for your bidding,</span>
+                <span class="c"># which can then be used as param references.</span>
+                <span class="k">pass</span>
+</div>
+    <span class="k">def</span> <span class="nf">_generate_config_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">config_params</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generates a configuration file from a template file</span>
+
+<span class="sd">        if the config directory for the component doesn&#39;t exist, it will be</span>
+<span class="sd">        created after which the config file will be generated into that dir.</span>
+
+<span class="sd">        :param string component: component name</span>
+<span class="sd">        :param dict config_params: file config params</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># where should config reside within the package?</span>
+        <span class="n">config_dir</span> <span class="o">=</span> \
+            <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_FILE_CONFIG_DIR</span><span class="p">]</span>
+        <span class="c"># where is the template dir?</span>
+        <span class="n">template_dir</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_FILE_TEMPLATE_FILE</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c"># where is the template file?</span>
+        <span class="n">template_file</span> <span class="o">=</span> \
+            <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_FILE_TEMPLATE_FILE</span><span class="p">]</span> \
+            <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c"># the output file&#39;s name is...</span>
+        <span class="n">output_file</span> <span class="o">=</span> \
+            <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_FILE_OUTPUT_FILE</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_FILE_OUTPUT_FILE</span> <span class="ow">in</span> <span class="n">config_params</span> \
+            <span class="k">else</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c"># and its path is...</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="s">&#39;{}/{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">],</span> <span class="n">config_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="c"># create the directory to put the config in after it&#39;s</span>
+        <span class="c"># genserated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">],</span> <span class="n">config_dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+        <span class="c"># and then generate the config file. WOOHOO!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_from_template</span><span class="p">(</span><span class="n">component</span><span class="p">,</span>
+                                    <span class="n">output_path</span><span class="p">,</span>
+                                    <span class="n">template_file</span><span class="p">,</span>
+                                    <span class="n">template_dir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_configs_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">config_params</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generates configuration files from a a templates directory</span>
+
+<span class="sd">        if the config directory for the `component` doesn&#39;t exist, it will be</span>
+<span class="sd">        created after which the config files will be generated into that dir.</span>
+
+<span class="sd">        the source directory, as configured in `config_params` will be iterated</span>
+<span class="sd">        over and all files will be processed.</span>
+
+<span class="sd">        :param string component: component name</span>
+<span class="sd">        :param dict config_params: file config params</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config_dir</span> <span class="o">=</span> <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_DIR_CONFIG_DIR</span><span class="p">]</span>
+        <span class="n">template_dir</span> <span class="o">=</span> \
+            <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_TEMPALTES_DIR_TEMPLATES_PATH</span><span class="p">]</span>
+        <span class="c"># iterate over the files in the dir...</span>
+        <span class="c"># and just perform the same steps as in _generate_config_from_file</span>
+        <span class="k">for</span> <span class="n">subdir</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">template_dir</span><span class="p">):</span>
+            <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="n">template_file</span> <span class="o">=</span> <span class="nb">file</span>
+                <span class="n">output_file</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">output_path</span> <span class="o">=</span> <span class="s">&#39;{}/{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">],</span> <span class="n">config_dir</span><span class="p">,</span>
+                    <span class="n">output_file</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">],</span> <span class="n">config_dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generate_from_template</span><span class="p">(</span><span class="n">component</span><span class="p">,</span>
+                                            <span class="n">output_path</span><span class="p">,</span>
+                                            <span class="n">template_file</span><span class="p">,</span>
+                                            <span class="n">template_dir</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_static_configs_from_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">config_params</span><span class="p">,</span>
+                                          <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        copies configuration files from a a configuration files directory</span>
+
+<span class="sd">        if the config directory for the `component` doesn&#39;t exist, it will be</span>
+<span class="sd">        created after which the config files will be generated into that dir.</span>
+
+<span class="sd">        the source directory, as configured in `config_params` will be iterated</span>
+<span class="sd">        over and all files will be copied.</span>
+
+<span class="sd">        :param string component: component name</span>
+<span class="sd">        :param dict config_params: file config params</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config_dir</span> <span class="o">=</span> <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_FILES_CONFIGS_DIR</span><span class="p">]</span>
+        <span class="n">files_dir</span> <span class="o">=</span> <span class="n">config_params</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_CONFIG_FILES_CONFIGS_PATH</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">],</span> <span class="n">config_dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+        <span class="c"># copy the static files to the destination config dir.</span>
+        <span class="c"># yep, simple as that...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="n">files_dir</span> <span class="o">+</span> <span class="s">&#39;/*&#39;</span><span class="p">,</span> <span class="n">component</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">]</span> <span class="o">+</span>
+                <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">config_dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TemplateHandler.generate_from_template"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler.generate_from_template">[docs]</a>    <span class="k">def</span> <span class="nf">generate_from_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component_config</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span>
+                               <span class="n">template_file</span><span class="p">,</span>
+                               <span class="n">templates</span><span class="o">=</span><span class="n">defs</span><span class="o">.</span><span class="n">PACKAGER_TEMPLATE_PATH</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        generates configuration files from templates using jinja2</span>
+<span class="sd">        http://jinja.pocoo.org/docs/</span>
+
+<span class="sd">        :param dict component_config: contains the params to use</span>
+<span class="sd">         in the template</span>
+<span class="sd">        :param string output_file: output file path</span>
+<span class="sd">        :param string template_file: template file name</span>
+<span class="sd">        :param string templates: template files directory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generating config file...&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">component_config</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;component must be of type dict&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;component must be of type dict&#39;</span><span class="p">)</span>
+        <span class="n">formatted_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template_formatter</span><span class="p">(</span>
+            <span class="n">templates</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">component_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">formatted_text</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_template_formatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_dir</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">var_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        receives a template and returns a formatted version of it</span>
+<span class="sd">        according to a provided variable dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">template_dir</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;template_dir must be of type string&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">template_dir</span><span class="p">):</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_dir</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;template dir missing&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;template dir missing&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">template_file</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;template_file must be of type string&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">template_dir</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">template_file</span><span class="p">):</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">template_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;template file missing&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;template file missing&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generating template from {0}/{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">template_dir</span><span class="p">,</span> <span class="n">template_file</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">var_dict</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;could not generate template ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;could not generate template&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_make_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a file from content</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># TODO: receive PRINT_TEMPLATES from pkm</span>
+        <span class="k">if</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">PRINT_TEMPLATES</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating file: {0} with content: </span><span class="se">\n</span><span class="s">{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">output_path</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;could not write to file&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;could not write to file {0}&#39;</span>
+                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_path</span><span class="p">))</span>
+
+</div>
+<span class="k">class</span> <span class="nc">PackagerError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;running in main...&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, nir0s.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

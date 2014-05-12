@@ -1,0 +1,12 @@
+input {
+    tcp {
+        port => {{ config_templates.__params_conf.test_tcp_port }}
+    }
+}
+
+output {
+    elasticsearch_http {
+        host => "localhost"
+        index => "{{ config_templates.__params_conf.events_index}}"
+    }
+}
