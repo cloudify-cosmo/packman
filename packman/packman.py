@@ -840,13 +840,11 @@ class YumHandler(CommonHandler):
         :param string pkg: package to download
         :param string dir: dir to download to
         """
+        # TODO: add an is-package-installed check. if it is
+        # TODO: run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        try:
-            return do('sudo yum -y reinstall --downloadonly '
-                      '--downloaddir={1} {0}'.format(pkg, dir))
-        except:
-            return do('sudo yum -y install --downloadonly '
-                      '--downloaddir={1} {0}'.format(pkg, dir))
+        return do('sudo yum -y install --downloadonly '
+                  '--downloaddir={1} {0}'.format(pkg, dir))
 
     def installs(self, packages):
         """
