@@ -508,3 +508,6 @@ class TestBaseMethods(unittest.TestCase):
     #         }
     #     }
     #     pack(component)
+
+# TODO: add apt handler tests
+# TODO: add yum handler tests (hrm.. how to?)

@@ -225,6 +225,7 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
+    # TODO: remove auto_get param - it is no longer in use
     auto_get = c[defs.PARAM_AUTO_GET] \
         if defs.PARAM_AUTO_GET in c else True
     if auto_get:
@@ -350,6 +351,7 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
+    # TODO: remove auto_pack param - it is no longer in use
     auto_pack = c[defs.PARAM_AUTO_PACK] \
         if defs.PARAM_AUTO_PACK in c else True
     if auto_pack:
@@ -366,12 +368,13 @@ def pack(component):
             if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
         src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
             if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
+        # TODO: identify dst_pkg_type by distro if not specified explicitly.
         dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
             if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
         sources_path = c[defs.PARAM_SOURCES_PATH] \
             if defs.PARAM_SOURCES_PATH in c else False
         # TODO: JEEZ... this archives thing is dumb...
-        # replace it with a normal destination path
+        # TODO: replace it with a normal destination path
         tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
             if defs.PARAM_SOURCES_PATH else False
         package_path = c[defs.PARAM_PACKAGE_PATH] \
@@ -835,7 +838,7 @@ class YumHandler(CommonHandler):
         :param string dir: dir to download to
         """
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        return do('sudo yum -y install --downloadonly --downloaddir={1} {0}'
+        return do('sudo yum -y reinstall --downloadonly --downloaddir={1} {0}'
                   .format(pkg, dir))
 
     def installs(self, packages):

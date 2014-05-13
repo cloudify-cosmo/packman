@@ -76,21 +76,21 @@ def main(test_options=None):
     print(options)
     if options['pack']:
         packman_runner('pack',
-                       options.get('--components_file'),
+                       options.get('--components-file'),
                        options.get('--components'),
                        options.get('--exclude'))
     elif options['get']:
         packman_runner('get',
-                       options.get('--components_file'),
+                       options.get('--components-file'),
                        options.get('--components'),
                        options.get('--exclude'))
     elif options['make']:
         packman_runner('get',
-                       options.get('--components_file'),
+                       options.get('--components-file'),
                        options.get('--components'),
                        options.get('--exclude'))
         packman_runner('pack',
-                       options.get('--components_file'),
+                       options.get('--components-file'),
                        options.get('--components'),
                        options.get('--exclude'))
 
