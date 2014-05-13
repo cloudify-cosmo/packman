@@ -39,12 +39,23 @@ Options:
 
 from __future__ import absolute_import
 from docopt import docopt
+from platform import dist
+from sys import exit
 
 from packman.packman import packman_runner
 
+dist_list = ('Ubuntu', 'debian', 'CentOS')
 
 def main(test_options=None):
     """Main entry point for script."""
+    distro = dist()[0]
+    print('Distribution Identified: ', distro)
+    if not distro in (dist_list):
+      print('Your distribution is not supported.'
+            'Supported Disributions are:')
+      for dist in dist_list:
+        print('    ', dist)
+      exit(1)
     import pkg_resources
     version = None
     try:
