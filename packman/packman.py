@@ -832,11 +832,11 @@ class YumHandler(CommonHandler):
         """
 
         lgr.debug('checking if {0} is installed'.format(package))
-        try:
-            do('sudo rpm -q {0}'.format(package))
+        x = do('sudo rpm -q {0}'.format(package), attempts=1)
+        if x.succeeded:
             lgr.debug('{0} is installed'.format(package))
             return True
-        except:
+        else:
             lgr.error('{0} is not installed'.format(package))
             return False
 
@@ -925,11 +925,11 @@ class AptHandler(CommonHandler):
         """
 
         lgr.debug('checking if {0} is installed'.format(package))
-        try:
-            do('sudo dpkg -s {0}'.format(package))
+        x = do('sudo dpkg -s {0}'.format(package), attempts=1)
+        if x.succeeded:
             lgr.debug('{0} is installed'.format(package))
             return True
-        except:
+        else:
             lgr.error('{0} is not installed'.format(package))
             return False
 
