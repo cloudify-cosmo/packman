@@ -133,6 +133,7 @@ def packman_runner(action='pack', components_file=None, components=None,
     # get packages.py file path
     components_file = components_file if components_file is not None \
         else os.getcwd() + '/' + 'packages.py'
+    lgr.debug('components file is: {}'.format(components_file))
     # append to path for importing
     sys.path.append(os.path.dirname(components_file))
     # import
