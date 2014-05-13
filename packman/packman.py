@@ -833,7 +833,7 @@ class YumHandler(CommonHandler):
 
         lgr.debug('checking if {0} is installed'.format(package))
         try:
-            do('sudo rpm -qi {0}'.format(package))
+            do('sudo rpm -q {0}'.format(package))
             lgr.debug('{0} is installed'.format(package))
             return True
         except:
@@ -860,7 +860,7 @@ class YumHandler(CommonHandler):
         # TODO: add an is-package-installed check. if it is
         # TODO: run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
-        if check_if_package_is_installed(package):
+        if self.check_if_package_is_installed(package):
             return do('sudo yum -y reinstall --downloadonly '
                       '--downloaddir={1} {0}'.format(package, dir))
         else:
