@@ -841,8 +841,12 @@ class YumHandler(CommonHandler):
         :param string dir: dir to download to
         """
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        return do('sudo yum -y reinstall --downloadonly --downloaddir={1} {0}'
-                  .format(pkg, dir))
+        try:
+            return do('sudo yum -y reinstall --downloadonly '
+                      '--downloaddir={1} {0}'.format(pkg, dir))
+        except:
+            return do('sudo yum -y install --downloadonly '
+                      '--downloaddir={1} {0}'.format(pkg, dir))
 
     def installs(self, packages):
         """
