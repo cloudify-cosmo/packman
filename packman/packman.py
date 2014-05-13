@@ -254,7 +254,7 @@ def get(component):
             if defs.PARAM_OVERWRITE_SOURCES in c else True
 
         common = CommonHandler()
-        if dist()[0] in ('CentOS'):
+        if dist()[0] in ('centos'):
             repo_handler = YumHandler()
         elif dist()[0] in ('Ubuntu', 'debian'):
             repo_handler = AptHandler()

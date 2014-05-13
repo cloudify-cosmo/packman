@@ -60,6 +60,7 @@ def check_dist():
 
 def main(test_options=None):
     """Main entry point for script."""
+    # TODO: currently, distrib is checked thruout the code. change it to once.
     check_dist()
     import pkg_resources
     version = None
