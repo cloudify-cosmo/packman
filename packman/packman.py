@@ -885,6 +885,24 @@ class YumHandler(CommonHandler):
         lgr.debug('installing {0}'.format(package))
         do('sudo yum -y install {0}'.format(package))
 
+    def add_keys(self, key_files):
+        """
+        adds a list of keys to the local repo
+
+        :param string key_files: key files paths
+        """
+        for key_file in key_files:
+            self.add_key(key_file)
+
+    def add_key(self, key_file):
+        """
+        adds a key to the local repo
+
+        :param string key_file: key file path
+        """
+        lgr.debug('adding key {0}'.format(key_file))
+        return do('sudo rpm -ivh {0}'.format(key_file))
+
 
 class AptHandler(CommonHandler):
     def dpkg_name(self, dir):
