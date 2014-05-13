@@ -823,6 +823,23 @@ class YumHandler(CommonHandler):
         lgr.debug('updating local yum repo')
         return do('sudo yum update')
 
+    def check_if_package_is_installed(self, package):
+        """
+        checks if a package is installed
+
+        :param string package: package name to check
+        :rtype: `bool` representing whether package is installed or not
+        """
+
+        lgr.debug('checking if {0} is installed'.format(package))
+        try:
+            do('sudo rpm -qi {0}'.format(package))
+            lgr.debug('{0} is installed'.format(package))
+            return True
+        except:
+            lgr.error('{0} is not installed'.format(package))
+            return False
+
     def downloads(self, reqs, sources_path):
         """
         downloads component requirements
@@ -833,18 +850,22 @@ class YumHandler(CommonHandler):
         for req in reqs:
             self.download(req, sources_path)
 
-    def download(self, pkg, dir):
+    def download(self, package, dir):
         """
         uses yum to download package debs from ubuntu's repo
 
-        :param string pkg: package to download
+        :param string package: package to download
         :param string dir: dir to download to
         """
         # TODO: add an is-package-installed check. if it is
         # TODO: run yum reinstall instead of yum install.
-        lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        return do('sudo yum -y install --downloadonly '
-                  '--downloaddir={1} {0}'.format(pkg, dir))
+        lgr.debug('downloading {0} to {1}'.format(package, dir))
+        if check_if_package_is_installed(package):
+            return do('sudo yum -y reinstall --downloadonly '
+                      '--downloaddir={1} {0}'.format(package, dir))
+        else:
+            return do('sudo yum -y install --downloadonly '
+                  '--downloaddir={1} {0}'.format(package, dir))
 
     def installs(self, packages):
         """
@@ -911,6 +932,8 @@ class AptHandler(CommonHandler):
         :param string pkg: package to download
         :param string dir: dir to download to
         """
+        # TODO: add an is-package-installed check. if it is
+        # TODO: run apt-get install --reinstall instead of apt-get install.
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
         return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
                   .format(pkg, dir))
