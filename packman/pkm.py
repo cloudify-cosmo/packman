@@ -17,21 +17,21 @@
 """Script to run packman via command line
 
 Usage:
-    pkm get [--components=<list> --components_file=<path> --exclude=<list>]
-    pkm pack [--components=<list> --components_file=<path> --exclude=<list>]
-    pkm make [--components=<list> --components_file=<path> --exclude=<list>]
+    pkm get [--components=<list> --components-file=<path> --exclude=<list>]
+    pkm pack [--components=<list> --components-file=<path> --exclude=<list>]
+    pkm make [--components=<list> --components-file=<path> --exclude=<list>]
     pkm --version
 
 Arguments:
-    pack     Packs "Component" configured in packages.py
-    get      Gets "Component" configured in packages.py
+    pack     Packs component configured in components file
+    get      Gets component configured in components file
     make     Gets AND (yeah!) Packs.. don't ya kno!
 
 Options:
     -h --help                   Show this screen.
     -c --components=<list>      Comma Separated list of component names
     -x --exclude=<list>         Comma Separated list of excluded components
-    --components_file=<path>
+    -f --components-file=<path> Components file path
     --verbose                   a LOT of output (NOT YET IMPLEMENTED)
     -v --version                Display current version of sandman and exit
 
