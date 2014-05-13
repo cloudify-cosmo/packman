@@ -118,14 +118,14 @@
   <div class="section" id="welcome-to-packman-s-documentation">
 <h1>Welcome to packman&#8217;s documentation!<a class="headerlink" href="#welcome-to-packman-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>packman creates packages.</p>
-<p>packman retrieve sources, adds some bootstrap scripts and configuration files to them, and packs them up nice and tight in a single package for different distros.</p>
+<p>packman retrieves sources, maybe adds some bootstrap scripts and configuration files to them, and packs them up nice and tight in a single package.</p>
 <p>packman&#8217;s real strength is in providing an simple configuration based API to the most basic tasks in creating packages like:</p>
 <ul class="simple">
-<li>retrieving sources from apt, yum and urls.</li>
-<li>retrieving python modules and ruby gems WITH dependencies from pypi or github.</li>
-<li>generating different files from templates using jinja2</li>
-<li>packaging using fpm (API NOT IMPLEMENTED YET - only exists in default implementation)</li>
-<li>handling different file operations like creating directories, removing them, taring, untaring, etc..</li>
+<li>retrieving sources from apt, yum, ppa and urls.</li>
+<li>retrieving python modules and ruby gems WITH dependencies.</li>
+<li>generating different files from templates using jinja2.</li>
+<li>packaging using fpm (API NOT IMPLEMENTED YET - only exists in default implementation).</li>
+<li>handling different file operations like creating directories and removing them, taring, untaring, etc..</li>
 </ul>
 <p>additionally, you can create your own python based tasks to replace the default ones and call them very simply using pkm (packman&#8217;s cli).</p>
 <p>Contents:</p>

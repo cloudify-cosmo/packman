@@ -27,7 +27,7 @@ echo 'source /etc/bash_completion.d/fab' >> ~/.bashrc &&
 # TODO: add virtualenv
 # sudo pip install virtualenvwrapper
 # mkvirtualenv packman
-sudo pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/develop.tar.gz
+sudo pip install https://github.com/cloudify-cosmo/packman/archive/develop.tar.gz
 # TODO: add bash completion support using docopt-completion
 # docopt-completion #VIRTUALENV#...pkm.py
 # source ~/.bashrc

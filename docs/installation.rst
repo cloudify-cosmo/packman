@@ -16,12 +16,13 @@ Pre-Requirements
 - pip >1.5 -*to download python modules*
 - virtualenv -*to create python virtual environments.*
 - jinja2 -*to create scripts and configuration files from templates*
-- pika -*to send events to rabbitmq if it's installed on the packaging server (for testing purposes)*
+- pika -*to send events to rabbitmq (currently only for testing purposes)*
 
-a `script <https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh>`_ is provided to install the above packages.
+.. note:: a `script <https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh>`_ is provided to install the above requirements.
 
 Installing Packman
 ------------------
 You can install ``packman`` by running ``pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip``.
-Of course, you must have the prereqs installed for packman to fully utilize its potential...
-The `vagrantfile <https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile>`_ provided in the github repo can supply you with a fully working ``packman`` machine.
+Of course, you must have the prereqs installed to fully utilize ``packman``'s potential...
+
+.. note:: The `vagrantfile <https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile>`_ provided in the github repo can supply you with a fully working ``packman`` machine.

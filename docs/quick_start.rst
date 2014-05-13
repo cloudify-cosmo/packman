@@ -19,3 +19,4 @@ Quick Start
 
 - review the retrieved resources in /sources
 - review the created deb files in /packages
+- start playing around with ~/examples/packages.py

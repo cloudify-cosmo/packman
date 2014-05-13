@@ -132,15 +132,21 @@
 <li>pip &gt;1.5 -<em>to download python modules</em></li>
 <li>virtualenv -<em>to create python virtual environments.</em></li>
 <li>jinja2 -<em>to create scripts and configuration files from templates</em></li>
-<li>pika -<em>to send events to rabbitmq if it&#8217;s installed on the packaging server (for testing purposes)</em></li>
+<li>pika -<em>to send events to rabbitmq (currently only for testing purposes)</em></li>
 </ul>
-<p>a <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh">script</a> is provided to install the above packages.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">a <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh">script</a> is provided to install the above requirements.</p>
+</div>
 </div>
 <div class="section" id="installing-packman">
 <h2>Installing Packman<a class="headerlink" href="#installing-packman" title="Permalink to this headline">¶</a></h2>
 <p>You can install <tt class="docutils literal"><span class="pre">packman</span></tt> by running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip</span></tt>.
-Of course, you must have the prereqs installed for packman to fully utilize its potential...
-The <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile">vagrantfile</a> provided in the github repo can supply you with a fully working <tt class="docutils literal"><span class="pre">packman</span></tt> machine.</p>
+Of course, you must have the prereqs installed to fully utilize <tt class="docutils literal"><span class="pre">packman</span></tt>&#8216;s potential...</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile">vagrantfile</a> provided in the github repo can supply you with a fully working <tt class="docutils literal"><span class="pre">packman</span></tt> machine.</p>
+</div>
 </div>
 </div>
 
