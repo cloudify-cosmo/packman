@@ -180,10 +180,12 @@ def packman_runner(action='pack', components_file=None, components=None,
                                 action, component))()
                     # else run the default action method
                     else:
-                        globals()[action](get_component_config(component))
+                        globals()[action](get_component_config(
+                            component, components_file=components_file))
                 # else run the default action method
                 else:
-                    globals()[action](get_component_config(component))
+                    globals()[action](get_component_config(
+                        component, components_file=components_file))
             else:
                 lgr.info('skipping component: {}'.format(component))
     else:
