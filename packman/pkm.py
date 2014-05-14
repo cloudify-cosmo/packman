@@ -50,7 +50,7 @@ dist_list = ('Ubuntu', 'debian', 'centos')
 def check_dist():
     distro = dist()[0]
     print('Distribution Identified: {}'.format(distro))
-    if not distro in dist_list:
+    if distro not in dist_list:
         print('Your distribution is not supported.'
               'Supported Disributions are:')
         for distro in dist_list:

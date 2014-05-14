@@ -300,6 +300,7 @@ def get(component):
             repo_handler.update()
         # download any other requirements if they exist
         if reqs:
+            # TODO: add support for installing reqs from urls
             repo_handler.downloads(reqs, dst_path)
         # download relevant python modules...
         if modules:
@@ -416,10 +417,10 @@ def pack(component):
         if bootstrap_script or bootstrap_script_in_pkg:
             # TODO: handle cases where a bootstrap script is not a template.
             # bootstrap_script - bootstrap script to be attached to the package
-            # bootstrap_script_in_pkg - same but for putting inside the package
             if bootstrap_template and bootstrap_script:
                 tmp_handler.create_bootstrap_script(c, bootstrap_template,
                                                     bootstrap_script)
+            # bootstrap_script_in_pkg - same but for putting inside the package
             if bootstrap_template and bootstrap_script_in_pkg:
                 tmp_handler.create_bootstrap_script(c, bootstrap_template,
                                                     bootstrap_script_in_pkg)
@@ -546,7 +547,7 @@ def do(command, attempts=2, sleep_time=3,
         return x
 
     # TODO: apply verbosity according to the verbose flag in pkm
-    # instead of a verbose flag in the config.
+    # TODO: instead of a verbose flag in the config.
     if pkm_conf.VERBOSE:
         return _execute()
     else:
@@ -850,7 +851,7 @@ class YumHandler(CommonHandler):
         for req in reqs:
             self.download(req, sources_path)
 
-    def download(self, package, dir):
+    def download(self, package, dir, enable_repo=False):
         """
         uses yum to download package debs from ubuntu's repo
 
@@ -860,12 +861,17 @@ class YumHandler(CommonHandler):
         # TODO: add an is-package-installed check. if it is
         # TODO: run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
+        # TODO: yum download exists with an error even if the download
+        # TODO: succeeded due to a non-zero error message. handle it better.
+        # TODO: add yum enable-repo option
+        # TODO: support yum reinstall including dependencies
+        # TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
         if self.check_if_package_is_installed(package):
             return do('sudo yum -y reinstall --downloadonly '
-                      '--downloaddir={1} {0}'.format(package, dir))
+                      '--downloaddir={1} {0}/archives'.format(package, dir))
         else:
             return do('sudo yum -y install --downloadonly '
-                  '--downloaddir={1} {0}'.format(package, dir))
+                      '--downloaddir={1} {0}/archives'.format(package, dir))
 
     def installs(self, packages):
         """

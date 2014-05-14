@@ -677,6 +677,22 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="packman.packman.YumHandler.check_if_package_is_installed">
+<tt class="descname">check_if_package_is_installed</tt><big>(</big><em>package</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.check_if_package_is_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.check_if_package_is_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks if a package is installed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>package</strong> (<em>string</em>) &#8211; package name to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><cite>bool</cite> representing whether package is installed or not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="packman.packman.YumHandler.downloads">
 <tt class="descname">downloads</tt><big>(</big><em>reqs</em>, <em>sources_path</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.downloads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.downloads" title="Permalink to this definition">¶</a></dt>
 <dd><p>downloads component requirements</p>
@@ -696,14 +712,14 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 
 <dl class="method">
 <dt id="packman.packman.YumHandler.download">
-<tt class="descname">download</tt><big>(</big><em>pkg</em>, <em>dir</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.download" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">download</tt><big>(</big><em>package</em>, <em>dir</em>, <em>enable_repo=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>uses yum to download package debs from ubuntu&#8217;s repo</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>pkg</strong> (<em>string</em>) &#8211; package to download</li>
+<li><strong>package</strong> (<em>string</em>) &#8211; package to download</li>
 <li><strong>dir</strong> (<em>string</em>) &#8211; dir to download to</li>
 </ul>
 </td>
@@ -735,6 +751,34 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>package</strong> (<em>string</em>) &#8211; package to install</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="packman.packman.YumHandler.add_keys">
+<tt class="descname">add_keys</tt><big>(</big><em>key_files</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.add_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.add_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds a list of keys to the local repo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key_files</strong> (<em>string</em>) &#8211; key files paths</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="packman.packman.YumHandler.add_key">
+<tt class="descname">add_key</tt><big>(</big><em>key_file</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#YumHandler.add_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.YumHandler.add_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds a key to the local repo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key_file</strong> (<em>string</em>) &#8211; key file path</td>
 </tr>
 </tbody>
 </table>

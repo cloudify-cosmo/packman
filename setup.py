@@ -61,7 +61,7 @@ class Tox(TestCommand):
 setup(
     name='packman',
     version=find_version('packman', '__init__.py'),
-    url='https://github.com/cloudify-cosmo/cloudify-packager',
+    url='https://github.com/cloudify-cosmo/packman',
     author='nir0s',
     author_email='nir36g@gmail.com',
     license='LICENSE',

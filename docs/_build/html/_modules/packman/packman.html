@@ -251,6 +251,7 @@
     <span class="c"># get packages.py file path</span>
     <span class="n">components_file</span> <span class="o">=</span> <span class="n">components_file</span> <span class="k">if</span> <span class="n">components_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> \
         <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="s">&#39;packages.py&#39;</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
     <span class="c"># append to path for importing</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
     <span class="c"># import</span>
@@ -297,10 +298,12 @@
                                 <span class="n">action</span><span class="p">,</span> <span class="n">component</span><span class="p">))()</span>
                     <span class="c"># else run the default action method</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+                        <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
+                            <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
                 <span class="c"># else run the default action method</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+                    <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
+                        <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;skipping component: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -343,6 +346,7 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
+    <span class="c"># TODO: remove auto_get param - it is no longer in use</span>
     <span class="n">auto_get</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
     <span class="k">if</span> <span class="n">auto_get</span><span class="p">:</span>
@@ -372,7 +376,7 @@
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_SOURCES</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
 
         <span class="n">common</span> <span class="o">=</span> <span class="n">CommonHandler</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;CentOS&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;centos&#39;</span><span class="p">):</span>
             <span class="n">repo_handler</span> <span class="o">=</span> <span class="n">YumHandler</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;Ubuntu&#39;</span><span class="p">,</span> <span class="s">&#39;debian&#39;</span><span class="p">):</span>
             <span class="n">repo_handler</span> <span class="o">=</span> <span class="n">AptHandler</span><span class="p">()</span>
@@ -414,6 +418,7 @@
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="c"># download any other requirements if they exist</span>
         <span class="k">if</span> <span class="n">reqs</span><span class="p">:</span>
+            <span class="c"># TODO: add support for installing reqs from urls</span>
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">downloads</span><span class="p">(</span><span class="n">reqs</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
         <span class="c"># download relevant python modules...</span>
         <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
@@ -468,6 +473,7 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
+    <span class="c"># TODO: remove auto_pack param - it is no longer in use</span>
     <span class="n">auto_pack</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
     <span class="k">if</span> <span class="n">auto_pack</span><span class="p">:</span>
@@ -484,12 +490,13 @@
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">src_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="c"># TODO: identify dst_pkg_type by distro if not specified explicitly.</span>
         <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">sources_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="c"># TODO: JEEZ... this archives thing is dumb...</span>
-        <span class="c"># replace it with a normal destination path</span>
+        <span class="c"># TODO: replace it with a normal destination path</span>
         <span class="n">tmp_pkg_path</span> <span class="o">=</span> <span class="s">&#39;{0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">])</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">package_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span><span class="p">]</span> \
@@ -528,10 +535,10 @@
         <span class="k">if</span> <span class="n">bootstrap_script</span> <span class="ow">or</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
             <span class="c"># TODO: handle cases where a bootstrap script is not a template.</span>
             <span class="c"># bootstrap_script - bootstrap script to be attached to the package</span>
-            <span class="c"># bootstrap_script_in_pkg - same but for putting inside the package</span>
             <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script</span><span class="p">:</span>
                 <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
                                                     <span class="n">bootstrap_script</span><span class="p">)</span>
+            <span class="c"># bootstrap_script_in_pkg - same but for putting inside the package</span>
             <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
                 <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
                                                     <span class="n">bootstrap_script_in_pkg</span><span class="p">)</span>
@@ -658,7 +665,7 @@
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="c"># TODO: apply verbosity according to the verbose flag in pkm</span>
-    <span class="c"># instead of a verbose flag in the config.</span>
+    <span class="c"># TODO: instead of a verbose flag in the config.</span>
     <span class="k">if</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_execute</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -935,6 +942,23 @@
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;updating local yum repo&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum update&#39;</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="YumHandler.check_if_package_is_installed"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.check_if_package_is_installed">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_package_is_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        checks if a package is installed</span>
+
+<span class="sd">        :param string package: package name to check</span>
+<span class="sd">        :rtype: `bool` representing whether package is installed or not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -q {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">),</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;{0} is not installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
 <div class="viewcode-block" id="YumHandler.downloads"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.downloads">[docs]</a>    <span class="k">def</span> <span class="nf">downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reqs</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        downloads component requirements</span>
@@ -945,16 +969,27 @@
         <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="YumHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+<div class="viewcode-block" id="YumHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">enable_repo</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        uses yum to download package debs from ubuntu&#39;s repo</span>
 
-<span class="sd">        :param string pkg: package to download</span>
+<span class="sd">        :param string package: package to download</span>
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install --downloadonly --downloaddir={1} {0}&#39;</span>
-                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="c"># TODO: add an is-package-installed check. if it is</span>
+        <span class="c"># TODO: run yum reinstall instead of yum install.</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="c"># TODO: yum download exists with an error even if the download</span>
+        <span class="c"># TODO: succeeded due to a non-zero error message. handle it better.</span>
+        <span class="c"># TODO: add yum enable-repo option</span>
+        <span class="c"># TODO: support yum reinstall including dependencies</span>
+        <span class="c"># TODO: reinstall $(repoquery --requires --recursive --resolve pkg)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_if_package_is_installed</span><span class="p">(</span><span class="n">package</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y reinstall --downloadonly &#39;</span>
+                      <span class="s">&#39;--downloaddir={1} {0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install --downloadonly &#39;</span>
+                      <span class="s">&#39;--downloaddir={1} {0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="YumHandler.installs"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.installs">[docs]</a>    <span class="k">def</span> <span class="nf">installs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -973,6 +1008,24 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;installing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
         <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="YumHandler.add_keys"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.add_keys">[docs]</a>    <span class="k">def</span> <span class="nf">add_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a list of keys to the local repo</span>
+
+<span class="sd">        :param string key_files: key files paths</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key_file</span> <span class="ow">in</span> <span class="n">key_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_key</span><span class="p">(</span><span class="n">key_file</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="YumHandler.add_key"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.add_key">[docs]</a>    <span class="k">def</span> <span class="nf">add_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a key to the local repo</span>
+
+<span class="sd">        :param string key_file: key file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding key {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -ivh {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
 
 </div></div>
 <div class="viewcode-block" id="AptHandler"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler">[docs]</a><span class="k">class</span> <span class="nc">AptHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
@@ -996,11 +1049,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo dpkg -s {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo dpkg -s {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">),</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span><span class="p">:</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
             <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;{0} is not installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
             <span class="k">return</span> <span class="bp">False</span>
 </div>
@@ -1021,6 +1074,8 @@
 <span class="sd">        :param string pkg: package to download</span>
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># TODO: add an is-package-installed check. if it is</span>
+        <span class="c"># TODO: run apt-get install --reinstall instead of apt-get install.</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>

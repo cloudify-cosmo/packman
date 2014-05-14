@@ -1,8 +1,24 @@
-[33mcd877c6[m[33m ([1;36mHEAD[m[33m, [1;31morigin/master[m[33m, [1;32mmaster[m[33m)[m added static doc
+[33m7e85950[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m fixed check_if_pack_age_is_installed bug
+[33md1dbe69[m added rpm key support to yum handler
+[33m14273ff[m oops... note to 'self'.. hah
+[33m19c39f9[m added test check-if-package-is-installed check in yum
+[33mfe5e4ac[m not working. calling install again and have a todo for adding an is-package-installed check
+[33mab61833[m now if yum fails to reinstall, it will try to install - when downloading packages, to overcome packages which werent already installed. ez!
+[33m5434f89[m fixed problem where calling get_component_config thru pkm would always result in using local packages.py
+[33m209fe07[m some fixes
+[33mbdc06e9[m some fies
+[33maa577dd[m fixing distribution support bugs
+[33m5e34955[m fixing distribution support bugs
+[33m98bbc7f[m fixing distribution support bugs
+[33m6b57c67[m now checking for distribution support
+[33mdbe4b01[m added shortcut to components file in cli
+[33m37c5b29[m[33m ([1;31morigin/master[m[33m, [1;32mmaster[m[33m)[m oops, added forgotten makefile from previous commit
+[33m1ade318[m lots of documentation changes, added makefile, fixed provision script
+[33mcd877c6[m added static doc
 [33m996336d[m continuing the documentation process
 [33mfe1e31f[m continuing the documentation process
 [33mb0bae7e[m doc fixes
-[33m0c013c8[m[33m ([1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m flake8 fixes
+[33m0c013c8[m flake8 fixes
 [33m57a1611[m doc changes
 [33mb7822ff[m fixed html generation problem on readthedocs
 [33md0fc9fb[m removed unnecessary code
