@@ -868,10 +868,10 @@ class YumHandler(CommonHandler):
         # TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
         if self.check_if_package_is_installed(package):
             return do('sudo yum -y reinstall --downloadonly '
-                      '--downloaddir={1} {0}/archives'.format(package, dir))
+                      '--downloaddir={1}/archives {0}'.format(package, dir))
         else:
             return do('sudo yum -y install --downloadonly '
-                      '--downloaddir={1} {0}/archives'.format(package, dir))
+                      '--downloaddir={1}/archives {0}'.format(package, dir))
 
     def installs(self, packages):
         """
