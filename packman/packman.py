@@ -1123,7 +1123,7 @@ class DownloadsHandler(CommonHandler):
         url_ext = urllib2.unquote(url).decode('utf8').split('/')[-1]
         # if the downloaded file is an rpm or deb, we want to download
         # it to the archives folder. yes, it's a dreadful solution...
-        if url_ext == 'rpm' or url_ext == 'deb':
+        if url_ext == '.rpm' or url_ext == '.deb':
             lgr.debug('the file is either an rpm or a deb. '
                       'we\'ll download it to the archives folder' )
             if dir:
