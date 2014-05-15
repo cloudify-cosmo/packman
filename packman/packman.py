@@ -291,13 +291,13 @@ def get(component):
             repo_handler.add_ppa_repos(source_ppas)
         # get a key for the repo if it's required..
         if source_keys:
-            dl_handler.wgets(source_keys, dst_path)
+            dl_handler.wgets(source_keys, dir=dst_path)
             for key in source_keys:
                 key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
                 repo_handler.add_key(dst_path + '/' + key_file)
         # retrieve the source for the package
         if source_urls:
-            dl_handler.wgets(source_urls, dst_path)
+            dl_handler.wgets(source_urls, dir=dst_path)
         # add the repo key
         if key_files:
             repo_handler.add_keys(key_files)
@@ -450,6 +450,7 @@ def pack(component):
                     # exists, and there are dependencies for the package, run
                     # fpm with the relevant flags.
                     if not mock:
+                        # TODO: redundant, remove it. it's covered below.
                         if bootstrap_script_in_pkg and dst_pkg_type == "tar":
                             do(
                                 'sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'
@@ -1118,12 +1119,24 @@ class DownloadsHandler(CommonHandler):
         :param string file: download to file...
         """
         options = '--timeout=30'
-        lgr.debug('downloading {0}'.format(url))
+        # retrieve url file extension
+        url_ext = urllib2.unquote(key).decode('utf8').split('/')[-1]
+        # if the downloaded file is an rpm or deb, we want to download
+        # it to the archives folder. yes, it's a dreadful solution...
+        if url_ext == 'rpm' or url_ext == 'deb':
+            lgr.debug('the file is either an rpm or a deb. '
+                      'we\'ll download it to the archives folder' )
+            if dir:
+                dir += '/archives'
+            elif file:
+                path, name = os.path.split(file)
+                file = path + '/archives/' + file
         if (file and dir) or (not file and not dir):
             lgr.warning('please specify either a directory'
                         ' or file to download to.')
             raise PackagerError('please specify either a directory'
                                 ' or file to download to.')
+        lgr.debug('downloading {0} to {1}'.format(url, file or dir))
         return do('wget {0} {1} -O {2}'.format(url, options, file), sudo=sudo) \
             if file else do('wget {0} {1} -P {2}'
                             .format(url, options, dir), sudo=sudo)
