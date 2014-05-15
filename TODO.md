@@ -1,5 +1,6 @@
-packman/pkm.py:63:    #  TODO: currently, distrib is checked thruout the code. change it to once.
-packman/pkm.py:74:    #  TODO: implement verbose output
+- packman/pkm.py:63:    #  TODO: currently, distrib is checked thruout the code. change it to once.
+- packman/pkm.py:74:    #  TODO: implement verbose output
+- 
 packman/tests/test_packman.py:512:    #  TODO: add apt handler tests
 packman/tests/test_packman.py:513:    #  TODO: add yum handler tests (hrm.. how to?)
 packman/definitions.py:32:    #  TODO: DEPRACATE!
