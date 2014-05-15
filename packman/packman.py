@@ -27,6 +27,7 @@ import re
 from time import sleep
 from jinja2 import Environment, FileSystemLoader
 from platform import dist
+import urllib2
 
 # __all__ = ['list']
 
@@ -291,6 +292,9 @@ def get(component):
         # get a key for the repo if it's required..
         if source_keys:
             dl_handler.wgets(source_keys, dst_path)
+            for source_key in source_keys:
+                key_file = urllib2.unquote(url).decode('utf8').split('/')[-1]
+                repo_handler.add_key(dst_path + '/' + key_file)
         # retrieve the source for the package
         if source_urls:
             dl_handler.wgets(source_urls, dst_path)
@@ -891,6 +895,25 @@ class YumHandler(CommonHandler):
         lgr.debug('installing {0}'.format(package))
         do('sudo yum -y install {0}'.format(package))
 
+    def add_src_repos(self, source_repos):
+        """
+        adds a list of source repos to the apt repo
+
+        :param list source_repos: repos to add to sources list
+        """
+        for source_repo in source_repos:
+            self.add_src_repo(source_repo)
+
+    def add_src_repo(self, source_repo):
+        """
+        adds a source repo to the apt repo
+
+        :param string source_repo: repo to add to sources list
+        """
+        lgr.debug('adding source repository {0}'.format(source_repo))
+        return do('sudo rpm -ivh {0}'
+                  .format(source_repo))
+
     def add_keys(self, key_files):
         """
         adds a list of keys to the local repo
@@ -907,7 +930,7 @@ class YumHandler(CommonHandler):
         :param string key_file: key file path
         """
         lgr.debug('adding key {0}'.format(key_file))
-        return do('sudo rpm -ivh {0}'.format(key_file))
+        return do('sudo rpm --import {0}'.format(key_file))
 
 
 class AptHandler(CommonHandler):
