@@ -304,7 +304,7 @@ def get(component):
                 # it to the archives folder. yes, it's a dreadful solution...
                 if not url_ext == '.rpm' and not url_ext == '.deb':
                     url_ext = False
-                dl_handler.wgets(source_urls, dir=dst_path,
+                dl_handler.wget(source_url, dir=dst_path,
                                  url_pkg_ext=url_ext)
         # add the repo key
         if key_files:
