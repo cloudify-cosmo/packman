@@ -305,7 +305,7 @@ def get(component):
                 if not url_ext == '.rpm' and not url_ext == '.deb':
                     url_ext = False
                 dl_handler.wget(source_url, dir=dst_path,
-                                 url_pkg_ext=url_ext)
+                                url_pkg_ext=url_ext)
         # add the repo key
         if key_files:
             repo_handler.add_keys(key_files)
@@ -458,6 +458,8 @@ def pack(component):
                     # exists, and there are dependencies for the package, run
                     # fpm with the relevant flags.
                     if not mock:
+                        # TODO: build fpm commands options before running fpm
+                        # TODO: maybe map config params to fpm flags...
                         # TODO: redundant, remove it. it's covered below.
                         if bootstrap_script_in_pkg and dst_pkg_type == "tar":
                             do(
