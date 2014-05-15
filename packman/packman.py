@@ -292,8 +292,8 @@ def get(component):
         # get a key for the repo if it's required..
         if source_keys:
             dl_handler.wgets(source_keys, dst_path)
-            for source_key in source_keys:
-                key_file = urllib2.unquote(url).decode('utf8').split('/')[-1]
+            for key in source_keys:
+                key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
                 repo_handler.add_key(dst_path + '/' + key_file)
         # retrieve the source for the package
         if source_urls:
