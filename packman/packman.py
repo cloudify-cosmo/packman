@@ -756,7 +756,7 @@ class PythonHandler(CommonHandler):
         return do('sudo {0}/pip install --no-use-wheel'
                   ' --process-dependency-links --download "{1}/" {2}'
                   .format(venv, dir, module)) \
-            if venv else do('sudo /usr/local/bin/pip install --no-use-wheel'
+            if venv else do('sudo pip install --no-use-wheel'
                             ' --process-dependency-links --download "{0}/" {1}'
                             .format(dir, module))
 
