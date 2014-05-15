@@ -1121,6 +1121,7 @@ class DownloadsHandler(CommonHandler):
         options = '--timeout=30'
         # retrieve url file extension
         url_ext = urllib2.unquote(url).decode('utf8').split('/')[-1]
+        lgr.debug('url file extension is: {}'.format(url_ext))
         # if the downloaded file is an rpm or deb, we want to download
         # it to the archives folder. yes, it's a dreadful solution...
         if url_ext == '.rpm' or url_ext == '.deb':
