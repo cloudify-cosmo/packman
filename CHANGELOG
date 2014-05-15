@@ -1,4 +1,15 @@
-[33m7e85950[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m fixed check_if_pack_age_is_installed bug
+[33m97637f6[m[33m ([1;36mHEAD[m[33m, [1;32mdevelop[m[33m)[m fixes conflicts
+[33mf8a92de[m optimized TODO file structure for markdown view
+[33md4df4f1[m[33m ([1;31morigin/develop[m[33m)[m Update TODO.md
+[33ma040f52[m fixed a bug running pip in system env
+[33m1d250ad[m flake8 fixes
+[33m1bcc281[m typo fix
+[33ma8eefd7[m added support for 2 types of source rpm repos
+[33m97aba89[m minor fix
+[33m6d04c6b[m added support for loading keys from urls instead of having to specify a key path as well
+[33mb3d4d4d[m fix problem with creating the archives dir
+[33ma18dc9f[m minor fixes
+[33m7e85950[m fixed check_if_pack_age_is_installed bug
 [33md1dbe69[m added rpm key support to yum handler
 [33m14273ff[m oops... note to 'self'.. hah
 [33m19c39f9[m added test check-if-package-is-installed check in yum
