@@ -145,6 +145,7 @@
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
 <span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">dist</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
 
 <span class="c"># __all__ = [&#39;list&#39;]</span>
 
@@ -409,6 +410,9 @@
         <span class="c"># get a key for the repo if it&#39;s required..</span>
         <span class="k">if</span> <span class="n">source_keys</span><span class="p">:</span>
             <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_keys</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">source_keys</span><span class="p">:</span>
+                <span class="n">key_file</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">unquote</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_key</span><span class="p">(</span><span class="n">dst_path</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">key_file</span><span class="p">)</span>
         <span class="c"># retrieve the source for the package</span>
         <span class="k">if</span> <span class="n">source_urls</span><span class="p">:</span>
             <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_urls</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
@@ -870,7 +874,7 @@
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo {0}/pip install --no-use-wheel&#39;</span>
                   <span class="s">&#39; --process-dependency-links --download &quot;{1}/&quot; {2}&#39;</span>
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">venv</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span> \
-            <span class="k">if</span> <span class="n">venv</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo /usr/local/bin/pip install --no-use-wheel&#39;</span>
+            <span class="k">if</span> <span class="n">venv</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo pip install --no-use-wheel&#39;</span>
                             <span class="s">&#39; --process-dependency-links --download &quot;{0}/&quot; {1}&#39;</span>
                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span>
 </div>
@@ -986,10 +990,10 @@
         <span class="c"># TODO: reinstall $(repoquery --requires --recursive --resolve pkg)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_if_package_is_installed</span><span class="p">(</span><span class="n">package</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y reinstall --downloadonly &#39;</span>
-                      <span class="s">&#39;--downloaddir={1} {0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+                      <span class="s">&#39;--downloaddir={1}/archives {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install --downloadonly &#39;</span>
-                      <span class="s">&#39;--downloaddir={1} {0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+                      <span class="s">&#39;--downloaddir={1}/archives {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="YumHandler.installs"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.installs">[docs]</a>    <span class="k">def</span> <span class="nf">installs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1009,6 +1013,28 @@
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;installing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
         <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
 </div>
+<div class="viewcode-block" id="YumHandler.add_src_repos"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.add_src_repos">[docs]</a>    <span class="k">def</span> <span class="nf">add_src_repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_repos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a list of source repos to the apt repo</span>
+
+<span class="sd">        :param list source_repos: repos to add to sources list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">source_repo</span> <span class="ow">in</span> <span class="n">source_repos</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_src_repo</span><span class="p">(</span><span class="n">source_repo</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="YumHandler.add_src_repo"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.add_src_repo">[docs]</a>    <span class="k">def</span> <span class="nf">add_src_repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_repo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        adds a source repo to the apt repo</span>
+
+<span class="sd">        :param string source_repo: repo to add to sources list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding source repository {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">source_repo</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.rpm&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -ivh {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dl</span> <span class="o">=</span> <span class="n">DownloadsHandler</span><span class="p">()</span>
+            <span class="n">dl</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="n">source_repo</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s">&#39;/etc/yum.repos.d/&#39;</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="YumHandler.add_keys"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.add_keys">[docs]</a>    <span class="k">def</span> <span class="nf">add_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        adds a list of keys to the local repo</span>
@@ -1025,7 +1051,7 @@
 <span class="sd">        :param string key_file: key file path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding key {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -ivh {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm --import {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_file</span><span class="p">))</span>
 
 </div></div>
 <div class="viewcode-block" id="AptHandler"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler">[docs]</a><span class="k">class</span> <span class="nc">AptHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>

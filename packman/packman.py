@@ -495,6 +495,7 @@ def pack(component):
                 lgr.error('sources dir {0} does\'nt exist, termintating...'
                           .format(sources_path))
                 # maybe bluntly exit since this is all irrelevant??
+                # TODO: raise instead of exiting.
                 sys.exit(1)
 
         # make sure the final destination for the package exists..
