@@ -1,6 +1,15 @@
-[33m97637f6[m[33m ([1;36mHEAD[m[33m, [1;32mdevelop[m[33m)[m fixes conflicts
+[33ma5619af[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m flake8 fixes
+[33m6bf862c[m minor fix
+[33m1e18f09[m moved file extension check to get method, to overcome key file or repo file downloads
+[33m3388864[m fixing wget archives feature - jeez... noob
+[33m22ea21e[m fixing wget archives feature
+[33m5900802[m well... apparently you get .ext rather than ext.. so.. fixed
+[33m4611be4[m oops...
+[33m92f2664[m now urls with rpm or deb ext will be downloaded to the archives folder
+[33md0378df[m make update
+[33m97637f6[m fixes conflicts
 [33mf8a92de[m optimized TODO file structure for markdown view
-[33md4df4f1[m[33m ([1;31morigin/develop[m[33m)[m Update TODO.md
+[33md4df4f1[m Update TODO.md
 [33ma040f52[m fixed a bug running pip in system env
 [33m1d250ad[m flake8 fixes
 [33m1bcc281[m typo fix

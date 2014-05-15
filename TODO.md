@@ -1,40 +1,46 @@
 - packman/pkm.py:63:    #  TODO: currently, distrib is checked thruout the code. change it to once.
 - packman/pkm.py:74:    #  TODO: implement verbose output
-- packman/tests/test_packman.py:512:    #  TODO: add apt handler tests
-- packman/tests/test_packman.py:513:    #  TODO: add yum handler tests (hrm.. how to?)
+- packman/tests/test_packman.py:284:    #  TODO: add wget archives dir test
+- packman/tests/test_packman.py:514:    #  TODO: add apt handler tests
+- packman/tests/test_packman.py:515:    #  TODO: add yum handler tests (hrm.. how to?)
 - packman/definitions.py:32:    #  TODO: DEPRACATE!
 - packman/packman.py:52:    #  TODO: only perform file related actions if file handler is defined
 - packman/packman.py:232:    #  TODO: remove auto_get param - it is no longer in use
-- packman/packman.py:307:    #  TODO: add support for installing reqs from urls
-- packman/packman.py:362:    #  TODO: remove auto_pack param - it is no longer in use
-- packman/packman.py:379:    #  TODO: identify dst_pkg_type by distro if not specified explicitly.
-- packman/packman.py:384:    #  TODO: JEEZ... this archives thing is dumb...
-- packman/packman.py:385:    #  TODO: replace it with a normal destination path
-- packman/packman.py:422:    #  TODO: handle cases where a bootstrap script is not a template.
-- packman/packman.py:488:    #  TODO: actually test the package itself.
-- packman/packman.py:490:    #  TODO: create mock package
-- packman/packman.py:498:    #  TODO: raise instead of exiting.
-- packman/packman.py:508:    #  TODO: remove temporary package
-- packman/packman.py:554:    #  TODO: apply verbosity according to the verbose flag in pkm
-- packman/packman.py:555:    #  TODO: instead of a verbose flag in the config.
-- packman/packman.py:642:    #  TODO: handle multiple files differently
-- packman/packman.py:666:    #  TODO: depracate this useless thing...
-- packman/packman.py:782:    #  TODO: support virtualenv --relocate OR
-- packman/packman.py:783:    #  TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:799:    #  TODO: remove static paths for ruby installations..
-- packman/packman.py:800:    #  TODO: add support for ruby in different environments
-- packman/packman.py:866:    #  TODO: add an is-package-installed check. if it is
-- packman/packman.py:867:    #  TODO: run yum reinstall instead of yum install.
-- packman/packman.py:869:    #  TODO: yum download exists with an error even if the download
-- packman/packman.py:870:    #  TODO: succeeded due to a non-zero error message. handle it better.
-- packman/packman.py:871:    #  TODO: add yum enable-repo option
-- packman/packman.py:872:    #  TODO: support yum reinstall including dependencies
-- packman/packman.py:873:    #  TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:951:    #  TODO: fix this... (it should dig a bit deeper)
-- packman/packman.py:986:    #  TODO: add an is-package-installed check. if it is
-- packman/packman.py:987:    #  TODO: run apt-get install --reinstall instead of apt-get install.
-- packman/packman.py:1131:    #  TODO: implement?
-- packman/packman.py:1154:    #  TODO: replace this with method generate_from_template()..
-- packman/packman.py:1351:    #  TODO: receive PRINT_TEMPLATES from pkm
+- packman/packman.py:315:    #  TODO: add support for installing reqs from urls
+- packman/packman.py:370:    #  TODO: remove auto_pack param - it is no longer in use
+- packman/packman.py:387:    #  TODO: identify dst_pkg_type by distro if not specified explicitly.
+- packman/packman.py:392:    #  TODO: JEEZ... this archives thing is dumb...
+- packman/packman.py:393:    #  TODO: replace it with a normal destination path
+- packman/packman.py:430:    #  TODO: handle cases where a bootstrap script is not a template.
+- packman/packman.py:461:    #  TODO: build fpm commands options before running fpm
+- packman/packman.py:462:    #  TODO: maybe map config params to fpm flags...
+- packman/packman.py:463:    #  TODO: redundant, remove it. it's covered below.
+- packman/packman.py:499:    #  TODO: actually test the package itself.
+- packman/packman.py:501:    #  TODO: create mock package
+- packman/packman.py:509:    #  TODO: raise instead of exiting.
+- packman/packman.py:519:    #  TODO: remove temporary package
+- packman/packman.py:565:    #  TODO: apply verbosity according to the verbose flag in pkm
+- packman/packman.py:566:    #  TODO: instead of a verbose flag in the config.
+- packman/packman.py:653:    #  TODO: handle multiple files differently
+- packman/packman.py:677:    #  TODO: depracate this useless thing...
+- packman/packman.py:793:    #  TODO: support virtualenv --relocate OR
+- packman/packman.py:794:    #  TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/packman.py:810:    #  TODO: remove static paths for ruby installations..
+- packman/packman.py:811:    #  TODO: add support for ruby in different environments
+- packman/packman.py:877:    #  TODO: add an is-package-installed check. if it is
+- packman/packman.py:878:    #  TODO: run yum reinstall instead of yum install.
+- packman/packman.py:880:    #  TODO: yum download exists with an error even if the download
+- packman/packman.py:881:    #  TODO: succeeded due to a non-zero error message. handle it better.
+- packman/packman.py:882:    #  TODO: add yum enable-repo option
+- packman/packman.py:883:    #  TODO: support yum reinstall including dependencies
+- packman/packman.py:884:    #  TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
+- packman/packman.py:962:    #  TODO: fix this... (it should dig a bit deeper)
+- packman/packman.py:997:    #  TODO: add an is-package-installed check. if it is
+- packman/packman.py:998:    #  TODO: run apt-get install --reinstall instead of apt-get install.
+- packman/packman.py:1132:    #  TODO: think about moving the file ext check to the get
+- packman/packman.py:1133:    #  TODO: method instead.. maybe it's a better solution
+- packman/packman.py:1153:    #  TODO: implement?
+- packman/packman.py:1176:    #  TODO: replace this with method generate_from_template()..
+- packman/packman.py:1373:    #  TODO: receive PRINT_TEMPLATES from pkm
 - vagrant/provision.sh:27:    #  TODO: add virtualenv
 - vagrant/provision.sh:31:    #  TODO: add bash completion support using docopt-completion

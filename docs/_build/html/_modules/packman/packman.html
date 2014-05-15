@@ -409,13 +409,21 @@
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_ppa_repos</span><span class="p">(</span><span class="n">source_ppas</span><span class="p">)</span>
         <span class="c"># get a key for the repo if it&#39;s required..</span>
         <span class="k">if</span> <span class="n">source_keys</span><span class="p">:</span>
-            <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_keys</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+            <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_keys</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">dst_path</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">source_keys</span><span class="p">:</span>
                 <span class="n">key_file</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">unquote</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_key</span><span class="p">(</span><span class="n">dst_path</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">key_file</span><span class="p">)</span>
         <span class="c"># retrieve the source for the package</span>
         <span class="k">if</span> <span class="n">source_urls</span><span class="p">:</span>
-            <span class="n">dl_handler</span><span class="o">.</span><span class="n">wgets</span><span class="p">(</span><span class="n">source_urls</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">source_url</span> <span class="ow">in</span> <span class="n">source_urls</span><span class="p">:</span>
+                <span class="c"># retrieve url file extension</span>
+                <span class="n">url_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">source_url</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c"># if the source file is an rpm or deb, we want to download</span>
+                <span class="c"># it to the archives folder. yes, it&#39;s a dreadful solution...</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">url_ext</span> <span class="o">==</span> <span class="s">&#39;.rpm&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">url_ext</span> <span class="o">==</span> <span class="s">&#39;.deb&#39;</span><span class="p">:</span>
+                    <span class="n">url_ext</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">dl_handler</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="n">source_url</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">dst_path</span><span class="p">,</span>
+                                <span class="n">url_pkg_ext</span><span class="o">=</span><span class="n">url_ext</span><span class="p">)</span>
         <span class="c"># add the repo key</span>
         <span class="k">if</span> <span class="n">key_files</span><span class="p">:</span>
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">add_keys</span><span class="p">(</span><span class="n">key_files</span><span class="p">)</span>
@@ -568,6 +576,9 @@
                     <span class="c"># exists, and there are dependencies for the package, run</span>
                     <span class="c"># fpm with the relevant flags.</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">mock</span><span class="p">:</span>
+                        <span class="c"># TODO: build fpm commands options before running fpm</span>
+                        <span class="c"># TODO: maybe map config params to fpm flags...</span>
+                        <span class="c"># TODO: redundant, remove it. it&#39;s covered below.</span>
                         <span class="k">if</span> <span class="n">bootstrap_script_in_pkg</span> <span class="ow">and</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar&quot;</span><span class="p">:</span>
                             <span class="n">do</span><span class="p">(</span>
                                 <span class="s">&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}&#39;</span>
@@ -613,6 +624,7 @@
                 <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;sources dir {0} does</span><span class="se">\&#39;</span><span class="s">nt exist, termintating...&#39;</span>
                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sources_path</span><span class="p">))</span>
                 <span class="c"># maybe bluntly exit since this is all irrelevant??</span>
+                <span class="c"># TODO: raise instead of exiting.</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c"># make sure the final destination for the package exists..</span>
@@ -1226,7 +1238,7 @@
         <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DownloadsHandler.wget"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.wget">[docs]</a>    <span class="k">def</span> <span class="nf">wget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="DownloadsHandler.wget"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.wget">[docs]</a>    <span class="k">def</span> <span class="nf">wget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">url_pkg_ext</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        wgets a url to a destination directory or file</span>
 
@@ -1235,12 +1247,23 @@
 <span class="sd">        :param string file: download to file...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;--timeout=30&#39;</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+        <span class="c"># TODO: think about moving the file ext check to the get</span>
+        <span class="c"># TODO: method instead.. maybe it&#39;s a better solution</span>
+        <span class="c"># workaround for archives folder</span>
+        <span class="k">if</span> <span class="n">url_pkg_ext</span><span class="p">:</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;the file is an {0} file. we</span><span class="se">\&#39;</span><span class="s">ll download it &#39;</span>
+                      <span class="s">&#39;to the archives folder&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url_pkg_ext</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">dir</span><span class="p">:</span>
+                <span class="nb">dir</span> <span class="o">+=</span> <span class="s">&#39;/archives&#39;</span>
+            <span class="k">elif</span> <span class="nb">file</span><span class="p">:</span>
+                <span class="n">path</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="nb">file</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s">&#39;/archives/&#39;</span> <span class="o">+</span> <span class="nb">file</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">file</span> <span class="ow">and</span> <span class="nb">dir</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">dir</span><span class="p">):</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;please specify either a directory&#39;</span>
                         <span class="s">&#39; or file to download to.&#39;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;please specify either a directory&#39;</span>
                                 <span class="s">&#39; or file to download to.&#39;</span><span class="p">)</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">or</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -O {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
             <span class="k">if</span> <span class="nb">file</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -P {2}&#39;</span>
                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
