@@ -281,6 +281,8 @@ class DownloadsHandlerTest(unittest.TestCase, DownloadsHandler,
             outcome = self.wget('www.google.comd', dir=TEST_DIR, sudo=False)
         self.assertTrue(outcome.failed)
 
+    # TODO: add wget archives dir test
+
 
 class TemplateHandlerTest(unittest.TestCase, TemplateHandler,
                           CommonHandler):

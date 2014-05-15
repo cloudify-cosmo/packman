@@ -297,7 +297,15 @@ def get(component):
                 repo_handler.add_key(dst_path + '/' + key_file)
         # retrieve the source for the package
         if source_urls:
-            dl_handler.wgets(source_urls, dir=dst_path)
+            for source_url in source_urls:
+                # retrieve url file extension
+                url_ext = os.path.splitext(source_url)[1]
+                # if the source file is an rpm or deb, we want to download
+                # it to the archives folder. yes, it's a dreadful solution...
+                if not url_ext == '.rpm' and not url_ext == '.deb':
+                    url_ext = False
+                dl_handler.wgets(source_urls, dir=dst_path,
+                                 url_pkg_ext=url_ext)
         # add the repo key
         if key_files:
             repo_handler.add_keys(key_files)
@@ -1110,7 +1118,7 @@ class DownloadsHandler(CommonHandler):
         for url in urls:
             self.wget(url, dir, sudo=sudo)
 
-    def wget(self, url, dir=False, file=False, sudo=True):
+    def wget(self, url, dir=False, file=False, url_pkg_ext=False, sudo=True):
         """
         wgets a url to a destination directory or file
 
@@ -1119,14 +1127,12 @@ class DownloadsHandler(CommonHandler):
         :param string file: download to file...
         """
         options = '--timeout=30'
-        # retrieve url file extension
-        url_ext = os.path.splitext(url)[1]
-        lgr.debug('url file extension is: {}'.format(url_ext))
-        # if the downloaded file is an rpm or deb, we want to download
-        # it to the archives folder. yes, it's a dreadful solution...
-        if url_ext == '.rpm' or url_ext == '.deb':
-            lgr.debug('the file is either an rpm or a deb. '
-                      'we\'ll download it to the archives folder' )
+        # TODO: think about moving the file ext check to the get
+        # TODO: method instead.. maybe it's a better solution
+        # workaround for archives folder
+        if url_pkg_ext:
+            lgr.debug('the file is an {0} file. we\'ll download it '
+                      'to the archives folder'.format(url_pkg_ext))
             if dir:
                 dir += '/archives'
             elif file:
