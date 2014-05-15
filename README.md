@@ -1,6 +1,7 @@
 packman
 =======
-
+<!-- http://stackoverflow.com/questions/10718767/have-the-same-readme-both-in-markdown-and-restructuredtext -->
+<!-- https://github.com/bebraw/pypandoc -->
 packman creates packages.
 
 The project was initally invented to create Cloudify (http://getcloudify.org/) packages and is now progressing towards being a good open-source solution to creating different types of packages for different needs.
