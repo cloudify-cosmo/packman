@@ -924,7 +924,7 @@ class YumHandler(CommonHandler):
             return do('sudo rpm -ivh {0}'.format(source_repo))
         else:
             dl = DownloadsHandler()
-            dl.wget(source_url, dir='/etc/yum.repos.d/')
+            dl.wget(source_repo, dir='/etc/yum.repos.d/')
 
     def add_keys(self, key_files):
         """
