@@ -222,7 +222,6 @@ def get(component):
      erased before creating a new package
     :rtype: `None`
     """
-
     # you can send the component dict directly, or retrieve it from
     # the packages.py file by sending its name
     c = component if type(component) is dict \
@@ -709,6 +708,42 @@ class CommonHandler():
         lgr.debug('untar-ing {0}'.format(input_file))
         return do('tar -C {0} -x{1} {2}'.format(
             chdir, opts, input_file), sudo=sudo)
+
+
+class fpmHandler(CommonHandler):
+    """
+    packaging handler
+    """
+    def __init__(self, sudo, name, source):
+        self.sudo = sudo
+        self.name = name
+        self.source = source
+        self.command = 'fpm -s {0} -t {1} -f '
+
+    def _build_fpm_cmd_string(*args):
+        self.command.append('-n {} '.format(self.name))
+        if version is not None:
+            self.command.append('-v {} '.format(version))
+        if chdir:
+            self.command.append('-C {} '.format(chdir))
+        if depends:
+            self.command.append("-d " + " -d ".join(depends))
+        if force:
+            self.command.append('-f ')
+        if after_install is not None:
+            self.command.append('--after-install {} '.format(
+                after_install))
+        if before_install is not None:
+            self.command.append('--before-install {} '.format(
+                before_install))
+        # MUST BE LAST
+        self.command = self.command.append(self.source)
+
+    def fpm(self, version=None, chdir=False,
+            depends=False, force=False,
+            after_intsall=None, before_install=None):
+        _build_fpm_cmd_string(args)
+        do(self.command, sudo=self.sudo)
 
 
 class PythonHandler(CommonHandler):
