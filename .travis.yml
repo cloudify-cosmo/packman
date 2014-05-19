@@ -12,3 +12,5 @@ script:
     - tox -e $TOX_ENV
 # after_success:
 #     coveralls
+notifications:
+  flowdock: a3373c20fe275f79e823b0b4ec9b6e4c

@@ -159,10 +159,11 @@ def packman_runner(action='pack', components_file=None, components=None,
     if excluded is not None:
         for excluded_component in excluded.split(','):
             excluded_components_list.append(excluded_component)
-    if set(components_list) == set(excluded_components_list):
-        lgr.error('your components list and excluded components list contain'
-                  ' the same items.')
-        raise PackagerError('components list and excluded list are the same')
+    if set(components_list) & set(excluded_components_list):
+        lgr.error('your components list and excluded components '
+                  'list contain a similar item.')
+        raise PackagerError('components list and excluded list '
+                            'are conflicting')
     # if at least 1 component exists
     if components_list:
         # iterate and run action

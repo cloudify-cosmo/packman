@@ -1,4 +1,6 @@
-[33ma5619af[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m flake8 fixes
+[33mdd548e9[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m started implementing an fpmHandler class
+[33mf17a5c4[m make release
+[33ma5619af[m flake8 fixes
 [33m6bf862c[m minor fix
 [33m1e18f09[m moved file extension check to get method, to overcome key file or repo file downloads
 [33m3388864[m fixing wget archives feature - jeez... noob

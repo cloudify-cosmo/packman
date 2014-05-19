@@ -23,24 +23,24 @@
 - packman/packman.py:566:    #  TODO: instead of a verbose flag in the config.
 - packman/packman.py:653:    #  TODO: handle multiple files differently
 - packman/packman.py:677:    #  TODO: depracate this useless thing...
-- packman/packman.py:793:    #  TODO: support virtualenv --relocate OR
-- packman/packman.py:794:    #  TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:810:    #  TODO: remove static paths for ruby installations..
-- packman/packman.py:811:    #  TODO: add support for ruby in different environments
-- packman/packman.py:877:    #  TODO: add an is-package-installed check. if it is
-- packman/packman.py:878:    #  TODO: run yum reinstall instead of yum install.
-- packman/packman.py:880:    #  TODO: yum download exists with an error even if the download
-- packman/packman.py:881:    #  TODO: succeeded due to a non-zero error message. handle it better.
-- packman/packman.py:882:    #  TODO: add yum enable-repo option
-- packman/packman.py:883:    #  TODO: support yum reinstall including dependencies
-- packman/packman.py:884:    #  TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:962:    #  TODO: fix this... (it should dig a bit deeper)
-- packman/packman.py:997:    #  TODO: add an is-package-installed check. if it is
-- packman/packman.py:998:    #  TODO: run apt-get install --reinstall instead of apt-get install.
-- packman/packman.py:1132:    #  TODO: think about moving the file ext check to the get
-- packman/packman.py:1133:    #  TODO: method instead.. maybe it's a better solution
-- packman/packman.py:1153:    #  TODO: implement?
-- packman/packman.py:1176:    #  TODO: replace this with method generate_from_template()..
-- packman/packman.py:1373:    #  TODO: receive PRINT_TEMPLATES from pkm
+- packman/packman.py:829:    #  TODO: support virtualenv --relocate OR
+- packman/packman.py:830:    #  TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/packman.py:846:    #  TODO: remove static paths for ruby installations..
+- packman/packman.py:847:    #  TODO: add support for ruby in different environments
+- packman/packman.py:913:    #  TODO: add an is-package-installed check. if it is
+- packman/packman.py:914:    #  TODO: run yum reinstall instead of yum install.
+- packman/packman.py:916:    #  TODO: yum download exists with an error even if the download
+- packman/packman.py:917:    #  TODO: succeeded due to a non-zero error message. handle it better.
+- packman/packman.py:918:    #  TODO: add yum enable-repo option
+- packman/packman.py:919:    #  TODO: support yum reinstall including dependencies
+- packman/packman.py:920:    #  TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
+- packman/packman.py:998:    #  TODO: fix this... (it should dig a bit deeper)
+- packman/packman.py:1033:    #  TODO: add an is-package-installed check. if it is
+- packman/packman.py:1034:    #  TODO: run apt-get install --reinstall instead of apt-get install.
+- packman/packman.py:1168:    #  TODO: think about moving the file ext check to the get
+- packman/packman.py:1169:    #  TODO: method instead.. maybe it's a better solution
+- packman/packman.py:1189:    #  TODO: implement?
+- packman/packman.py:1212:    #  TODO: replace this with method generate_from_template()..
+- packman/packman.py:1409:    #  TODO: receive PRINT_TEMPLATES from pkm
 - vagrant/provision.sh:27:    #  TODO: add virtualenv
 - vagrant/provision.sh:31:    #  TODO: add bash completion support using docopt-completion

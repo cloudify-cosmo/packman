@@ -277,10 +277,11 @@
     <span class="k">if</span> <span class="n">excluded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">excluded_component</span> <span class="ow">in</span> <span class="n">excluded</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
             <span class="n">excluded_components_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">excluded_component</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">components_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">excluded_components_list</span><span class="p">):</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;your components list and excluded components list contain&#39;</span>
-                  <span class="s">&#39; the same items.&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components list and excluded list are the same&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">components_list</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">excluded_components_list</span><span class="p">):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;your components list and excluded components &#39;</span>
+                  <span class="s">&#39;list contain a similar item.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components list and excluded list &#39;</span>
+                            <span class="s">&#39;are conflicting&#39;</span><span class="p">)</span>
     <span class="c"># if at least 1 component exists</span>
     <span class="k">if</span> <span class="n">components_list</span><span class="p">:</span>
         <span class="c"># iterate and run action</span>
@@ -340,7 +341,6 @@
 <span class="sd">     erased before creating a new package</span>
 <span class="sd">    :rtype: `None`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c"># you can send the component dict directly, or retrieve it from</span>
     <span class="c"># the packages.py file by sending its name</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">component</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span> \
@@ -827,6 +827,42 @@
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;untar-ing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_file</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -x{1} {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">input_file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="fpmHandler"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler">[docs]</a><span class="k">class</span> <span class="nc">fpmHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    packaging handler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sudo</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sudo</span> <span class="o">=</span> <span class="n">sudo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s">&#39;fpm -s {0} -t {1} -f &#39;</span>
+
+    <span class="k">def</span> <span class="nf">_build_fpm_cmd_string</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;-n {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;-v {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">chdir</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;-C {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chdir</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">depends</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;-d &quot;</span> <span class="o">+</span> <span class="s">&quot; -d &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">depends</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;-f &#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">after_install</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;--after-install {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">after_install</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">before_install</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;--before-install {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">before_install</span><span class="p">))</span>
+        <span class="c"># MUST BE LAST</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+
+<div class="viewcode-block" id="fpmHandler.fpm"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler.fpm">[docs]</a>    <span class="k">def</span> <span class="nf">fpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">chdir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">depends</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">after_intsall</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">before_install</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">_build_fpm_cmd_string</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">do</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sudo</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="PythonHandler"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler">[docs]</a><span class="k">class</span> <span class="nc">PythonHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
