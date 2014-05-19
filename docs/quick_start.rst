@@ -9,6 +9,7 @@ Quick Start
     git clone git@github.com:cloudify-cosmo/cloudify-packager.git
 
 - go to the vagrant directory
+
 - run::
 
     vagrant up packman

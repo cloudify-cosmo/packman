@@ -22,7 +22,7 @@ Pre-Requirements
 
 Installing Packman
 ------------------
-You can install ``packman`` by running ``pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/master.zip``.
+You can install ``packman`` by running ``pip install packman``.
 Of course, you must have the prereqs installed to fully utilize ``packman``'s potential...
 
 .. note:: The `vagrantfile <https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/Vagrantfile>`_ provided in the github repo can supply you with a fully working ``packman`` machine.

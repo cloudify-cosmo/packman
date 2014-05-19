@@ -32,8 +32,18 @@ A very simple example of a component's configuration for riemann::
         },
     }
 
-The Configuration Parameters
-----------------------------
+Breakdown:
+
+    - ***name*** is the component's name (DUH!). it's used to create named directories and package file names mostly.
+    - ***version***, when applicable, is used to apply a version to the component's package name (in the future, it might dictate the component's version to download.)
+    - ***source_urls*** is a list of package sources to download.
+    - ***depends*** is a list of dependencies for the package (obviously only applicable to specific package types like debs and rpms.)
+    - ***package_path*** is the path where the component's package will be stored after the packaging process is complete for that same component.
+    - ***sources_path*** is the path where the component's parts (files, configs, etc..) will be stored before the component's package is created.
+    - ***dst_package_type*** is... well.. you know.
+
+Additional Configuration Parameters
+-----------------------------------
 By default, a component can be comprised of a set of parameters, all of which (names) are configurable in the definitions.py file (This is currently only available by editing the module directly). The file is not currently directly available to the user (as most of the parameters names are self-explanatory) but at a future version, a user will be able to override the parameter names by supplying an overriding definitions.py file (to override all or some of the parameter names).
 
 For the complete list of params, see the `defintions <https://github.com/cloudify-cosmo/packman/blob/develop/packman/definitions.py>`_ file.

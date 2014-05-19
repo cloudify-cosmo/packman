@@ -29,8 +29,8 @@
 
   
     <link rel="top" title="packman 0.1.0 documentation" href="index.html"/>
-        <link rel="next" title="Packman File Structure" href="module_file_struct.html"/>
-        <link rel="prev" title="Packman’s API" href="api.html"/> 
+        <link rel="next" title="Packman’s API" href="api.html"/>
+        <link rel="prev" title="Template Handling" href="template_handling.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -70,13 +70,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="component_config.html">Components File Configuration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="component_config.html#a-component-s-structure">A Component&#8217;s Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="component_config.html#the-configuration-parameters">The Configuration Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_config.html#additional-configuration-parameters">Additional Configuration Parameters</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="template_handling.html">Template Handling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Using alternative implementations of get or pack methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Packman&#8217;s API</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Using alternative implementations of get or pack methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_file_struct.html">Packman File Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_file_struct.html#module">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_file_struct.html#user">User</a></li>
@@ -126,6 +127,7 @@
 <li>we create a get.py file in our cwd with a function called <tt class="docutils literal"><span class="pre">get_riemann</span></tt>.</li>
 <li>this will override the get method when running <tt class="docutils literal"><span class="pre">pkm</span> <span class="pre">get</span> <span class="pre">-c</span> <span class="pre">riemann</span></tt></li>
 <li>same goes for the <tt class="docutils literal"><span class="pre">pack</span></tt> method.</li>
+<li>of course, a user can create a specific get function only to extend the base get method by importing the <strong>*get*</strong> method from packman and adding to it.</li>
 </ul>
 <p>for an example, see an example <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/get.py">get</a> file.</p>
 </div>
@@ -136,10 +138,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="module_file_struct.html" class="btn btn-neutral float-right" title="Packman File Structure"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Packman’s API"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api.html" class="btn btn-neutral" title="Packman’s API"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="template_handling.html" class="btn btn-neutral" title="Template Handling"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

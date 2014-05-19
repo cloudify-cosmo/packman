@@ -43,3 +43,5 @@ yeilds the following::
         -f --components_file=<path> Components file path (if ommited, will assume packages.py in the cwd)
         --verbose                   a LOT of output (NOT YET IMPLEMENTED)
         -v --version                Display current version of sandman and exit
+
+.. note:: when not specifying copmonents explicitly using the --components flag, the task will run on all components in the dict.

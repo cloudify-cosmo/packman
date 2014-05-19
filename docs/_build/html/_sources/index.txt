@@ -23,8 +23,9 @@ Contents:
    installation
    pkm
    component_config
-   api
+   template_handling
    alternative_methods
+   api
    module_file_struct
 
 

@@ -11,5 +11,6 @@ let's look at the example:
 - we create a get.py file in our cwd with a function called ``get_riemann``.
 - this will override the get method when running ``pkm get -c riemann``
 - same goes for the ``pack`` method.
+- of course, a user can create a specific get function only to extend the base get method by importing the ***get*** method from packman and adding to it.
 
 for an example, see an example `get <https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/get.py>`_ file.
