@@ -168,7 +168,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">LOGGER</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span> <span class="k">else</span> <span class="n">config</span>
-    <span class="c"># TODO: only perform file related actions if file handler is defined</span>
+    <span class="c"># TODO: (IMPRV) only perform file related actions if file handler is</span>
+    <span class="c"># TODO: (IMPRV) defined.</span>
     <span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
             <span class="n">pkm_conf</span><span class="o">.</span><span class="n">LOGGER</span><span class="p">[</span><span class="s">&#39;handlers&#39;</span><span class="p">][</span><span class="s">&#39;file&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]))</span>
@@ -348,7 +349,7 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
-    <span class="c"># TODO: remove auto_get param - it is no longer in use</span>
+    <span class="c"># TODO: (DEPR) remove auto_get param - it is no longer in use</span>
     <span class="n">auto_get</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_GET</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
     <span class="k">if</span> <span class="n">auto_get</span><span class="p">:</span>
@@ -431,7 +432,7 @@
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="c"># download any other requirements if they exist</span>
         <span class="k">if</span> <span class="n">reqs</span><span class="p">:</span>
-            <span class="c"># TODO: add support for installing reqs from urls</span>
+            <span class="c"># TODO: (FEAT) add support for installing reqs from urls</span>
             <span class="n">repo_handler</span><span class="o">.</span><span class="n">downloads</span><span class="p">(</span><span class="n">reqs</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
         <span class="c"># download relevant python modules...</span>
         <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
@@ -486,7 +487,7 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
-    <span class="c"># TODO: remove auto_pack param - it is no longer in use</span>
+    <span class="c"># TODO: (DEPR) remove auto_pack param - it is no longer in use</span>
     <span class="n">auto_pack</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_AUTO_PACK</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">True</span>
     <span class="k">if</span> <span class="n">auto_pack</span><span class="p">:</span>
@@ -503,13 +504,14 @@
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">src_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
-        <span class="c"># TODO: identify dst_pkg_type by distro if not specified explicitly.</span>
+        <span class="c"># TODO: (IMPRV) identify dst_pkg_type by distro if not specified</span>
+        <span class="c"># TODO: (IMPRV) explicitly.</span>
         <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">sources_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">]</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
-        <span class="c"># TODO: JEEZ... this archives thing is dumb...</span>
-        <span class="c"># TODO: replace it with a normal destination path</span>
+        <span class="c"># TODO: (STPD) JEEZ... this archives thing is dumb...</span>
+        <span class="c"># TODO: (STPD) replace it with a normal destination path</span>
         <span class="n">tmp_pkg_path</span> <span class="o">=</span> <span class="s">&#39;{0}/archives&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">])</span> \
             <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="n">package_path</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span><span class="p">]</span> \
@@ -546,7 +548,8 @@
             <span class="n">tmp_handler</span><span class="o">.</span><span class="n">generate_configs</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
         <span class="c"># if bootstrap scripts are required, generate them.</span>
         <span class="k">if</span> <span class="n">bootstrap_script</span> <span class="ow">or</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
-            <span class="c"># TODO: handle cases where a bootstrap script is not a template.</span>
+            <span class="c"># TODO: (IMPRV) handle cases where a bootstrap script is not a</span>
+            <span class="c"># TODO: (IMPRV) template.</span>
             <span class="c"># bootstrap_script - bootstrap script to be attached to the package</span>
             <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script</span><span class="p">:</span>
                 <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
@@ -579,7 +582,7 @@
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">mock</span><span class="p">:</span>
                         <span class="c"># TODO: build fpm commands options before running fpm</span>
                         <span class="c"># TODO: maybe map config params to fpm flags...</span>
-                        <span class="c"># TODO: redundant, remove it. it&#39;s covered below.</span>
+                        <span class="c"># TODO: (IMPRV) redundant. it&#39;s covered below.</span>
                         <span class="k">if</span> <span class="n">bootstrap_script_in_pkg</span> <span class="ow">and</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar&quot;</span><span class="p">:</span>
                             <span class="n">do</span><span class="p">(</span>
                                 <span class="s">&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}&#39;</span>
@@ -615,9 +618,8 @@
                             <span class="k">if</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar.gz&quot;</span><span class="p">:</span>
                                 <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gzip {0}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
                         <span class="c"># and check if the packaging process succeeded.</span>
-                        <span class="c"># TODO: actually test the package itself.</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c"># TODO: create mock package</span>
+                        <span class="c"># TODO: (FEAT) create mock package</span>
                         <span class="k">return</span>
             <span class="c"># apparently, the src for creation the package doesn&#39;t exist...</span>
             <span class="c"># what can you do?</span>
@@ -625,7 +627,7 @@
                 <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;sources dir {0} does</span><span class="se">\&#39;</span><span class="s">nt exist, termintating...&#39;</span>
                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sources_path</span><span class="p">))</span>
                 <span class="c"># maybe bluntly exit since this is all irrelevant??</span>
-                <span class="c"># TODO: raise instead of exiting.</span>
+                <span class="c"># TODO: (IMPRV) raise instead of exiting.</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c"># make sure the final destination for the package exists..</span>
@@ -635,7 +637,7 @@
         <span class="c"># and then copy the final package over..</span>
         <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package creation completed successfully!&#39;</span><span class="p">)</span>
-        <span class="c"># TODO: remove temporary package</span>
+        <span class="c"># TODO: (IMPRV) remove temporary package</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package is set to be packaged manually&#39;</span><span class="p">)</span>
 
@@ -681,8 +683,8 @@
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">execution</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="c"># TODO: apply verbosity according to the verbose flag in pkm</span>
-    <span class="c"># TODO: instead of a verbose flag in the config.</span>
+    <span class="c"># TODO: (FEAT) apply verbosity according to the verbose flag in pkm</span>
+    <span class="c"># TODO: (FEAT) instead of a verbose flag in the config.</span>
     <span class="k">if</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_execute</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -769,7 +771,7 @@
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="k">else</span> <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;dir doesn</span><span class="se">\&#39;</span><span class="s">t exist&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">False</span>
 
-    <span class="c"># TODO: handle multiple files differently</span></div>
+    <span class="c"># TODO: (IMPRV) handle multiple files differently</span></div>
 <div class="viewcode-block" id="CommonHandler.rm"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.rm">[docs]</a>    <span class="k">def</span> <span class="nf">rm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        deletes a file or a set of files</span>
@@ -793,7 +795,7 @@
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp -R {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> <span class="k">if</span> <span class="n">recurse</span> \
             <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 
-    <span class="c"># TODO: depracate this useless thing...</span></div>
+    <span class="c"># TODO: (DEPR) depracate this useless thing...</span></div>
 <div class="viewcode-block" id="CommonHandler.make_package_paths"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.make_package_paths">[docs]</a>    <span class="k">def</span> <span class="nf">make_package_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg_dir</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        DEPRACATED!</span>
@@ -945,8 +947,8 @@
             <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;module {0} is not installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-    <span class="c"># TODO: support virtualenv --relocate OR</span>
-    <span class="c"># TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA</span></div>
+    <span class="c"># TODO: (FEAT) support virtualenv --relocate OR</span>
+    <span class="c"># TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA</span></div>
 <div class="viewcode-block" id="PythonHandler.venv"><a class="viewcode-back" href="../../api.html#packman.packman.PythonHandler.venv">[docs]</a>    <span class="k">def</span> <span class="nf">venv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">venv_dir</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates a virtualenv</span>
@@ -1030,13 +1032,13 @@
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># TODO: add an is-package-installed check. if it is</span>
-        <span class="c"># TODO: run yum reinstall instead of yum install.</span>
+        <span class="c"># TODO: (IMPRV) run yum reinstall instead of yum install.</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="c"># TODO: yum download exists with an error even if the download</span>
-        <span class="c"># TODO: succeeded due to a non-zero error message. handle it better.</span>
-        <span class="c"># TODO: add yum enable-repo option</span>
-        <span class="c"># TODO: support yum reinstall including dependencies</span>
-        <span class="c"># TODO: reinstall $(repoquery --requires --recursive --resolve pkg)</span>
+        <span class="c"># TODO: (BUG) yum download exits with an error even if the download</span>
+        <span class="c"># TODO: (BUG) succeeded due to a non-zero error message.</span>
+        <span class="c"># TODO: (FEAT) add yum enable-repo option</span>
+        <span class="c"># TODO: (FEAT) support yum reinstall including dependencies</span>
+        <span class="c"># TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_if_package_is_installed</span><span class="p">(</span><span class="n">package</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y reinstall --downloadonly &#39;</span>
                       <span class="s">&#39;--downloaddir={1}/archives {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
@@ -1113,8 +1115,7 @@
 
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;renaming deb files...&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;dpkg-name {0}/*.deb&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">))</span>
-
-    <span class="c"># TODO: fix this... (it should dig a bit deeper)</span></div>
+</div>
 <div class="viewcode-block" id="AptHandler.check_if_package_is_installed"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.check_if_package_is_installed">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_package_is_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        checks if a package is installed</span>
@@ -1149,8 +1150,9 @@
 <span class="sd">        :param string pkg: package to download</span>
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># TODO: add an is-package-installed check. if it is</span>
-        <span class="c"># TODO: run apt-get install --reinstall instead of apt-get install.</span>
+        <span class="c"># TODO: (IMPRV) add an is-package-installed check. if it is</span>
+        <span class="c"># TODO: (IMPRV) run apt-get install --reinstall instead of apt-get</span>
+        <span class="c"># TODO: (IMPRV) install.</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
@@ -1284,8 +1286,8 @@
 <span class="sd">        :param string file: download to file...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">options</span> <span class="o">=</span> <span class="s">&#39;--timeout=30&#39;</span>
-        <span class="c"># TODO: think about moving the file ext check to the get</span>
-        <span class="c"># TODO: method instead.. maybe it&#39;s a better solution</span>
+        <span class="c"># TODO: (IMPRV) think about moving the file ext check to the get</span>
+        <span class="c"># TODO: (IMPRV) method instead.. maybe it&#39;s a better solution</span>
         <span class="c"># workaround for archives folder</span>
         <span class="k">if</span> <span class="n">url_pkg_ext</span><span class="p">:</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;the file is an {0} file. we</span><span class="se">\&#39;</span><span class="s">ll download it &#39;</span>
@@ -1301,11 +1303,12 @@
             <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;please specify either a directory&#39;</span>
                                 <span class="s">&#39; or file to download to.&#39;</span><span class="p">)</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">or</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -O {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -O {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> \
             <span class="k">if</span> <span class="nb">file</span> <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;wget {0} {1} -P {2}&#39;</span>
                             <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">dir</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 
-    <span class="c"># TODO: implement?</span></div>
+    <span class="c"># TODO: (FEAT) implement curl?</span></div>
 <div class="viewcode-block" id="DownloadsHandler.curls"><a class="viewcode-back" href="../../api.html#packman.packman.DownloadsHandler.curls">[docs]</a>    <span class="k">def</span> <span class="nf">curls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        curls a list of urls</span>
@@ -1328,7 +1331,7 @@
 
 </div></div>
 <div class="viewcode-block" id="TemplateHandler"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler">[docs]</a><span class="k">class</span> <span class="nc">TemplateHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
-    <span class="c"># TODO: replace this with method generate_from_template()..</span>
+    <span class="c"># TODO: (IMPRV) replace this with method generate_from_template()..</span>
 <div class="viewcode-block" id="TemplateHandler.create_bootstrap_script"><a class="viewcode-back" href="../../api.html#packman.packman.TemplateHandler.create_bootstrap_script">[docs]</a>    <span class="k">def</span> <span class="nf">create_bootstrap_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">script_file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates a script file from a template file</span>
@@ -1525,7 +1528,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        creates a file from content</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># TODO: receive PRINT_TEMPLATES from pkm</span>
+        <span class="c"># TODO: (FEAT) receive PRINT_TEMPLATES from pkm</span>
         <span class="k">if</span> <span class="n">pkm_conf</span><span class="o">.</span><span class="n">PRINT_TEMPLATES</span><span class="p">:</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;creating file: {0} with content: </span><span class="se">\n</span><span class="s">{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                       <span class="n">output_path</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>

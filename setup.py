@@ -24,12 +24,6 @@ import codecs
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-# try:
-#     from pypandoc import convert
-#     read_md = lambda f: convert(f, 'rst')
-# except ImportError:
-#     print("warning: pypandoc module not found, could not convert Markdown to RST")
-#     read_md = lambda f: open(f, 'r').read()
 
 def read(*parts):
     # intentionally *not* adding an encoding option to open
@@ -68,7 +62,7 @@ setup(
     license='LICENSE',
     platforms='Ubuntu',
     description='Package Generator',
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     packages=['packman'],
     entry_points={
         'console_scripts': [
@@ -82,6 +76,7 @@ setup(
         "docopt==.0.6.1",
         "infi.docopt_completion==0.2.1",
         "sphinx-rtd-theme",
+        "pypandoc",
     ],
     tests_require=['nose', 'tox'],
     test_suite='packman.test.test_packman',

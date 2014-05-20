@@ -1,4 +1,6 @@
-[33mdd548e9[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m started implementing an fpmHandler class
+[33m5032ab3[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m refactoring documentation
+[33m29ceb58[m[33m ([1;33mtag: 0.1[m[33m)[m added github - flowdock integration (for testing)
+[33mdd548e9[m started implementing an fpmHandler class
 [33mf17a5c4[m make release
 [33ma5619af[m flake8 fixes
 [33m6bf862c[m minor fix

@@ -49,7 +49,8 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
     """
 
     config = pkm_conf.LOGGER if not config else config
-    # TODO: only perform file related actions if file handler is defined
+    # TODO: (IMPRV) only perform file related actions if file handler is
+    # TODO: (IMPRV) defined.
     log_dir = os.path.expanduser(
         os.path.dirname(
             pkm_conf.LOGGER['handlers']['file']['filename']))
@@ -229,7 +230,7 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: remove auto_get param - it is no longer in use
+    # TODO: (DEPR) remove auto_get param - it is no longer in use
     auto_get = c[defs.PARAM_AUTO_GET] \
         if defs.PARAM_AUTO_GET in c else True
     if auto_get:
@@ -312,7 +313,7 @@ def get(component):
             repo_handler.update()
         # download any other requirements if they exist
         if reqs:
-            # TODO: add support for installing reqs from urls
+            # TODO: (FEAT) add support for installing reqs from urls
             repo_handler.downloads(reqs, dst_path)
         # download relevant python modules...
         if modules:
@@ -367,7 +368,7 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: remove auto_pack param - it is no longer in use
+    # TODO: (DEPR) remove auto_pack param - it is no longer in use
     auto_pack = c[defs.PARAM_AUTO_PACK] \
         if defs.PARAM_AUTO_PACK in c else True
     if auto_pack:
@@ -384,13 +385,14 @@ def pack(component):
             if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
         src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
             if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
-        # TODO: identify dst_pkg_type by distro if not specified explicitly.
+        # TODO: (IMPRV) identify dst_pkg_type by distro if not specified
+        # TODO: (IMPRV) explicitly.
         dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
             if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
         sources_path = c[defs.PARAM_SOURCES_PATH] \
             if defs.PARAM_SOURCES_PATH in c else False
-        # TODO: JEEZ... this archives thing is dumb...
-        # TODO: replace it with a normal destination path
+        # TODO: (STPD) JEEZ... this archives thing is dumb...
+        # TODO: (STPD) replace it with a normal destination path
         tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
             if defs.PARAM_SOURCES_PATH else False
         package_path = c[defs.PARAM_PACKAGE_PATH] \
@@ -427,7 +429,8 @@ def pack(component):
             tmp_handler.generate_configs(c)
         # if bootstrap scripts are required, generate them.
         if bootstrap_script or bootstrap_script_in_pkg:
-            # TODO: handle cases where a bootstrap script is not a template.
+            # TODO: (IMPRV) handle cases where a bootstrap script is not a
+            # TODO: (IMPRV) template.
             # bootstrap_script - bootstrap script to be attached to the package
             if bootstrap_template and bootstrap_script:
                 tmp_handler.create_bootstrap_script(c, bootstrap_template,
@@ -460,7 +463,7 @@ def pack(component):
                     if not mock:
                         # TODO: build fpm commands options before running fpm
                         # TODO: maybe map config params to fpm flags...
-                        # TODO: redundant, remove it. it's covered below.
+                        # TODO: (IMPRV) redundant. it's covered below.
                         if bootstrap_script_in_pkg and dst_pkg_type == "tar":
                             do(
                                 'sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'
@@ -496,9 +499,8 @@ def pack(component):
                             if dst_pkg_type == "tar.gz":
                                 do('sudo gzip {0}*'.format(name))
                         # and check if the packaging process succeeded.
-                        # TODO: actually test the package itself.
                     else:
-                        # TODO: create mock package
+                        # TODO: (FEAT) create mock package
                         return
             # apparently, the src for creation the package doesn't exist...
             # what can you do?
@@ -506,7 +508,7 @@ def pack(component):
                 lgr.error('sources dir {0} does\'nt exist, termintating...'
                           .format(sources_path))
                 # maybe bluntly exit since this is all irrelevant??
-                # TODO: raise instead of exiting.
+                # TODO: (IMPRV) raise instead of exiting.
                 sys.exit(1)
 
         # make sure the final destination for the package exists..
@@ -516,7 +518,7 @@ def pack(component):
         # and then copy the final package over..
         common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
         lgr.info('package creation completed successfully!')
-        # TODO: remove temporary package
+        # TODO: (IMPRV) remove temporary package
     else:
         lgr.info('package is set to be packaged manually')
 
@@ -562,8 +564,8 @@ def do(command, attempts=2, sleep_time=3,
                   .format(command, execution, x.stdout))
         return x
 
-    # TODO: apply verbosity according to the verbose flag in pkm
-    # TODO: instead of a verbose flag in the config.
+    # TODO: (FEAT) apply verbosity according to the verbose flag in pkm
+    # TODO: (FEAT) instead of a verbose flag in the config.
     if pkm_conf.VERBOSE:
         return _execute()
     else:
@@ -650,7 +652,7 @@ class CommonHandler():
             if os.path.isdir(dir) else lgr.warning('dir doesn\'t exist')
         return False
 
-    # TODO: handle multiple files differently
+    # TODO: (IMPRV) handle multiple files differently
     def rm(self, file, sudo=True):
         """
         deletes a file or a set of files
@@ -674,7 +676,7 @@ class CommonHandler():
         return do('cp -R {0} {1}'.format(src, dst), sudo=sudo) if recurse \
             else do('cp {0} {1}'.format(src, dst), sudo=sudo)
 
-    # TODO: depracate this useless thing...
+    # TODO: (DEPR) depracate this useless thing...
     def make_package_paths(self, pkg_dir, tmp_dir):
         """
         DEPRACATED!
@@ -826,8 +828,8 @@ class PythonHandler(CommonHandler):
             lgr.debug('module {0} is not installed'.format(name))
             return False
 
-    # TODO: support virtualenv --relocate OR
-    # TODO: support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+    # TODO: (FEAT) support virtualenv --relocate OR
+    # TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
     def venv(self, venv_dir, sudo=True):
         """
         creates a virtualenv
@@ -911,13 +913,13 @@ class YumHandler(CommonHandler):
         :param string dir: dir to download to
         """
         # TODO: add an is-package-installed check. if it is
-        # TODO: run yum reinstall instead of yum install.
+        # TODO: (IMPRV) run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
-        # TODO: yum download exists with an error even if the download
-        # TODO: succeeded due to a non-zero error message. handle it better.
-        # TODO: add yum enable-repo option
-        # TODO: support yum reinstall including dependencies
-        # TODO: reinstall $(repoquery --requires --recursive --resolve pkg)
+        # TODO: (BUG) yum download exits with an error even if the download
+        # TODO: (BUG) succeeded due to a non-zero error message.
+        # TODO: (FEAT) add yum enable-repo option
+        # TODO: (FEAT) support yum reinstall including dependencies
+        # TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
         if self.check_if_package_is_installed(package):
             return do('sudo yum -y reinstall --downloadonly '
                       '--downloaddir={1}/archives {0}'.format(package, dir))
@@ -995,7 +997,6 @@ class AptHandler(CommonHandler):
         lgr.debug('renaming deb files...')
         return do('dpkg-name {0}/*.deb'.format(dir))
 
-    # TODO: fix this... (it should dig a bit deeper)
     def check_if_package_is_installed(self, package):
         """
         checks if a package is installed
@@ -1030,8 +1031,9 @@ class AptHandler(CommonHandler):
         :param string pkg: package to download
         :param string dir: dir to download to
         """
-        # TODO: add an is-package-installed check. if it is
-        # TODO: run apt-get install --reinstall instead of apt-get install.
+        # TODO: (IMPRV) add an is-package-installed check. if it is
+        # TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
+        # TODO: (IMPRV) install.
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
         return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
                   .format(pkg, dir))
@@ -1165,8 +1167,8 @@ class DownloadsHandler(CommonHandler):
         :param string file: download to file...
         """
         options = '--timeout=30'
-        # TODO: think about moving the file ext check to the get
-        # TODO: method instead.. maybe it's a better solution
+        # TODO: (IMPRV) think about moving the file ext check to the get
+        # TODO: (IMPRV) method instead.. maybe it's a better solution
         # workaround for archives folder
         if url_pkg_ext:
             lgr.debug('the file is an {0} file. we\'ll download it '
@@ -1182,11 +1184,12 @@ class DownloadsHandler(CommonHandler):
             raise PackagerError('please specify either a directory'
                                 ' or file to download to.')
         lgr.debug('downloading {0} to {1}'.format(url, file or dir))
-        return do('wget {0} {1} -O {2}'.format(url, options, file), sudo=sudo) \
+        return do('wget {0} {1} -O {2}'.format(
+            url, options, file), sudo=sudo) \
             if file else do('wget {0} {1} -P {2}'
                             .format(url, options, dir), sudo=sudo)
 
-    # TODO: implement?
+    # TODO: (FEAT) implement curl?
     def curls(self, urls, dir=False):
         """
         curls a list of urls
@@ -1209,7 +1212,7 @@ class DownloadsHandler(CommonHandler):
 
 
 class TemplateHandler(CommonHandler):
-    # TODO: replace this with method generate_from_template()..
+    # TODO: (IMPRV) replace this with method generate_from_template()..
     def create_bootstrap_script(self, component, template_file, script_file):
         """
         creates a script file from a template file
@@ -1406,7 +1409,7 @@ class TemplateHandler(CommonHandler):
         """
         creates a file from content
         """
-        # TODO: receive PRINT_TEMPLATES from pkm
+        # TODO: (FEAT) receive PRINT_TEMPLATES from pkm
         if pkm_conf.PRINT_TEMPLATES:
             lgr.debug('creating file: {0} with content: \n{1}'.format(
                       output_path, content))
