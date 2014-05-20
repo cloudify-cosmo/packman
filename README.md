@@ -25,9 +25,12 @@ see [packman requirements](http://packman.readthedocs.org/en/latest/installation
 ### Usage Examples
 
 ```shell
-pkm get --components my_component --components_file /my_components_file.py
-pkm pack -c my_component,my_other_component
-pkm make
+ # `pkm get` retrieves component sources
+ pkm get --components my_component --components_file /my_components_file.py
+ # `pkm pack` packages sources, scripts and configs.
+ pkm pack -c my_component,my_other_component
+ # `pkm make` ... does both one after the other
+ pkm make -x excluded_component
 ```
 
 ### Additional Information

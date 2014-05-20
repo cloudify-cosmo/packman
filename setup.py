@@ -76,7 +76,6 @@ setup(
         "docopt==.0.6.1",
         "infi.docopt_completion==0.2.1",
         "sphinx-rtd-theme",
-        "pypandoc",
     ],
     tests_require=['nose', 'tox'],
     test_suite='packman.test.test_packman',
