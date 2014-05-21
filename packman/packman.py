@@ -171,6 +171,8 @@ def packman_runner(action='pack', components_file=None, components=None,
             com_list.append(component)
         for xcom in xcom_list:
             com_list = [com for com in com_list if com != xcom]
+    lgr.debug('components list: {}'.format(com_list))
+    lgr.debug('excluded components list: {}'.format(xcom_list))
     # if at least 1 component exists
     if com_list:
         # iterate and run action
