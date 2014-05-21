@@ -148,28 +148,34 @@ def packman_runner(action='pack', components_file=None, components=None,
         raise PackagerError
     except:
         raise('Unknown Error when trying to import packages.py file')
-    # append components list to list
-    components_list = []
+    # if a component appears in both lists - ignore it.
+    # if it appears only in the components list, continue.
+    # if it appears only in the excluded list, continue
+    # append excluded components to list.
+    xcom_list = []
+    if excluded is not None:
+        for xcom in excluded.split(','):
+            xcom_list.append(xcom)
+    # append components to list.
+    com_list = []
     if components is not None:
         for component in components.split(','):
-            components_list.append(component)
+            com_list.append(component)
+        if set(com_list) & set(xcom_list):
+            lgr.error('your components list and excluded components '
+                      'list contain a similar item.')
+            raise PackagerError('components list and excluded list '
+                                'are conflicting')
     else:
         for component, values in packages.PACKAGES.items():
-            components_list.append(component)
-    excluded_components_list = []
-    if excluded is not None:
-        for excluded_component in excluded.split(','):
-            excluded_components_list.append(excluded_component)
-    if set(components_list) & set(excluded_components_list):
-        lgr.error('your components list and excluded components '
-                  'list contain a similar item.')
-        raise PackagerError('components list and excluded list '
-                            'are conflicting')
+            com_list.append(component)
+        for xcom in xcom_list:
+            com_list = [com for com in com_list if com != xcom]
     # if at least 1 component exists
-    if components_list:
+    if com_list:
         # iterate and run action
-        for component in components_list:
-            if component not in excluded_components_list:
+        for component in com_list:
+            if component not in xcom_list:
                 # looks for the overriding methods file in the current path
                 if os.path.isfile(os.getcwd() + '/{}.py'.format(action)):
                     # imports the overriding methods file
