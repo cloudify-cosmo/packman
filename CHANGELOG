@@ -1,4 +1,5 @@
-[33m7631b3f[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m added setup.cfg for pypi
+[33ma431a39[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m lots of big fixes and optimizations. also added keep_sources after packaging support
+[33m7631b3f[m added setup.cfg for pypi
 [33m9e72cf9[m now printing lists of components and excluded components before running
 [33m70fbc90[m cleaned up packman provision script for ubuntu and fixed a bug with conflicting components
 [33m5c4abe1[m fixed travis notifications

@@ -698,17 +698,7 @@ class CommonHandler():
         return do('cp -R {0} {1}'.format(src, dst), sudo=sudo) if recurse \
             else do('cp {0} {1}'.format(src, dst), sudo=sudo)
 
-    # TODO: (DEPR) depracate this useless thing...
-    def make_package_paths(self, pkg_dir, tmp_dir):
-        """
-        DEPRACATED!
-        creates directories for managing packages
-        """
-        # this is stupid... remove it soon...
-        lgr.debug('creating package directories')
-        self.mkdir('%s/archives' % tmp_dir)
-        self.mkdir(pkg_dir)
-
+    # TODO: (TEST) depracate make_package_paths...
     def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
         """
         tars an input file or directory
@@ -867,8 +857,6 @@ class PythonHandler(CommonHandler):
 
 
 class RubyHandler(CommonHandler):
-    # TODO: remove static paths for ruby installations..
-    # TODO: add support for ruby in different environments
     def get_ruby_gems(self, gem, dir=False):
         """
         downloads a list of ruby gems
@@ -887,8 +875,11 @@ class RubyHandler(CommonHandler):
         :param string dir: directory to download gem to
         """
         lgr.debug('downloading gem {0}'.format(gem))
-        return do('sudo gem install --no-ri --no-rdoc'
-                  ' --install-dir {0} {1}'.format(dir, gem))
+        # TODO: (TEST) add support for ruby in different environments
+        return do('sudo {0}/bin/gem install --no-ri --no-rdoc'
+                  ' --install-dir {1} {2}'.format(rbenv, dir, gem)) \
+            if rbenv else do('sudo gem install --no-ri --no-rdoc'
+                             ' --install-dir {1} {2}'.format(dir, gem))
 
 
 class YumHandler(CommonHandler):
@@ -934,14 +925,14 @@ class YumHandler(CommonHandler):
         :param string package: package to download
         :param string dir: dir to download to
         """
-        # TODO: add an is-package-installed check. if it is
-        # TODO: (IMPRV) run yum reinstall instead of yum install.
+        # TODO: (TEST) add an is-package-installed check. if it is,
+        # TODO: (TEST) run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
         # TODO: (BUG) yum download exits with an error even if the download
         # TODO: (BUG) succeeded due to a non-zero error message.
         # TODO: (FEAT) add yum enable-repo option
-        # TODO: (FEAT) support yum reinstall including dependencies
         # TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+        # TODO: (IMPRV) can be used to download deps. test to see if it works.
         if self.check_if_package_is_installed(package):
             return do('sudo yum -y reinstall --downloadonly '
                       '--downloaddir={1}/archives {0}'.format(package, dir))

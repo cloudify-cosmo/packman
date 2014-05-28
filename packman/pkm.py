@@ -58,7 +58,6 @@ def main(test_options=None):
     finally:
         del pkg_resources
 
-    # TODO: (FEAT) implement verbose output
     options = test_options or docopt(__doc__, version=version)
     print(options)
     if options['pack']:
