@@ -39,29 +39,16 @@ Options:
 
 from __future__ import absolute_import
 from docopt import docopt
-from platform import dist
-from sys import exit
 
 from packman.packman import packman_runner
-
-dist_list = ('Ubuntu', 'debian', 'centos')
-
-
-def check_dist():
-    distro = dist()[0]
-    print('Distribution Identified: {}'.format(distro))
-    if distro not in dist_list:
-        print('Your distribution is not supported.'
-              'Supported Disributions are:')
-        for distro in dist_list:
-            print('    {}'.format(distro))
-        exit(1)
+from packman.packman import check_distro
 
 
 def main(test_options=None):
     """Main entry point for script."""
-    # TODO: currently, distrib is checked thruout the code. change it to once.
-    check_dist()
+    # TODO: (TEST) currently, distrib is checked thruout the code.
+    # TODO: (TEST) change it to once.
+    check_distro(verify=True)
     import pkg_resources
     version = None
     try:
@@ -71,7 +58,7 @@ def main(test_options=None):
     finally:
         del pkg_resources
 
-    # TODO: implement verbose output
+    # TODO: (FEAT) implement verbose output
     options = test_options or docopt(__doc__, version=version)
     print(options)
     if options['pack']:

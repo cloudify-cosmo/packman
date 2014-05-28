@@ -281,7 +281,7 @@ class DownloadsHandlerTest(unittest.TestCase, DownloadsHandler,
             outcome = self.wget('www.google.comd', dir=TEST_DIR, sudo=False)
         self.assertTrue(outcome.failed)
 
-    # TODO: add wget archives dir test
+    # TODO: (TEST) add wget archives dir test
 
 
 class TemplateHandlerTest(unittest.TestCase, TemplateHandler,
@@ -511,5 +511,5 @@ class TestBaseMethods(unittest.TestCase):
     #     }
     #     pack(component)
 
-# TODO: add apt handler tests
-# TODO: add yum handler tests (hrm.. how to?)
+# TODO: (TEST) add apt handler tests
+# TODO: (TEST) add yum handler tests (hrm.. how to?)

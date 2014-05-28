@@ -5,6 +5,10 @@ packman
 
 [![Gitter chat](https://badges.gitter.im/cloudify-cosmo/packman.png)](https://gitter.im/cloudify-cosmo/packman)
 
+[![PyPI](http://img.shields.io/pypi/dm/packman.svg)](http://img.shields.io/pypi/dm/packman.svg)
+
+[![PypI](http://img.shields.io/pypi/v/packman.svg)](http://img.shields.io/pypi/v/packman.svg)
+
 packman creates packages.
 
 You can write a `components file` containing your packages' configuration and packman will retrieve the resources and create the packages accordingly.

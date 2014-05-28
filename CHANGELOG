@@ -1,4 +1,11 @@
-[33m5032ab3[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m refactoring documentation
+[33m7631b3f[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m added setup.cfg for pypi
+[33m9e72cf9[m now printing lists of components and excluded components before running
+[33m70fbc90[m cleaned up packman provision script for ubuntu and fixed a bug with conflicting components
+[33m5c4abe1[m fixed travis notifications
+[33mee19413[m flake8 fixes
+[33m7b92330[m visual and integrations changes
+[33m08ff5b7[m added rst readme with automated conversion for pypi, some more doc changes, removed some unnecessary code
+[33m5032ab3[m refactoring documentation
 [33m29ceb58[m[33m ([1;33mtag: 0.1[m[33m)[m added github - flowdock integration (for testing)
 [33mdd548e9[m started implementing an fpmHandler class
 [33mf17a5c4[m make release

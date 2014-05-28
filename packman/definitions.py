@@ -28,10 +28,7 @@ PARAM_SOURCE_KEYS = 'source_keys'  # an optional 'string' representing a key to 
 PARAM_KEY_FILES_PATH = 'key_files'  # an optional 'string' representing a key to add
 PARAM_REQS = 'reqs'  # an optional [list] of requirements to download from the local distributions repos
 PARAM_PREREQS = 'prereqs'  # an optional [list] of prerequirements to install from before retrieving the sources or packgaging
-
-# TODO: DEPRACATE!
-PARAM_AUTO_GET = 'auto_get'  # bool representing whether the package is automatically retrieved by packman or if there's an external logic for retrieving it
-PARAM_AUTO_PACK = 'auto_pack'  # bool representing whether the package is automatically packaged by packman or if there's an external logic for packaging it
+PARAM_KEEP_SOURCES = 'keep_sources'  # an optional 'bool' representing whether to keep the retrieved sources after packaging
 
 # packman configuration files generation params
 PARAM_CONFIG_TEMPLATE_DIR = '__template_dir'  # an optional 'dict' containing config for generating config files from a templates directory

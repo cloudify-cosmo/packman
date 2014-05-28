@@ -14,6 +14,11 @@
 #    * See the License for the specific language governing permissions and
 #    * limitations under the License.
 
+# TODO: (FEAT) add http://megastep.org/makeself/ support
+# TODO: (FEAT) add http://semver.org/ support
+# TODO: (READ) review https://speakerdeck.com/schisamo/eat-the-whole-bowl-building-a-full-stack-installer-with-omnibus  # NOQA
+# TODO: (IMPRV) redo RepoHandler implementation with generic one. should pull all repo handling commands from config  # NOQA
+
 import logging
 import logging.config
 
@@ -31,9 +36,11 @@ import urllib2
 
 # __all__ = ['list']
 
+SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
+
 
 def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
-                config={}):
+                logging_config={}):
     """
     initializes a base logger
 
@@ -48,9 +55,10 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
     :rtype: `python logger`
     """
 
-    config = pkm_conf.LOGGER if not config else config
+    logging_config = pkm_conf.LOGGER if not logging_config else logging_config
     # TODO: (IMPRV) only perform file related actions if file handler is
     # TODO: (IMPRV) defined.
+
     log_dir = os.path.expanduser(
         os.path.dirname(
             pkm_conf.LOGGER['handlers']['file']['filename']))
@@ -63,18 +71,31 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
         d = os.path.dirname(logfile)
         if not os.path.exists(d) and not len(d) == 0:
             os.makedirs(d)
-        logging.config.dictConfig(config)
+        logging.config.dictConfig(logging_config)
         lgr = logging.getLogger('user')
         lgr.setLevel(base_level) if not pkm_conf.VERBOSE \
             else lgr.setLevel(verbose_level)
         return lgr
-    except ValueError:
+    except ValueError as e:
         sys.exit('could not initialize logger.'
                  ' verify your logger config'
-                 ' and permissions to write to {0}'
-                 .format(logfile))
+                 ' and permissions to write to {0} ({1})'
+                 .format(logfile, e))
 
 lgr = init_logger()
+
+
+def check_distro(verify=False):
+    distro = dist()[0]
+    lgr.debug('Distribution Identified: {}'.format(distro))
+    if verify:
+        if distro not in SUPPORTED_DISTROS:
+            lgr.debug('Your distribution is not supported.'
+                      'Supported Disributions are:')
+            for distro in dist_list:
+                print('    {}'.format(distro))
+            sys.exit(1)
+    return distro
 
 
 def get_component_config(component_name, components_dict={},
@@ -238,99 +259,94 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: (DEPR) remove auto_get param - it is no longer in use
-    auto_get = c[defs.PARAM_AUTO_GET] \
-        if defs.PARAM_AUTO_GET in c else True
-    if auto_get:
-        source_repos = c[defs.PARAM_SOURCE_REPOS] \
-            if defs.PARAM_SOURCE_REPOS in c else False
-        source_ppas = c[defs.PARAM_SOURCE_PPAS] \
-            if defs.PARAM_SOURCE_PPAS in c else False
-        source_keys = c[defs.PARAM_SOURCE_KEYS] \
-            if defs.PARAM_SOURCE_KEYS in c else False
-        source_urls = c[defs.PARAM_SOURCE_URLS] \
-            if defs.PARAM_SOURCE_URLS in c else False
-        key_files = c[defs.PARAM_KEY_FILES_PATH] \
-            if defs.PARAM_KEY_FILES_PATH in c else False
-        reqs = c[defs.PARAM_REQS] \
-            if defs.PARAM_REQS in c else False
-        prereqs = c[defs.PARAM_PREREQS] \
-            if defs.PARAM_PREREQS in c else False
-        dst_path = c[defs.PARAM_SOURCES_PATH] \
-            if defs.PARAM_SOURCES_PATH in c else False
-        package_path = c[defs.PARAM_PACKAGE_PATH] \
-            if defs.PARAM_PACKAGE_PATH in c else False
-        modules = c[defs.PARAM_MODULES] \
-            if defs.PARAM_MODULES in c else False
-        gems = pakcage[defs.PARAM_GEMS] \
-            if defs.PARAM_GEMS in c else False
-        overwrite = c[defs.PARAM_OVERWRITE_SOURCES] \
-            if defs.PARAM_OVERWRITE_SOURCES in c else True
+    # TODO: (TEST) remove auto_get param - it is no longer in use
+    source_repos = c[defs.PARAM_SOURCE_REPOS] \
+        if defs.PARAM_SOURCE_REPOS in c else False
+    source_ppas = c[defs.PARAM_SOURCE_PPAS] \
+        if defs.PARAM_SOURCE_PPAS in c else False
+    source_keys = c[defs.PARAM_SOURCE_KEYS] \
+        if defs.PARAM_SOURCE_KEYS in c else False
+    source_urls = c[defs.PARAM_SOURCE_URLS] \
+        if defs.PARAM_SOURCE_URLS in c else False
+    key_files = c[defs.PARAM_KEY_FILES_PATH] \
+        if defs.PARAM_KEY_FILES_PATH in c else False
+    reqs = c[defs.PARAM_REQS] \
+        if defs.PARAM_REQS in c else False
+    prereqs = c[defs.PARAM_PREREQS] \
+        if defs.PARAM_PREREQS in c else False
+    dst_path = c[defs.PARAM_SOURCES_PATH] \
+        if defs.PARAM_SOURCES_PATH in c else False
+    package_path = c[defs.PARAM_PACKAGE_PATH] \
+        if defs.PARAM_PACKAGE_PATH in c else False
+    modules = c[defs.PARAM_MODULES] \
+        if defs.PARAM_MODULES in c else False
+    gems = pakcage[defs.PARAM_GEMS] \
+        if defs.PARAM_GEMS in c else False
+    overwrite = c[defs.PARAM_OVERWRITE_SOURCES] \
+        if defs.PARAM_OVERWRITE_SOURCES in c else True
 
-        common = CommonHandler()
-        if dist()[0] in ('centos'):
-            repo_handler = YumHandler()
-        elif dist()[0] in ('Ubuntu', 'debian'):
-            repo_handler = AptHandler()
-        dl_handler = DownloadsHandler()
-        py_handler = PythonHandler()
-        ruby_handler = RubyHandler()
+    common = CommonHandler()
+    if centos:
+        repo_handler = YumHandler()
+    elif debian:
+        repo_handler = AptHandler()
+    dl_handler = DownloadsHandler()
+    py_handler = PythonHandler()
+    ruby_handler = RubyHandler()
 
-        # should the source dir be removed before retrieving package contents?
-        if overwrite:
-            lgr.info('overwrite enabled. removing directory before retrieval')
-            common.rmdir(dst_path)
-        else:
-            if common.is_dir(dst_path):
-                lgr.error('the destination directory for this package already '
-                          'exists and overwrite is disabled.')
-        # create the directories required for package creation...
-        if not common.is_dir(package_path + '/archives'):
-            common.mkdir(package_path + '/archives')
-        if not common.is_dir(dst_path):
-            common.mkdir(dst_path)
-
-        if prereqs:
-            repo_handler.installs(prereqs)
-        # if there's a source repo to add... add it.
-        if source_repos:
-            repo_handler.add_src_repos(source_repos)
-        # if there's a source ppa to add... add it?
-        if source_ppas:
-            repo_handler.add_ppa_repos(source_ppas)
-        # get a key for the repo if it's required..
-        if source_keys:
-            dl_handler.wgets(source_keys, dir=dst_path)
-            for key in source_keys:
-                key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
-                repo_handler.add_key(dst_path + '/' + key_file)
-        # retrieve the source for the package
-        if source_urls:
-            for source_url in source_urls:
-                # retrieve url file extension
-                url_ext = os.path.splitext(source_url)[1]
-                # if the source file is an rpm or deb, we want to download
-                # it to the archives folder. yes, it's a dreadful solution...
-                if not url_ext == '.rpm' and not url_ext == '.deb':
-                    url_ext = False
-                dl_handler.wget(source_url, dir=dst_path,
-                                url_pkg_ext=url_ext)
-        # add the repo key
-        if key_files:
-            repo_handler.add_keys(key_files)
-            repo_handler.update()
-        # download any other requirements if they exist
-        if reqs:
-            # TODO: (FEAT) add support for installing reqs from urls
-            repo_handler.downloads(reqs, dst_path)
-        # download relevant python modules...
-        if modules:
-            py_handler.get_python_modules(modules, dst_path)
-        # download relevant ruby gems...
-        if gems:
-            ruby_handler.get_ruby_gems(gems, dst_path)
+    # should the source dir be removed before retrieving package contents?
+    if overwrite:
+        lgr.info('overwrite enabled. removing directory before retrieval')
+        common.rmdir(dst_path)
     else:
-        lgr.info('component is set to manual retrieval')
+        if common.is_dir(dst_path):
+            lgr.error('the destination directory for this package already '
+                      'exists and overwrite is disabled.')
+    # create the directories required for package creation...
+    if not common.is_dir(package_path + '/archives'):
+        common.mkdir(package_path + '/archives')
+    if not common.is_dir(dst_path):
+        common.mkdir(dst_path)
+
+    if prereqs:
+        repo_handler.installs(prereqs)
+    # if there's a source repo to add... add it.
+    if source_repos:
+        repo_handler.add_src_repos(source_repos)
+    # if there's a source ppa to add... add it?
+    if source_ppas:
+        repo_handler.add_ppa_repos(source_ppas)
+    # get a key for the repo if it's required..
+    if source_keys:
+        dl_handler.wgets(source_keys, dir=dst_path)
+        for key in source_keys:
+            key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
+            repo_handler.add_key(dst_path + '/' + key_file)
+    # retrieve the source for the package
+    if source_urls:
+        for source_url in source_urls:
+            # retrieve url file extension
+            url_ext = os.path.splitext(source_url)[1]
+            # if the source file is an rpm or deb, we want to download
+            # it to the archives folder. yes, it's a dreadful solution...
+            if not url_ext == '.rpm' and not url_ext == '.deb':
+                url_ext = False
+            dl_handler.wget(source_url, dir=dst_path,
+                            url_pkg_ext=url_ext)
+    # add the repo key
+    if key_files:
+        repo_handler.add_keys(key_files)
+        repo_handler.update()
+    # download any other requirements if they exist
+    if reqs:
+        # TODO: (FEAT) add support for installing reqs from urls
+        repo_handler.downloads(reqs, dst_path)
+    # download relevant python modules...
+    if modules:
+        py_handler.get_python_modules(modules, dst_path)
+    # download relevant ruby gems...
+    if gems:
+        ruby_handler.get_ruby_gems(gems, dst_path)
 
 
 def pack(component):
@@ -376,159 +392,157 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: (DEPR) remove auto_pack param - it is no longer in use
-    auto_pack = c[defs.PARAM_AUTO_PACK] \
-        if defs.PARAM_AUTO_PACK in c else True
-    if auto_pack:
-        name = c[defs.PARAM_NAME] \
-            if defs.PARAM_NAME in c else False
-        version = c[defs.PARAM_VERSION] \
-            if defs.PARAM_VERSION in c else False
-        bootstrap_template = c[defs.PARAM_BOOTSTRAP_TEMPLATE_PATH] \
-            if defs.PARAM_BOOTSTRAP_TEMPLATE_PATH in c else False
-        bootstrap_script = c[defs.PARAM_BOOTSTRAP_SCRIPT_PATH] \
-            if defs.PARAM_BOOTSTRAP_SCRIPT_PATH in c else False
-        bootstrap_script_in_pkg = cwd + '/' + \
-            c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH] \
-            if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
-        src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
-            if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
-        # TODO: (IMPRV) identify dst_pkg_type by distro if not specified
-        # TODO: (IMPRV) explicitly.
-        dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
-            if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
-        sources_path = c[defs.PARAM_SOURCES_PATH] \
-            if defs.PARAM_SOURCES_PATH in c else False
-        # TODO: (STPD) JEEZ... this archives thing is dumb...
-        # TODO: (STPD) replace it with a normal destination path
-        tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
-            if defs.PARAM_SOURCES_PATH else False
-        package_path = c[defs.PARAM_PACKAGE_PATH] \
-            if defs.PARAM_PACKAGE_PATH in c else False
-        depends = c[defs.PARAM_DEPENDS] \
-            if defs.PARAM_DEPENDS in c else False
-        config_templates = c[defs.PARAM_CONFIG_TEMPLATE_CONFIG] \
-            if defs.PARAM_CONFIG_TEMPLATE_CONFIG in c else False
-        overwrite = c[defs.PARAM_OVERWRITE_OUTPUT_PACKAGE] \
-            if defs.PARAM_OVERWRITE_OUTPUT_PACKAGE in c else True
-        mock = c[defs.PARAM_MOCK] if defs.PARAM_MOCK in c else False
+    # TODO: (TEST) remove auto_pack param - it is no longer in use
+    name = c[defs.PARAM_NAME] \
+        if defs.PARAM_NAME in c else False
+    version = c[defs.PARAM_VERSION] \
+        if defs.PARAM_VERSION in c else False
+    bootstrap_template = c[defs.PARAM_BOOTSTRAP_TEMPLATE_PATH] \
+        if defs.PARAM_BOOTSTRAP_TEMPLATE_PATH in c else False
+    bootstrap_script = c[defs.PARAM_BOOTSTRAP_SCRIPT_PATH] \
+        if defs.PARAM_BOOTSTRAP_SCRIPT_PATH in c else False
+    bootstrap_script_in_pkg = cwd + '/' + \
+        c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH] \
+        if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
+    src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
+        if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
+    # TODO: (TEST) identify dst_pkg_type by distro if not specified
+    # TODO: (TEST) explicitly.
+    dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
+        if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
+    if not dst_pkg_type:
+        if centos:
+            dst_pkg_type = 'rpm'
+        elif debian:
+            dst_pkg_type = 'deb'
+    sources_path = c[defs.PARAM_SOURCES_PATH] \
+        if defs.PARAM_SOURCES_PATH in c else False
+    # TODO: (STPD) JEEZ... this archives thing is dumb...
+    # TODO: (STPD) replace it with a normal destination path
+    tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
+        if defs.PARAM_SOURCES_PATH else False
+    package_path = c[defs.PARAM_PACKAGE_PATH] \
+        if defs.PARAM_PACKAGE_PATH in c else False
+    depends = c[defs.PARAM_DEPENDS] \
+        if defs.PARAM_DEPENDS in c else False
+    config_templates = c[defs.PARAM_CONFIG_TEMPLATE_CONFIG] \
+        if defs.PARAM_CONFIG_TEMPLATE_CONFIG in c else False
+    overwrite = c[defs.PARAM_OVERWRITE_OUTPUT_PACKAGE] \
+        if defs.PARAM_OVERWRITE_OUTPUT_PACKAGE in c else True
+    mock = c[defs.PARAM_MOCK] if defs.PARAM_MOCK in c else False
+    keep_sources = c[defs.PARAM_KEEP_SOURCES] \
+        if defs.PARAM_KEEP_SOURCES in c else True
 
-        common = CommonHandler()
-        tmp_handler = TemplateHandler()
+    common = CommonHandler()
+    tmp_handler = TemplateHandler()
 
-        # can't use sources_path == tmp_pkg_path for the package... duh!
-        if sources_path == tmp_pkg_path:
-            lgr.error('source and destination paths must'
-                      ' be different to avoid conflicts!')
-        lgr.info('cleaning up before packaging...')
+    # can't use sources_path == tmp_pkg_path for the package... duh!
+    if sources_path == tmp_pkg_path:
+        lgr.error('source and destination paths must'
+                  ' be different to avoid conflicts!')
+    lgr.info('cleaning up before packaging...')
 
-        # should the packaging process overwrite the previous packages?
-        if overwrite:
-            lgr.info('overwrite enabled. removing directory before packaging')
-            common.rm('{0}/{1}*'.format(package_path, name))
-        # if the package is ...
-        if src_pkg_type:
-            common.rmdir(tmp_pkg_path)
-            common.mkdir(tmp_pkg_path)
+    # should the packaging process overwrite the previous packages?
+    if overwrite:
+        lgr.info('overwrite enabled. removing directory before packaging')
+        common.rm('{0}/{1}*'.format(package_path, name))
+    # if the package is ...
+    if src_pkg_type:
+        common.rmdir(tmp_pkg_path)
+        common.mkdir(tmp_pkg_path)
 
-        lgr.info('generating package scripts and config files...')
-        # if there are configuration templates to generate configs from...
-        if config_templates:
-            tmp_handler.generate_configs(c)
-        # if bootstrap scripts are required, generate them.
-        if bootstrap_script or bootstrap_script_in_pkg:
-            # TODO: (IMPRV) handle cases where a bootstrap script is not a
-            # TODO: (IMPRV) template.
-            # bootstrap_script - bootstrap script to be attached to the package
-            if bootstrap_template and bootstrap_script:
-                tmp_handler.create_bootstrap_script(c, bootstrap_template,
-                                                    bootstrap_script)
-            # bootstrap_script_in_pkg - same but for putting inside the package
-            if bootstrap_template and bootstrap_script_in_pkg:
-                tmp_handler.create_bootstrap_script(c, bootstrap_template,
-                                                    bootstrap_script_in_pkg)
-                # if it's in_pkg, grant it exec permissions and copy it to the
-                # package's path.
-                if bootstrap_script_in_pkg:
-                    lgr.debug('granting execution permissions')
-                    do('chmod +x {0}'.format(bootstrap_script_in_pkg))
-                    lgr.debug('copying bootstrap script to package directory')
-                    common.cp(bootstrap_script_in_pkg, sources_path)
-        lgr.info('packing up component...')
-        # if a package needs to be created (not just files copied)...
-        if src_pkg_type:
-            lgr.info('packing {0}'.format(name))
-            # if the source dir for the package exists
-            if common.is_dir(sources_path):
-                # change the path to the destination path, since fpm doesn't
-                # accept (for now) a dst dir, but rather creates the package in
-                # the cwd.
-                with lcd(tmp_pkg_path):
-                    # these will handle the different packaging cases based on
-                    # the requirement. for instance, if a bootstrap script
-                    # exists, and there are dependencies for the package, run
-                    # fpm with the relevant flags.
-                    if not mock:
-                        # TODO: build fpm commands options before running fpm
-                        # TODO: maybe map config params to fpm flags...
-                        # TODO: (IMPRV) redundant. it's covered below.
-                        if bootstrap_script_in_pkg and dst_pkg_type == "tar":
-                            do(
-                                'sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'
-                                .format(src_pkg_type, "tar", name, version,
-                                        sources_path))
-                        elif bootstrap_script and not depends:
-                            do('sudo fpm -s {0} -t {1} --after-install {2}'
-                               ' -n {3} -v {4} -f {5}'
-                               .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                                       + '/' + bootstrap_script, name, version,
-                                       sources_path))
-                        elif bootstrap_script and depends:
-                            lgr.debug('package dependencies are: {0}'
-                                      .format(", ".join(depends)))
-                            dep_str = "-d " + " -d ".join(depends)
-                            do('sudo fpm -s {0} -t {1} --after-install {2} {3}'
-                               ' -n {4} -v {5} -f {6}'
-                               .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                                       + '/' + bootstrap_script, dep_str,
-                                       name, version, sources_path))
-                        # else just create a package with default flags...
-                        else:
-                            if dst_pkg_type.startswith("tar"):
-                                do('sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'  # NOQA
-                                   .format(src_pkg_type, "tar", name, version,
-                                           sources_path))
-                            else:
-                                do(
-                                    'sudo fpm -s {0} -t {1} -n {2} -v {3} '
-                                    '-f {4}'
-                                    .format(src_pkg_type, dst_pkg_type, name,
-                                            version, sources_path))
-                            if dst_pkg_type == "tar.gz":
-                                do('sudo gzip {0}*'.format(name))
-                        # and check if the packaging process succeeded.
+    lgr.info('generating package scripts and config files...')
+    # if there are configuration templates to generate configs from...
+    if config_templates:
+        tmp_handler.generate_configs(c)
+    # if bootstrap scripts are required, generate them.
+    if bootstrap_script or bootstrap_script_in_pkg:
+        # TODO: (TEST) handle cases where a bootstrap script is not a
+        # TODO: (TEST) template.
+        # bootstrap_script - bootstrap script to be attached to the package
+        if bootstrap_template and bootstrap_script:
+            tmp_handler.create_bootstrap_script(c, bootstrap_template,
+                                                bootstrap_script)
+        # bootstrap_script_in_pkg - same but for putting inside the package
+        if bootstrap_template and bootstrap_script_in_pkg:
+            tmp_handler.create_bootstrap_script(c, bootstrap_template,
+                                                bootstrap_script_in_pkg)
+            # if it's in_pkg, grant it exec permissions and copy it to the
+            # package's path.
+            if bootstrap_script_in_pkg:
+                lgr.debug('granting execution permissions')
+                do('chmod +x {0}'.format(bootstrap_script_in_pkg))
+                lgr.debug('copying bootstrap script to package directory')
+                common.cp(bootstrap_script_in_pkg, sources_path)
+    lgr.info('packing up component...')
+    # if a package needs to be created (not just files copied)...
+    if src_pkg_type:
+        lgr.info('packing {0}'.format(name))
+        # if the source dir for the package exists
+        if common.is_dir(sources_path):
+            # change the path to the destination path, since fpm doesn't
+            # accept (for now) a dst dir, but rather creates the package in
+            # the cwd.
+            with lcd(tmp_pkg_path):
+                # these will handle the different packaging cases based on
+                # the requirement. for instance, if a bootstrap script
+                # exists, and there are dependencies for the package, run
+                # fpm with the relevant flags.
+                if not mock:
+                    # TODO: (FEAT) build fpm commands options before running
+                    # TODO: (FEAT) fpm maybe map config params to fpm flags...
+                    if bootstrap_script and not depends:
+                        do('sudo fpm -s {0} -t {1} --after-install {2}'
+                           ' -n {3} -v {4} -f {5}'
+                           .format(src_pkg_type, dst_pkg_type, os.getcwd()
+                                   + '/' + bootstrap_script, name, version,
+                                   sources_path))
+                    elif bootstrap_script and depends:
+                        lgr.debug('package dependencies are: {0}'
+                                  .format(", ".join(depends)))
+                        dep_str = "-d " + " -d ".join(depends)
+                        do('sudo fpm -s {0} -t {1} --after-install {2} {3}'
+                           ' -n {4} -v {5} -f {6}'
+                           .format(src_pkg_type, dst_pkg_type, os.getcwd()
+                                   + '/' + bootstrap_script, dep_str,
+                                   name, version, sources_path))
+                    # else just create a package with default flags...
                     else:
-                        # TODO: (FEAT) create mock package
-                        return
-            # apparently, the src for creation the package doesn't exist...
-            # what can you do?
-            else:
-                lgr.error('sources dir {0} does\'nt exist, termintating...'
-                          .format(sources_path))
-                # maybe bluntly exit since this is all irrelevant??
-                # TODO: (IMPRV) raise instead of exiting.
-                sys.exit(1)
+                        if dst_pkg_type.startswith("tar"):
+                            do('sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'  # NOQA
+                               .format(src_pkg_type, "tar", name, version,
+                                       sources_path))
+                        else:
+                            do(
+                                'sudo fpm -s {0} -t {1} -n {2} -v {3} '
+                                '-f {4}'
+                                .format(src_pkg_type, dst_pkg_type, name,
+                                        version, sources_path))
+                        if dst_pkg_type == "tar.gz":
+                            do('sudo gzip {0}*'.format(name))
+                    # and check if the packaging process succeeded.
+                else:
+                    # TODO: (FEAT) create mock package
+                    return
+        # apparently, the src for creation the package doesn't exist...
+        # what can you do?
+        else:
+            lgr.error('sources dir {0} does\'nt exist, termintating...'
+                      .format(sources_path))
+            # maybe bluntly exit since this is all irrelevant??
+            # TODO: (TEST) raise instead of exiting.
+            raise PackagerError('sources dir missing')
 
-        # make sure the final destination for the package exists..
-        if not common.is_dir(package_path):
-            common.mkdir(package_path)
-        lgr.info("isolating archives...")
-        # and then copy the final package over..
-        common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
-        lgr.info('package creation completed successfully!')
-        # TODO: (IMPRV) remove temporary package
-    else:
-        lgr.info('package is set to be packaged manually')
+    # make sure the final destination for the package exists..
+    if not common.is_dir(package_path):
+        common.mkdir(package_path)
+    lgr.info("isolating archives...")
+    # and then copy the final package over..
+    common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
+    lgr.info('package creation completed successfully!')
+    # TODO: (TEST) add keep_sources flag in components file.
+    if not keep_sources:
+        common.rmdir(sources_path)
 
 
 def do(command, attempts=2, sleep_time=3,
@@ -1042,6 +1056,8 @@ class AptHandler(CommonHandler):
         # TODO: (IMPRV) add an is-package-installed check. if it is
         # TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
         # TODO: (IMPRV) install.
+        # TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+        # TODO: for downloading requirements
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
         return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
                   .format(pkg, dir))
@@ -1439,3 +1455,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+else:
+    if check_distro() in ('centos'):
+        rhel = True
+    elif check_distro() in ('Ubuntu', 'debian'):
+        debian = True
