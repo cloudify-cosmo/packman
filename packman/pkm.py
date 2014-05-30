@@ -17,9 +17,9 @@
 """Script to run packman via command line
 
 Usage:
-    pkm get [--components=<list> --components-file=<path> --exclude=<list>]
-    pkm pack [--components=<list> --components-file=<path> --exclude=<list>]
-    pkm make [--components=<list> --components-file=<path> --exclude=<list>]
+    pkm get [--components=<list> --components-file=<path> --exclude=<list> -v]
+    pkm pack [--components=<list> --components-file=<path> --exclude=<list> -v]
+    pkm make [--components=<list> --components-file=<path> --exclude=<list> -v]
     pkm --version
 
 Arguments:
@@ -46,8 +46,6 @@ from packman.packman import check_distro
 
 def main(test_options=None):
     """Main entry point for script."""
-    # TODO: (TEST) currently, distrib is checked thruout the code.
-    # TODO: (TEST) change it to once.
     check_distro(verify=True)
     import pkg_resources
     version = None

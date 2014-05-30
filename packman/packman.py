@@ -282,7 +282,6 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: (TEST) remove auto_get param - it is no longer in use
     source_repos = c[defs.PARAM_SOURCE_REPOS] \
         if defs.PARAM_SOURCE_REPOS in c else False
     source_ppas = c[defs.PARAM_SOURCE_PPAS] \
@@ -415,7 +414,6 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
-    # TODO: (TEST) remove auto_pack param - it is no longer in use
     name = c[defs.PARAM_NAME] \
         if defs.PARAM_NAME in c else False
     version = c[defs.PARAM_VERSION] \
@@ -429,10 +427,9 @@ def pack(component):
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
         if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
-    # TODO: (TEST) identify dst_pkg_type by distro if not specified
-    # TODO: (TEST) explicitly.
     dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
         if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
+    # identifies pkg type automatically if not specified explicitly
     if not dst_pkg_type:
         if centos:
             dst_pkg_type = 'rpm'
@@ -480,8 +477,6 @@ def pack(component):
         tmp_handler.generate_configs(c)
     # if bootstrap scripts are required, generate them.
     if bootstrap_script or bootstrap_script_in_pkg:
-        # TODO: (TEST) handle cases where a bootstrap script is not a
-        # TODO: (TEST) template.
         # bootstrap_script - bootstrap script to be attached to the package
         if bootstrap_template and bootstrap_script:
             tmp_handler.create_bootstrap_script(c, bootstrap_template,
@@ -512,48 +507,11 @@ def pack(component):
                 # exists, and there are dependencies for the package, run
                 # fpm with the relevant flags.
                 if not mock:
-                    # TODO: (FEAT) build fpm commands options before running
-                    # TODO: (FEAT) fpm maybe map config params to fpm flags...
                     i = fpmHandler(name, src_pkg_type, dst_pkg_type,
                                    sources_path, sudo=True)
-                    # params = {
-                    #     "version" : version,
-                    #     "force" : overwrite,
-                    #     "depends" : depends,
-                    #     "after_install" : bootstrap_script,
-                    #     "chdir" : False,
-                    #     "before_install" : False,
-                    # }
                     i.fpm(version=version, force=overwrite, depends=depends,
                           after_install=bootstrap_script, chdir=False,
                           before_install=None)
-                    # if bootstrap_script and not depends:
-                    #     do('sudo fpm -s {0} -t {1} --after-install {2}'
-                    #        ' -n {3} -v {4} -f {5}'
-                    #        .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                    #                + '/' + bootstrap_script, name, version,
-                    #                sources_path))
-                    # elif bootstrap_script and depends:
-                    #     lgr.debug('package dependencies are: {0}'
-                    #               .format(", ".join(depends)))
-                    #     dep_str = "-d " + " -d ".join(depends)
-                    #     do('sudo fpm -s {0} -t {1} --after-install {2} {3}'
-                    #        ' -n {4} -v {5} -f {6}'
-                    #        .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                    #                + '/' + bootstrap_script, dep_str,
-                    #                name, version, sources_path))
-                    # # else just create a package with default flags...
-                    # else:
-                    #     if dst_pkg_type.startswith("tar"):
-                    #         do('sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'  # NOQA
-                    #            .format(src_pkg_type, "tar", name, version,
-                    #                    sources_path))
-                    #     else:
-                    #         do(
-                    #             'sudo fpm -s {0} -t {1} -n {2} -v {3} '
-                    #             '-f {4}'
-                    #             .format(src_pkg_type, dst_pkg_type, name,
-                    #                     version, sources_path))
                     if dst_pkg_type == "tar.gz":
                         do('sudo gzip {0}*'.format(name))
                     # and check if the packaging process succeeded.
@@ -566,7 +524,6 @@ def pack(component):
             lgr.error('sources dir {0} does\'nt exist, termintating...'
                       .format(sources_path))
             # maybe bluntly exit since this is all irrelevant??
-            # TODO: (TEST) raise instead of exiting.
             raise PackagerError('sources dir missing')
 
     # make sure the final destination for the package exists..
@@ -576,7 +533,6 @@ def pack(component):
     # and then copy the final package over..
     common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
-    # TODO: (TEST) add keep_sources flag in components file.
     if not keep_sources:
         common.rmdir(sources_path)
 
@@ -731,7 +687,6 @@ class CommonHandler():
         return do('cp -R {0} {1}'.format(src, dst), sudo=sudo) if recurse \
             else do('cp {0} {1}'.format(src, dst), sudo=sudo)
 
-    # TODO: (TEST) depracate make_package_paths...
     def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
         """
         tars an input file or directory
@@ -961,7 +916,6 @@ class YumHandler(CommonHandler):
         :param string package: package to download
         :param string dir: dir to download to
         """
-        # TODO: (TEST) add an is-package-installed check. if it is,
         # TODO: (TEST) run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
         # TODO: (BUG) yum download exits with an error even if the download
