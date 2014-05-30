@@ -526,7 +526,7 @@ def pack(component):
                     # }
                     i.fpm(version=version, force=overwrite, depends=depends,
                           after_install=bootstrap_script, chdir=False,
-                          before_install=False)
+                          before_install=None)
                     # if bootstrap_script and not depends:
                     #     do('sudo fpm -s {0} -t {1} --after-install {2}'
                     #        ' -n {3} -v {4} -f {5}'
