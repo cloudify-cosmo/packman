@@ -515,7 +515,7 @@ def pack(component):
                     # TODO: (FEAT) build fpm commands options before running
                     # TODO: (FEAT) fpm maybe map config params to fpm flags...
                     i = fpmHandler(name, src_pkg_type, dst_pkg_type,
-                                   sources_path)
+                                   sources_path, sudo=True)
                     i.fpm(version=version, force=force, depends=depends,
                           after_install=bootstrap_script, chdir=False,
                           before_install=False)
@@ -754,7 +754,7 @@ class fpmHandler(CommonHandler):
     """
     packaging handler
     """
-    def __init__(self, sudo, name, source):
+    def __init__(self, name, input_type, output_type, source, sudo):
         self.sudo = sudo
         self.name = name
         self.output_type = 'tar' if self.output_type.startswith('tar') \
