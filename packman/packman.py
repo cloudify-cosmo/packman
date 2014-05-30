@@ -516,15 +516,17 @@ def pack(component):
                     # TODO: (FEAT) fpm maybe map config params to fpm flags...
                     i = fpmHandler(name, src_pkg_type, dst_pkg_type,
                                    sources_path, sudo=True)
-                    params = {
-                        "version": version,
-                        "force": overwrite,
-                        "depends": depends,
-                        "after_install": bootstrap_script,
-                        "chdir": False,
-                        "before_install": False,
-                    }
-                    i.fpm(params)
+                    # params = {
+                    #     "version" : version,
+                    #     "force" : overwrite,
+                    #     "depends" : depends,
+                    #     "after_install" : bootstrap_script,
+                    #     "chdir" : False,
+                    #     "before_install" : False,
+                    # }
+                    i.fpm(version=version, force=overwrite, depends=depends,
+                          after_install=bootstrap_script, chdir=False,
+                          before_install=False)
                     # if bootstrap_script and not depends:
                     #     do('sudo fpm -s {0} -t {1} --after-install {2}'
                     #        ' -n {3} -v {4} -f {5}'
