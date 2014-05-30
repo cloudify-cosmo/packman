@@ -1474,6 +1474,6 @@ def main():
 if __name__ == '__main__':
     main()
 if check_distro() in ('centos'):
-    rhel = True
+    centos = True
 elif check_distro() in ('Ubuntu', 'debian'):
     debian = True
