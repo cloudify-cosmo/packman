@@ -790,7 +790,7 @@ class fpmHandler(CommonHandler):
                 os.getcwd() + '/' + kwargs['before_install'])
         # MUST BE LAST
         self.command += self.source
-        lgr.debug('fpm cmd is: {}'.format(command))
+        lgr.debug('fpm cmd is: {}'.format(self.command))
 
     def fpm(self, **kwargs):
         self._build_fpm_cmd_string(**kwargs)
