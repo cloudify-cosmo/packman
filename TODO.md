@@ -7,53 +7,54 @@
 - nose-1.3.3-py2.7.egg/nose/inspector.py:163:    #  TODO
 - packman/pkm.py:49:    #  TODO: (TEST) currently, distrib is checked thruout the code.
 - packman/pkm.py:50:    #  TODO: (TEST) change it to once.
-- packman/tests/test_packman.py:284:    #  TODO: (TEST) add wget archives dir test
-- packman/tests/test_packman.py:514:    #  TODO: (TEST) add apt handler tests
-- packman/tests/test_packman.py:515:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
+- packman/tests/test_packman.py:290:    #  TODO: (TEST) add wget archives dir test
+- packman/tests/test_packman.py:557:    #  TODO: (TEST) add apt handler tests
+- packman/tests/test_packman.py:558:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
 - packman/packman.py:17:    #  TODO: (FEAT) add http://megastep.org/makeself/ support
 - packman/packman.py:18:    #  TODO: (FEAT) add http://semver.org/ support
 - packman/packman.py:19:    #  TODO: (READ) review https://speakerdeck.com/schisamo/eat-the-whole-bowl-building-a-full-stack-installer-with-omnibus  # NOQA
 - packman/packman.py:20:    #  TODO: (IMPRV) redo RepoHandler implementation with generic one. should pull all repo handling commands from config  # NOQA
 - packman/packman.py:59:    #  TODO: (IMPRV) only perform file related actions if file handler is
 - packman/packman.py:60:    #  TODO: (IMPRV) defined.
-- packman/packman.py:262:    #  TODO: (TEST) remove auto_get param - it is no longer in use
-- packman/packman.py:342:    #  TODO: (FEAT) add support for installing reqs from urls
-- packman/packman.py:395:    #  TODO: (TEST) remove auto_pack param - it is no longer in use
-- packman/packman.py:409:    #  TODO: (TEST) identify dst_pkg_type by distro if not specified
-- packman/packman.py:410:    #  TODO: (TEST) explicitly.
-- packman/packman.py:420:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
-- packman/packman.py:421:    #  TODO: (STPD) replace it with a normal destination path
-- packman/packman.py:460:    #  TODO: (TEST) handle cases where a bootstrap script is not a
-- packman/packman.py:461:    #  TODO: (TEST) template.
-- packman/packman.py:492:    #  TODO: (FEAT) build fpm commands options before running
-- packman/packman.py:493:    #  TODO: (FEAT) fpm maybe map config params to fpm flags...
-- packman/packman.py:525:    #  TODO: (FEAT) create mock package
-- packman/packman.py:533:    #  TODO: (TEST) raise instead of exiting.
-- packman/packman.py:543:    #  TODO: (TEST) add keep_sources flag in components file.
-- packman/packman.py:589:    #  TODO: (FEAT) apply verbosity according to the verbose flag in pkm
-- packman/packman.py:590:    #  TODO: (FEAT) instead of a verbose flag in the config.
-- packman/packman.py:677:    #  TODO: (IMPRV) handle multiple files differently
-- packman/packman.py:701:    #  TODO: (TEST) depracate make_package_paths...
-- packman/packman.py:843:    #  TODO: (FEAT) support virtualenv --relocate OR
-- packman/packman.py:844:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:878:    #  TODO: (TEST) add support for ruby in different environments
-- packman/packman.py:928:    #  TODO: (TEST) add an is-package-installed check. if it is,
-- packman/packman.py:929:    #  TODO: (TEST) run yum reinstall instead of yum install.
-- packman/packman.py:931:    #  TODO: (BUG) yum download exits with an error even if the download
-- packman/packman.py:932:    #  TODO: (BUG) succeeded due to a non-zero error message.
-- packman/packman.py:933:    #  TODO: (FEAT) add yum enable-repo option
-- packman/packman.py:934:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:935:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
-- packman/packman.py:1047:    #  TODO: (IMPRV) add an is-package-installed check. if it is
-- packman/packman.py:1048:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
-- packman/packman.py:1049:    #  TODO: (IMPRV) install.
-- packman/packman.py:1050:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-- packman/packman.py:1051:    #  TODO: for downloading requirements
-- packman/packman.py:1185:    #  TODO: (IMPRV) think about moving the file ext check to the get
-- packman/packman.py:1186:    #  TODO: (IMPRV) method instead.. maybe it's a better solution
-- packman/packman.py:1207:    #  TODO: (FEAT) implement curl?
-- packman/packman.py:1230:    #  TODO: (IMPRV) replace this with method generate_from_template()..
-- packman/packman.py:1427:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
+- packman/packman.py:223:    #  TODO: the list is written with this in mind. maybe we can remove?
+- packman/packman.py:285:    #  TODO: (TEST) remove auto_get param - it is no longer in use
+- packman/packman.py:365:    #  TODO: (FEAT) add support for installing reqs from urls
+- packman/packman.py:418:    #  TODO: (TEST) remove auto_pack param - it is no longer in use
+- packman/packman.py:432:    #  TODO: (TEST) identify dst_pkg_type by distro if not specified
+- packman/packman.py:433:    #  TODO: (TEST) explicitly.
+- packman/packman.py:443:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
+- packman/packman.py:444:    #  TODO: (STPD) replace it with a normal destination path
+- packman/packman.py:483:    #  TODO: (TEST) handle cases where a bootstrap script is not a
+- packman/packman.py:484:    #  TODO: (TEST) template.
+- packman/packman.py:515:    #  TODO: (FEAT) build fpm commands options before running
+- packman/packman.py:516:    #  TODO: (FEAT) fpm maybe map config params to fpm flags...
+- packman/packman.py:553:    #  TODO: (FEAT) create mock package
+- packman/packman.py:561:    #  TODO: (TEST) raise instead of exiting.
+- packman/packman.py:571:    #  TODO: (TEST) add keep_sources flag in components file.
+- packman/packman.py:617:    #  TODO: (FEAT) apply verbosity according to the verbose flag in pkm
+- packman/packman.py:618:    #  TODO: (FEAT) instead of a verbose flag in the config.
+- packman/packman.py:702:    #  TODO: (IMPRV) handle multiple files differently
+- packman/packman.py:726:    #  TODO: (TEST) depracate make_package_paths...
+- packman/packman.py:871:    #  TODO: (FEAT) support virtualenv --relocate OR
+- packman/packman.py:872:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/packman.py:906:    #  TODO: (TEST) add support for ruby in different environments
+- packman/packman.py:956:    #  TODO: (TEST) add an is-package-installed check. if it is,
+- packman/packman.py:957:    #  TODO: (TEST) run yum reinstall instead of yum install.
+- packman/packman.py:959:    #  TODO: (BUG) yum download exits with an error even if the download
+- packman/packman.py:960:    #  TODO: (BUG) succeeded due to a non-zero error message.
+- packman/packman.py:961:    #  TODO: (FEAT) add yum enable-repo option
+- packman/packman.py:962:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+- packman/packman.py:963:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
+- packman/packman.py:1075:    #  TODO: (IMPRV) add an is-package-installed check. if it is
+- packman/packman.py:1076:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
+- packman/packman.py:1077:    #  TODO: (IMPRV) install.
+- packman/packman.py:1078:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+- packman/packman.py:1079:    #  TODO: for downloading requirements
+- packman/packman.py:1213:    #  TODO: (IMPRV) think about moving the file ext check to the get
+- packman/packman.py:1214:    #  TODO: (IMPRV) method instead.. maybe it's a better solution
+- packman/packman.py:1235:    #  TODO: (FEAT) implement curl?
+- packman/packman.py:1258:    #  TODO: (IMPRV) replace this with method generate_from_template()..
+- packman/packman.py:1455:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
 - vagrant/provision.sh:6:    #  TODO: check if make/git are required by default
 - vagrant/provision.sh:21:    #  TODO: add virtualenv to provisioning process
 - vagrant/provision.sh:24:    #  TODO: add bash completion support using docopt-completion
