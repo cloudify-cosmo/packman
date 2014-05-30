@@ -23,12 +23,18 @@ from packman.packman import TemplateHandler
 from packman.packman import PackagerError
 from packman.packman import init_logger
 from packman.packman import get_component_config
+from packman.packman import check_distro
+from packman.packman import SUPPORTED_DISTROS
+from packman.packman import set_global_verbosity_level
+
 
 import unittest
 import os
 from functools import wraps
 from fabric.api import hide
 from testfixtures import log_capture
+import logging
+from platform import dist
 
 
 TEST_DIR = '{0}/test_dir'.format(os.path.expanduser("~"))
@@ -440,9 +446,31 @@ class TestBaseMethods(unittest.TestCase):
 
     @log_capture()
     def test_logger(self, capture):
-        lgr = init_logger()
+        lgr = init_logger(base_level=logging.DEBUG)
         lgr.debug('TEST_LOGGER_OUTPUT')
         capture.check(('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
+
+    def test_logger_bad_config(self):
+        try:
+            init_logger(logging_config={'x': 'y'})
+        except SystemExit as ex:
+            self.assertIn('could not init', str(ex))
+
+    @log_capture()
+    def test_set_global_verbosity_level(self, capture):
+        lgr = init_logger(base_level=logging.INFO)
+
+        set_global_verbosity_level(is_verbose_output=False)
+        lgr.debug('TEST_LOGGER_OUTPUT')
+        capture.check()
+        lgr.info('TEST_LOGGER_OUTPUT')
+        capture.check(('user', 'INFO', 'TEST_LOGGER_OUTPUT'))
+
+        set_global_verbosity_level(is_verbose_output=True)
+        lgr.debug('TEST_LOGGER_OUTPUT')
+        capture.check(
+            ('user', 'INFO', 'TEST_LOGGER_OUTPUT'),
+            ('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
 
     def test_get_component_config_dict(self):
         c = get_component_config('test_component', MOCK_PACKAGES_DICT)
@@ -476,6 +504,21 @@ class TestBaseMethods(unittest.TestCase):
                                  components_file='x')
         except PackagerError as ex:
             self.assertEqual(str(ex), 'missing components file')
+
+    def test_check_distro(self):
+        test_distro = dist()[0]
+        distro = check_distro()
+        self.assertEqual(distro, test_distro)
+
+    def test_check_distro_verify_success(self):
+        distro = check_distro(verify=True)
+        self.assertIn(distro, SUPPORTED_DISTROS)
+
+    def test_check_distro_verify_fail(self):
+        try:
+            check_distro(verify=True, supported='nodistro')
+        except RuntimeError as ex:
+            self.assertEqual(str(ex), 'distro not supported')
 
     # @dir
     # def test_pack(self):

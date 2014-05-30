@@ -32,8 +32,8 @@ Options:
     -c --components=<list>      Comma Separated list of component names
     -x --exclude=<list>         Comma Separated list of excluded components
     -f --components-file=<path> Components file path
-    --verbose                   a LOT of output (NOT YET IMPLEMENTED)
-    -v --version                Display current version of sandman and exit
+    -v --verbose                a LOT of output (NOT YET IMPLEMENTED)
+    --version                   Display current version of sandman and exit
 
 """
 
@@ -64,21 +64,25 @@ def main(test_options=None):
         packman_runner('pack',
                        options.get('--components-file'),
                        options.get('--components'),
-                       options.get('--exclude'))
+                       options.get('--exclude'),
+                       options.get('--verbose'))
     elif options['get']:
         packman_runner('get',
                        options.get('--components-file'),
                        options.get('--components'),
-                       options.get('--exclude'))
+                       options.get('--exclude'),
+                       options.get('--verbose'))
     elif options['make']:
         packman_runner('get',
                        options.get('--components-file'),
                        options.get('--components'),
-                       options.get('--exclude'))
+                       options.get('--exclude'),
+                       options.get('--verbose'))
         packman_runner('pack',
                        options.get('--components-file'),
                        options.get('--components'),
-                       options.get('--exclude'))
+                       options.get('--exclude'),
+                       options.get('--verbose'))
 
 
 if __name__ == '__main__':

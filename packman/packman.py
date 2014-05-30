@@ -73,8 +73,8 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
             os.makedirs(d)
         logging.config.dictConfig(logging_config)
         lgr = logging.getLogger('user')
-        lgr.setLevel(base_level) if not pkm_conf.VERBOSE \
-            else lgr.setLevel(verbose_level)
+        # lgr.setLevel(base_level) if not pkm_conf.VERBOSE \
+        lgr.setLevel(base_level)
         return lgr
     except ValueError as e:
         sys.exit('could not initialize logger.'
@@ -85,16 +85,28 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
 lgr = init_logger()
 
 
-def check_distro(verify=False):
+def set_global_verbosity_level(is_verbose_output=False):
+    """
+    sets the global verbosity level for console and the lgr logger.
+
+    :param bool is_verbose_output: should be output be verbose
+    """
+    global verbose_output
+    verbose_output = is_verbose_output
+    if verbose_output:
+        lgr.setLevel(logging.DEBUG)
+    # print 'level is: ' + str(lgr.getEffectiveLevel())
+
+
+def check_distro(verify=False, supported=SUPPORTED_DISTROS):
     distro = dist()[0]
     lgr.debug('Distribution Identified: {}'.format(distro))
-    if verify:
-        if distro not in SUPPORTED_DISTROS:
-            lgr.debug('Your distribution is not supported.'
-                      'Supported Disributions are:')
-            for distro in dist_list:
-                print('    {}'.format(distro))
-            sys.exit(1)
+    if verify and distro not in supported:
+        lgr.debug('Your distribution is not supported.'
+                  'Supported Disributions are:')
+        for distro in supported:
+            print('    {}'.format(distro))
+        raise RuntimeError('distro not supported')
     return distro
 
 
@@ -133,7 +145,7 @@ def get_component_config(component_name, components_dict={},
 
 
 def packman_runner(action='pack', components_file=None, components=None,
-                   excluded=None):
+                   excluded=None, verbose=False):
     """
     logic for running packman. mainly called from the cli (pkm.py)
 
@@ -141,6 +153,7 @@ def packman_runner(action='pack', components_file=None, components=None,
     as `components_file`.
 
     if `components` are supplied, they will be iterated over.
+    if `excluded` are supplied, they will be ignored.
 
     if a pack.py or get.py files are present, and an action_component
     function exists in the files, those functions will be used.
@@ -151,8 +164,12 @@ def packman_runner(action='pack', components_file=None, components=None,
     :param string components_file: path to file containing component config
     :param string components: comma delimited list of components to perform
      `action` on.
+    :param string excluded: comma delimited list of components to exclude
+    :param bool verbose: determines output verbosity level
     :rtype: `None`
     """
+    if verbose:
+        set_global_verbosity_level(is_verbose_output=True)
     # get packages.py file path
     components_file = components_file if components_file is not None \
         else os.getcwd() + '/' + 'packages.py'
@@ -177,27 +194,33 @@ def packman_runner(action='pack', components_file=None, components=None,
     if excluded is not None:
         for xcom in excluded.split(','):
             xcom_list.append(xcom)
-    # append components to list.
+    # append components to list if a list is supplied
     com_list = []
     if components is not None:
         for component in components.split(','):
             com_list.append(component)
+        # and raise if components appear in exlucded list and components list
         if set(com_list) & set(xcom_list):
             lgr.error('your components list and excluded components '
                       'list contain a similar item.')
             raise PackagerError('components list and excluded list '
                                 'are conflicting')
+    # else iterate over all components in components file
     else:
         for component, values in packages.PACKAGES.items():
             com_list.append(component)
+        # and rewrite the list after removing excluded components
         for xcom in xcom_list:
             com_list = [com for com in com_list if com != xcom]
+    # sum up what we've got until now
     lgr.debug('components list: {}'.format(com_list))
     lgr.debug('excluded components list: {}'.format(xcom_list))
     # if at least 1 component exists
     if com_list:
         # iterate and run action
         for component in com_list:
+            # only on components not in the xcom_list
+            # TODO: the list is written with this in mind. maybe we can remove?
             if component not in xcom_list:
                 # looks for the overriding methods file in the current path
                 if os.path.isfile(os.getcwd() + '/{}.py'.format(action)):
@@ -491,35 +514,40 @@ def pack(component):
                 if not mock:
                     # TODO: (FEAT) build fpm commands options before running
                     # TODO: (FEAT) fpm maybe map config params to fpm flags...
-                    if bootstrap_script and not depends:
-                        do('sudo fpm -s {0} -t {1} --after-install {2}'
-                           ' -n {3} -v {4} -f {5}'
-                           .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                                   + '/' + bootstrap_script, name, version,
-                                   sources_path))
-                    elif bootstrap_script and depends:
-                        lgr.debug('package dependencies are: {0}'
-                                  .format(", ".join(depends)))
-                        dep_str = "-d " + " -d ".join(depends)
-                        do('sudo fpm -s {0} -t {1} --after-install {2} {3}'
-                           ' -n {4} -v {5} -f {6}'
-                           .format(src_pkg_type, dst_pkg_type, os.getcwd()
-                                   + '/' + bootstrap_script, dep_str,
-                                   name, version, sources_path))
-                    # else just create a package with default flags...
-                    else:
-                        if dst_pkg_type.startswith("tar"):
-                            do('sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'  # NOQA
-                               .format(src_pkg_type, "tar", name, version,
-                                       sources_path))
-                        else:
-                            do(
-                                'sudo fpm -s {0} -t {1} -n {2} -v {3} '
-                                '-f {4}'
-                                .format(src_pkg_type, dst_pkg_type, name,
-                                        version, sources_path))
-                        if dst_pkg_type == "tar.gz":
-                            do('sudo gzip {0}*'.format(name))
+                    i = fpmHandler(name, src_pkg_type, dst_pkg_type,
+                                   sources_path)
+                    i.fpm(version=version, force=force, depends=depends,
+                          after_install=bootstrap_script, chdir=False,
+                          before_install=False)
+                    # if bootstrap_script and not depends:
+                    #     do('sudo fpm -s {0} -t {1} --after-install {2}'
+                    #        ' -n {3} -v {4} -f {5}'
+                    #        .format(src_pkg_type, dst_pkg_type, os.getcwd()
+                    #                + '/' + bootstrap_script, name, version,
+                    #                sources_path))
+                    # elif bootstrap_script and depends:
+                    #     lgr.debug('package dependencies are: {0}'
+                    #               .format(", ".join(depends)))
+                    #     dep_str = "-d " + " -d ".join(depends)
+                    #     do('sudo fpm -s {0} -t {1} --after-install {2} {3}'
+                    #        ' -n {4} -v {5} -f {6}'
+                    #        .format(src_pkg_type, dst_pkg_type, os.getcwd()
+                    #                + '/' + bootstrap_script, dep_str,
+                    #                name, version, sources_path))
+                    # # else just create a package with default flags...
+                    # else:
+                    #     if dst_pkg_type.startswith("tar"):
+                    #         do('sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}'  # NOQA
+                    #            .format(src_pkg_type, "tar", name, version,
+                    #                    sources_path))
+                    #     else:
+                    #         do(
+                    #             'sudo fpm -s {0} -t {1} -n {2} -v {3} '
+                    #             '-f {4}'
+                    #             .format(src_pkg_type, dst_pkg_type, name,
+                    #                     version, sources_path))
+                    if dst_pkg_type == "tar.gz":
+                        do('sudo gzip {0}*'.format(name))
                     # and check if the packaging process succeeded.
                 else:
                     # TODO: (FEAT) create mock package
@@ -588,11 +616,8 @@ def do(command, attempts=2, sleep_time=3,
 
     # TODO: (FEAT) apply verbosity according to the verbose flag in pkm
     # TODO: (FEAT) instead of a verbose flag in the config.
-    if pkm_conf.VERBOSE:
+    with hide('running'):
         return _execute()
-    else:
-        with hide('running'):
-            return _execute()
 
 
 class CommonHandler():
@@ -732,31 +757,34 @@ class fpmHandler(CommonHandler):
     def __init__(self, sudo, name, source):
         self.sudo = sudo
         self.name = name
+        self.output_type = 'tar' if self.output_type.startswith('tar') \
+            else self.output_type
+        self.input_type = input_type
         self.source = source
-        self.command = 'fpm -s {0} -t {1} -f '
+        self.command = 'fpm -n {0} -s {1} -t {2} '
 
-    def _build_fpm_cmd_string(*args):
-        self.command.append('-n {} '.format(self.name))
+    def _build_fpm_cmd_string(self, *args):
+        self.command = self.command.format(
+            self.name, self.input_type, self.output_type)
         if version is not None:
-            self.command.append('-v {} '.format(version))
+            self.command += '-v {} '.format(version)
         if chdir:
-            self.command.append('-C {} '.format(chdir))
+            self.command += '-C {} '.format(chdir)
         if depends:
-            self.command.append("-d " + " -d ".join(depends))
+            self.command += "-d " + " -d ".join(depends)
         if force:
-            self.command.append('-f ')
+            self.command += '-f '
         if after_install is not None:
-            self.command.append('--after-install {} '.format(
-                after_install))
+            self.command += '--after-install {} '.format(
+                os.getcwd() + '/' + after_install)
         if before_install is not None:
-            self.command.append('--before-install {} '.format(
-                before_install))
+            self.command += '--before-install {} '.format(
+                os.getcwd() + '/' + before_install)
         # MUST BE LAST
-        self.command = self.command.append(self.source)
+        self.command += self.source
+        lgr.debug('fpm cmd is: {}'.format(command))
 
-    def fpm(self, version=None, chdir=False,
-            depends=False, force=False,
-            after_intsall=None, before_install=None):
+    def fpm(self, *args):
         _build_fpm_cmd_string(args)
         do(self.command, sudo=self.sudo)
 
@@ -1425,9 +1453,8 @@ class TemplateHandler(CommonHandler):
         creates a file from content
         """
         # TODO: (FEAT) receive PRINT_TEMPLATES from pkm
-        if pkm_conf.PRINT_TEMPLATES:
-            lgr.debug('creating file: {0} with content: \n{1}'.format(
-                      output_path, content))
+        lgr.debug('creating file: {0} with content: \n{1}'.format(
+                  output_path, content))
         try:
             with open(output_path, 'w+') as f:
                 f.write(content)

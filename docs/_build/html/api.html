@@ -126,7 +126,7 @@
 </div>
 <span class="target" id="module-packman.packman"></span><dl class="function">
 <dt id="packman.packman.init_logger">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">init_logger</tt><big>(</big><em>base_level=20</em>, <em>verbose_level=10</em>, <em>config={}</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.init_logger" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">init_logger</tt><big>(</big><em>base_level=20</em>, <em>verbose_level=10</em>, <em>logging_config={}</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.init_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>initializes a base logger</p>
 <p>you can use this to init a logger in any of your files.
 this will use config.py&#8217;s LOGGER param and logging.dictConfig to configure
@@ -151,6 +151,27 @@ used to override the default configuration from config.py</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="packman.packman.set_global_verbosity_level">
+<tt class="descclassname">packman.packman.</tt><tt class="descname">set_global_verbosity_level</tt><big>(</big><em>is_verbose_output=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#set_global_verbosity_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.set_global_verbosity_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets the global verbosity level for console and the lgr logger.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>is_verbose_output</strong> (<em>bool</em>) &#8211; should be output be verbose</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><cite>None</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="packman.packman.check_distro">
+<tt class="descclassname">packman.packman.</tt><tt class="descname">check_distro</tt><big>(</big><em>verify=False</em>, <em>supported=('Ubuntu'</em>, <em>'debian'</em>, <em>'centos')</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#check_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.check_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="packman.packman.get_component_config">
 <tt class="descclassname">packman.packman.</tt><tt class="descname">get_component_config</tt><big>(</big><em>component_name</em>, <em>components_dict={}</em>, <em>components_file=''</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_component_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_component_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns a component&#8217;s configuration</p>
@@ -172,11 +193,12 @@ for the specific component_name.</p>
 
 <dl class="function">
 <dt id="packman.packman.packman_runner">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">packman_runner</tt><big>(</big><em>action='pack'</em>, <em>components_file=None</em>, <em>components=None</em>, <em>excluded=None</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#packman_runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.packman_runner" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">packman_runner</tt><big>(</big><em>action='pack'</em>, <em>components_file=None</em>, <em>components=None</em>, <em>excluded=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#packman_runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.packman_runner" title="Permalink to this definition">¶</a></dt>
 <dd><p>logic for running packman. mainly called from the cli (pkm.py)</p>
 <p>if no <cite>components_file</cite> is supplied, we will assume a local packages.py
 as <cite>components_file</cite>.</p>
-<p>if <cite>components</cite> are supplied, they will be iterated over.</p>
+<p>if <cite>components</cite> are supplied, they will be iterated over.
+if <cite>excluded</cite> are supplied, they will be ignored.</p>
 <p>if a pack.py or get.py files are present, and an action_component
 function exists in the files, those functions will be used.
 else, the base get and pack methods supplied with packman will be used.
@@ -190,6 +212,8 @@ so for instance, if you have a component named <cite>x</cite></p>
 <li><strong>components_file</strong> (<em>string</em>) &#8211; path to file containing component config</li>
 <li><strong>components</strong> (<em>string</em>) &#8211; comma delimited list of components to perform
 <cite>action</cite> on.</li>
+<li><strong>excluded</strong> (<em>string</em>) &#8211; comma delimited list of components to exclude</li>
+<li><strong>verbose</strong> (<em>bool</em>) &#8211; determines output verbosity level</li>
 </ul>
 </td>
 </tr>
@@ -460,13 +484,6 @@ obviously, <cite>attempts</cite> must be larger than 0...</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="packman.packman.CommonHandler.make_package_paths">
-<tt class="descname">make_package_paths</tt><big>(</big><em>pkg_dir</em>, <em>tmp_dir</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.make_package_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.make_package_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>DEPRACATED!
-creates directories for managing packages</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="packman.packman.CommonHandler.tar">
 <tt class="descname">tar</tt><big>(</big><em>chdir</em>, <em>output_file</em>, <em>input_path</em>, <em>opts='zvf'</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.tar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.tar" title="Permalink to this definition">¶</a></dt>
 <dd><p>tars an input file or directory</p>
@@ -514,7 +531,7 @@ creates directories for managing packages</p>
 <p>packaging handler</p>
 <dl class="method">
 <dt id="packman.packman.fpmHandler.fpm">
-<tt class="descname">fpm</tt><big>(</big><em>version=None</em>, <em>chdir=False</em>, <em>depends=False</em>, <em>force=False</em>, <em>after_intsall=None</em>, <em>before_install=None</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#fpmHandler.fpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.fpmHandler.fpm" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">fpm</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#fpmHandler.fpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.fpmHandler.fpm" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
