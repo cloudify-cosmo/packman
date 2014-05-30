@@ -516,9 +516,15 @@ def pack(component):
                     # TODO: (FEAT) fpm maybe map config params to fpm flags...
                     i = fpmHandler(name, src_pkg_type, dst_pkg_type,
                                    sources_path, sudo=True)
-                    i.fpm(version=version, force=overwrite, depends=depends,
-                          after_install=bootstrap_script, chdir=False,
-                          before_install=False)
+                    params = {
+                        "version": version,
+                        "force": overwrite,
+                        "depends": depends,
+                        "after_install": bootstrap_script,
+                        "chdir": False,
+                        "before_install": False,
+                    }
+                    i.fpm(params)
                     # if bootstrap_script and not depends:
                     #     do('sudo fpm -s {0} -t {1} --after-install {2}'
                     #        ' -n {3} -v {4} -f {5}'
@@ -763,11 +769,12 @@ class fpmHandler(CommonHandler):
         self.source = source
         self.command = 'fpm -n {0} -s {1} -t {2} '
 
-    def _build_fpm_cmd_string(self, *args):
+    def _build_fpm_cmd_string(self, **kwargs):
         self.command = self.command.format(
             self.name, self.input_type, self.output_type)
-        if version is not None:
-            self.command += '-v {} '.format(version)
+        if kwargs['version'] is not None:
+            self.command += '-v {} '.format(kwargs['version'])
+        print(kwargs['version'])
         if chdir:
             self.command += '-C {} '.format(chdir)
         if depends:
@@ -784,8 +791,8 @@ class fpmHandler(CommonHandler):
         self.command += self.source
         lgr.debug('fpm cmd is: {}'.format(command))
 
-    def fpm(self, *args):
-        _build_fpm_cmd_string(args)
+    def fpm(self, **kwargs):
+        _build_fpm_cmd_string(kwargs)
         do(self.command, sudo=self.sudo)
 
 
