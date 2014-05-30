@@ -794,7 +794,7 @@ class fpmHandler(CommonHandler):
         lgr.debug('fpm cmd is: {}'.format(command))
 
     def fpm(self, **kwargs):
-        self._build_fpm_cmd_string(kwargs)
+        self._build_fpm_cmd_string(**kwargs)
         do(self.command, sudo=self.sudo)
 
 
