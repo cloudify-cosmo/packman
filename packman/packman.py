@@ -757,8 +757,8 @@ class fpmHandler(CommonHandler):
     def __init__(self, name, input_type, output_type, source, sudo):
         self.sudo = sudo
         self.name = name
-        self.output_type = 'tar' if self.output_type.startswith('tar') \
-            else self.output_type
+        self.output_type = 'tar' if output_type.startswith('tar') \
+            else output_type
         self.input_type = input_type
         self.source = source
         self.command = 'fpm -n {0} -s {1} -t {2} '
