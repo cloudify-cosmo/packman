@@ -776,19 +776,18 @@ class fpmHandler(CommonHandler):
             self.name, self.input_type, self.output_type)
         if kwargs['version'] is not None:
             self.command += '-v {} '.format(kwargs['version'])
-        print(kwargs['version'])
-        if chdir:
-            self.command += '-C {} '.format(chdir)
-        if depends:
-            self.command += "-d " + " -d ".join(depends)
-        if force:
+        if kwargs['chdir']:
+            self.command += '-C {} '.format(kwargs['chdir'])
+        if kwargs['depends']:
+            self.command += "-d " + " -d ".join(kwargs['depends'])
+        if kwargs['force']:
             self.command += '-f '
-        if after_install is not None:
+        if kwargs['after_install'] is not None:
             self.command += '--after-install {} '.format(
-                os.getcwd() + '/' + after_install)
-        if before_install is not None:
+                os.getcwd() + '/' + kwargs['after_install'])
+        if kwargs['before_install'] is not None:
             self.command += '--before-install {} '.format(
-                os.getcwd() + '/' + before_install)
+                os.getcwd() + '/' + kwargs['before_install'])
         # MUST BE LAST
         self.command += self.source
         lgr.debug('fpm cmd is: {}'.format(command))
