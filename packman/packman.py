@@ -1339,20 +1339,6 @@ class TemplateHandler(CommonHandler):
         self.cp(files_dir + '/*', component[defs.PARAM_SOURCES_PATH] +
                 '/' + config_dir, sudo=sudo)
 
-    # TODO: (IMPRV) replace this with method generate_from_template()..
-    def create_bootstrap_script(self, component, template_file, script_file):
-        """
-        creates a script file from a template file
-
-        :param dict component: contains the params to use in the template
-        :param string template_file: template file path
-        :param string script_file: output path for generated script
-        """
-        lgr.debug('creating bootstrap script...')
-        formatted_text = self._template_formatter(
-            defs.PACKAGER_TEMPLATE_PATH, template_file, component)
-        self._make_file(script_file, formatted_text)
-
     def generate_from_template(self, component_config, output_file,
                                template_file,
                                templates=defs.PACKAGER_TEMPLATE_PATH):

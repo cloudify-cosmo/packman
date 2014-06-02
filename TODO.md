@@ -8,30 +8,26 @@
 - packman/packman.py:59:    #  TODO: (IMPRV) only perform file related actions if file handler is
 - packman/packman.py:60:    #  TODO: (IMPRV) defined.
 - packman/packman.py:224:    #  TODO: the list is written with this in mind. maybe we can remove?
-- packman/packman.py:365:    #  TODO: (FEAT) add support for installing reqs from urls
-- packman/packman.py:441:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
-- packman/packman.py:442:    #  TODO: (STPD) replace it with a normal destination path
-- packman/packman.py:520:    #  TODO: (FEAT) create mock package
-- packman/packman.py:665:    #  TODO: (IMPRV) handle multiple files differently
-- packman/packman.py:833:    #  TODO: (FEAT) support virtualenv --relocate OR
-- packman/packman.py:834:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:868:    #  TODO: (TEST) add support for ruby in different environments
-- packman/packman.py:918:    #  TODO: (TEST) run yum reinstall instead of yum install.
-- packman/packman.py:920:    #  TODO: (BUG) yum download exits with an error even if the download
-- packman/packman.py:921:    #  TODO: (BUG) succeeded due to a non-zero error message.
-- packman/packman.py:922:    #  TODO: (FEAT) add yum enable-repo option
-- packman/packman.py:923:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:924:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
-- packman/packman.py:1036:    #  TODO: (IMPRV) add an is-package-installed check. if it is
-- packman/packman.py:1037:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
-- packman/packman.py:1038:    #  TODO: (IMPRV) install.
-- packman/packman.py:1039:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-- packman/packman.py:1040:    #  TODO: for downloading requirements
-- packman/packman.py:1174:    #  TODO: (IMPRV) think about moving the file ext check to the get
-- packman/packman.py:1175:    #  TODO: (IMPRV) method instead.. maybe it's a better solution
-- packman/packman.py:1196:    #  TODO: (FEAT) implement curl?
-- packman/packman.py:1219:    #  TODO: (IMPRV) replace this with method generate_from_template()..
-- packman/packman.py:1416:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
+- packman/packman.py:369:    #  TODO: (FEAT) add support for installing reqs from urls
+- packman/packman.py:445:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
+- packman/packman.py:446:    #  TODO: (STPD) replace it with a normal destination path
+- packman/packman.py:663:    #  TODO: (IMPRV) handle multiple files differently
+- packman/packman.py:831:    #  TODO: (FEAT) support virtualenv --relocate OR
+- packman/packman.py:832:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/packman.py:866:    #  TODO: (TEST) add support for ruby in different environments
+- packman/packman.py:916:    #  TODO: (TEST) run yum reinstall instead of yum install.
+- packman/packman.py:918:    #  TODO: (BUG) yum download exits with an error even if the download
+- packman/packman.py:919:    #  TODO: (BUG) succeeded due to a non-zero error message.
+- packman/packman.py:920:    #  TODO: (FEAT) add yum enable-repo option
+- packman/packman.py:921:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+- packman/packman.py:922:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
+- packman/packman.py:1034:    #  TODO: (IMPRV) add an is-package-installed check. if it is
+- packman/packman.py:1035:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
+- packman/packman.py:1036:    #  TODO: (IMPRV) install.
+- packman/packman.py:1037:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+- packman/packman.py:1038:    #  TODO: for downloading requirements
+- packman/packman.py:1188:    #  TODO: (FEAT) implement curl?
+- packman/packman.py:1395:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
 - vagrant/provision.sh:6:    #  TODO: check if make/git are required by default
 - vagrant/provision.sh:21:    #  TODO: add virtualenv to provisioning process
 - vagrant/provision.sh:24:    #  TODO: add bash completion support using docopt-completion
