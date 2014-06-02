@@ -352,10 +352,14 @@ def get(component):
             url_ext = os.path.splitext(source_url)[1]
             # if the source file is an rpm or deb, we want to download
             # it to the archives folder. yes, it's a dreadful solution...
-            if not url_ext == '.rpm' and not url_ext == '.deb':
-                url_ext = False
-            dl_handler.wget(source_url, dir=dst_path,
-                            url_pkg_ext=url_ext)
+            if url_ext in ('.rpm', '.deb'):
+                lgr.debug('the file is an {0} file. we\'ll download it '
+                          'to the archives folder'.format(url_pkg_ext))
+                dst_path += '/archives'
+                # elif file:
+                #     path, name = os.path.split(file)
+                #     file = path + '/archives/' + file
+            dl_handler.wget(source_url, dir=dst_path)
     # add the repo key
     if key_files:
         repo_handler.add_keys(key_files)
@@ -450,7 +454,6 @@ def pack(component):
         if defs.PARAM_CONFIG_TEMPLATE_CONFIG in c else False
     overwrite = c[defs.PARAM_OVERWRITE_OUTPUT_PACKAGE] \
         if defs.PARAM_OVERWRITE_OUTPUT_PACKAGE in c else True
-    mock = c[defs.PARAM_MOCK] if defs.PARAM_MOCK in c else False
     keep_sources = c[defs.PARAM_KEEP_SOURCES] \
         if defs.PARAM_KEEP_SOURCES in c else True
 
@@ -480,12 +483,12 @@ def pack(component):
     if bootstrap_script or bootstrap_script_in_pkg:
         # bootstrap_script - bootstrap script to be attached to the package
         if bootstrap_template and bootstrap_script:
-            tmp_handler.create_bootstrap_script(c, bootstrap_template,
-                                                bootstrap_script)
+            tmp_handler.generate_from_template(c, bootstrap_script,
+                                               bootstrap_template)
         # bootstrap_script_in_pkg - same but for putting inside the package
         if bootstrap_template and bootstrap_script_in_pkg:
-            tmp_handler.create_bootstrap_script(c, bootstrap_template,
-                                                bootstrap_script_in_pkg)
+            tmp_handler.generate_from_template(c, bootstrap_script_in_pkg,
+                                               bootstrap_template)
             # if it's in_pkg, grant it exec permissions and copy it to the
             # package's path.
             if bootstrap_script_in_pkg:
@@ -507,18 +510,13 @@ def pack(component):
                 # the requirement. for instance, if a bootstrap script
                 # exists, and there are dependencies for the package, run
                 # fpm with the relevant flags.
-                if not mock:
-                    i = fpmHandler(name, src_pkg_type, dst_pkg_type,
-                                   sources_path, sudo=True)
-                    i.fpm(version=version, force=overwrite, depends=depends,
-                          after_install=bootstrap_script, chdir=False,
-                          before_install=None)
-                    if dst_pkg_type == "tar.gz":
-                        do('sudo gzip {0}*'.format(name))
-                    # and check if the packaging process succeeded.
-                else:
-                    # TODO: (FEAT) create mock package
-                    return
+                i = fpmHandler(name, src_pkg_type, dst_pkg_type,
+                               sources_path, sudo=True)
+                i.fpm(version=version, force=overwrite, depends=depends,
+                      after_install=bootstrap_script, chdir=False,
+                      before_install=None)
+                if dst_pkg_type == "tar.gz":
+                    do('sudo gzip {0}*'.format(name))
         # apparently, the src for creation the package doesn't exist...
         # what can you do?
         else:
@@ -579,8 +577,6 @@ def do(command, attempts=2, sleep_time=3,
                   .format(command, execution, x.stdout))
         return x
 
-    # TODO: (FEAT) apply verbosity according to the verbose flag in pkm
-    # TODO: (FEAT) instead of a verbose flag in the config.
     with hide('running'):
         return _execute()
 
@@ -1041,8 +1037,12 @@ class AptHandler(CommonHandler):
         # TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
         # TODO: for downloading requirements
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
-                  .format(pkg, dir))
+        if check_if_package_is_installed(pkg):
+            return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
+                      .format(pkg, dir))
+        else:
+            return do('sudo apt-get -y install --reinstall '
+                      '{0} -d -o=dir::cache={1}'.format(pkg, dir))
 
     def autoremove(self, pkg):
         """
@@ -1164,7 +1164,7 @@ class DownloadsHandler(CommonHandler):
         for url in urls:
             self.wget(url, dir, sudo=sudo)
 
-    def wget(self, url, dir=False, file=False, url_pkg_ext=False, sudo=True):
+    def wget(self, url, dir=False, file=False, sudo=True):
         """
         wgets a url to a destination directory or file
 
@@ -1173,17 +1173,7 @@ class DownloadsHandler(CommonHandler):
         :param string file: download to file...
         """
         options = '--timeout=30'
-        # TODO: (IMPRV) think about moving the file ext check to the get
-        # TODO: (IMPRV) method instead.. maybe it's a better solution
         # workaround for archives folder
-        if url_pkg_ext:
-            lgr.debug('the file is an {0} file. we\'ll download it '
-                      'to the archives folder'.format(url_pkg_ext))
-            if dir:
-                dir += '/archives'
-            elif file:
-                path, name = os.path.split(file)
-                file = path + '/archives/' + file
         if (file and dir) or (not file and not dir):
             lgr.warning('please specify either a directory'
                         ' or file to download to.')
@@ -1218,19 +1208,6 @@ class DownloadsHandler(CommonHandler):
 
 
 class TemplateHandler(CommonHandler):
-    # TODO: (IMPRV) replace this with method generate_from_template()..
-    def create_bootstrap_script(self, component, template_file, script_file):
-        """
-        creates a script file from a template file
-
-        :param dict component: contains the params to use in the template
-        :param string template_file: template file path
-        :param string script_file: output path for generated script
-        """
-        lgr.debug('creating bootstrap script...')
-        formatted_text = self._template_formatter(
-            defs.PACKAGER_TEMPLATE_PATH, template_file, component)
-        self._make_file(script_file, formatted_text)
 
     def generate_configs(self, component, sudo=True):
         """
@@ -1361,6 +1338,20 @@ class TemplateHandler(CommonHandler):
         # yep, simple as that...
         self.cp(files_dir + '/*', component[defs.PARAM_SOURCES_PATH] +
                 '/' + config_dir, sudo=sudo)
+
+    # TODO: (IMPRV) replace this with method generate_from_template()..
+    def create_bootstrap_script(self, component, template_file, script_file):
+        """
+        creates a script file from a template file
+
+        :param dict component: contains the params to use in the template
+        :param string template_file: template file path
+        :param string script_file: output path for generated script
+        """
+        lgr.debug('creating bootstrap script...')
+        formatted_text = self._template_formatter(
+            defs.PACKAGER_TEMPLATE_PATH, template_file, component)
+        self._make_file(script_file, formatted_text)
 
     def generate_from_template(self, component_config, output_file,
                                template_file,

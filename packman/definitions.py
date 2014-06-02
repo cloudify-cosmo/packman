@@ -17,7 +17,6 @@ PARAM_BOOTSTRAP_SCRIPT_PATH = 'bootstrap_script'  # an optional 'string' represe
 PARAM_BOOTSTRAP_TEMPLATE_PATH = 'bootstrap_template'  # an optional 'string' representing a bootstrap script path to be appended to a deb or rpm (appended)
 PARAM_OVERWRITE_OUTPUT_PACKAGE = 'overwrite_package'  # an optional bool representing whether to overwrite a destination package by default
 PARAM_OVERWRITE_SOURCES = 'overwrite_sources'  # an optional bool representing whether to overwrite sources when retrieving package sources
-PARAM_MOCK = 'mock'  # an optional bool representing whether a mock package will be created instead of a real one (for testing purposes)
 PARAM_CONFIG_TEMPLATE_CONFIG = 'config_templates'  # an optional {dict} of config files and templates
 PARAM_MODULES = 'modules'  # an optional [list] of python modules to install into a virtualenv
 PARAM_GEMS = 'gems'  # an optional [list] of ruby gems to download
