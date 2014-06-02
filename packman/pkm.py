@@ -46,7 +46,6 @@ from packman.packman import check_distro
 
 def main(test_options=None):
     """Main entry point for script."""
-    check_distro(verify=True)
     import pkg_resources
     version = None
     try:
@@ -57,6 +56,7 @@ def main(test_options=None):
         del pkg_resources
 
     options = test_options or docopt(__doc__, version=version)
+    check_distro(verify=True, verbose=options.get('--verbose'))
     print(options)
     if options['pack']:
         packman_runner('pack',

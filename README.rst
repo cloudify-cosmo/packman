@@ -5,14 +5,25 @@ packman
 
 |Gitter chat|
 
+|PyPI|
+
+|PypI|
+
 packman creates packages.
 
-You can write a dict containing your package's configuration and packman
-will retrieve the resources and create a package accordingly.
+You can write a ``components file`` containing your packages'
+configuration and packman will retrieve the resources and create the
+packages accordingly.
 
 The project was initally invented to create Cloudify
 (http://getcloudify.org/) packages and is now progressing towards being
 a simple open-source solution to creating different types of packages.
+
+Quick Start
+~~~~~~~~~~~
+
+`Quick
+Start <http://packman.readthedocs.org/en/latest/quick_start.html>`__
 
 Documentation
 ~~~~~~~~~~~~~
@@ -35,20 +46,23 @@ before installing packman
 Usage Examples
 ~~~~~~~~~~~~~~
 
+see `Components
+Configuration <http://packman.readthedocs.org/en/latest/component_config.html>`__
+to configure your ``components file``
+
 .. code:: shell
 
-    pkm get --components my_component --components_file /my_components_file.py
-    pkm pack -c my_component,my_other_component
-    pkm make
+     # `pkm get` retrieves component sources
+     pkm get --components my_component --components_file /my_components_file.py
+     # `pkm pack` packages sources, scripts and configs.
+     pkm pack -c my_component,my_other_component
+     # `pkm make` ... does both one after the other
+     pkm make -x excluded_component
 
 Additional Information
 ~~~~~~~~~~~~~~~~~~~~~~
 
 -  `packman's cli <http://packman.readthedocs.org/en/latest/pkm.html>`__
--  `Quick
-   Start <http://packman.readthedocs.org/en/latest/quick_start.html>`__
--  `Components
-   Configuration <http://packman.readthedocs.org/en/latest/component_config.html>`__
 -  `Alternative
    Implementations <http://packman.readthedocs.org/en/latest/alternative_methods.html>`__
 -  `Template
@@ -60,8 +74,7 @@ Vagrant
 
 A vagrantfile is provided to load machines:
 
--  a packman host (which, by default, is prepared for packaging
-   components)
+-  a packman host (which, by default, is ready to package components)
 -  a tester host (which, by default, is a clean machine to test the
    package installation on)
 -  CentOS and other distribs are being added...
@@ -76,3 +89,7 @@ installation will be implemented to check the entire process.
    :target: https://travis-ci.org/cloudify-cosmo/packman
 .. |Gitter chat| image:: https://badges.gitter.im/cloudify-cosmo/packman.png
    :target: https://gitter.im/cloudify-cosmo/packman
+.. |PyPI| image:: http://img.shields.io/pypi/dm/packman.svg
+   :target: http://img.shields.io/pypi/dm/packman.svg
+.. |PypI| image:: http://img.shields.io/pypi/v/packman.svg
+   :target: http://img.shields.io/pypi/v/packman.svg

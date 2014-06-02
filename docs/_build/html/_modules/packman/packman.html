@@ -209,11 +209,7 @@
 <span class="sd">    sets the global verbosity level for console and the lgr logger.</span>
 
 <span class="sd">    :param bool is_verbose_output: should be output be verbose</span>
-<span class="sd">    :rtype: `None`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># we need both lgr.setLevel and the verbose_output parameter</span>
-    <span class="c"># since not all output is generated at the logger level.</span>
-    <span class="c"># verbose_output can help us control that.</span>
     <span class="k">global</span> <span class="n">verbose_output</span>
     <span class="n">verbose_output</span> <span class="o">=</span> <span class="n">is_verbose_output</span>
     <span class="k">if</span> <span class="n">verbose_output</span><span class="p">:</span>
@@ -405,7 +401,6 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
-    <span class="c"># TODO: (TEST) remove auto_get param - it is no longer in use</span>
     <span class="n">source_repos</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_REPOS</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_REPOS</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
     <span class="n">source_ppas</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PPAS</span><span class="p">]</span> \
@@ -538,7 +533,6 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
-    <span class="c"># TODO: (TEST) remove auto_pack param - it is no longer in use</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_VERSION</span><span class="p">]</span> \
@@ -552,10 +546,9 @@
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
     <span class="n">src_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
-    <span class="c"># TODO: (TEST) identify dst_pkg_type by distro if not specified</span>
-    <span class="c"># TODO: (TEST) explicitly.</span>
     <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span><span class="p">]</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
+    <span class="c"># identifies pkg type automatically if not specified explicitly</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dst_pkg_type</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">centos</span><span class="p">:</span>
             <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="s">&#39;rpm&#39;</span>
@@ -603,8 +596,6 @@
         <span class="n">tmp_handler</span><span class="o">.</span><span class="n">generate_configs</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="c"># if bootstrap scripts are required, generate them.</span>
     <span class="k">if</span> <span class="n">bootstrap_script</span> <span class="ow">or</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
-        <span class="c"># TODO: (TEST) handle cases where a bootstrap script is not a</span>
-        <span class="c"># TODO: (TEST) template.</span>
         <span class="c"># bootstrap_script - bootstrap script to be attached to the package</span>
         <span class="k">if</span> <span class="n">bootstrap_template</span> <span class="ow">and</span> <span class="n">bootstrap_script</span><span class="p">:</span>
             <span class="n">tmp_handler</span><span class="o">.</span><span class="n">create_bootstrap_script</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">bootstrap_template</span><span class="p">,</span>
@@ -635,40 +626,11 @@
                 <span class="c"># exists, and there are dependencies for the package, run</span>
                 <span class="c"># fpm with the relevant flags.</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">mock</span><span class="p">:</span>
-                    <span class="c"># TODO: (FEAT) build fpm commands options before running</span>
-                    <span class="c"># TODO: (FEAT) fpm maybe map config params to fpm flags...</span>
                     <span class="n">i</span> <span class="o">=</span> <span class="n">fpmHandler</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span>
-                                   <span class="n">sources_path</span><span class="p">)</span>
-                    <span class="n">i</span><span class="o">.</span><span class="n">fpm</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">depends</span><span class="p">,</span>
+                                   <span class="n">sources_path</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">fpm</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">depends</span><span class="p">,</span>
                           <span class="n">after_install</span><span class="o">=</span><span class="n">bootstrap_script</span><span class="p">,</span> <span class="n">chdir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                          <span class="n">before_install</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-                    <span class="c"># if bootstrap_script and not depends:</span>
-                    <span class="c">#     do(&#39;sudo fpm -s {0} -t {1} --after-install {2}&#39;</span>
-                    <span class="c">#        &#39; -n {3} -v {4} -f {5}&#39;</span>
-                    <span class="c">#        .format(src_pkg_type, dst_pkg_type, os.getcwd()</span>
-                    <span class="c">#                + &#39;/&#39; + bootstrap_script, name, version,</span>
-                    <span class="c">#                sources_path))</span>
-                    <span class="c"># elif bootstrap_script and depends:</span>
-                    <span class="c">#     lgr.debug(&#39;package dependencies are: {0}&#39;</span>
-                    <span class="c">#               .format(&quot;, &quot;.join(depends)))</span>
-                    <span class="c">#     dep_str = &quot;-d &quot; + &quot; -d &quot;.join(depends)</span>
-                    <span class="c">#     do(&#39;sudo fpm -s {0} -t {1} --after-install {2} {3}&#39;</span>
-                    <span class="c">#        &#39; -n {4} -v {5} -f {6}&#39;</span>
-                    <span class="c">#        .format(src_pkg_type, dst_pkg_type, os.getcwd()</span>
-                    <span class="c">#                + &#39;/&#39; + bootstrap_script, dep_str,</span>
-                    <span class="c">#                name, version, sources_path))</span>
-                    <span class="c"># # else just create a package with default flags...</span>
-                    <span class="c"># else:</span>
-                    <span class="c">#     if dst_pkg_type.startswith(&quot;tar&quot;):</span>
-                    <span class="c">#         do(&#39;sudo fpm -s {0} -t {1} -n {2} -v {3} -f {4}&#39;  # NOQA</span>
-                    <span class="c">#            .format(src_pkg_type, &quot;tar&quot;, name, version,</span>
-                    <span class="c">#                    sources_path))</span>
-                    <span class="c">#     else:</span>
-                    <span class="c">#         do(</span>
-                    <span class="c">#             &#39;sudo fpm -s {0} -t {1} -n {2} -v {3} &#39;</span>
-                    <span class="c">#             &#39;-f {4}&#39;</span>
-                    <span class="c">#             .format(src_pkg_type, dst_pkg_type, name,</span>
-                    <span class="c">#                     version, sources_path))</span>
+                          <span class="n">before_install</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar.gz&quot;</span><span class="p">:</span>
                         <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gzip {0}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
                     <span class="c"># and check if the packaging process succeeded.</span>
@@ -681,7 +643,6 @@
             <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;sources dir {0} does</span><span class="se">\&#39;</span><span class="s">nt exist, termintating...&#39;</span>
                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sources_path</span><span class="p">))</span>
             <span class="c"># maybe bluntly exit since this is all irrelevant??</span>
-            <span class="c"># TODO: (TEST) raise instead of exiting.</span>
             <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;sources dir missing&#39;</span><span class="p">)</span>
 
     <span class="c"># make sure the final destination for the package exists..</span>
@@ -691,7 +652,6 @@
     <span class="c"># and then copy the final package over..</span>
     <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package creation completed successfully!&#39;</span><span class="p">)</span>
-    <span class="c"># TODO: (TEST) add keep_sources flag in components file.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_sources</span><span class="p">:</span>
         <span class="n">common</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">sources_path</span><span class="p">)</span>
 
@@ -845,8 +805,7 @@
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copying {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp -R {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> <span class="k">if</span> <span class="n">recurse</span> \
             <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
-
-    <span class="c"># TODO: (TEST) depracate make_package_paths...</span></div>
+</div>
 <div class="viewcode-block" id="CommonHandler.tar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.tar">[docs]</a>    <span class="k">def</span> <span class="nf">tar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        tars an input file or directory</span>
@@ -877,38 +836,38 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    packaging handler</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sudo</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">input_type</span><span class="p">,</span> <span class="n">output_type</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sudo</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sudo</span> <span class="o">=</span> <span class="n">sudo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="s">&#39;tar&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;tar&#39;</span><span class="p">)</span> \
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="s">&#39;tar&#39;</span> <span class="k">if</span> <span class="n">output_type</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;tar&#39;</span><span class="p">)</span> \
+            <span class="k">else</span> <span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_type</span> <span class="o">=</span> <span class="n">input_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s">&#39;fpm -n {0} -s {1} -t {2} &#39;</span>
 
-    <span class="k">def</span> <span class="nf">_build_fpm_cmd_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_build_fpm_cmd_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;-v {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">chdir</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;-C {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chdir</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">depends</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&quot;-d &quot;</span> <span class="o">+</span> <span class="s">&quot; -d &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">depends</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;-v {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;chdir&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;-C {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;chdir&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;depends&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&quot;-d &quot;</span> <span class="o">+</span> <span class="s">&quot; -d &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;depends&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;force&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;-f &#39;</span>
-        <span class="k">if</span> <span class="n">after_install</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;after_install&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;--after-install {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">after_install</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">before_install</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;after_install&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;before_install&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="s">&#39;--before-install {} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">before_install</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;before_install&#39;</span><span class="p">])</span>
         <span class="c"># MUST BE LAST</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;fpm cmd is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;fpm cmd is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">))</span>
 
-<div class="viewcode-block" id="fpmHandler.fpm"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler.fpm">[docs]</a>    <span class="k">def</span> <span class="nf">fpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="n">_build_fpm_cmd_string</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<div class="viewcode-block" id="fpmHandler.fpm"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler.fpm">[docs]</a>    <span class="k">def</span> <span class="nf">fpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_fpm_cmd_string</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">do</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sudo</span><span class="p">)</span>
 
 </div></div>
@@ -1076,7 +1035,6 @@
 <span class="sd">        :param string package: package to download</span>
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># TODO: (TEST) add an is-package-installed check. if it is,</span>
         <span class="c"># TODO: (TEST) run yum reinstall instead of yum install.</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="c"># TODO: (BUG) yum download exits with an error even if the download</span>
@@ -1596,11 +1554,10 @@
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">check_distro</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;centos&#39;</span><span class="p">):</span>
-        <span class="n">rhel</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">elif</span> <span class="n">check_distro</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;Ubuntu&#39;</span><span class="p">,</span> <span class="s">&#39;debian&#39;</span><span class="p">):</span>
-        <span class="n">debian</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">if</span> <span class="n">check_distro</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;centos&#39;</span><span class="p">):</span>
+    <span class="n">centos</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">elif</span> <span class="n">check_distro</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;Ubuntu&#39;</span><span class="p">,</span> <span class="s">&#39;debian&#39;</span><span class="p">):</span>
+    <span class="n">debian</span> <span class="o">=</span> <span class="bp">True</span>
 </pre></div>
 
           </div>

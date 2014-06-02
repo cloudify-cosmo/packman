@@ -98,7 +98,8 @@ def set_global_verbosity_level(is_verbose_output=False):
     # print 'level is: ' + str(lgr.getEffectiveLevel())
 
 
-def check_distro(verify=False, supported=SUPPORTED_DISTROS):
+def check_distro(verify=False, supported=SUPPORTED_DISTROS, verbose=False):
+    set_global_verbosity_level(verbose)
     distro = dist()[0]
     lgr.debug('Distribution Identified: {}'.format(distro))
     if verify and distro not in supported:
@@ -183,7 +184,7 @@ def packman_runner(action='pack', components_file=None, components=None,
     except ImportError:
         lgr.error('could not import packages.py file. please verify that '
                   'it exists in the specified path')
-        raise PackagerError
+        raise PackagerError('components file missing')
     except:
         raise('Unknown Error when trying to import packages.py file')
     # if a component appears in both lists - ignore it.

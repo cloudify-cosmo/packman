@@ -1,10 +1,3 @@
-- nose-1.3.3-py2.7.egg/nose/util.py:34:    #  TODO: empty directories look like non-directory files
-- nose-1.3.3-py2.7.egg/nose/plugins/attrib.py:235:    #  TODO: is there a need for case-sensitive value comparison?
-- nose-1.3.3-py2.7.egg/nose/plugins/prof.py:135:    #  TODO: is this trying to catch just the case where not
-- nose-1.3.3-py2.7.egg/nose/loader.py:199:    #  TODO: is this try/except needed?
-- nose-1.3.3-py2.7.egg/nose/loader.py:545:    #  TODO: is this try/except needed?
-- nose-1.3.3-py2.7.egg/nose/inspector.py:160:    #  TODO
-- nose-1.3.3-py2.7.egg/nose/inspector.py:163:    #  TODO
 - packman/tests/test_packman.py:290:    #  TODO: (TEST) add wget archives dir test
 - packman/tests/test_packman.py:557:    #  TODO: (TEST) add apt handler tests
 - packman/tests/test_packman.py:558:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
@@ -18,32 +11,29 @@
 - packman/packman.py:364:    #  TODO: (FEAT) add support for installing reqs from urls
 - packman/packman.py:440:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
 - packman/packman.py:441:    #  TODO: (STPD) replace it with a normal destination path
-- packman/packman.py:510:    #  TODO: (FEAT) build fpm commands options before running
-- packman/packman.py:511:    #  TODO: (FEAT) fpm maybe map config params to fpm flags...
-- packman/packman.py:556:    #  TODO: (FEAT) create mock package
-- packman/packman.py:618:    #  TODO: (FEAT) apply verbosity according to the verbose flag in pkm
-- packman/packman.py:619:    #  TODO: (FEAT) instead of a verbose flag in the config.
-- packman/packman.py:703:    #  TODO: (IMPRV) handle multiple files differently
-- packman/packman.py:871:    #  TODO: (FEAT) support virtualenv --relocate OR
-- packman/packman.py:872:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:906:    #  TODO: (TEST) add support for ruby in different environments
-- packman/packman.py:956:    #  TODO: (TEST) run yum reinstall instead of yum install.
-- packman/packman.py:958:    #  TODO: (BUG) yum download exits with an error even if the download
-- packman/packman.py:959:    #  TODO: (BUG) succeeded due to a non-zero error message.
-- packman/packman.py:960:    #  TODO: (FEAT) add yum enable-repo option
-- packman/packman.py:961:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:962:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
-- packman/packman.py:1074:    #  TODO: (IMPRV) add an is-package-installed check. if it is
-- packman/packman.py:1075:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
-- packman/packman.py:1076:    #  TODO: (IMPRV) install.
-- packman/packman.py:1077:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-- packman/packman.py:1078:    #  TODO: for downloading requirements
-- packman/packman.py:1212:    #  TODO: (IMPRV) think about moving the file ext check to the get
-- packman/packman.py:1213:    #  TODO: (IMPRV) method instead.. maybe it's a better solution
-- packman/packman.py:1234:    #  TODO: (FEAT) implement curl?
-- packman/packman.py:1257:    #  TODO: (IMPRV) replace this with method generate_from_template()..
-- packman/packman.py:1454:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
+- packman/packman.py:519:    #  TODO: (FEAT) create mock package
+- packman/packman.py:581:    #  TODO: (FEAT) apply verbosity according to the verbose flag in pkm
+- packman/packman.py:582:    #  TODO: (FEAT) instead of a verbose flag in the config.
+- packman/packman.py:666:    #  TODO: (IMPRV) handle multiple files differently
+- packman/packman.py:834:    #  TODO: (FEAT) support virtualenv --relocate OR
+- packman/packman.py:835:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/packman.py:869:    #  TODO: (TEST) add support for ruby in different environments
+- packman/packman.py:919:    #  TODO: (TEST) run yum reinstall instead of yum install.
+- packman/packman.py:921:    #  TODO: (BUG) yum download exits with an error even if the download
+- packman/packman.py:922:    #  TODO: (BUG) succeeded due to a non-zero error message.
+- packman/packman.py:923:    #  TODO: (FEAT) add yum enable-repo option
+- packman/packman.py:924:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+- packman/packman.py:925:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
+- packman/packman.py:1037:    #  TODO: (IMPRV) add an is-package-installed check. if it is
+- packman/packman.py:1038:    #  TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
+- packman/packman.py:1039:    #  TODO: (IMPRV) install.
+- packman/packman.py:1040:    #  TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+- packman/packman.py:1041:    #  TODO: for downloading requirements
+- packman/packman.py:1175:    #  TODO: (IMPRV) think about moving the file ext check to the get
+- packman/packman.py:1176:    #  TODO: (IMPRV) method instead.. maybe it's a better solution
+- packman/packman.py:1197:    #  TODO: (FEAT) implement curl?
+- packman/packman.py:1220:    #  TODO: (IMPRV) replace this with method generate_from_template()..
+- packman/packman.py:1417:    #  TODO: (FEAT) receive PRINT_TEMPLATES from pkm
 - vagrant/provision.sh:6:    #  TODO: check if make/git are required by default
 - vagrant/provision.sh:21:    #  TODO: add virtualenv to provisioning process
 - vagrant/provision.sh:24:    #  TODO: add bash completion support using docopt-completion
-- virtualenv-1.11.6-py2.7.egg/virtualenv.py:2340:    # # TODO:
