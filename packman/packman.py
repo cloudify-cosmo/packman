@@ -319,7 +319,8 @@ def get(component):
 
     # should the source dir be removed before retrieving package contents?
     if overwrite:
-        lgr.info('overwrite enabled. removing directory before retrieval')
+        lgr.info('overwrite enabled. removing {0} before retrieval'.format(
+            dst_path))
         common.rmdir(dst_path)
     else:
         if common.is_dir(dst_path):
@@ -468,7 +469,8 @@ def pack(component):
 
     # should the packaging process overwrite the previous packages?
     if overwrite:
-        lgr.info('overwrite enabled. removing directory before packaging')
+        lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
+                 .format(package_path, name))
         common.rm('{0}/{1}*'.format(package_path, name))
     # if the package is ...
     if src_pkg_type:
