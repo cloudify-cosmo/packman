@@ -3,8 +3,6 @@ echo bootstrapping packman...
 # update
 sudo apt-get -y update &&
 # install prereqs
-# TODO: check if make/git are required by default
-# sudo apt-get install -y make git &&
 sudo apt-get install -y python-setuptools python-dev rubygems &&
 # install fpm
 sudo gem install fpm --no-ri --no-rdoc &&

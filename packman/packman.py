@@ -18,6 +18,7 @@
 # TODO: (FEAT) add http://semver.org/ support
 # TODO: (READ) review https://speakerdeck.com/schisamo/eat-the-whole-bowl-building-a-full-stack-installer-with-omnibus  # NOQA
 # TODO: (IMPRV) redo RepoHandler implementation with generic one. should pull all repo handling commands from config  # NOQA
+# TODO: (FEAT) add support to download and run from github repos so that "components" repos can be created  # NOQA
 
 import logging
 import logging.config
@@ -332,6 +333,8 @@ def get(component):
     if not common.is_dir(dst_path):
         common.mkdir(dst_path)
 
+    # TODO: (TEST) raise on "command not supported by distro"
+    # TODO: (FEAT) add support for building packages from source
     if prereqs:
         repo_handler.installs(prereqs)
     # if there's a source repo to add... add it.
@@ -339,6 +342,8 @@ def get(component):
         repo_handler.add_src_repos(source_repos)
     # if there's a source ppa to add... add it?
     if source_ppas:
+        if not debian:
+            raise PackagerError('command not supported in distro')
         repo_handler.add_ppa_repos(source_ppas)
     # get a key for the repo if it's required..
     if source_keys:
@@ -354,7 +359,7 @@ def get(component):
             # if the source file is an rpm or deb, we want to download
             # it to the archives folder. yes, it's a dreadful solution...
             if url_ext in ('.rpm', '.deb'):
-                lgr.debug('the file is an {0} file. we\'ll download it '
+                lgr.debug('the file is a {0} file. we\'ll download it '
                           'to the archives folder'.format(url_pkg_ext))
                 dst_path += '/archives'
                 # elif file:
@@ -367,8 +372,14 @@ def get(component):
         repo_handler.update()
     # download any other requirements if they exist
     if reqs:
-        # TODO: (FEAT) add support for installing reqs from urls
-        repo_handler.downloads(reqs, dst_path)
+        for req in reqs:
+            if req.startswith('http'):
+                dl_handler.wget(req, file='/tmp/dep.tar.gz')
+                with lcd(dst_path):
+                    common.untar('/tmp/dep.tar.gz')
+                    # packman_runner('make', )
+            else:
+                repo_handler.download(reqs, dst_path)
     # download relevant python modules...
     if modules:
         py_handler.get_python_modules(modules, dst_path)
@@ -465,7 +476,6 @@ def pack(component):
     if sources_path == tmp_pkg_path:
         lgr.error('source and destination paths must'
                   ' be different to avoid conflicts!')
-    lgr.info('cleaning up before packaging...')
 
     # should the packaging process overwrite the previous packages?
     if overwrite:
@@ -916,8 +926,8 @@ class YumHandler(CommonHandler):
         """
         # TODO: (TEST) run yum reinstall instead of yum install.
         lgr.debug('downloading {0} to {1}'.format(package, dir))
-        # TODO: (BUG) yum download exits with an error even if the download
-        # TODO: (BUG) succeeded due to a non-zero error message.
+        # TODO: (FIX) yum download exits with an error even if the download
+        # TODO: (FIX) succeeded due to a non-zero error message.
         # TODO: (FEAT) add yum enable-repo option
         # TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
         # TODO: (IMPRV) can be used to download deps. test to see if it works.
