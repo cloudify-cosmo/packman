@@ -496,10 +496,9 @@ def pack(component):
                 do('chmod +x {0}'.format(bootstrap_script_in_pkg))
                 lgr.debug('copying bootstrap script to package directory')
                 common.cp(bootstrap_script_in_pkg, sources_path)
-    lgr.info('packing up component...')
+    lgr.info('packing up component: {0}'.format(name))
     # if a package needs to be created (not just files copied)...
     if src_pkg_type:
-        lgr.info('packing {0}'.format(name))
         # if the source dir for the package exists
         if common.is_dir(sources_path):
             # change the path to the destination path, since fpm doesn't
@@ -657,7 +656,7 @@ class CommonHandler():
         """
         lgr.debug('attempting to remove directory {0}'.format(dir))
         return do('rm -rf {0}'.format(dir), sudo=sudo) \
-            if os.path.isdir(dir) else lgr.warning('dir doesn\'t exist')
+            if os.path.isdir(dir) else lgr.debug('dir doesn\'t exist')
         return False
 
     # TODO: (IMPRV) handle multiple files differently
@@ -667,9 +666,9 @@ class CommonHandler():
 
         :param string file(s): file(s) to remove
         """
-        lgr.info('removing files {0}'.format(file))
+        lgr.debug('removing files {0}'.format(file))
         return do('rm {0}'.format(file), sudo=sudo) if os.path.isfile(file) \
-            else lgr.warning('file(s) do(es)n\'t exist')
+            else lgr.debug('file(s) do(es)n\'t exist')
         return False
 
     def cp(self, src, dst, recurse=True, sudo=True):

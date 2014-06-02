@@ -39,9 +39,12 @@ Options:
 
 from __future__ import absolute_import
 from docopt import docopt
-
+from packman.packman import init_logger
 from packman.packman import packman_runner
 from packman.packman import check_distro
+from packman.packman import set_global_verbosity_level
+
+lgr = init_logger()
 
 
 def main(test_options=None):
@@ -56,8 +59,9 @@ def main(test_options=None):
         del pkg_resources
 
     options = test_options or docopt(__doc__, version=version)
+    set_global_verbosity_level(options.get('--verbose'))
     check_distro(verify=True, verbose=options.get('--verbose'))
-    print(options)
+    lgr.debug(options)
     if options['pack']:
         packman_runner('pack',
                        options.get('--components-file'),
