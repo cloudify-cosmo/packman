@@ -186,8 +186,9 @@ def packman_runner(action='pack', components_file=None, components=None,
         lgr.error('could not import packages.py file. please verify that '
                   'it exists in the specified path')
         raise PackagerError('components file missing')
-    except:
-        raise('Unknown Error when trying to import packages.py file')
+    except Exception as e:
+        raise('Unknown Error when trying to import packages.py file: {}'
+              .format(e))
     # if a component appears in both lists - ignore it.
     # if it appears only in the components list, continue.
     # if it appears only in the excluded list, continue
