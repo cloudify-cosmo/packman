@@ -1031,11 +1031,11 @@ class AptHandler(CommonHandler):
         :param string pkg: package to download
         :param string dir: dir to download to
         """
-        # TODO: (IMPRV) add an is-package-installed check. if it is
-        # TODO: (IMPRV) run apt-get install --reinstall instead of apt-get
-        # TODO: (IMPRV) install.
-        # TODO: try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-        # TODO: for downloading requirements
+        # TODO: (TEST) add an is-package-installed check. if it is
+        # TODO: (TEST) run apt-get install --reinstall instead of apt-get
+        # TODO: (TEST) install.
+        # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+        # TODO: (IMPRV) for downloading requirements
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
         if check_if_package_is_installed(pkg):
             return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
@@ -1392,7 +1392,6 @@ class TemplateHandler(CommonHandler):
         """
         creates a file from content
         """
-        # TODO: (FEAT) receive PRINT_TEMPLATES from pkm
         lgr.debug('creating file: {0} with content: \n{1}'.format(
                   output_path, content))
         try:
@@ -1413,7 +1412,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-if check_distro() in ('centos'):
-    centos = True
-elif check_distro() in ('Ubuntu', 'debian'):
-    debian = True
+centos = True if check_distro() in ('centos') else False
+debian = True if check_distro() in ('Ubuntu', 'debian') else False
