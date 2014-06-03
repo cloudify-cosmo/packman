@@ -34,6 +34,7 @@ from time import sleep
 from jinja2 import Environment, FileSystemLoader
 from platform import dist
 import urllib2
+import glob
 
 # __all__ = ['list']
 
@@ -185,9 +186,11 @@ def packman_runner(action='pack', components_file=None, components=None,
         os.getcwd(), 'packages.py')
     lgr.debug('components file is: {}'.format(components_file))
     # append to path for importing
+    # print(os.path.dirname(components_file))
     sys.path.append(os.path.dirname(components_file))
     # import
     try:
+        # print(str(os.path.basename(os.path.splitext(components_file)[0])))
         packages = __import__(os.path.basename(os.path.splitext(
             components_file)[0]))
     except ImportError:
@@ -250,7 +253,6 @@ def packman_runner(action='pack', components_file=None, components=None,
                                 action, component))()
                     # else run the default action method
                     else:
-                        # TODO: add "make" action method to replace pkm one
                         # TODO: check for bad action
                         globals()[action](get_component_config(
                             component, components_file=components_file))
@@ -374,19 +376,17 @@ def get(component):
     # download any other requirements if they exist
     for req in reqs:
         if req.startswith('http'):
-            common.mkdir('{}/tmp'.format(dst_path))
-            dl_handler.download(req, file='{}/tmp/{}_reqs.tar.gz'.format(
-                dst_path, name))
-            common.untar('{}/tmp'.format(dst_path),
-                         '{}/tmp/{}_reqs.tar.gz'.format(
-                             dst_path, name))
-            import glob
-            cf = glob.glob('{}/tmp/*/packages.py'.format(dst_path))
-            # print 'AHHHHHHHHHHHHHHHHHHHHHHH', cf[0]
-            # with open(cf[0], 'r') as f:
-            #     print f.read()
-            packman_runner('get', components_file=cf[0])
-            packman_runner('pack', components_file=cf[0])
+            common.mkdir('/tmp')
+            dl_handler.download(req, file='/tmp/{}_reqs.tar.gz'.format(
+                name))
+            common.untar('/tmp',
+                         '/tmp/{}_reqs.tar.gz'.format(
+                             name), strip=0)
+            cf = glob.glob('/tmp/packages.py')
+            if not cf:
+                cf = glob.glob('/tmp/**/packages.py')
+            print 'HAHAAAAAAAAAAAAAAAAAAAA', cf
+
         else:
             repo_handler.download(reqs, dst_path)
     # download relevant python modules...
@@ -703,7 +703,7 @@ class CommonHandler():
         return do('tar -C {0} -c{1} {2} {3}'.format(
             chdir, opts, output_file, input_path), sudo=sudo)
 
-    def untar(self, chdir, input_file, opts='zvf', sudo=True):
+    def untar(self, chdir, input_file, opts='zvf', strip=0, sudo=True):
         """
         untars a file
 
@@ -712,8 +712,8 @@ class CommonHandler():
         :param string opts: tar opts
         """
         lgr.debug('untar-ing {0}'.format(input_file))
-        return do('tar -C {0} -x{1} {2}'.format(
-            chdir, opts, input_file), sudo=sudo)
+        return do('tar -C {0} -x{1} {2} --strip={3}'.format(
+            chdir, opts, input_file, strip), sudo=sudo)
 
 
 class fpmHandler(CommonHandler):
@@ -1043,7 +1043,7 @@ class AptHandler(CommonHandler):
         # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
         # TODO: (IMPRV) for downloading requirements
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        if check_if_package_is_installed(pkg):
+        if self.check_if_package_is_installed(pkg):
             return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
                       .format(pkg, dir))
         else:
