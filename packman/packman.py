@@ -851,7 +851,7 @@ class PythonHandler(CommonHandler):
 
 
 class RubyHandler(CommonHandler):
-    def get_ruby_gems(self, gem, dir=False):
+    def get_ruby_gems(self, gems, dir=False):
         """
         downloads a list of ruby gems
 

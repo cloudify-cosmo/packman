@@ -17,7 +17,7 @@
 from packman.packman import init_logger
 from packman.packman import get_component_config as get_conf
 from packman.packman import CommonHandler
-from packman.packman import DownloadsHandler
+from packman.packman import WgetHandler
 from packman.packman import do
 
 from fabric.api import *  # NOQA
@@ -45,10 +45,10 @@ def get_elasticsearch():
 
     package = get_conf('elasticsearch')
 
-    dl_handler = DownloadsHandler()
+    dl_handler = WgetHandler()
     _prepare(package)
     for url in package['source_urls']:
-        dl_handler.wget(url, dir=package['sources_path'])
+        dl_handler.download(url, dir=package['sources_path'])
 
 
 def get_kibana():
@@ -59,10 +59,10 @@ def get_kibana():
 
     package = get_conf('kibana3')
 
-    dl_handler = DownloadsHandler()
+    dl_handler = WgetHandler()
     _prepare(package)
     for url in package['source_urls']:
-        dl_handler.wget(url, dir=package['sources_path'])
+        dl_handler.download(url, dir=package['sources_path'])
 
 
 def get_ruby():
