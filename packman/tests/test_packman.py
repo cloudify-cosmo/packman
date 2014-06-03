@@ -18,13 +18,12 @@ __author__ = 'nir0s'
 from packman.packman import do
 from packman.packman import CommonHandler
 from packman.packman import PythonHandler
-from packman.packman import DownloadsHandler
+from packman.packman import WgetHandler
 from packman.packman import TemplateHandler
 from packman.packman import PackagerError
 from packman.packman import init_logger
 from packman.packman import get_component_config
-from packman.packman import check_distro
-from packman.packman import SUPPORTED_DISTROS
+from packman.packman import check_distro, get_distro
 from packman.packman import set_global_verbosity_level
 
 
@@ -265,26 +264,34 @@ class PythonHandlerTest(unittest.TestCase, PythonHandler, CommonHandler):
         self.assertTrue(outcome)
 
 
-class DownloadsHandlerTest(unittest.TestCase, DownloadsHandler,
-                           CommonHandler):
+class WgetHandlerTest(unittest.TestCase, WgetHandler,
+                      CommonHandler):
+
+    @dir
+    def test_wgets_file_to_dir(self):
+        with hide(HIDE_LEVEL):
+            self.downloads(['www.google.com'], dir=TEST_DIR, sudo=False)
+        outcome = self.is_file('{0}/index.html'.format(TEST_DIR))
+        self.assertTrue(outcome)
 
     @dir
     def test_wget_file_to_dir(self):
         with hide(HIDE_LEVEL):
-            self.wget('www.google.com', dir=TEST_DIR, sudo=False)
+            self.download('www.google.com', dir=TEST_DIR, sudo=False)
         outcome = self.is_file('{0}/index.html'.format(TEST_DIR))
         self.assertTrue(outcome)
 
     @dir
     def test_wget_file_to_file(self):
         with hide(HIDE_LEVEL):
-            self.wget('www.google.com', file=TEST_FILE, sudo=False)
+            self.download('www.google.com', file=TEST_FILE, sudo=False)
         outcome = self.is_file(TEST_FILE)
         self.assertTrue(outcome)
 
     def test_wget_nonexistent_url(self):
         with hide(HIDE_LEVEL):
-            outcome = self.wget('www.google.comd', dir=TEST_DIR, sudo=False)
+            outcome = self.download('www.google.comd', dir=TEST_DIR,
+                                    sudo=False)
         self.assertTrue(outcome.failed)
 
     # TODO: (TEST) add wget archives dir test
@@ -505,18 +512,17 @@ class TestBaseMethods(unittest.TestCase):
         except PackagerError as ex:
             self.assertEqual(str(ex), 'missing components file')
 
-    def test_check_distro(self):
+    def test_get_distro(self):
         test_distro = dist()[0]
-        distro = check_distro()
+        distro = get_distro()
         self.assertEqual(distro, test_distro)
 
-    def test_check_distro_verify_success(self):
-        distro = check_distro(verify=True)
-        self.assertIn(distro, SUPPORTED_DISTROS)
+    def test_check_distro_success(self):
+        check_distro()
 
-    def test_check_distro_verify_fail(self):
+    def test_check_distro_fail(self):
         try:
-            check_distro(verify=True, supported='nodistro')
+            check_distro(supported='nodistro')
         except RuntimeError as ex:
             self.assertEqual(str(ex), 'distro not supported')
 

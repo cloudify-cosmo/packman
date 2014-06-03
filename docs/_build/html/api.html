@@ -126,7 +126,7 @@
 </div>
 <span class="target" id="module-packman.packman"></span><dl class="function">
 <dt id="packman.packman.init_logger">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">init_logger</tt><big>(</big><em>base_level=20</em>, <em>verbose_level=10</em>, <em>logging_config={}</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.init_logger" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">init_logger</tt><big>(</big><em>base_level=20</em>, <em>verbose_level=10</em>, <em>logging_config=None</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.init_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>initializes a base logger</p>
 <p>you can use this to init a logger in any of your files.
 this will use config.py&#8217;s LOGGER param and logging.dictConfig to configure
@@ -165,13 +165,18 @@ used to override the default configuration from config.py</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="packman.packman.get_distro">
+<tt class="descclassname">packman.packman.</tt><tt class="descname">get_distro</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_distro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="packman.packman.check_distro">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">check_distro</tt><big>(</big><em>verify=False</em>, <em>supported=('Ubuntu'</em>, <em>'debian'</em>, <em>'centos')</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#check_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.check_distro" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">check_distro</tt><big>(</big><em>supported=('Ubuntu'</em>, <em>'debian'</em>, <em>'centos')</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#check_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.check_distro" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="packman.packman.get_component_config">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">get_component_config</tt><big>(</big><em>component_name</em>, <em>components_dict={}</em>, <em>components_file=''</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_component_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_component_config" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">get_component_config</tt><big>(</big><em>component_name</em>, <em>components_dict=None</em>, <em>components_file=''</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_component_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_component_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns a component&#8217;s configuration</p>
 <p>if <cite>components_dict</cite> is not supplied, a packages.py file in the cwd will be
 assumed unless <cite>components_file</cite> is explicitly given.
@@ -1075,12 +1080,12 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 </dd></dl>
 
 <dl class="class">
-<dt id="packman.packman.DownloadsHandler">
-<em class="property">class </em><tt class="descclassname">packman.packman.</tt><tt class="descname">DownloadsHandler</tt><a class="reference internal" href="_modules/packman/packman.html#DownloadsHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.DownloadsHandler" title="Permalink to this definition">¶</a></dt>
+<dt id="packman.packman.WgetHandler">
+<em class="property">class </em><tt class="descclassname">packman.packman.</tt><tt class="descname">WgetHandler</tt><a class="reference internal" href="_modules/packman/packman.html#WgetHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.WgetHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#packman.packman.CommonHandler" title="packman.packman.CommonHandler"><tt class="xref py py-class docutils literal"><span class="pre">packman.packman.CommonHandler</span></tt></a></p>
 <dl class="method">
-<dt id="packman.packman.DownloadsHandler.wgets">
-<tt class="descname">wgets</tt><big>(</big><em>urls</em>, <em>dir=False</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#DownloadsHandler.wgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.DownloadsHandler.wgets" title="Permalink to this definition">¶</a></dt>
+<dt id="packman.packman.WgetHandler.downloads">
+<tt class="descname">downloads</tt><big>(</big><em>urls</em>, <em>dir=False</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#WgetHandler.downloads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.WgetHandler.downloads" title="Permalink to this definition">¶</a></dt>
 <dd><p>wgets a list of urls to a destination directory</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1097,8 +1102,8 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="packman.packman.DownloadsHandler.wget">
-<tt class="descname">wget</tt><big>(</big><em>url</em>, <em>dir=False</em>, <em>file=False</em>, <em>url_pkg_ext=False</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#DownloadsHandler.wget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.DownloadsHandler.wget" title="Permalink to this definition">¶</a></dt>
+<dt id="packman.packman.WgetHandler.download">
+<tt class="descname">download</tt><big>(</big><em>url</em>, <em>dir=False</em>, <em>file=False</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#WgetHandler.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.WgetHandler.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>wgets a url to a destination directory or file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1115,68 +1120,12 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="packman.packman.DownloadsHandler.curls">
-<tt class="descname">curls</tt><big>(</big><em>urls</em>, <em>dir=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#DownloadsHandler.curls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.DownloadsHandler.curls" title="Permalink to this definition">¶</a></dt>
-<dd><p>curls a list of urls</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>url</strong> (<em>list</em>) &#8211; urls to curl?</li>
-<li><strong>dir</strong> (<em>string</em>) &#8211; curl to dir....</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="packman.packman.DownloadsHandler.curl">
-<tt class="descname">curl</tt><big>(</big><em>url</em>, <em>dir=False</em>, <em>file=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#DownloadsHandler.curl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.DownloadsHandler.curl" title="Permalink to this definition">¶</a></dt>
-<dd><p>curls a url</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>url</strong> (<em>string</em>) &#8211; url to curl?</li>
-<li><strong>dir</strong> (<em>string</em>) &#8211; download to dir....</li>
-<li><strong>file</strong> (<em>string</em>) &#8211; download to file...</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="packman.packman.TemplateHandler">
 <em class="property">class </em><tt class="descclassname">packman.packman.</tt><tt class="descname">TemplateHandler</tt><a class="reference internal" href="_modules/packman/packman.html#TemplateHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.TemplateHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#packman.packman.CommonHandler" title="packman.packman.CommonHandler"><tt class="xref py py-class docutils literal"><span class="pre">packman.packman.CommonHandler</span></tt></a></p>
-<dl class="method">
-<dt id="packman.packman.TemplateHandler.create_bootstrap_script">
-<tt class="descname">create_bootstrap_script</tt><big>(</big><em>component</em>, <em>template_file</em>, <em>script_file</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#TemplateHandler.create_bootstrap_script"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.TemplateHandler.create_bootstrap_script" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a script file from a template file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>component</strong> (<em>dict</em>) &#8211; contains the params to use in the template</li>
-<li><strong>template_file</strong> (<em>string</em>) &#8211; template file path</li>
-<li><strong>script_file</strong> (<em>string</em>) &#8211; output path for generated script</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="packman.packman.TemplateHandler.generate_configs">
 <tt class="descname">generate_configs</tt><big>(</big><em>component</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#TemplateHandler.generate_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.TemplateHandler.generate_configs" title="Permalink to this definition">¶</a></dt>

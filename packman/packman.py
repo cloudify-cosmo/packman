@@ -41,7 +41,7 @@ SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 
 
 def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
-                logging_config={}):
+                logging_config=None):
     """
     initializes a base logger
 
@@ -55,8 +55,9 @@ def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
      used to override the default configuration from config.py
     :rtype: `python logger`
     """
-
-    logging_config = pkm_conf.LOGGER if not logging_config else logging_config
+    if logging_config is None:
+        logging_config = {}
+    logging_config = logging_config or pkm_conf.LOGGER
     # TODO: (IMPRV) only perform file related actions if file handler is
     # TODO: (IMPRV) defined.
 
@@ -96,23 +97,29 @@ def set_global_verbosity_level(is_verbose_output=False):
     verbose_output = is_verbose_output
     if verbose_output:
         lgr.setLevel(logging.DEBUG)
+    else:
+        lgr.setLevel(logging.INFO)
     # print 'level is: ' + str(lgr.getEffectiveLevel())
 
 
-def check_distro(verify=False, supported=SUPPORTED_DISTROS, verbose=False):
-    set_global_verbosity_level(verbose)
+def get_distro():
     distro = dist()[0]
+    return distro
+
+
+def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
+    set_global_verbosity_level(verbose)
+    distro = get_distro()
     lgr.debug('Distribution Identified: {}'.format(distro))
-    if verify and distro not in supported:
+    if distro not in supported:
         lgr.debug('Your distribution is not supported.'
                   'Supported Disributions are:')
         for distro in supported:
             print('    {}'.format(distro))
         raise RuntimeError('distro not supported')
-    return distro
 
 
-def get_component_config(component_name, components_dict={},
+def get_component_config(component_name, components_dict=None,
                          components_file=''):
     """
     returns a component's configuration
@@ -125,10 +132,12 @@ def get_component_config(component_name, components_dict={},
     :param string component: component name to retrieve config for.
     :rtype: `dict` representing package configuration
     """
+    if components_dict is None:
+        components_dict = {}
     lgr.debug('retrieving configuration for {0}'.format(component_name))
     try:
         if not components_dict:
-            components_file = os.getcwd() + '/' + 'packages.py' \
+            components_file = os.path.join(os.getcwd(), 'packages.py') \
                 if len(components_file) == 0 else components_file
             lgr.debug('components file is: {}'.format(components_file))
             sys.path.append(os.path.dirname(components_file))
@@ -170,11 +179,10 @@ def packman_runner(action='pack', components_file=None, components=None,
     :param bool verbose: determines output verbosity level
     :rtype: `None`
     """
-    if verbose:
-        set_global_verbosity_level(is_verbose_output=True)
+    set_global_verbosity_level(verbose)
     # get packages.py file path
-    components_file = components_file if components_file is not None \
-        else os.getcwd() + '/' + 'packages.py'
+    components_file = components_file or os.path.join(
+        os.getcwd(), 'packages.py')
     lgr.debug('components file is: {}'.format(components_file))
     # append to path for importing
     sys.path.append(os.path.dirname(components_file))
@@ -186,20 +194,21 @@ def packman_runner(action='pack', components_file=None, components=None,
         lgr.error('could not import packages.py file. please verify that '
                   'it exists in the specified path')
         raise PackagerError('components file missing')
-    except Exception as e:
-        raise('Unknown Error when trying to import packages.py file: {}'
-              .format(e))
+    # except Exception as e:
+    #     raise('Unknown Error when trying to import packages.py file: {}'
+    #           .format(e))
     # if a component appears in both lists - ignore it.
     # if it appears only in the components list, continue.
     # if it appears only in the excluded list, continue
     # append excluded components to list.
-    xcom_list = []
-    if excluded is not None:
-        for xcom in excluded.split(','):
-            xcom_list.append(xcom)
+    # xcom_list = []
+    # if excluded:
+    #     for xcom in excluded.split(','):
+    #         xcom_list.append(xcom)
+    xcom_list = filter(None, (excluded or "").split(','))
     # append components to list if a list is supplied
     com_list = []
-    if components is not None:
+    if components:
         for component in components.split(','):
             com_list.append(component)
         # and raise if components appear in exlucded list and components list
@@ -226,18 +235,23 @@ def packman_runner(action='pack', components_file=None, components=None,
             # TODO: the list is written with this in mind. maybe we can remove?
             if component not in xcom_list:
                 # looks for the overriding methods file in the current path
-                if os.path.isfile(os.getcwd() + '/{}.py'.format(action)):
+                if os.path.isfile(os.path.join(os.getcwd(), '{}.py'.format(
+                        action))):
                     # imports the overriding methods file
                     overr_methods = __import__(os.path.basename(
                         os.path.splitext(
-                            os.getcwd() + '/{}.py'.format(action))[0]))
+                            os.path.join(os.getcwd(), '{}.py'.format(
+                                action)))[0]))
                     # if the method was found in the overriding file, run it.
-                    if '{}_{}'.format(action, component) in dir(overr_methods):
+                    if hasattr(overr_methods, '{}_{}'.format(
+                            action, component)):
                         getattr(
                             overr_methods, '{}_{}'.format(
                                 action, component))()
                     # else run the default action method
                     else:
+                        # TODO: add "make" action method to replace pkm one
+                        # TODO: check for bad action
                         globals()[action](get_component_config(
                             component, components_file=components_file))
                 # else run the default action method
@@ -285,37 +299,26 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    source_repos = c[defs.PARAM_SOURCE_REPOS] \
-        if defs.PARAM_SOURCE_REPOS in c else False
-    source_ppas = c[defs.PARAM_SOURCE_PPAS] \
-        if defs.PARAM_SOURCE_PPAS in c else False
-    source_keys = c[defs.PARAM_SOURCE_KEYS] \
-        if defs.PARAM_SOURCE_KEYS in c else False
-    source_urls = c[defs.PARAM_SOURCE_URLS] \
-        if defs.PARAM_SOURCE_URLS in c else False
-    key_files = c[defs.PARAM_KEY_FILES_PATH] \
-        if defs.PARAM_KEY_FILES_PATH in c else False
-    reqs = c[defs.PARAM_REQS] \
-        if defs.PARAM_REQS in c else False
-    prereqs = c[defs.PARAM_PREREQS] \
-        if defs.PARAM_PREREQS in c else False
-    dst_path = c[defs.PARAM_SOURCES_PATH] \
-        if defs.PARAM_SOURCES_PATH in c else False
-    package_path = c[defs.PARAM_PACKAGE_PATH] \
-        if defs.PARAM_PACKAGE_PATH in c else False
-    modules = c[defs.PARAM_MODULES] \
-        if defs.PARAM_MODULES in c else False
-    gems = pakcage[defs.PARAM_GEMS] \
-        if defs.PARAM_GEMS in c else False
-    overwrite = c[defs.PARAM_OVERWRITE_SOURCES] \
-        if defs.PARAM_OVERWRITE_SOURCES in c else True
+    name = c.get(defs.PARAM_NAME, False)
+    source_repos = c.get(defs.PARAM_SOURCE_REPOS, [])
+    source_ppas = c.get(defs.PARAM_SOURCE_PPAS, [])
+    source_keys = c.get(defs.PARAM_SOURCE_KEYS, [])
+    source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
+    key_files = c.get(defs.PARAM_KEY_FILES_PATH, [])
+    reqs = c.get(defs.PARAM_REQS, [])
+    prereqs = c.get(defs.PARAM_PREREQS, [])
+    modules = c.get(defs.PARAM_MODULES, [])
+    gems = c.get(defs.PARAM_GEMS, [])
+    dst_path = c.get(defs.PARAM_SOURCES_PATH, False)
+    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
+    overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
 
     common = CommonHandler()
     if centos:
         repo_handler = YumHandler()
     elif debian:
         repo_handler = AptHandler()
-    dl_handler = DownloadsHandler()
+    dl_handler = WgetHandler()
     py_handler = PythonHandler()
     ruby_handler = RubyHandler()
 
@@ -329,64 +332,67 @@ def get(component):
             lgr.error('the destination directory for this package already '
                       'exists and overwrite is disabled.')
     # create the directories required for package creation...
-    if not common.is_dir(package_path + '/archives'):
-        common.mkdir(package_path + '/archives')
+    if not common.is_dir(os.path.join(package_path, 'archives')):
+        common.mkdir(os.path.join(package_path, 'archives'))
     if not common.is_dir(dst_path):
         common.mkdir(dst_path)
 
     # TODO: (TEST) raise on "command not supported by distro"
     # TODO: (FEAT) add support for building packages from source
-    if prereqs:
-        repo_handler.installs(prereqs)
+    repo_handler.installs(prereqs)
     # if there's a source repo to add... add it.
-    if source_repos:
-        repo_handler.add_src_repos(source_repos)
+    repo_handler.add_src_repos(source_repos)
     # if there's a source ppa to add... add it?
     if source_ppas:
         if not debian:
-            raise PackagerError('command not supported in distro')
+            raise PackagerError('ppas not supported by {}'.format(
+                get_distro()))
         repo_handler.add_ppa_repos(source_ppas)
     # get a key for the repo if it's required..
-    if source_keys:
-        dl_handler.wgets(source_keys, dir=dst_path)
-        for key in source_keys:
-            key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
-            repo_handler.add_key(dst_path + '/' + key_file)
+    dl_handler.downloads(source_keys, dir=dst_path)
+    for key in source_keys:
+        key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
+        repo_handler.add_key(os.path.join(dst_path, key_file))
     # retrieve the source for the package
-    if source_urls:
-        for source_url in source_urls:
-            # retrieve url file extension
-            url_ext = os.path.splitext(source_url)[1]
-            # if the source file is an rpm or deb, we want to download
-            # it to the archives folder. yes, it's a dreadful solution...
-            if url_ext in ('.rpm', '.deb'):
-                lgr.debug('the file is a {0} file. we\'ll download it '
-                          'to the archives folder'.format(url_pkg_ext))
-                dst_path += '/archives'
-                # elif file:
-                #     path, name = os.path.split(file)
-                #     file = path + '/archives/' + file
-            dl_handler.wget(source_url, dir=dst_path)
+    for source_url in source_urls:
+        # retrieve url file extension
+        url_ext = os.path.splitext(source_url)[1]
+        # if the source file is an rpm or deb, we want to download
+        # it to the archives folder. yes, it's a dreadful solution...
+        if url_ext in ('.rpm', '.deb'):
+            lgr.debug('the file is a {0} file. we\'ll download it '
+                      'to the archives folder'.format(url_pkg_ext))
+            dst_path += '/archives'
+            # elif file:
+            #     path, name = os.path.split(file)
+            #     file = path + '/archives/' + file
+        dl_handler.download(source_url, dir=dst_path)
     # add the repo key
     if key_files:
         repo_handler.add_keys(key_files)
         repo_handler.update()
     # download any other requirements if they exist
-    if reqs:
-        for req in reqs:
-            if req.startswith('http'):
-                dl_handler.wget(req, file='/tmp/dep.tar.gz')
-                with lcd(dst_path):
-                    common.untar('/tmp/dep.tar.gz')
-                    # packman_runner('make', )
-            else:
-                repo_handler.download(reqs, dst_path)
+    for req in reqs:
+        if req.startswith('http'):
+            common.mkdir('{}/tmp'.format(dst_path))
+            dl_handler.download(req, file='{}/tmp/{}_reqs.tar.gz'.format(
+                dst_path, name))
+            common.untar('{}/tmp'.format(dst_path),
+                         '{}/tmp/{}_reqs.tar.gz'.format(
+                             dst_path, name))
+            import glob
+            cf = glob.glob('{}/tmp/*/packages.py'.format(dst_path))
+            # print 'AHHHHHHHHHHHHHHHHHHHHHHH', cf[0]
+            # with open(cf[0], 'r') as f:
+            #     print f.read()
+            packman_runner('get', components_file=cf[0])
+            packman_runner('pack', components_file=cf[0])
+        else:
+            repo_handler.download(reqs, dst_path)
     # download relevant python modules...
-    if modules:
-        py_handler.get_python_modules(modules, dst_path)
+    py_handler.get_python_modules(modules, dst_path)
     # download relevant ruby gems...
-    if gems:
-        ruby_handler.get_ruby_gems(gems, dst_path)
+    ruby_handler.get_ruby_gems(gems, dst_path)
 
 
 def pack(component):
@@ -432,43 +438,31 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
-    name = c[defs.PARAM_NAME] \
-        if defs.PARAM_NAME in c else False
-    version = c[defs.PARAM_VERSION] \
-        if defs.PARAM_VERSION in c else False
-    bootstrap_template = c[defs.PARAM_BOOTSTRAP_TEMPLATE_PATH] \
-        if defs.PARAM_BOOTSTRAP_TEMPLATE_PATH in c else False
-    bootstrap_script = c[defs.PARAM_BOOTSTRAP_SCRIPT_PATH] \
-        if defs.PARAM_BOOTSTRAP_SCRIPT_PATH in c else False
-    bootstrap_script_in_pkg = cwd + '/' + \
-        c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH] \
+    name = c.get(defs.PARAM_NAME, False)
+    version = c.get(defs.PARAM_VERSION, False)
+    bootstrap_template = c.get(defs.PARAM_BOOTSTRAP_TEMPLATE_PATH, False)
+    bootstrap_script = c.get(defs.PARAM_BOOTSTRAP_SCRIPT_PATH, False)
+    bootstrap_script_in_pkg = os.path.join(
+        cwd, c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH]) \
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
-    src_pkg_type = c[defs.PARAM_SOURCE_PACKAGE_TYPE] \
-        if defs.PARAM_SOURCE_PACKAGE_TYPE in c else False
-    dst_pkg_type = c[defs.PARAM_DESTINATION_PACKAGE_TYPE] \
-        if defs.PARAM_DESTINATION_PACKAGE_TYPE in c else False
+    src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
+    dst_pkg_type = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPE, False)
     # identifies pkg type automatically if not specified explicitly
     if not dst_pkg_type:
         if centos:
             dst_pkg_type = 'rpm'
         elif debian:
             dst_pkg_type = 'deb'
-    sources_path = c[defs.PARAM_SOURCES_PATH] \
-        if defs.PARAM_SOURCES_PATH in c else False
+    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
     tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
         if defs.PARAM_SOURCES_PATH else False
-    package_path = c[defs.PARAM_PACKAGE_PATH] \
-        if defs.PARAM_PACKAGE_PATH in c else False
-    depends = c[defs.PARAM_DEPENDS] \
-        if defs.PARAM_DEPENDS in c else False
-    config_templates = c[defs.PARAM_CONFIG_TEMPLATE_CONFIG] \
-        if defs.PARAM_CONFIG_TEMPLATE_CONFIG in c else False
-    overwrite = c[defs.PARAM_OVERWRITE_OUTPUT_PACKAGE] \
-        if defs.PARAM_OVERWRITE_OUTPUT_PACKAGE in c else True
-    keep_sources = c[defs.PARAM_KEEP_SOURCES] \
-        if defs.PARAM_KEEP_SOURCES in c else True
+    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
+    depends = c.get(defs.PARAM_DEPENDS, False)
+    config_templates = c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False)
+    overwrite = c.get(defs.PARAM_OVERWRITE_OUTPUT_PACKAGE, True)
+    keep_sources = c.get(defs.PARAM_KEEP_SOURCES, True)
 
     common = CommonHandler()
     tmp_handler = TemplateHandler()
@@ -738,7 +732,7 @@ class fpmHandler(CommonHandler):
     def _build_fpm_cmd_string(self, **kwargs):
         self.command = self.command.format(
             self.name, self.input_type, self.output_type)
-        if kwargs['version'] is not None:
+        if kwargs['version']:
             self.command += '-v {} '.format(kwargs['version'])
         if kwargs['chdir']:
             self.command += '-C {} '.format(kwargs['chdir'])
@@ -746,12 +740,12 @@ class fpmHandler(CommonHandler):
             self.command += "-d " + " -d ".join(kwargs['depends'])
         if kwargs['force']:
             self.command += '-f '
-        if kwargs['after_install'] is not None:
+        if kwargs['after_install']:
             self.command += '--after-install {} '.format(
-                os.getcwd() + '/' + kwargs['after_install'])
-        if kwargs['before_install'] is not None:
+                os.path.join(os.getcwd(), kwargs['after_install']))
+        if kwargs['before_install']:
             self.command += '--before-install {} '.format(
-                os.getcwd() + '/' + kwargs['before_install'])
+                os.path.join(os.getcwd(), kwargs['before_install']))
         # MUST BE LAST
         self.command += self.source
         lgr.debug('fpm cmd is: {}'.format(self.command))
@@ -976,8 +970,8 @@ class YumHandler(CommonHandler):
         if os.path.splitext(source_repo)[1] == '.rpm':
             return do('sudo rpm -ivh {0}'.format(source_repo))
         else:
-            dl = DownloadsHandler()
-            dl.wget(source_repo, dir='/etc/yum.repos.d/')
+            dl = WgetHandler()
+            dl.download(source_repo, dir='/etc/yum.repos.d/')
 
     def add_keys(self, key_files):
         """
@@ -1165,8 +1159,8 @@ class AptHandler(CommonHandler):
         return do('sudo apt-get -y purge {0}'.format(package))
 
 
-class DownloadsHandler(CommonHandler):
-    def wgets(self, urls, dir=False, sudo=True):
+class WgetHandler(CommonHandler):
+    def downloads(self, urls, dir=False, sudo=True):
         """
         wgets a list of urls to a destination directory
 
@@ -1174,9 +1168,9 @@ class DownloadsHandler(CommonHandler):
         :param string dir: download to dir...
         """
         for url in urls:
-            self.wget(url, dir, sudo=sudo)
+            self.download(url, dir, sudo=sudo)
 
-    def wget(self, url, dir=False, file=False, sudo=True):
+    def download(self, url, dir=False, file=False, sudo=True):
         """
         wgets a url to a destination directory or file
 
@@ -1196,27 +1190,6 @@ class DownloadsHandler(CommonHandler):
             url, options, file), sudo=sudo) \
             if file else do('wget {0} {1} -P {2}'
                             .format(url, options, dir), sudo=sudo)
-
-    # TODO: (FEAT) implement curl?
-    def curls(self, urls, dir=False):
-        """
-        curls a list of urls
-
-        :param list url: urls to curl?
-        :param string dir: curl to dir....
-        """
-        for url in urls:
-            self.curl(url, dir)
-
-    def curl(self, url, dir=False, file=False):
-        """
-        curls a url
-
-        :param string url: url to curl?
-        :param string dir: download to dir....
-        :param string file: download to file...
-        """
-        raise PackagerError('not implemented!')
 
 
 class TemplateHandler(CommonHandler):
@@ -1348,8 +1321,9 @@ class TemplateHandler(CommonHandler):
             component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
         # copy the static files to the destination config dir.
         # yep, simple as that...
-        self.cp(files_dir + '/*', component[defs.PARAM_SOURCES_PATH] +
-                '/' + config_dir, sudo=sudo)
+        self.cp(os.path.join(files_dir, '*'),
+                os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir),
+                sudo=sudo)
 
     def generate_from_template(self, component_config, output_file,
                                template_file,
@@ -1386,7 +1360,7 @@ class TemplateHandler(CommonHandler):
             raise PackagerError('template dir missing')
         if type(template_file) is not str:
             raise PackagerError('template_file must be of type string')
-        if self.is_file(template_dir + '/' + template_file):
+        if self.is_file(os.path.join(template_dir, template_file)):
             template = env.get_template(template_file)
         else:
             lgr.error('template file missing')
@@ -1424,5 +1398,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-centos = True if check_distro() in ('centos') else False
-debian = True if check_distro() in ('Ubuntu', 'debian') else False
+
+centos = get_distro() in ('centos')
+debian = get_distro() in ('Ubuntu', 'debian')

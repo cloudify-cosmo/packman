@@ -47,8 +47,7 @@ from packman.packman import set_global_verbosity_level
 lgr = init_logger()
 
 
-def main(test_options=None):
-    """Main entry point for script."""
+def ver_check():
     import pkg_resources
     version = None
     try:
@@ -57,34 +56,47 @@ def main(test_options=None):
         print(e)
     finally:
         del pkg_resources
+    return version
 
+
+def pkm_run(o):
+    if o['pack']:
+        packman_runner('pack',
+                       o.get('--components-file'),
+                       o.get('--components'),
+                       o.get('--exclude'),
+                       o.get('--verbose'))
+    elif o['get']:
+        packman_runner('get',
+                       o.get('--components-file'),
+                       o.get('--components'),
+                       o.get('--exclude'),
+                       o.get('--verbose'))
+    elif o['make']:
+        packman_runner('get',
+                       o.get('--components-file'),
+                       o.get('--components'),
+                       o.get('--exclude'),
+                       o.get('--verbose'))
+        packman_runner('pack',
+                       o.get('--components-file'),
+                       o.get('--components'),
+                       o.get('--exclude'),
+                       o.get('--verbose'))
+
+
+def pkm(test_options=None):
+    """Main entry point for script."""
+    version = ver_check()
     options = test_options or docopt(__doc__, version=version)
     set_global_verbosity_level(options.get('--verbose'))
-    check_distro(verify=True, verbose=options.get('--verbose'))
+    check_distro(verbose=options.get('--verbose'))
     lgr.debug(options)
-    if options['pack']:
-        packman_runner('pack',
-                       options.get('--components-file'),
-                       options.get('--components'),
-                       options.get('--exclude'),
-                       options.get('--verbose'))
-    elif options['get']:
-        packman_runner('get',
-                       options.get('--components-file'),
-                       options.get('--components'),
-                       options.get('--exclude'),
-                       options.get('--verbose'))
-    elif options['make']:
-        packman_runner('get',
-                       options.get('--components-file'),
-                       options.get('--components'),
-                       options.get('--exclude'),
-                       options.get('--verbose'))
-        packman_runner('pack',
-                       options.get('--components-file'),
-                       options.get('--components'),
-                       options.get('--exclude'),
-                       options.get('--verbose'))
+    pkm_run(options)
+
+
+def main():
+    pkm()
 
 
 if __name__ == '__main__':
