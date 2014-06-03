@@ -388,7 +388,7 @@ def get(component):
             print 'HAHAAAAAAAAAAAAAAAAAAAA', cf
 
         else:
-            repo_handler.download(reqs, dst_path)
+            repo_handler.downloads(reqs, dst_path)
     # download relevant python modules...
     py_handler.get_python_modules(modules, dst_path)
     # download relevant ruby gems...
