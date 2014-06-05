@@ -104,11 +104,18 @@ def set_global_verbosity_level(is_verbose_output=False):
 
 
 def get_distro():
+    """returns the machine's distro
+    """
     distro = dist()[0]
     return distro
 
 
 def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
+    """checks that the machine's distro is supported
+
+    :param tuple supported: tuple of supported distros
+    :param bool verbose: verbosity level
+    """
     set_global_verbosity_level(verbose)
     distro = get_distro()
     lgr.debug('Distribution Identified: {}'.format(distro))
@@ -135,18 +142,26 @@ def get_component_config(component_name, components_dict=None,
     """
     if components_dict is None:
         components_dict = {}
-    lgr.debug('retrieving configuration for {0}'.format(component_name))
+    lgr.info('retrieving configuration for {0}'.format(component_name))
     try:
         if not components_dict:
             components_file = os.path.join(os.getcwd(), 'packages.py') \
                 if len(components_file) == 0 else components_file
-            lgr.debug('components file is: {}'.format(components_file))
+            lgr.info('components file is: {}'.format(components_file))
+            # sys.path.insert(0, os.path.dirname(components_file))
             sys.path.append(os.path.dirname(components_file))
             try:
-                components_dict = __import__(os.path.basename(os.path.splitext(
-                    components_file)[0])).PACKAGES
-            except:
-                raise PackagerError('missing components file')
+                # print ('OHHHHHHHH', sys.path)
+                print(os.path.basename(os.path.splitext(components_file)[0]))
+                os.chdir(os.path.dirname(components_file))
+                print 'AHHHHH', os.getcwd()
+                components_dict = __import__(os.path.basename(
+                    os.path.splitext(components_file)[0])).PACKAGES
+                # imp.load_module(components_file)
+                print('AHHHHHHHH', components_dict)
+            except Exception as e:
+                raise PackagerError('missing components file', e)
+            # del sys.path[0]
         component_config = components_dict[component_name]
         lgr.debug('{0} config retrieved successfully'.format(component_name))
         return component_config
@@ -241,6 +256,7 @@ def packman_runner(action='pack', components_file=None, components=None,
                 if os.path.isfile(os.path.join(os.getcwd(), '{}.py'.format(
                         action))):
                     # imports the overriding methods file
+                    # TODO: enable sending parameters to the overriding methods
                     overr_methods = __import__(os.path.basename(
                         os.path.splitext(
                             os.path.join(os.getcwd(), '{}.py'.format(
@@ -375,18 +391,30 @@ def get(component):
         repo_handler.update()
     # download any other requirements if they exist
     for req in reqs:
-        if req.startswith('http'):
-            common.mkdir('/tmp')
-            dl_handler.download(req, file='/tmp/{}_reqs.tar.gz'.format(
-                name))
-            common.untar('/tmp',
-                         '/tmp/{}_reqs.tar.gz'.format(
-                             name), strip=0)
-            cf = glob.glob('/tmp/packages.py')
+        if type(req) is dict:
+            home = os.path.expanduser('~')
+            common.mkdir('{}/tmp'.format(home), sudo=False)
+            dl_handler.download(
+                req['url'], file='{0}/tmp/{1}_reqs.tar.gz'.format(
+                    home, name), sudo=False)
+            common.untar('{0}/tmp'.format(home),
+                         '{0}/tmp/{1}_reqs.tar.gz'.format(
+                             home, name), strip=0, sudo=False)
+            cf = glob.glob('{}/tmp/packages.py'.format(home))
             if not cf:
-                cf = glob.glob('/tmp/**/packages.py')
-            print 'HAHAAAAAAAAAAAAAAAAAAAA', cf
-
+                cf = glob.glob('{}/tmp/**/packages.py'.format(home))
+            # cfpath = os.path.splitext(cf[0])[0]
+            print 'HAHAAAAAAAAAAAAAAAAAAAA', cf[0]
+            cffile = name + '_' + os.path.basename(cf[0])
+            cfdir = os.path.dirname(cf[0])
+            cfnew = os.path.join(cfdir, cffile)
+            os.rename(cf[0], cfnew)
+            print 'HAHAAAAAAAAAAAAAAAAAAAA', cfnew
+            for component in req['components']:
+                c = get_component_config(
+                    component, components_file=cfnew)
+                # get(c)
+                # pack(c)
         else:
             repo_handler.downloads(reqs, dst_path)
     # download relevant python modules...
@@ -1043,12 +1071,12 @@ class AptHandler(CommonHandler):
         # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
         # TODO: (IMPRV) for downloading requirements
         lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        if self.check_if_package_is_installed(pkg):
-            return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
-                      .format(pkg, dir))
-        else:
-            return do('sudo apt-get -y install --reinstall '
-                      '{0} -d -o=dir::cache={1}'.format(pkg, dir))
+        # if self.check_if_package_is_installed(pkg):
+        return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
+                  .format(pkg, dir))
+        # else:
+        #     return do('sudo apt-get -y install --reinstall '
+        #               '{0} -d -o=dir::cache={1}'.format(pkg, dir))
 
     def autoremove(self, pkg):
         """
