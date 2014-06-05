@@ -375,8 +375,10 @@ def get(component):
             # elif file:
             #     path, name = os.path.split(file)
             #     file = path + '/archives/' + file
-        dl_handler.download(source_url, dir=os.path.join(
-            dst_path, 'archives'))
+            dl_handler.download(source_url, dir=os.path.join(
+                dst_path, 'archives'))
+        else:
+            dl_handler.download(source_url, dir=dst_path)
     # add the repo key
     if key_files:
         repo_handler.add_keys(key_files)
