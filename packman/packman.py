@@ -371,7 +371,7 @@ def get(component):
         # it to the archives folder. yes, it's a dreadful solution...
         if url_ext in ('.rpm', '.deb'):
             lgr.debug('the file is a {0} file. we\'ll download it '
-                      'to the archives folder'.format(url_pkg_ext))
+                      'to the archives folder'.format(url_ext))
             dst_path += '/archives'
             # elif file:
             #     path, name = os.path.split(file)
