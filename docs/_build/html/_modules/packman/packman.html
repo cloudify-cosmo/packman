@@ -153,6 +153,7 @@
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
 <span class="kn">from</span> <span class="nn">platform</span> <span class="kn">import</span> <span class="n">dist</span>
 <span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 
 <span class="c"># __all__ = [&#39;list&#39;]</span>
 
@@ -222,11 +223,18 @@
 
 </div>
 <div class="viewcode-block" id="get_distro"><a class="viewcode-back" href="../../api.html#packman.packman.get_distro">[docs]</a><span class="k">def</span> <span class="nf">get_distro</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;returns the machine&#39;s distro</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">distro</span> <span class="o">=</span> <span class="n">dist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">distro</span>
 
 </div>
 <div class="viewcode-block" id="check_distro"><a class="viewcode-back" href="../../api.html#packman.packman.check_distro">[docs]</a><span class="k">def</span> <span class="nf">check_distro</span><span class="p">(</span><span class="n">supported</span><span class="o">=</span><span class="n">SUPPORTED_DISTROS</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;checks that the machine&#39;s distro is supported</span>
+
+<span class="sd">    :param tuple supported: tuple of supported distros</span>
+<span class="sd">    :param bool verbose: verbosity level</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">set_global_verbosity_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
     <span class="n">distro</span> <span class="o">=</span> <span class="n">get_distro</span><span class="p">()</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Distribution Identified: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">distro</span><span class="p">))</span>
@@ -304,9 +312,11 @@
         <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;packages.py&#39;</span><span class="p">)</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
     <span class="c"># append to path for importing</span>
+    <span class="c"># print(os.path.dirname(components_file))</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
     <span class="c"># import</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="c"># print(str(os.path.basename(os.path.splitext(components_file)[0])))</span>
         <span class="n">packages</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
             <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -357,6 +367,7 @@
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">action</span><span class="p">))):</span>
                     <span class="c"># imports the overriding methods file</span>
+                    <span class="c"># TODO: enable sending parameters to the overriding methods</span>
                     <span class="n">overr_methods</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
                             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -369,7 +380,6 @@
                                 <span class="n">action</span><span class="p">,</span> <span class="n">component</span><span class="p">))()</span>
                     <span class="c"># else run the default action method</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c"># TODO: add &quot;make&quot; action method to replace pkm one</span>
                         <span class="c"># TODO: check for bad action</span>
                         <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
                             <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
@@ -492,22 +502,32 @@
         <span class="n">repo_handler</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
     <span class="c"># download any other requirements if they exist</span>
     <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;http&#39;</span><span class="p">):</span>
-            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;{}/tmp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dst_path</span><span class="p">))</span>
-            <span class="n">dl_handler</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="s">&#39;{}/tmp/{}_reqs.tar.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">dst_path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-            <span class="n">common</span><span class="o">.</span><span class="n">untar</span><span class="p">(</span><span class="s">&#39;{}/tmp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dst_path</span><span class="p">),</span>
-                         <span class="s">&#39;{}/tmp/{}_reqs.tar.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                             <span class="n">dst_path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-            <span class="kn">import</span> <span class="nn">glob</span>
-            <span class="n">cf</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;{}/tmp/*/packages.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dst_path</span><span class="p">))</span>
-            <span class="c"># print &#39;AHHHHHHHHHHHHHHHHHHHHHHH&#39;, cf[0]</span>
-            <span class="c"># with open(cf[0], &#39;r&#39;) as f:</span>
-            <span class="c">#     print f.read()</span>
-            <span class="n">packman_runner</span><span class="p">(</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">packman_runner</span><span class="p">(</span><span class="s">&#39;pack&#39;</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&#39;~&#39;</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s">&#39;{}/tmp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">dl_handler</span><span class="o">.</span><span class="n">download</span><span class="p">(</span>
+                <span class="n">req</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">],</span> <span class="nb">file</span><span class="o">=</span><span class="s">&#39;{0}/tmp/{1}_reqs.tar.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">untar</span><span class="p">(</span><span class="s">&#39;{0}/tmp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="p">),</span>
+                         <span class="s">&#39;{0}/tmp/{1}_reqs.tar.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                             <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">strip</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">cf</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;{}/tmp/packages.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cf</span><span class="p">:</span>
+                <span class="n">cf</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;{}/tmp/**/packages.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="p">))</span>
+            <span class="c"># cfpath = os.path.splitext(cf[0])[0]</span>
+            <span class="k">print</span> <span class="s">&#39;HAHAAAAAAAAAAAAAAAAAAAA&#39;</span><span class="p">,</span> <span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">cffile</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">cfdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">cfnew</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfdir</span><span class="p">,</span> <span class="n">cffile</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">cf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfnew</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&#39;HAHAAAAAAAAAAAAAAAAAAAA&#39;</span><span class="p">,</span> <span class="n">cfnew</span>
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">req</span><span class="p">[</span><span class="s">&#39;components&#39;</span><span class="p">]:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">get_component_config</span><span class="p">(</span>
+                    <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">cfnew</span><span class="p">)</span>
+                <span class="c"># get(c)</span>
+                <span class="c"># pack(c)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">repo_handler</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">reqs</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+            <span class="n">repo_handler</span><span class="o">.</span><span class="n">downloads</span><span class="p">(</span><span class="n">reqs</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
     <span class="c"># download relevant python modules...</span>
     <span class="n">py_handler</span><span class="o">.</span><span class="n">get_python_modules</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
     <span class="c"># download relevant ruby gems...</span>
@@ -822,7 +842,7 @@
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -c{1} {2} {3}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">input_path</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="CommonHandler.untar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.untar">[docs]</a>    <span class="k">def</span> <span class="nf">untar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="CommonHandler.untar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.untar">[docs]</a>    <span class="k">def</span> <span class="nf">untar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        untars a file</span>
 
@@ -831,8 +851,8 @@
 <span class="sd">        :param string opts: tar opts</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;untar-ing {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_file</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -x{1} {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">input_file</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;tar -C {0} -x{1} {2} --strip={3}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">chdir</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">input_file</span><span class="p">,</span> <span class="n">strip</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="fpmHandler"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler">[docs]</a><span class="k">class</span> <span class="nc">fpmHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
@@ -970,7 +990,7 @@
 
 </div></div>
 <div class="viewcode-block" id="RubyHandler"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler">[docs]</a><span class="k">class</span> <span class="nc">RubyHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
-<div class="viewcode-block" id="RubyHandler.get_ruby_gems"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler.get_ruby_gems">[docs]</a>    <span class="k">def</span> <span class="nf">get_ruby_gems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gem</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RubyHandler.get_ruby_gems"><a class="viewcode-back" href="../../api.html#packman.packman.RubyHandler.get_ruby_gems">[docs]</a>    <span class="k">def</span> <span class="nf">get_ruby_gems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gems</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        downloads a list of ruby gems</span>
 
@@ -1162,12 +1182,12 @@
         <span class="c"># TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA</span>
         <span class="c"># TODO: (IMPRV) for downloading requirements</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">check_if_package_is_installed</span><span class="p">(</span><span class="n">pkg</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
-                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install --reinstall &#39;</span>
-                      <span class="s">&#39;{0} -d -o=dir::cache={1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="c"># if self.check_if_package_is_installed(pkg):</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="c"># else:</span>
+        <span class="c">#     return do(&#39;sudo apt-get -y install --reinstall &#39;</span>
+        <span class="c">#               &#39;{0} -d -o=dir::cache={1}&#39;.format(pkg, dir))</span>
 </div>
 <div class="viewcode-block" id="AptHandler.autoremove"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.autoremove">[docs]</a>    <span class="k">def</span> <span class="nf">autoremove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

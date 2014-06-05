@@ -142,26 +142,18 @@ def get_component_config(component_name, components_dict=None,
     """
     if components_dict is None:
         components_dict = {}
-    lgr.info('retrieving configuration for {0}'.format(component_name))
+    lgr.debug('retrieving configuration for {0}'.format(component_name))
     try:
         if not components_dict:
             components_file = os.path.join(os.getcwd(), 'packages.py') \
                 if len(components_file) == 0 else components_file
-            lgr.info('components file is: {}'.format(components_file))
-            # sys.path.insert(0, os.path.dirname(components_file))
+            lgr.debug('components file is: {}'.format(components_file))
             sys.path.append(os.path.dirname(components_file))
             try:
-                # print ('OHHHHHHHH', sys.path)
-                print(os.path.basename(os.path.splitext(components_file)[0]))
-                os.chdir(os.path.dirname(components_file))
-                print 'AHHHHH', os.getcwd()
-                components_dict = __import__(os.path.basename(
-                    os.path.splitext(components_file)[0])).PACKAGES
-                # imp.load_module(components_file)
-                print('AHHHHHHHH', components_dict)
-            except Exception as e:
-                raise PackagerError('missing components file', e)
-            # del sys.path[0]
+                components_dict = __import__(os.path.basename(os.path.splitext(
+                    components_file)[0])).PACKAGES
+            except:
+                raise PackagerError('missing components file')
         component_config = components_dict[component_name]
         lgr.debug('{0} config retrieved successfully'.format(component_name))
         return component_config

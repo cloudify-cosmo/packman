@@ -167,12 +167,26 @@ used to override the default configuration from config.py</li>
 <dl class="function">
 <dt id="packman.packman.get_distro">
 <tt class="descclassname">packman.packman.</tt><tt class="descname">get_distro</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_distro" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>returns the machine&#8217;s distro</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="packman.packman.check_distro">
 <tt class="descclassname">packman.packman.</tt><tt class="descname">check_distro</tt><big>(</big><em>supported=('Ubuntu'</em>, <em>'debian'</em>, <em>'centos')</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#check_distro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.check_distro" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>checks that the machine&#8217;s distro is supported</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>supported</strong> (<em>tuple</em>) &#8211; tuple of supported distros</li>
+<li><strong>verbose</strong> (<em>bool</em>) &#8211; verbosity level</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="packman.packman.get_component_config">
@@ -508,7 +522,7 @@ obviously, <cite>attempts</cite> must be larger than 0...</p>
 
 <dl class="method">
 <dt id="packman.packman.CommonHandler.untar">
-<tt class="descname">untar</tt><big>(</big><em>chdir</em>, <em>input_file</em>, <em>opts='zvf'</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.untar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.untar" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">untar</tt><big>(</big><em>chdir</em>, <em>input_file</em>, <em>opts='zvf'</em>, <em>strip=0</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.untar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.untar" title="Permalink to this definition">¶</a></dt>
 <dd><p>untars a file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -663,7 +677,7 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 <dd><p>Bases: <a class="reference internal" href="#packman.packman.CommonHandler" title="packman.packman.CommonHandler"><tt class="xref py py-class docutils literal"><span class="pre">packman.packman.CommonHandler</span></tt></a></p>
 <dl class="method">
 <dt id="packman.packman.RubyHandler.get_ruby_gems">
-<tt class="descname">get_ruby_gems</tt><big>(</big><em>gem</em>, <em>dir=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#RubyHandler.get_ruby_gems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.RubyHandler.get_ruby_gems" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_ruby_gems</tt><big>(</big><em>gems</em>, <em>dir=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#RubyHandler.get_ruby_gems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.RubyHandler.get_ruby_gems" title="Permalink to this definition">¶</a></dt>
 <dd><p>downloads a list of ruby gems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
