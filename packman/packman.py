@@ -372,11 +372,11 @@ def get(component):
         if url_ext in ('.rpm', '.deb'):
             lgr.debug('the file is a {0} file. we\'ll download it '
                       'to the archives folder'.format(url_ext))
-            dst_path += '/archives'
             # elif file:
             #     path, name = os.path.split(file)
             #     file = path + '/archives/' + file
-        dl_handler.download(source_url, dir=dst_path)
+        dl_handler.download(source_url, dir=os.path.join(
+            dst_path, 'archives'))
     # add the repo key
     if key_files:
         repo_handler.add_keys(key_files)
