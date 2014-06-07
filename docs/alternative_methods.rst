@@ -14,3 +14,5 @@ let's look at the example:
 - of course, a user can create a specific get function only to extend the base get method by importing the ***get*** method from packman and adding to it.
 
 for an example, see an example `get <https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/get.py>`_ file.
+
+..note:: when looking for the overriding methods' names, all hyphens will be replaced by underscores and all dots will be removed. so, for instnce, you could provide a component named "java-1.7.0-openjdk", but when specifying the method's name, you should call it "get_java_170_openjdk"

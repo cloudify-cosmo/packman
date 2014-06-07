@@ -253,12 +253,16 @@ def packman_runner(action='pack', components_file=None, components=None,
                         os.path.splitext(
                             os.path.join(os.getcwd(), '{}.py'.format(
                                 action)))[0]))
+                    # replace hyphens with underscores and remove dots from the
+                    # overriding methods names
+                    component_re = component.replace('-', '_')
+                    component_re = component_re.replace('.', '')
                     # if the method was found in the overriding file, run it.
                     if hasattr(overr_methods, '{}_{}'.format(
-                            action, component)):
+                            action, component_re)):
                         getattr(
                             overr_methods, '{}_{}'.format(
-                                action, component))()
+                                action, component_re))()
                     # else run the default action method
                     else:
                         # TODO: check for bad action
