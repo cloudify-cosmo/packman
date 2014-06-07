@@ -43,8 +43,7 @@ SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 
 def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
                 logging_config=None):
-    """
-    initializes a base logger
+    """initializes a base logger
 
     you can use this to init a logger in any of your files.
     this will use config.py's LOGGER param and logging.dictConfig to configure
@@ -89,8 +88,7 @@ lgr = init_logger()
 
 
 def set_global_verbosity_level(is_verbose_output=False):
-    """
-    sets the global verbosity level for console and the lgr logger.
+    """sets the global verbosity level for console and the lgr logger.
 
     :param bool is_verbose_output: should be output be verbose
     """
@@ -106,8 +104,7 @@ def set_global_verbosity_level(is_verbose_output=False):
 def get_distro():
     """returns the machine's distro
     """
-    distro = dist()[0]
-    return distro
+    return dist()[0]
 
 
 def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
@@ -129,8 +126,7 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
 
 def get_component_config(component_name, components_dict=None,
                          components_file=''):
-    """
-    returns a component's configuration
+    """returns a component's configuration
 
     if `components_dict` is not supplied, a packages.py file in the cwd will be
     assumed unless `components_file` is explicitly given.
@@ -165,8 +161,7 @@ def get_component_config(component_name, components_dict=None,
 
 def packman_runner(action='pack', components_file=None, components=None,
                    excluded=None, verbose=False):
-    """
-    logic for running packman. mainly called from the cli (pkm.py)
+    """logic for running packman. mainly called from the cli (pkm.py)
 
     if no `components_file` is supplied, we will assume a local packages.py
     as `components_file`.
@@ -279,8 +274,7 @@ def packman_runner(action='pack', components_file=None, components=None,
 
 
 def get(component):
-    """
-    retrieves resources for packaging
+    """retrieves resources for packaging
 
     .. note:: component params are defined in packages.py
 
@@ -422,8 +416,7 @@ def get(component):
 
 
 def pack(component):
-    """
-    creates a package according to the provided package configuration
+    """creates a package according to the provided package configuration
     in packages.py
     uses fpm (https://github.com/jordansissel/fpm/wiki) to create packages.
 
@@ -570,8 +563,7 @@ def pack(component):
 
 def do(command, attempts=2, sleep_time=3,
        capture=False, combine_stderr=False, sudo=False):
-    """
-    executes a command locally with retries on failure.
+    """executes a command locally with retries on failure.
 
     if a `command` execution is successful, it will return a fabric
     object with the output (x.stdout, x.stderr, x.succeeded, etc..)
@@ -614,8 +606,7 @@ def do(command, attempts=2, sleep_time=3,
 
 
 class CommonHandler():
-    """
-    common class to handle files and directories
+    """common class to handle files and directories
     """
     def find_in_dir(self, dir, pattern, sudo=True):
         """
@@ -631,8 +622,7 @@ class CommonHandler():
         return x.stdout if x.succeeded else None
 
     def is_dir(self, dir):
-        """
-        checks if a directory exists
+        """checks if a directory exists
 
         :param string dir: directory to check
         :rtype: `bool`
@@ -646,8 +636,7 @@ class CommonHandler():
             return False
 
     def is_file(self, file):
-        """
-        checks if a file exists
+        """checks if a file exists
 
         :param string file: file to check
         :rtype: `bool`
@@ -661,8 +650,7 @@ class CommonHandler():
             return False
 
     def touch(self, file, sudo=True):
-        """
-        creates a file
+        """creates a file
 
         :param string file: file to touch
         """
@@ -670,8 +658,7 @@ class CommonHandler():
         return do('touch {0}'.format(file), sudo=sudo)
 
     def mkdir(self, dir, sudo=True):
-        """
-        creates (recursively) a directory
+        """creates (recursively) a directory
 
         :param string dir: directory to create
         """
@@ -682,8 +669,7 @@ class CommonHandler():
         return False
 
     def rmdir(self, dir, sudo=True):
-        """
-        deletes a directory
+        """deletes a directory
 
         :param string dir: directory to remove
         """
@@ -694,8 +680,7 @@ class CommonHandler():
 
     # TODO: (IMPRV) handle multiple files differently
     def rm(self, file, sudo=True):
-        """
-        deletes a file or a set of files
+        """deletes a file or a set of files
 
         :param string file(s): file(s) to remove
         """
@@ -705,8 +690,7 @@ class CommonHandler():
         return False
 
     def cp(self, src, dst, recurse=True, sudo=True):
-        """
-        copies (recuresively or not) files or directories
+        """copies (recuresively or not) files or directories
 
         :param string src: source to copy
         :param string dst: destination to copy to
@@ -717,8 +701,7 @@ class CommonHandler():
             else do('cp {0} {1}'.format(src, dst), sudo=sudo)
 
     def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
-        """
-        tars an input file or directory
+        """tars an input file or directory
 
         :param string chdir: change to this dir before archiving
         :param string output_file: tar output file path
@@ -730,8 +713,7 @@ class CommonHandler():
             chdir, opts, output_file, input_path), sudo=sudo)
 
     def untar(self, chdir, input_file, opts='zvf', strip=0, sudo=True):
-        """
-        untars a file
+        """untars a file
 
         :param string chdir: change to this dir before extracting
         :param string input_file: file to untar
@@ -743,8 +725,7 @@ class CommonHandler():
 
 
 class fpmHandler(CommonHandler):
-    """
-    packaging handler
+    """packaging handler
     """
     def __init__(self, name, input_type, output_type, source, sudo):
         self.sudo = sudo
@@ -772,7 +753,7 @@ class fpmHandler(CommonHandler):
             self.command += "-d " + " -d ".join(kwargs['depends'])
             self.command += " "
         if kwargs['force']:
-            self.command += ' -f '
+            self.command += '-f '
         # MUST BE LAST
         self.command += self.source
         lgr.debug('fpm cmd is: {}'.format(self.command))
@@ -783,12 +764,10 @@ class fpmHandler(CommonHandler):
 
 
 class PythonHandler(CommonHandler):
-    """
-    python operations handler
+    """python operations handler
     """
     def pips(self, modules, venv=False, attempts=5):
-        """
-        pip installs a list of modules
+        """pip installs a list of modules
 
         :param list modules: python modules to ``pip install``
         :param string venv: (optional) if ommited, will use system python
@@ -798,8 +777,7 @@ class PythonHandler(CommonHandler):
             self.pip(module, venv, attempts)
 
     def pip(self, module, venv=False, attempts=5, sudo=True, timeout='45'):
-        """
-        pip installs a module
+        """pip installs a module
 
         :param string module: python module to ``pip install``
         :param string venv: (optional) if ommited, will use system python
@@ -815,8 +793,7 @@ class PythonHandler(CommonHandler):
                             attempts=attempts, sudo=sudo)
 
     def get_python_modules(self, modules, dir=False, venv=False):
-        """
-        downloads python modules
+        """downloads python modules
 
         :param list modules: python modules to download
         :param string dir: dir to download modules to
@@ -827,8 +804,7 @@ class PythonHandler(CommonHandler):
             self.get_python_module(module, dir, venv)
 
     def get_python_module(self, module, dir=False, venv=False):
-        """
-        downloads a python module
+        """downloads a python module
 
         :param string module: python module to download
         :param string dir: dir to download module to
@@ -844,8 +820,7 @@ class PythonHandler(CommonHandler):
                             .format(dir, module))
 
     def check_module_installed(self, name, dir=False):
-        """
-        checks to see that a module is installed
+        """checks to see that a module is installed
 
         :param string name: module to check for
         :param string dir: (optional) if ommited, will use system python
@@ -864,8 +839,7 @@ class PythonHandler(CommonHandler):
     # TODO: (FEAT) support virtualenv --relocate OR
     # TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
     def venv(self, venv_dir, sudo=True):
-        """
-        creates a virtualenv
+        """creates a virtualenv
 
         :param string venv_dir: venv path to create
         """
@@ -879,8 +853,7 @@ class PythonHandler(CommonHandler):
 
 class RubyHandler(CommonHandler):
     def get_ruby_gems(self, gems, dir=False):
-        """
-        downloads a list of ruby gems
+        """downloads a list of ruby gems
 
         :param list gems: gems to download
         :param string dir: directory to download gems to
@@ -889,8 +862,7 @@ class RubyHandler(CommonHandler):
             self.get_ruby_gem(gem, dir)
 
     def get_ruby_gem(self, gem, rbenv=False, dir=False):
-        """
-        downloads a ruby gem
+        """downloads a ruby gem
 
         :param string gem: gem to download
         :param string dir: directory to download gem to
@@ -906,15 +878,13 @@ class RubyHandler(CommonHandler):
 class YumHandler(CommonHandler):
     @staticmethod
     def update():
-        """
-        runs yum update
+        """runs yum update
         """
         lgr.debug('updating local yum repo')
         return do('sudo yum update')
 
     def check_if_package_is_installed(self, package):
-        """
-        checks if a package is installed
+        """checks if a package is installed
 
         :param string package: package name to check
         :rtype: `bool` representing whether package is installed or not
@@ -930,8 +900,7 @@ class YumHandler(CommonHandler):
             return False
 
     def downloads(self, reqs, sources_path):
-        """
-        downloads component requirements
+        """downloads component requirements
 
         :param list reqs: list of requirements to download
         :param sources_path: path to download requirements to
@@ -940,8 +909,7 @@ class YumHandler(CommonHandler):
             self.download(req, sources_path)
 
     def download(self, package, dir, enable_repo=False):
-        """
-        uses yum to download package debs from ubuntu's repo
+        """uses yum to download package debs from ubuntu's repo
 
         :param string package: package to download
         :param string dir: dir to download to
@@ -961,8 +929,7 @@ class YumHandler(CommonHandler):
                   '--downloaddir={1}/archives {0}'.format(package, dir))
 
     def installs(self, packages):
-        """
-        yum installs a list of packages
+        """yum installs a list of packages
 
         :param list package: packages to install
         """
@@ -970,8 +937,7 @@ class YumHandler(CommonHandler):
             self.install(package)
 
     def install(self, package):
-        """
-        yum installs a package
+        """yum installs a package
 
         :param string package: package to install
         """
@@ -979,8 +945,7 @@ class YumHandler(CommonHandler):
         do('sudo yum -y install {0}'.format(package))
 
     def add_src_repos(self, source_repos):
-        """
-        adds a list of source repos to the apt repo
+        """adds a list of source repos to the apt repo
 
         :param list source_repos: repos to add to sources list
         """
@@ -988,8 +953,7 @@ class YumHandler(CommonHandler):
             self.add_src_repo(source_repo)
 
     def add_src_repo(self, source_repo):
-        """
-        adds a source repo to the apt repo
+        """adds a source repo to the apt repo
 
         :param string source_repo: repo to add to sources list
         """
@@ -1001,8 +965,7 @@ class YumHandler(CommonHandler):
             dl.download(source_repo, dir='/etc/yum.repos.d/')
 
     def add_keys(self, key_files):
-        """
-        adds a list of keys to the local repo
+        """adds a list of keys to the local repo
 
         :param string key_files: key files paths
         """
@@ -1010,8 +973,7 @@ class YumHandler(CommonHandler):
             self.add_key(key_file)
 
     def add_key(self, key_file):
-        """
-        adds a key to the local repo
+        """adds a key to the local repo
 
         :param string key_file: key file path
         """
@@ -1021,8 +983,7 @@ class YumHandler(CommonHandler):
 
 class AptHandler(CommonHandler):
     def dpkg_name(self, dir):
-        """
-        renames deb files to conventional names
+        """renames deb files to conventional names
 
         :param string dir: dir to review
         """
@@ -1031,8 +992,7 @@ class AptHandler(CommonHandler):
         return do('dpkg-name {0}/*.deb'.format(dir))
 
     def check_if_package_is_installed(self, package):
-        """
-        checks if a package is installed
+        """checks if a package is installed
 
         :param string package: package name to check
         :rtype: `bool` representing whether package is installed or not
@@ -1048,8 +1008,7 @@ class AptHandler(CommonHandler):
             return False
 
     def downloads(self, reqs, sources_path):
-        """
-        downloads component requirements
+        """downloads component requirements
 
         :param list reqs: list of requirements to download
         :param sources_path: path to download requirements to
@@ -1058,8 +1017,7 @@ class AptHandler(CommonHandler):
             self.download(req, sources_path)
 
     def download(self, pkg, dir):
-        """
-        uses apt to download package debs from ubuntu's repo
+        """uses apt to download package debs from ubuntu's repo
 
         :param string pkg: package to download
         :param string dir: dir to download to
@@ -1078,8 +1036,7 @@ class AptHandler(CommonHandler):
         #               '{0} -d -o=dir::cache={1}'.format(pkg, dir))
 
     def autoremove(self, pkg):
-        """
-        autoremoves package dependencies
+        """autoremoves package dependencies
 
         :param string pkg: package to remove
         """
@@ -1087,8 +1044,7 @@ class AptHandler(CommonHandler):
         return do('sudo apt-get -y autoremove {0}'.format(pkg))
 
     def add_src_repos(self, source_repos):
-        """
-        adds a list of source repos to the apt repo
+        """adds a list of source repos to the apt repo
 
         :param list source_repos: repos to add to sources list
         """
@@ -1096,8 +1052,7 @@ class AptHandler(CommonHandler):
             self.add_src_repo(source_repo)
 
     def add_src_repo(self, source_repo):
-        """
-        adds a source repo to the apt repo
+        """adds a source repo to the apt repo
 
         :param string source_repo: repo to add to sources list
         """
@@ -1106,8 +1061,7 @@ class AptHandler(CommonHandler):
                   .format(source_repo))
 
     def add_ppa_repos(self, source_ppas):
-        """
-        adds a list of ppa repos to the apt repo
+        """adds a list of ppa repos to the apt repo
 
         :param list source_ppas: ppa urls to add
         """
@@ -1115,8 +1069,7 @@ class AptHandler(CommonHandler):
             self.add_ppa_repo(source_ppa)
 
     def add_ppa_repo(self, source_ppa):
-        """
-        adds a ppa repo to the apt repo
+        """adds a ppa repo to the apt repo
 
         :param string source_ppa: ppa url to add
         """
@@ -1124,8 +1077,7 @@ class AptHandler(CommonHandler):
         return do('add-apt-repository -y {0}'.format(source_ppa))
 
     def add_keys(self, key_files):
-        """
-        adds a list of keys to the local repo
+        """adds a list of keys to the local repo
 
         :param string key_files: key files paths
         """
@@ -1133,8 +1085,7 @@ class AptHandler(CommonHandler):
             self.add_key(key_file)
 
     def add_key(self, key_file):
-        """
-        adds a key to the local repo
+        """adds a key to the local repo
 
         :param string key_file: key file path
         """
@@ -1143,15 +1094,13 @@ class AptHandler(CommonHandler):
 
     @staticmethod
     def update():
-        """
-        runs apt-get update
+        """runs apt-get update
         """
         lgr.debug('updating local apt repo')
         return do('sudo apt-get update')
 
     def installs(self, packages):
-        """
-        apt-get installs a list of packages
+        """apt-get installs a list of packages
 
         :param list packages: packages to install
         """
@@ -1159,8 +1108,7 @@ class AptHandler(CommonHandler):
             self.install(package)
 
     def install(self, package):
-        """
-        apt-get installs a package
+        """apt-get installs a package
 
         :param string package: package to install
         """
@@ -1168,8 +1116,7 @@ class AptHandler(CommonHandler):
         do('sudo apt-get -y install {0}'.format(package))
 
     def purges(self, packages):
-        """
-        completely purges a list of packages from the local repo
+        """completely purges a list of packages from the local repo
 
         :param list packages: packages name to purge
         """
@@ -1177,8 +1124,7 @@ class AptHandler(CommonHandler):
             self.purge(package)
 
     def purge(self, package):
-        """
-        completely purges a package from the local repo
+        """completely purges a package from the local repo
 
         :param string package: package name to purge
         """
@@ -1188,8 +1134,7 @@ class AptHandler(CommonHandler):
 
 class WgetHandler(CommonHandler):
     def downloads(self, urls, dir=False, sudo=True):
-        """
-        wgets a list of urls to a destination directory
+        """wgets a list of urls to a destination directory
 
         :param list urls: a list of urls to download
         :param string dir: download to dir...
@@ -1198,8 +1143,7 @@ class WgetHandler(CommonHandler):
             self.download(url, dir, sudo=sudo)
 
     def download(self, url, dir=False, file=False, sudo=True):
-        """
-        wgets a url to a destination directory or file
+        """wgets a url to a destination directory or file
 
         :param string url: url to wget?
         :param string dir: download to dir....
@@ -1222,8 +1166,7 @@ class WgetHandler(CommonHandler):
 class TemplateHandler(CommonHandler):
 
     def generate_configs(self, component, sudo=True):
-        """
-        generates configuration files from templates
+        """generates configuration files from templates
 
         for every key in the configuration templates sub-dict, if a key
         corresponds with a templates/configs key (as defined in definitions.py)
@@ -1257,8 +1200,7 @@ class TemplateHandler(CommonHandler):
                 pass
 
     def _generate_config_from_file(self, component, config_params, sudo=True):
-        """
-        generates a configuration file from a template file
+        """generates a configuration file from a template file
 
         if the config directory for the component doesn't exist, it will be
         created after which the config file will be generated into that dir.
@@ -1296,8 +1238,7 @@ class TemplateHandler(CommonHandler):
                                     template_dir)
 
     def _generate_configs_from_dir(self, component, config_params, sudo=True):
-        """
-        generates configuration files from a a templates directory
+        """generates configuration files from a a templates directory
 
         if the config directory for the `component` doesn't exist, it will be
         created after which the config files will be generated into that dir.
@@ -1330,8 +1271,7 @@ class TemplateHandler(CommonHandler):
 
     def _generate_static_configs_from_dir(self, component, config_params,
                                           sudo=True):
-        """
-        copies configuration files from a a configuration files directory
+        """copies configuration files from a a configuration files directory
 
         if the config directory for the `component` doesn't exist, it will be
         created after which the config files will be generated into that dir.
@@ -1355,8 +1295,7 @@ class TemplateHandler(CommonHandler):
     def generate_from_template(self, component_config, output_file,
                                template_file,
                                templates=defs.PACKAGER_TEMPLATE_PATH):
-        """
-        generates configuration files from templates using jinja2
+        """generates configuration files from templates using jinja2
         http://jinja.pocoo.org/docs/
 
         :param dict component_config: contains the params to use
@@ -1374,9 +1313,14 @@ class TemplateHandler(CommonHandler):
         self._make_file(output_file, formatted_text)
 
     def _template_formatter(self, template_dir, template_file, var_dict):
-        """
-        receives a template and returns a formatted version of it
+        """receives a template and returns a formatted version of it
         according to a provided variable dictionary
+
+        :param string template_dir: where all temlate files reside
+        :param string template_file: template file name
+        :param dict var_dict: dict of all params to be used
+         when creating the file
+        :rtype: generated template content
         """
         if type(template_dir) is not str:
             raise PackagerError('template_dir must be of type string')
@@ -1402,8 +1346,11 @@ class TemplateHandler(CommonHandler):
             raise PackagerError('could not generate template')
 
     def _make_file(self, output_path, content):
-        """
-        creates a file from content
+        """creates a file from content
+
+        :param string output_path: path to output the generated
+         file to
+        :param content: content to write to file
         """
         lgr.debug('creating file: {0} with content: \n{1}'.format(
                   output_path, content))

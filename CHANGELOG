@@ -1,4 +1,11 @@
-[33m1bf5558[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m started adding support for installing requirements from tar files
+[33m0ab7e42[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m added support for component names containing hyphens and dots when assigning them with alternative get and pack methods
+[33m6e59628[m removed package_installed check due to a bug. testing
+[33m3bbe24c[m fixed bug when downloading non rpm/deb files
+[33m85fe0e0[m fixed bug when building the fpm string
+[33m8016843[m fixed problem with resoure download logic
+[33mbbc9406[m hotfix
+[33m99f784c[m fixed broken get_components_config
+[33m1bf5558[m started adding support for installing requirements from tar files
 [33m024736f[m hotfix
 [33m889f6ef[m hotfix
 [33mb2d7fff[m oops.. ruby gems typo
