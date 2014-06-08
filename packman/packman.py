@@ -597,7 +597,7 @@ def do(command, attempts=2, sleep_time=3,
     def _execute():
         for execution in xrange(attempts):
             with settings(warn_only=True):
-                with hide('warning'):
+                with hide('warnings'):
                     x = local('sudo {0}'.format(command), capture) if sudo \
                         else local(command, capture)
                 if x.succeeded:
