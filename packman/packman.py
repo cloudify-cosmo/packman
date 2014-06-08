@@ -934,12 +934,14 @@ class YumHandler(CommonHandler):
         # TODO: (FEAT) add yum enable-repo option
         # TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
         # TODO: (IMPRV) can be used to download deps. test to see if it works.
-        # if self.check_if_package_is_installed(package):
-        #     return do('sudo yum -y reinstall --downloadonly '
-        #               '--downloaddir={1}/archives {0}'.format(package, dir))
-        # else:
-        return do('sudo yum -y install --downloadonly '
-                  '--downloaddir={1}/archives {0}'.format(package, dir))
+        if self.check_if_package_is_installed(package):
+            return do('sudo yum -y reinstall --downloadonly '
+                      '--downloaddir={1}/archives {0}'.format(
+                          package, dir), accepted_err_codes=[1])
+        else:
+            return do('sudo yum -y install --downloadonly '
+                      '--downloaddir={1}/archives {0}'.format(
+                          package, dir), accepted_err_codes=[1])
 
     def installs(self, packages):
         """yum installs a list of packages
