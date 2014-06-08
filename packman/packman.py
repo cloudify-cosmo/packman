@@ -570,7 +570,7 @@ def pack(component):
         common.rmdir(sources_path)
 
 
-def do(command, attempts=2, sleep_time=3,
+def do(command, attempts=2, sleep_time=3, accepted_err_codes=None,
        capture=False, combine_stderr=False, sudo=False):
     """executes a command locally with retries on failure.
 
@@ -600,7 +600,7 @@ def do(command, attempts=2, sleep_time=3,
                 with hide('warnings'):
                     x = local('sudo {0}'.format(command), capture) if sudo \
                         else local(command, capture)
-                if x.succeeded:
+                if x.succeeded or x.return_code in accepted_err_codes:
                     lgr.debug('successfully executed: ' + command)
                     return x
                 lgr.warning('failed to run command: {0} -retrying ({1}/{2})'
@@ -901,7 +901,8 @@ class YumHandler(CommonHandler):
         """
 
         lgr.debug('checking if {0} is installed'.format(package))
-        x = do('sudo rpm -qa | grep {0}'.format(package), attempts=1)
+        x = do('sudo rpm -qa | grep {0}'.format(
+            package), attempts=1, accepted_err_codes=[1])
         if x.succeeded:
             lgr.debug('{0} is installed'.format(package))
             return True
@@ -969,7 +970,8 @@ class YumHandler(CommonHandler):
         """
         lgr.debug('adding source repository {0}'.format(source_repo))
         if os.path.splitext(source_repo)[1] == '.rpm':
-            return do('sudo rpm -ivh {0}'.format(source_repo))
+            return do('sudo rpm -ivh {0}'.format(
+                source_repo), accepted_err_codes=[1])
         else:
             dl = WgetHandler()
             dl.download(source_repo, dir='/etc/yum.repos.d/')
