@@ -39,9 +39,17 @@ import glob
 # __all__ = ['list']
 
 SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
+DEFAULT_COMPONENTS_FILE = 'packages.py'
+PACKAGE_TYPES = {
+    "centos": "rpm",
+    "debian": "deb",
+}
+DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
+DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
 
 
-def init_logger(base_level=logging.INFO, verbose_level=logging.DEBUG,
+def init_logger(base_level=DEFAULT_BASE_LOGGING_LEVEL,
+                verbose_level=DEFAULT_VERBOSE_LOGGING_LEVEL,
                 logging_config=None):
     """initializes a base logger
 
@@ -117,42 +125,60 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
     distro = get_distro()
     lgr.debug('Distribution Identified: {}'.format(distro))
     if distro not in supported:
-        lgr.debug('Your distribution is not supported.'
+        lgr.error('Your distribution is not supported.'
                   'Supported Disributions are:')
         for distro in supported:
-            print('    {}'.format(distro))
+            lgr.error('    {}'.format(distro))
         raise RuntimeError('distro not supported')
 
 
+def import_components_dict(components_file):
+    """returns a components dictionary
+
+    :param string components_file: components_file to search in
+    :rtype: `dict` with components configuration
+    """
+    # get components file path
+    components_file = components_file or os.path.join(
+        os.getcwd(), DEFAULT_COMPONENTS_FILE)
+    lgr.debug('components file is: {}'.format(components_file))
+    # append to path for importing
+    sys.path.append(os.path.dirname(components_file))
+    try:
+        return __import__(os.path.basename(os.path.splitext(
+            components_file)[0])).PACKAGES
+    except ImportError:
+        lgr.error('could not import packages.py file. please verify that '
+                  'it exists in the specified path')
+        # TODO: (IMPRV) add conditional raising with verbosity dependency
+        # TODO: (IMPRV) throughout the code
+        # if int(lgr.getEffectiveLevel()) > DEFAULT_BASE_LOGGING_LEVEL:
+        raise PackagerError('missing components file')
+        # sys.exit(1)
+
+
 def get_component_config(component_name, components_dict=None,
-                         components_file=''):
+                         components_file=None):
     """returns a component's configuration
 
     if `components_dict` is not supplied, a packages.py file in the cwd will be
     assumed unless `components_file` is explicitly given.
     after a `components_dict` is defined, a `component_config` will be returned
-    for the specific component_name.
+    for the specified component_name.
 
     :param string component: component name to retrieve config for.
-    :rtype: `dict` representing package configuration
+    :param dict components_dict: dict containing components configuration
+    :param string components_file: components file to search in
+    :rtype: `dict` representing component configuration
     """
     if components_dict is None:
         components_dict = {}
     lgr.debug('retrieving configuration for {0}'.format(component_name))
     try:
         if not components_dict:
-            components_file = os.path.join(os.getcwd(), 'packages.py') \
-                if len(components_file) == 0 else components_file
-            lgr.debug('components file is: {}'.format(components_file))
-            sys.path.append(os.path.dirname(components_file))
-            try:
-                components_dict = __import__(os.path.basename(os.path.splitext(
-                    components_file)[0])).PACKAGES
-            except:
-                raise PackagerError('missing components file')
-        component_config = components_dict[component_name]
+            components_dict = import_components_dict(components_file)
         lgr.debug('{0} config retrieved successfully'.format(component_name))
-        return component_config
+        return components_dict[component_name]
     except KeyError:
         lgr.error('package configuration for'
                   ' {0} was not found, terminating...'.format(component_name))
@@ -182,95 +208,74 @@ def packman_runner(action='pack', components_file=None, components=None,
     :param bool verbose: determines output verbosity level
     :rtype: `None`
     """
+    def _build_excluded_components_list(excluded_components):
+        return filter(None, (excluded or "").split(','))
+
+    def _build_components_list(components, xcom_list, components_dict):
+        com_list = []
+        if components:
+            for component in components.split(','):
+                com_list.append(component)
+            # and raise if same component appears in both lists
+            if set(com_list) & set(xcom_list):
+                lgr.error('your components list and excluded components '
+                          'list contain a similar item.')
+                raise PackagerError('components list and excluded list '
+                                    'are conflicting')
+        # else iterate over all components in components file
+        else:
+            for component, values in components_dict.items():
+                com_list.append(component)
+            # and rewrite the list after removing excluded components
+            for xcom in xcom_list:
+                com_list = [com for com in com_list if com != xcom]
+        return com_list
+
+    def _import_overriding_methods(action):
+        return __import__(os.path.basename(os.path.splitext(
+            os.path.join(os.getcwd(), '{}.py'.format(action)))[0]))
+
     set_global_verbosity_level(verbose)
-    # get packages.py file path
-    components_file = components_file or os.path.join(
-        os.getcwd(), 'packages.py')
-    lgr.debug('components file is: {}'.format(components_file))
-    # append to path for importing
-    # print(os.path.dirname(components_file))
-    sys.path.append(os.path.dirname(components_file))
-    # import
-    try:
-        # print(str(os.path.basename(os.path.splitext(components_file)[0])))
-        packages = __import__(os.path.basename(os.path.splitext(
-            components_file)[0]))
-    except ImportError:
-        lgr.error('could not import packages.py file. please verify that '
-                  'it exists in the specified path')
-        raise PackagerError('components file missing')
-    # except Exception as e:
-    #     raise('Unknown Error when trying to import packages.py file: {}'
-    #           .format(e))
-    # if a component appears in both lists - ignore it.
-    # if it appears only in the components list, continue.
-    # if it appears only in the excluded list, continue
+    # import dict of all components
+    components_dict = import_components_dict(components_file)
     # append excluded components to list.
-    # xcom_list = []
-    # if excluded:
-    #     for xcom in excluded.split(','):
-    #         xcom_list.append(xcom)
-    xcom_list = filter(None, (excluded or "").split(','))
-    # append components to list if a list is supplied
-    com_list = []
-    if components:
-        for component in components.split(','):
-            com_list.append(component)
-        # and raise if components appear in exlucded list and components list
-        if set(com_list) & set(xcom_list):
-            lgr.error('your components list and excluded components '
-                      'list contain a similar item.')
-            raise PackagerError('components list and excluded list '
-                                'are conflicting')
-    # else iterate over all components in components file
-    else:
-        for component, values in packages.PACKAGES.items():
-            com_list.append(component)
-        # and rewrite the list after removing excluded components
-        for xcom in xcom_list:
-            com_list = [com for com in com_list if com != xcom]
-    # sum up what we've got until now
-    lgr.debug('components list: {}'.format(com_list))
+    xcom_list = _build_excluded_components_list(excluded)
     lgr.debug('excluded components list: {}'.format(xcom_list))
+    # append components to list if a list is supplied
+    com_list = _build_components_list(components, xcom_list, components_dict)
+    lgr.debug('components list: {}'.format(com_list))
     # if at least 1 component exists
     if com_list:
         # iterate and run action
         for component in com_list:
-            # only on components not in the xcom_list
-            # TODO: the list is written with this in mind. maybe we can remove?
-            if component not in xcom_list:
-                # looks for the overriding methods file in the current path
-                if os.path.isfile(os.path.join(os.getcwd(), '{}.py'.format(
-                        action))):
-                    # imports the overriding methods file
-                    # TODO: enable sending parameters to the overriding methods
-                    overr_methods = __import__(os.path.basename(
-                        os.path.splitext(
-                            os.path.join(os.getcwd(), '{}.py'.format(
-                                action)))[0]))
-                    # replace hyphens with underscores and remove dots from the
-                    # overriding methods names
-                    component_re = component.replace('-', '_')
-                    component_re = component_re.replace('.', '')
-                    # if the method was found in the overriding file, run it.
-                    if hasattr(overr_methods, '{}_{}'.format(
-                            action, component_re)):
-                        getattr(
-                            overr_methods, '{}_{}'.format(
-                                action, component_re))()
-                    # else run the default action method
-                    else:
-                        # TODO: check for bad action
-                        globals()[action](get_component_config(
-                            component, components_file=components_file))
+            # looks for the overriding methods file in the current path
+            if os.path.isfile(os.path.join(os.getcwd(), '{}.py'.format(
+                    action))):
+                # imports the overriding methods file
+                # TODO: allow sending parameters to the overriding methods
+                overr_methods = _import_overriding_methods()
+                # replace hyphens with underscores and remove dots from the
+                # overriding methods names
+                component_re = component.replace('-', '_')
+                component_re = component_re.replace('.', '')
+                # if the method was found in the overriding file, run it.
+                if hasattr(overr_methods, '{}_{}'.format(
+                        action, component_re)):
+                    getattr(
+                        overr_methods, '{}_{}'.format(
+                            action, component_re))()
                 # else run the default action method
                 else:
+                    # TODO: check for bad action
                     globals()[action](get_component_config(
                         component, components_file=components_file))
+            # else run the default action method
             else:
-                lgr.info('skipping component: {}'.format(component))
+                globals()[action](get_component_config(
+                    component, components_file=components_file))
     else:
-        raise PackagerError('no components to handle')
+        raise PackagerError('no components to handle,'
+                            ' check your components file')
 
 
 def get(component):
@@ -307,7 +312,7 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    name = c.get(defs.PARAM_NAME, False)
+    name = c.get(defs.PARAM_NAME)
     source_repos = c.get(defs.PARAM_SOURCE_REPOS, [])
     source_ppas = c.get(defs.PARAM_SOURCE_PPAS, [])
     source_keys = c.get(defs.PARAM_SOURCE_KEYS, [])
@@ -318,7 +323,6 @@ def get(component):
     modules = c.get(defs.PARAM_MODULES, [])
     gems = c.get(defs.PARAM_GEMS, [])
     dst_path = c.get(defs.PARAM_SOURCES_PATH, False)
-    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
     overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
 
     common = CommonHandler()
@@ -340,8 +344,6 @@ def get(component):
             lgr.error('the destination directory for this package already '
                       'exists and overwrite is disabled.')
     # create the directories required for package creation...
-    if not common.is_dir(os.path.join(package_path, 'archives')):
-        common.mkdir(os.path.join(package_path, 'archives'))
     if not common.is_dir(dst_path):
         common.mkdir(dst_path)
 
@@ -457,7 +459,7 @@ def pack(component):
         else get_component_config(component)
 
     # define params for packaging
-    name = c.get(defs.PARAM_NAME, False)
+    name = c.get(defs.PARAM_NAME)
     version = c.get(defs.PARAM_VERSION, False)
     bootstrap_template = c.get(defs.PARAM_BOOTSTRAP_TEMPLATE_PATH, False)
     bootstrap_script = c.get(defs.PARAM_BOOTSTRAP_SCRIPT_PATH, False)
@@ -468,10 +470,15 @@ def pack(component):
     dst_pkg_type = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPE, False)
     # identifies pkg type automatically if not specified explicitly
     if not dst_pkg_type:
+        lgr.debug('destination package type ommitted')
         if centos:
-            dst_pkg_type = 'rpm'
+            lgr.debug('assuming default type: {}'.format(
+                PACKAGE_TYPES['centos']))
+            dst_pkg_type = PACKAGE_TYPES['centos']
         elif debian:
-            dst_pkg_type = 'deb'
+            lgr.debug('assuming default type: {}'.format(
+                PACKAGE_TYPES['debian']))
+            dst_pkg_type = PACKAGE_TYPES['debian']
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
@@ -486,17 +493,20 @@ def pack(component):
     common = CommonHandler()
     tmp_handler = TemplateHandler()
 
+    # if the package_path doesn't exist, create it
+    if not common.is_dir(os.path.join(package_path, 'archives')):
+        common.mkdir(os.path.join(package_path, 'archives'))
     # can't use sources_path == tmp_pkg_path for the package... duh!
     if sources_path == tmp_pkg_path:
         lgr.error('source and destination paths must'
                   ' be different to avoid conflicts!')
-
     # should the packaging process overwrite the previous packages?
     if overwrite:
         lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
                  .format(package_path, name))
         common.rm('{0}/{1}*'.format(package_path, name))
     # if the package is ...
+    # TODO: (CHK) why did I do this?
     if src_pkg_type:
         common.rmdir(tmp_pkg_path)
         common.mkdir(tmp_pkg_path)
@@ -517,11 +527,10 @@ def pack(component):
                                                bootstrap_template)
             # if it's in_pkg, grant it exec permissions and copy it to the
             # package's path.
-            if bootstrap_script_in_pkg:
-                lgr.debug('granting execution permissions')
-                do('chmod +x {0}'.format(bootstrap_script_in_pkg))
-                lgr.debug('copying bootstrap script to package directory')
-                common.cp(bootstrap_script_in_pkg, sources_path)
+            lgr.debug('granting execution permissions')
+            do('chmod +x {0}'.format(bootstrap_script_in_pkg))
+            lgr.debug('copying bootstrap script to package directory')
+            common.cp(bootstrap_script_in_pkg, sources_path)
     lgr.info('packing up component: {0}'.format(name))
     # if a package needs to be created (not just files copied)...
     if src_pkg_type:
@@ -588,8 +597,9 @@ def do(command, attempts=2, sleep_time=3,
     def _execute():
         for execution in xrange(attempts):
             with settings(warn_only=True):
-                x = local('sudo {0}'.format(command), capture) if sudo \
-                    else local(command, capture)
+                with hide('warning'):
+                    x = local('sudo {0}'.format(command), capture) if sudo \
+                        else local(command, capture)
                 if x.succeeded:
                     lgr.debug('successfully executed: ' + command)
                     return x
@@ -891,7 +901,7 @@ class YumHandler(CommonHandler):
         """
 
         lgr.debug('checking if {0} is installed'.format(package))
-        x = do('sudo rpm -q {0}'.format(package), attempts=1)
+        x = do('sudo rpm -qa | grep {0}'.format(package), attempts=1)
         if x.succeeded:
             lgr.debug('{0} is installed'.format(package))
             return True
@@ -1016,10 +1026,10 @@ class AptHandler(CommonHandler):
         for req in reqs:
             self.download(req, sources_path)
 
-    def download(self, pkg, dir):
+    def download(self, package, dir):
         """uses apt to download package debs from ubuntu's repo
 
-        :param string pkg: package to download
+        :param string package: package to download
         :param string dir: dir to download to
         """
         # TODO: (TEST) add an is-package-installed check. if it is
@@ -1027,10 +1037,10 @@ class AptHandler(CommonHandler):
         # TODO: (TEST) install.
         # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
         # TODO: (IMPRV) for downloading requirements
-        lgr.debug('downloading {0} to {1}'.format(pkg, dir))
-        # if self.check_if_package_is_installed(pkg):
+        lgr.debug('downloading {0} to {1}'.format(package, dir))
+        # if self.check_if_package_is_installed(package):
         return do('sudo apt-get -y install {0} -d -o=dir::cache={1}'
-                  .format(pkg, dir))
+                  .format(package, dir))
         # else:
         #     return do('sudo apt-get -y install --reinstall '
         #               '{0} -d -o=dir::cache={1}'.format(pkg, dir))
