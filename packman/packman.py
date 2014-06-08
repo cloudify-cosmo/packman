@@ -253,7 +253,7 @@ def packman_runner(action='pack', components_file=None, components=None,
                     action))):
                 # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
-                overr_methods = _import_overriding_methods()
+                overr_methods = _import_overriding_methods(action)
                 # replace hyphens with underscores and remove dots from the
                 # overriding methods names
                 component_re = component.replace('-', '_')
