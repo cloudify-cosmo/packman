@@ -593,6 +593,8 @@ def do(command, attempts=2, sleep_time=3, accepted_err_codes=None,
         raise RuntimeError('attempts must be at least 1')
     if not sleep_time > 0:
         raise RuntimeError('sleep_time must be larger than 0')
+    if not accepted_err_codes:
+        accepted_err_codes = []
 
     def _execute():
         for execution in xrange(attempts):
