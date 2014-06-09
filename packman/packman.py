@@ -468,7 +468,7 @@ def pack(component):
         cwd, c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH]) \
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
-    dst_pkg_types = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPE, [])
+    dst_pkg_types = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPES, [])
     # identifies pkg type automatically if not specified explicitly
     if not dst_pkg_types:
         lgr.debug('destination package type ommitted')
@@ -554,6 +554,9 @@ def pack(component):
                     if dst_pkg_type == "tar.gz":
                         lgr.debug('converting tar to tar.gz...')
                         do('sudo gzip {0}.tar*'.format(name))
+                    lgr.info("isolating archives...")
+                    common.mv('{0}/*.{1}'.format(
+                        tmp_pkg_path, dst_pkg_type), package_path)
         # apparently, the src for creation the package doesn't exist...
         # what can you do?
         else:
@@ -561,14 +564,12 @@ def pack(component):
                       .format(sources_path))
             # maybe bluntly exit since this is all irrelevant??
             raise PackagerError('sources dir missing')
-
-    # make sure the final destination for the package exists..
-    if not common.is_dir(package_path):
-        common.mkdir(package_path)
-    lgr.info("isolating archives...")
-    # and then copy the final package over..
-    for dst_pkg_type in dst_pkg_types:
-        common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
+    else:
+        lgr.info("isolating archives...")
+        # and then copy the final package over..
+        for dst_pkg_type in dst_pkg_types:
+            common.mv('{0}/*.{1}'.format(
+                tmp_pkg_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
     if not keep_sources:
         common.rmdir(sources_path)
@@ -715,6 +716,15 @@ class CommonHandler():
         lgr.debug('copying {0} to {1}'.format(src, dst))
         return do('cp -R {0} {1}'.format(src, dst), sudo=sudo) if recurse \
             else do('cp {0} {1}'.format(src, dst), sudo=sudo)
+
+    def mv(self, src, dst, sudo=True):
+        """moves files or directories
+
+        :param string src: source to copy
+        :param string dst: destination to copy to
+        """
+        lgr.debug('moving {0} to {1}'.format(src, dst))
+        return do('mv {0} {1}'.format(src, dst), sudo=sudo)
 
     def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
         """tars an input file or directory
