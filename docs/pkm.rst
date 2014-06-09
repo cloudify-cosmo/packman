@@ -26,22 +26,22 @@ yeilds the following::
     Script to run packman via command line
 
     Usage:
-        pkm get [--components=<list> --components_file=<path> --exclude=<list>]
-        pkm pack [--components=<list> --components_file=<path> --exclude=<list>]
-        pkm make [--components=<list> --components_file=<path> --exclude=<list>]
+        pkm get [--components=<list> --components-file=<path> --exclude=<list> -v]
+        pkm pack [--components=<list> --components-file=<path> --exclude=<list> -v]
+        pkm make [--components=<list> --components-file=<path> --exclude=<list> -v]
         pkm --version
 
     Arguments:
-        pack     Packs "Component" configured in packages.py
-        get      Gets "Component" configured in packages.py
+        pack     Packs component configured in components file
+        get      Gets component configured in components file
         make     Gets AND (yeah!) Packs.. don't ya kno!
 
     Options:
         -h --help                   Show this screen.
         -c --components=<list>      Comma Separated list of component names
         -x --exclude=<list>         Comma Separated list of excluded components
-        -f --components_file=<path> Components file path (if ommited, will assume packages.py in the cwd)
-        --verbose                   a LOT of output (NOT YET IMPLEMENTED)
-        -v --version                Display current version of sandman and exit
+        -f --components-file=<path> Components file path
+        -v --verbose                a LOT of output
+        --version                   Display current version of sandman and exit
 
 .. note:: when not specifying copmonents explicitly using the --components flag, the task will run on all components in the dict.

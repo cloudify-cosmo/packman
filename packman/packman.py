@@ -132,7 +132,7 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
         raise RuntimeError('distro not supported')
 
 
-def import_components_dict(components_file):
+def _import_components_dict(components_file):
     """returns a components dictionary
 
     :param string components_file: components_file to search in
@@ -176,7 +176,7 @@ def get_component_config(component_name, components_dict=None,
     lgr.debug('retrieving configuration for {0}'.format(component_name))
     try:
         if not components_dict:
-            components_dict = import_components_dict(components_file)
+            components_dict = _import_components_dict(components_file)
         lgr.debug('{0} config retrieved successfully'.format(component_name))
         return components_dict[component_name]
     except KeyError:
@@ -198,7 +198,8 @@ def packman_runner(action='pack', components_file=None, components=None,
     if a pack.py or get.py files are present, and an action_component
     function exists in the files, those functions will be used.
     else, the base get and pack methods supplied with packman will be used.
-    so for instance, if you have a component named `x`
+    so for instance, if you have a component named `x`, and you want to write
+    your own `get` function for it. Just write a get_x() function in get.py.
 
     :param string action: action to perform (get, pack)
     :param string components_file: path to file containing component config
@@ -209,7 +210,7 @@ def packman_runner(action='pack', components_file=None, components=None,
     :rtype: `None`
     """
     def _build_excluded_components_list(excluded_components):
-        return filter(None, (excluded or "").split(','))
+        return filter(None, (excluded_components or "").split(','))
 
     def _build_components_list(components, xcom_list, components_dict):
         com_list = []
@@ -237,7 +238,7 @@ def packman_runner(action='pack', components_file=None, components=None,
 
     set_global_verbosity_level(verbose)
     # import dict of all components
-    components_dict = import_components_dict(components_file)
+    components_dict = _import_components_dict(components_file)
     # append excluded components to list.
     xcom_list = _build_excluded_components_list(excluded)
     lgr.debug('excluded components list: {}'.format(xcom_list))
@@ -435,7 +436,7 @@ def pack(component):
      depending on its type
     :param string version: version to append to package
     :param string src_pkg_type: package source type (as supported by fpm)
-    :param string dst_pkg_type: package destination type (as supported by fpm)
+    :param list dst_pkg_types: package destination types (as supported by fpm)
     :param string src_path: path containing sources
      from which package will be created
     :param string tmp_pkg_path: path where temp package is placed
@@ -467,18 +468,18 @@ def pack(component):
         cwd, c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH]) \
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
-    dst_pkg_type = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPE, False)
+    dst_pkg_types = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPE, [])
     # identifies pkg type automatically if not specified explicitly
-    if not dst_pkg_type:
+    if not dst_pkg_types:
         lgr.debug('destination package type ommitted')
         if centos:
             lgr.debug('assuming default type: {}'.format(
                 PACKAGE_TYPES['centos']))
-            dst_pkg_type = PACKAGE_TYPES['centos']
+            dst_pkg_types = [PACKAGE_TYPES['centos']]
         elif debian:
             lgr.debug('assuming default type: {}'.format(
                 PACKAGE_TYPES['debian']))
-            dst_pkg_type = PACKAGE_TYPES['debian']
+            dst_pkg_types = [PACKAGE_TYPES['debian']]
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
@@ -544,13 +545,15 @@ def pack(component):
                 # the requirement. for instance, if a bootstrap script
                 # exists, and there are dependencies for the package, run
                 # fpm with the relevant flags.
-                i = fpmHandler(name, src_pkg_type, dst_pkg_type,
-                               sources_path, sudo=True)
-                i.fpm(version=version, force=overwrite, depends=depends,
-                      after_install=bootstrap_script, chdir=False,
-                      before_install=None)
-                if dst_pkg_type == "tar.gz":
-                    do('sudo gzip {0}*'.format(name))
+                for dst_pkg_type in dst_pkg_types:
+                    i = fpmHandler(name, src_pkg_type, dst_pkg_type,
+                                   sources_path, sudo=True)
+                    i.fpm(version=version, force=overwrite, depends=depends,
+                          after_install=bootstrap_script, chdir=False,
+                          before_install=None)
+                    if dst_pkg_type == "tar.gz":
+                        lgr.debug('converting tar to tar.gz...')
+                        do('sudo gzip {0}.tar*'.format(name))
         # apparently, the src for creation the package doesn't exist...
         # what can you do?
         else:
@@ -564,7 +567,8 @@ def pack(component):
         common.mkdir(package_path)
     lgr.info("isolating archives...")
     # and then copy the final package over..
-    common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
+    for dst_pkg_type in dst_pkg_types:
+        common.cp('{0}/*.{1}'.format(tmp_pkg_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
     if not keep_sources:
         common.rmdir(sources_path)
