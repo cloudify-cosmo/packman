@@ -506,7 +506,7 @@ def pack(component):
         lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
                  .format(package_path, name))
         common.rm('{0}/{1}*'.format(package_path, name))
-    # if the package is ...
+    # if a package is supported to be created, cleanup prior to creation
     # TODO: (CHK) why did I do this?
     if src_pkg_type:
         common.rmdir(tmp_pkg_path)
@@ -533,7 +533,9 @@ def pack(component):
             lgr.debug('copying bootstrap script to package directory')
             common.cp(bootstrap_script_in_pkg, sources_path)
     lgr.info('packing up component: {0}'.format(name))
-    # if a package needs to be created (not just files copied)...
+    # this checks if a package needs to be created. If no source package type
+    # is supplied, the assumption is that packages are only being downloaded
+    # so if there's a source package type...
     if src_pkg_type:
         # if the source dir for the package exists
         if common.is_dir(sources_path):
@@ -541,7 +543,7 @@ def pack(component):
             # accept (for now) a dst dir, but rather creates the package in
             # the cwd.
             with lcd(tmp_pkg_path):
-                # these will handle the different packaging cases based on
+                # this will handle the different packaging cases based on
                 # the requirement. for instance, if a bootstrap script
                 # exists, and there are dependencies for the package, run
                 # fpm with the relevant flags.
@@ -564,9 +566,10 @@ def pack(component):
                       .format(sources_path))
             # maybe bluntly exit since this is all irrelevant??
             raise PackagerError('sources dir missing')
+    # and if a source package type isn't supplied, files will only
+    # be copied to their corresponding destination locations.
     else:
         lgr.info("isolating archives...")
-        # and then copy the final package over..
         for dst_pkg_type in dst_pkg_types:
             common.mv('{0}/*.{1}'.format(
                 tmp_pkg_path, dst_pkg_type), package_path)
@@ -751,7 +754,7 @@ class CommonHandler():
 
 
 class fpmHandler(CommonHandler):
-    """packaging handler
+    """fpm handler to handle the packaging process
     """
     def __init__(self, name, input_type, output_type, source, sudo):
         self.sudo = sudo
@@ -763,6 +766,9 @@ class fpmHandler(CommonHandler):
         self.command = 'fpm -n {0} -s {1} -t {2} '
 
     def _build_fpm_cmd_string(self, **kwargs):
+        """this will build a command string
+        """
+        # TODO: add verbose mode to fpm runs
         self.command = self.command.format(
             self.name, self.input_type, self.output_type)
         if kwargs['version']:
@@ -785,6 +791,8 @@ class fpmHandler(CommonHandler):
         lgr.debug('fpm cmd is: {}'.format(self.command))
 
     def fpm(self, **kwargs):
+        """runs fpm
+        """
         self._build_fpm_cmd_string(**kwargs)
         do(self.command, sudo=self.sudo)
 
