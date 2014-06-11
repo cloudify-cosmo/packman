@@ -421,7 +421,7 @@ def get(component):
     py_handler.get_python_modules(modules, dst_path)
     # download relevant ruby gems...
     ruby_handler.get_ruby_gems(gems, dst_path)
-    lgr.debug('package retrieval completed successfully!')
+    lgr.info('package retrieval completed successfully!')
 
 
 def pack(component):
@@ -934,7 +934,7 @@ class YumHandler(CommonHandler):
         lgr.debug('checking if {0} is installed'.format(package))
         x = do('sudo rpm -qa | grep {0}'.format(
             package), attempts=1, accepted_err_codes=[1])
-        if x.succeeded:
+        if x.return_code == 0:
             lgr.debug('{0} is installed'.format(package))
             return True
         else:
@@ -963,14 +963,14 @@ class YumHandler(CommonHandler):
         # TODO: (FEAT) add yum enable-repo option
         # TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
         # TODO: (IMPRV) can be used to download deps. test to see if it works.
-        if self.check_if_package_is_installed(package):
-            return do('sudo yum -y reinstall --downloadonly '
-                      '--downloaddir={1}/archives {0}'.format(
-                          package, dir), accepted_err_codes=[1])
-        else:
-            return do('sudo yum -y install --downloadonly '
-                      '--downloaddir={1}/archives {0}'.format(
-                          package, dir), accepted_err_codes=[1])
+        # if self.check_if_package_is_installed(package):
+            # return do('sudo yum -y reinstall --downloadonly '
+            #           '--downloaddir={1}/archives {0}'.format(
+            #               package, dir), accepted_err_codes=[1])
+        # else:
+        return do('sudo yum -y install --downloadonly '
+                  '--downloaddir={1}/archives {0}'.format(
+                      package, dir), accepted_err_codes=[1])
 
     def installs(self, packages):
         """yum installs a list of packages
