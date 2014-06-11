@@ -421,7 +421,7 @@ def get(component):
     py_handler.get_python_modules(modules, dst_path)
     # download relevant ruby gems...
     ruby_handler.get_ruby_gems(gems, dst_path)
-    lgr.info('package retrieval completed successfully!')
+    lgr.debug('package retrieval completed successfully!')
 
 
 def pack(component):
