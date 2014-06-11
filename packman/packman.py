@@ -210,9 +210,11 @@ def packman_runner(action='pack', components_file=None, components=None,
     :rtype: `None`
     """
     def _build_excluded_components_list(excluded_components):
+        lgr.debug('building excluded components list...')
         return filter(None, (excluded_components or "").split(','))
 
     def _build_components_list(components, xcom_list, components_dict):
+        lgr.debug('building components list...')
         com_list = []
         if components:
             for component in components.split(','):
@@ -233,6 +235,7 @@ def packman_runner(action='pack', components_file=None, components=None,
         return com_list
 
     def _import_overriding_methods(action):
+        lgr.debug('importing overriding methods file...')
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{}.py'.format(action)))[0]))
 
@@ -268,10 +271,12 @@ def packman_runner(action='pack', components_file=None, components=None,
                 # else run the default action method
                 else:
                     # TODO: check for bad action
+                    lgr.debug('testing...')
                     globals()[action](get_component_config(
                         component, components_file=components_file))
             # else run the default action method
             else:
+                lgr.debug('testing2...')
                 globals()[action](get_component_config(
                     component, components_file=components_file))
     else:
@@ -416,6 +421,7 @@ def get(component):
     py_handler.get_python_modules(modules, dst_path)
     # download relevant ruby gems...
     ruby_handler.get_ruby_gems(gems, dst_path)
+    lgr.info('package retrieval completed successfully!')
 
 
 def pack(component):
@@ -459,7 +465,7 @@ def pack(component):
     c = component if type(component) is dict \
         else get_component_config(component)
 
-    # define params for packaging
+    # define params for packaging process
     name = c.get(defs.PARAM_NAME)
     version = c.get(defs.PARAM_VERSION, False)
     bootstrap_template = c.get(defs.PARAM_BOOTSTRAP_TEMPLATE_PATH, False)
@@ -575,6 +581,7 @@ def pack(component):
                 tmp_pkg_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
     if not keep_sources:
+        lgr.debug('removing sources...')
         common.rmdir(sources_path)
 
 
