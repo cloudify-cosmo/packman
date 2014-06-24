@@ -144,23 +144,23 @@ you can:</p>
 <div class="highlight-python"><div class="highlight"><pre>Script to run packman via command line
 
 Usage:
-    pkm get [--components=&lt;list&gt; --components_file=&lt;path&gt; --exclude=&lt;list&gt;]
-    pkm pack [--components=&lt;list&gt; --components_file=&lt;path&gt; --exclude=&lt;list&gt;]
-    pkm make [--components=&lt;list&gt; --components_file=&lt;path&gt; --exclude=&lt;list&gt;]
+    pkm get [--components=&lt;list&gt; --components-file=&lt;path&gt; --exclude=&lt;list&gt; -v]
+    pkm pack [--components=&lt;list&gt; --components-file=&lt;path&gt; --exclude=&lt;list&gt; -v]
+    pkm make [--components=&lt;list&gt; --components-file=&lt;path&gt; --exclude=&lt;list&gt; -v]
     pkm --version
 
 Arguments:
-    pack     Packs &quot;Component&quot; configured in packages.py
-    get      Gets &quot;Component&quot; configured in packages.py
+    pack     Packs component configured in components file
+    get      Gets component configured in components file
     make     Gets AND (yeah!) Packs.. don&#39;t ya kno!
 
 Options:
     -h --help                   Show this screen.
     -c --components=&lt;list&gt;      Comma Separated list of component names
     -x --exclude=&lt;list&gt;         Comma Separated list of excluded components
-    -f --components_file=&lt;path&gt; Components file path (if ommited, will assume packages.py in the cwd)
-    --verbose                   a LOT of output (NOT YET IMPLEMENTED)
-    -v --version                Display current version of sandman and exit
+    -f --components-file=&lt;path&gt; Components file path
+    -v --verbose                a LOT of output
+    --version                   Display current version of sandman and exit
 </pre></div>
 </div>
 <div class="admonition note">

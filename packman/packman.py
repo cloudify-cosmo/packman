@@ -133,7 +133,7 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
 
 
 def _import_components_dict(components_file):
-    """returns a components dictionary
+    """returns a components file dictionary
 
     :param string components_file: components_file to search in
     :rtype: `dict` with components configuration

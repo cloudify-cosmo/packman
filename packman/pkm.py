@@ -32,7 +32,7 @@ Options:
     -c --components=<list>      Comma Separated list of component names
     -x --exclude=<list>         Comma Separated list of excluded components
     -f --components-file=<path> Components file path
-    -v --verbose                a LOT of output (NOT YET IMPLEMENTED)
+    -v --verbose                a LOT of output
     --version                   Display current version of sandman and exit
 
 """

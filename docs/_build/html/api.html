@@ -119,6 +119,8 @@
             
   <div class="section" id="packman-s-api">
 <h1>Packman&#8217;s API<a class="headerlink" href="#packman-s-api" title="Permalink to this headline">¶</a></h1>
+<p><cite>packman</cite> provides an API that can be used to easily create packages from external application (for instance, you could call packman from your build machine to generate packages after all tests passed).</p>
+<p>The API is also usable when alternative implementations of <cite>get</cite> and <cite>pack</cite> for different components, as described <a class="reference external" href="http://packman.readthedocs.org/en/latest/alternative_methods.html">here</a></p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
@@ -190,19 +192,25 @@ used to override the default configuration from config.py</li>
 
 <dl class="function">
 <dt id="packman.packman.get_component_config">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">get_component_config</tt><big>(</big><em>component_name</em>, <em>components_dict=None</em>, <em>components_file=''</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_component_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_component_config" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">get_component_config</tt><big>(</big><em>component_name</em>, <em>components_dict=None</em>, <em>components_file=None</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#get_component_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.get_component_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns a component&#8217;s configuration</p>
 <p>if <cite>components_dict</cite> is not supplied, a packages.py file in the cwd will be
 assumed unless <cite>components_file</cite> is explicitly given.
 after a <cite>components_dict</cite> is defined, a <cite>component_config</cite> will be returned
-for the specific component_name.</p>
+for the specified component_name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>string</em>) &#8211; component name to retrieve config for.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>string</em>) &#8211; component name to retrieve config for.</li>
+<li><strong>components_dict</strong> (<em>dict</em>) &#8211; dict containing components configuration</li>
+<li><strong>components_file</strong> (<em>string</em>) &#8211; components file to search in</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><cite>dict</cite> representing package configuration</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><cite>dict</cite> representing component configuration</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -219,7 +227,8 @@ if <cite>excluded</cite> are supplied, they will be ignored.</p>
 <p>if a pack.py or get.py files are present, and an action_component
 function exists in the files, those functions will be used.
 else, the base get and pack methods supplied with packman will be used.
-so for instance, if you have a component named <cite>x</cite></p>
+so for instance, if you have a component named <cite>x</cite>, and you want to write
+your own <cite>get</cite> function for it. Just write a get_x() function in get.py.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -315,7 +324,7 @@ will be appended to the filename and to the package
 depending on its type</li>
 <li><strong>version</strong> (<em>string</em>) &#8211; version to append to package</li>
 <li><strong>src_pkg_type</strong> (<em>string</em>) &#8211; package source type (as supported by fpm)</li>
-<li><strong>dst_pkg_type</strong> (<em>string</em>) &#8211; package destination type (as supported by fpm)</li>
+<li><strong>dst_pkg_types</strong> (<em>list</em>) &#8211; package destination types (as supported by fpm)</li>
 <li><strong>src_path</strong> (<em>string</em>) &#8211; path containing sources
 from which package will be created</li>
 <li><strong>tmp_pkg_path</strong> (<em>string</em>) &#8211; path where temp package is placed</li>
@@ -340,7 +349,7 @@ erased before creating a new package</li>
 
 <dl class="function">
 <dt id="packman.packman.do">
-<tt class="descclassname">packman.packman.</tt><tt class="descname">do</tt><big>(</big><em>command</em>, <em>attempts=2</em>, <em>sleep_time=3</em>, <em>capture=False</em>, <em>combine_stderr=False</em>, <em>sudo=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#do"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.do" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">packman.packman.</tt><tt class="descname">do</tt><big>(</big><em>command</em>, <em>attempts=2</em>, <em>sleep_time=3</em>, <em>accepted_err_codes=None</em>, <em>capture=False</em>, <em>combine_stderr=False</em>, <em>sudo=False</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#do"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.do" title="Permalink to this definition">¶</a></dt>
 <dd><p>executes a command locally with retries on failure.</p>
 <p>if a <cite>command</cite> execution is successful, it will return a fabric
 object with the output (x.stdout, x.stderr, x.succeeded, etc..)</p>
@@ -501,6 +510,24 @@ obviously, <cite>attempts</cite> must be larger than 0...</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="packman.packman.CommonHandler.mv">
+<tt class="descname">mv</tt><big>(</big><em>src</em>, <em>dst</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.mv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.mv" title="Permalink to this definition">¶</a></dt>
+<dd><p>moves files or directories</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>src</strong> (<em>string</em>) &#8211; source to copy</li>
+<li><strong>dst</strong> (<em>string</em>) &#8211; destination to copy to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="packman.packman.CommonHandler.tar">
 <tt class="descname">tar</tt><big>(</big><em>chdir</em>, <em>output_file</em>, <em>input_path</em>, <em>opts='zvf'</em>, <em>sudo=True</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#CommonHandler.tar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.CommonHandler.tar" title="Permalink to this definition">¶</a></dt>
 <dd><p>tars an input file or directory</p>
@@ -545,11 +572,12 @@ obviously, <cite>attempts</cite> must be larger than 0...</p>
 <dt id="packman.packman.fpmHandler">
 <em class="property">class </em><tt class="descclassname">packman.packman.</tt><tt class="descname">fpmHandler</tt><big>(</big><em>name</em>, <em>input_type</em>, <em>output_type</em>, <em>source</em>, <em>sudo</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#fpmHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.fpmHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#packman.packman.CommonHandler" title="packman.packman.CommonHandler"><tt class="xref py py-class docutils literal"><span class="pre">packman.packman.CommonHandler</span></tt></a></p>
-<p>packaging handler</p>
+<p>fpm handler to handle the packaging process</p>
 <dl class="method">
 <dt id="packman.packman.fpmHandler.fpm">
 <tt class="descname">fpm</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#fpmHandler.fpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.fpmHandler.fpm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>runs fpm</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -915,14 +943,14 @@ else, will use <cite>dir</cite> (for virtualenvs and such)</li>
 
 <dl class="method">
 <dt id="packman.packman.AptHandler.download">
-<tt class="descname">download</tt><big>(</big><em>pkg</em>, <em>dir</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#AptHandler.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.AptHandler.download" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">download</tt><big>(</big><em>package</em>, <em>dir</em><big>)</big><a class="reference internal" href="_modules/packman/packman.html#AptHandler.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#packman.packman.AptHandler.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>uses apt to download package debs from ubuntu&#8217;s repo</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>pkg</strong> (<em>string</em>) &#8211; package to download</li>
+<li><strong>package</strong> (<em>string</em>) &#8211; package to download</li>
 <li><strong>dir</strong> (<em>string</em>) &#8211; dir to download to</li>
 </ul>
 </td>

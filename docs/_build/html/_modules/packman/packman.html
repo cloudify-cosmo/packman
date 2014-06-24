@@ -158,9 +158,17 @@
 <span class="c"># __all__ = [&#39;list&#39;]</span>
 
 <span class="n">SUPPORTED_DISTROS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Ubuntu&#39;</span><span class="p">,</span> <span class="s">&#39;debian&#39;</span><span class="p">,</span> <span class="s">&#39;centos&#39;</span><span class="p">)</span>
+<span class="n">DEFAULT_COMPONENTS_FILE</span> <span class="o">=</span> <span class="s">&#39;packages.py&#39;</span>
+<span class="n">PACKAGE_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;centos&quot;</span><span class="p">:</span> <span class="s">&quot;rpm&quot;</span><span class="p">,</span>
+    <span class="s">&quot;debian&quot;</span><span class="p">:</span> <span class="s">&quot;deb&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">DEFAULT_BASE_LOGGING_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+<span class="n">DEFAULT_VERBOSE_LOGGING_LEVEL</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
 
 
-<div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../../api.html#packman.packman.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">base_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">verbose_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+<div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../../api.html#packman.packman.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">(</span><span class="n">base_level</span><span class="o">=</span><span class="n">DEFAULT_BASE_LOGGING_LEVEL</span><span class="p">,</span>
+                <span class="n">verbose_level</span><span class="o">=</span><span class="n">DEFAULT_VERBOSE_LOGGING_LEVEL</span><span class="p">,</span>
                 <span class="n">logging_config</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;initializes a base logger</span>
 
@@ -236,42 +244,60 @@
     <span class="n">distro</span> <span class="o">=</span> <span class="n">get_distro</span><span class="p">()</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Distribution Identified: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">distro</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">distro</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported</span><span class="p">:</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Your distribution is not supported.&#39;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;Your distribution is not supported.&#39;</span>
                   <span class="s">&#39;Supported Disributions are:&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="n">supported</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;    {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">distro</span><span class="p">))</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;    {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">distro</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;distro not supported&#39;</span><span class="p">)</span>
 
 </div>
+<span class="k">def</span> <span class="nf">_import_components_dict</span><span class="p">(</span><span class="n">components_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;returns a components file dictionary</span>
+
+<span class="sd">    :param string components_file: components_file to search in</span>
+<span class="sd">    :rtype: `dict` with components configuration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># get components file path</span>
+    <span class="n">components_file</span> <span class="o">=</span> <span class="n">components_file</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">DEFAULT_COMPONENTS_FILE</span><span class="p">)</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
+    <span class="c"># append to path for importing</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+            <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">PACKAGES</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;could not import packages.py file. please verify that &#39;</span>
+                  <span class="s">&#39;it exists in the specified path&#39;</span><span class="p">)</span>
+        <span class="c"># TODO: (IMPRV) add conditional raising with verbosity dependency</span>
+        <span class="c"># TODO: (IMPRV) throughout the code</span>
+        <span class="c"># if int(lgr.getEffectiveLevel()) &gt; DEFAULT_BASE_LOGGING_LEVEL:</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;missing components file&#39;</span><span class="p">)</span>
+        <span class="c"># sys.exit(1)</span>
+
+
 <div class="viewcode-block" id="get_component_config"><a class="viewcode-back" href="../../api.html#packman.packman.get_component_config">[docs]</a><span class="k">def</span> <span class="nf">get_component_config</span><span class="p">(</span><span class="n">component_name</span><span class="p">,</span> <span class="n">components_dict</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                         <span class="n">components_file</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+                         <span class="n">components_file</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;returns a component&#39;s configuration</span>
 
 <span class="sd">    if `components_dict` is not supplied, a packages.py file in the cwd will be</span>
 <span class="sd">    assumed unless `components_file` is explicitly given.</span>
 <span class="sd">    after a `components_dict` is defined, a `component_config` will be returned</span>
-<span class="sd">    for the specific component_name.</span>
+<span class="sd">    for the specified component_name.</span>
 
 <span class="sd">    :param string component: component name to retrieve config for.</span>
-<span class="sd">    :rtype: `dict` representing package configuration</span>
+<span class="sd">    :param dict components_dict: dict containing components configuration</span>
+<span class="sd">    :param string components_file: components file to search in</span>
+<span class="sd">    :rtype: `dict` representing component configuration</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">components_dict</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">components_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;retrieving configuration for {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">components_dict</span><span class="p">:</span>
-            <span class="n">components_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;packages.py&#39;</span><span class="p">)</span> \
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">components_file</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">components_file</span>
-            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">components_dict</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
-                    <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">PACKAGES</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;missing components file&#39;</span><span class="p">)</span>
-        <span class="n">component_config</span> <span class="o">=</span> <span class="n">components_dict</span><span class="p">[</span><span class="n">component_name</span><span class="p">]</span>
+            <span class="n">components_dict</span> <span class="o">=</span> <span class="n">_import_components_dict</span><span class="p">(</span><span class="n">components_file</span><span class="p">)</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} config retrieved successfully&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">component_config</span>
+        <span class="k">return</span> <span class="n">components_dict</span><span class="p">[</span><span class="n">component_name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;package configuration for&#39;</span>
                   <span class="s">&#39; {0} was not found, terminating...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component_name</span><span class="p">))</span>
@@ -291,7 +317,8 @@
 <span class="sd">    if a pack.py or get.py files are present, and an action_component</span>
 <span class="sd">    function exists in the files, those functions will be used.</span>
 <span class="sd">    else, the base get and pack methods supplied with packman will be used.</span>
-<span class="sd">    so for instance, if you have a component named `x`</span>
+<span class="sd">    so for instance, if you have a component named `x`, and you want to write</span>
+<span class="sd">    your own `get` function for it. Just write a get_x() function in get.py.</span>
 
 <span class="sd">    :param string action: action to perform (get, pack)</span>
 <span class="sd">    :param string components_file: path to file containing component config</span>
@@ -301,95 +328,79 @@
 <span class="sd">    :param bool verbose: determines output verbosity level</span>
 <span class="sd">    :rtype: `None`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_build_excluded_components_list</span><span class="p">(</span><span class="n">excluded_components</span><span class="p">):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;building excluded components list...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="n">excluded_components</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_build_components_list</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">xcom_list</span><span class="p">,</span> <span class="n">components_dict</span><span class="p">):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;building components list...&#39;</span><span class="p">)</span>
+        <span class="n">com_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">components</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+                <span class="n">com_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+            <span class="c"># and raise if same component appears in both lists</span>
+            <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">com_list</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">xcom_list</span><span class="p">):</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;your components list and excluded components &#39;</span>
+                          <span class="s">&#39;list contain a similar item.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components list and excluded list &#39;</span>
+                                    <span class="s">&#39;are conflicting&#39;</span><span class="p">)</span>
+        <span class="c"># else iterate over all components in components file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">components_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">com_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+            <span class="c"># and rewrite the list after removing excluded components</span>
+            <span class="k">for</span> <span class="n">xcom</span> <span class="ow">in</span> <span class="n">xcom_list</span><span class="p">:</span>
+                <span class="n">com_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">com</span> <span class="k">for</span> <span class="n">com</span> <span class="ow">in</span> <span class="n">com_list</span> <span class="k">if</span> <span class="n">com</span> <span class="o">!=</span> <span class="n">xcom</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">com_list</span>
+
+    <span class="k">def</span> <span class="nf">_import_overriding_methods</span><span class="p">(</span><span class="n">action</span><span class="p">):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;importing overriding methods file...&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]))</span>
+
     <span class="n">set_global_verbosity_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="c"># get packages.py file path</span>
-    <span class="n">components_file</span> <span class="o">=</span> <span class="n">components_file</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;packages.py&#39;</span><span class="p">)</span>
-    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components file is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
-    <span class="c"># append to path for importing</span>
-    <span class="c"># print(os.path.dirname(components_file))</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">components_file</span><span class="p">))</span>
-    <span class="c"># import</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c"># print(str(os.path.basename(os.path.splitext(components_file)[0])))</span>
-        <span class="n">packages</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
-            <span class="n">components_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;could not import packages.py file. please verify that &#39;</span>
-                  <span class="s">&#39;it exists in the specified path&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components file missing&#39;</span><span class="p">)</span>
-    <span class="c"># except Exception as e:</span>
-    <span class="c">#     raise(&#39;Unknown Error when trying to import packages.py file: {}&#39;</span>
-    <span class="c">#           .format(e))</span>
-    <span class="c"># if a component appears in both lists - ignore it.</span>
-    <span class="c"># if it appears only in the components list, continue.</span>
-    <span class="c"># if it appears only in the excluded list, continue</span>
+    <span class="c"># import dict of all components</span>
+    <span class="n">components_dict</span> <span class="o">=</span> <span class="n">_import_components_dict</span><span class="p">(</span><span class="n">components_file</span><span class="p">)</span>
     <span class="c"># append excluded components to list.</span>
-    <span class="c"># xcom_list = []</span>
-    <span class="c"># if excluded:</span>
-    <span class="c">#     for xcom in excluded.split(&#39;,&#39;):</span>
-    <span class="c">#         xcom_list.append(xcom)</span>
-    <span class="n">xcom_list</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="n">excluded</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
-    <span class="c"># append components to list if a list is supplied</span>
-    <span class="n">com_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">components</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
-            <span class="n">com_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
-        <span class="c"># and raise if components appear in exlucded list and components list</span>
-        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">com_list</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">xcom_list</span><span class="p">):</span>
-            <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;your components list and excluded components &#39;</span>
-                      <span class="s">&#39;list contain a similar item.&#39;</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;components list and excluded list &#39;</span>
-                                <span class="s">&#39;are conflicting&#39;</span><span class="p">)</span>
-    <span class="c"># else iterate over all components in components file</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">packages</span><span class="o">.</span><span class="n">PACKAGES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">com_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
-        <span class="c"># and rewrite the list after removing excluded components</span>
-        <span class="k">for</span> <span class="n">xcom</span> <span class="ow">in</span> <span class="n">xcom_list</span><span class="p">:</span>
-            <span class="n">com_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">com</span> <span class="k">for</span> <span class="n">com</span> <span class="ow">in</span> <span class="n">com_list</span> <span class="k">if</span> <span class="n">com</span> <span class="o">!=</span> <span class="n">xcom</span><span class="p">]</span>
-    <span class="c"># sum up what we&#39;ve got until now</span>
-    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components list: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">com_list</span><span class="p">))</span>
+    <span class="n">xcom_list</span> <span class="o">=</span> <span class="n">_build_excluded_components_list</span><span class="p">(</span><span class="n">excluded</span><span class="p">)</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;excluded components list: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xcom_list</span><span class="p">))</span>
+    <span class="c"># append components to list if a list is supplied</span>
+    <span class="n">com_list</span> <span class="o">=</span> <span class="n">_build_components_list</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">xcom_list</span><span class="p">,</span> <span class="n">components_dict</span><span class="p">)</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;components list: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">com_list</span><span class="p">))</span>
     <span class="c"># if at least 1 component exists</span>
     <span class="k">if</span> <span class="n">com_list</span><span class="p">:</span>
         <span class="c"># iterate and run action</span>
         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">com_list</span><span class="p">:</span>
-            <span class="c"># only on components not in the xcom_list</span>
-            <span class="c"># TODO: the list is written with this in mind. maybe we can remove?</span>
-            <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xcom_list</span><span class="p">:</span>
-                <span class="c"># looks for the overriding methods file in the current path</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">action</span><span class="p">))):</span>
-                    <span class="c"># imports the overriding methods file</span>
-                    <span class="c"># TODO: enable sending parameters to the overriding methods</span>
-                    <span class="n">overr_methods</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                <span class="n">action</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]))</span>
-                    <span class="c"># replace hyphens with underscores and remove dots from the</span>
-                    <span class="c"># overriding methods names</span>
-                    <span class="n">component_re</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span>
-                    <span class="n">component_re</span> <span class="o">=</span> <span class="n">component_re</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
-                    <span class="c"># if the method was found in the overriding file, run it.</span>
-                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">overr_methods</span><span class="p">,</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">action</span><span class="p">,</span> <span class="n">component_re</span><span class="p">)):</span>
-                        <span class="nb">getattr</span><span class="p">(</span>
-                            <span class="n">overr_methods</span><span class="p">,</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                <span class="n">action</span><span class="p">,</span> <span class="n">component_re</span><span class="p">))()</span>
-                    <span class="c"># else run the default action method</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="c"># TODO: check for bad action</span>
-                        <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
-                            <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
+            <span class="c"># looks for the overriding methods file in the current path</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s">&#39;{}.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">action</span><span class="p">))):</span>
+                <span class="c"># imports the overriding methods file</span>
+                <span class="c"># TODO: allow sending parameters to the overriding methods</span>
+                <span class="n">overr_methods</span> <span class="o">=</span> <span class="n">_import_overriding_methods</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+                <span class="c"># replace hyphens with underscores and remove dots from the</span>
+                <span class="c"># overriding methods names</span>
+                <span class="n">component_re</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span>
+                <span class="n">component_re</span> <span class="o">=</span> <span class="n">component_re</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+                <span class="c"># if the method was found in the overriding file, run it.</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">overr_methods</span><span class="p">,</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">action</span><span class="p">,</span> <span class="n">component_re</span><span class="p">)):</span>
+                    <span class="nb">getattr</span><span class="p">(</span>
+                        <span class="n">overr_methods</span><span class="p">,</span> <span class="s">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">action</span><span class="p">,</span> <span class="n">component_re</span><span class="p">))()</span>
                 <span class="c"># else run the default action method</span>
                 <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># TODO: check for bad action</span>
+                    <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;testing...&#39;</span><span class="p">)</span>
                     <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
                         <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
+            <span class="c"># else run the default action method</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;skipping component: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+                <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;testing2...&#39;</span><span class="p">)</span>
+                <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">get_component_config</span><span class="p">(</span>
+                    <span class="n">component</span><span class="p">,</span> <span class="n">components_file</span><span class="o">=</span><span class="n">components_file</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;no components to handle&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;no components to handle,&#39;</span>
+                            <span class="s">&#39; check your components file&#39;</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="get"><a class="viewcode-back" href="../../api.html#packman.packman.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
@@ -426,7 +437,7 @@
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
     <span class="c"># define params for packaging</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">)</span>
     <span class="n">source_repos</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_REPOS</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">source_ppas</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PPAS</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">source_keys</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_KEYS</span><span class="p">,</span> <span class="p">[])</span>
@@ -437,7 +448,6 @@
     <span class="n">modules</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_MODULES</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">gems</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_GEMS</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">dst_path</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">package_path</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_PACKAGE_PATH</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
     <span class="n">overwrite</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_OVERWRITE_SOURCES</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
 
     <span class="n">common</span> <span class="o">=</span> <span class="n">CommonHandler</span><span class="p">()</span>
@@ -459,8 +469,6 @@
             <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;the destination directory for this package already &#39;</span>
                       <span class="s">&#39;exists and overwrite is disabled.&#39;</span><span class="p">)</span>
     <span class="c"># create the directories required for package creation...</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="s">&#39;archives&#39;</span><span class="p">)):</span>
-        <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="s">&#39;archives&#39;</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">):</span>
         <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dst_path</span><span class="p">)</span>
 
@@ -532,6 +540,7 @@
     <span class="n">py_handler</span><span class="o">.</span><span class="n">get_python_modules</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
     <span class="c"># download relevant ruby gems...</span>
     <span class="n">ruby_handler</span><span class="o">.</span><span class="n">get_ruby_gems</span><span class="p">(</span><span class="n">gems</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">)</span>
+    <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package retrieval completed successfully!&#39;</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="pack"><a class="viewcode-back" href="../../api.html#packman.packman.pack">[docs]</a><span class="k">def</span> <span class="nf">pack</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
@@ -552,7 +561,7 @@
 <span class="sd">     depending on its type</span>
 <span class="sd">    :param string version: version to append to package</span>
 <span class="sd">    :param string src_pkg_type: package source type (as supported by fpm)</span>
-<span class="sd">    :param string dst_pkg_type: package destination type (as supported by fpm)</span>
+<span class="sd">    :param list dst_pkg_types: package destination types (as supported by fpm)</span>
 <span class="sd">    :param string src_path: path containing sources</span>
 <span class="sd">     from which package will be created</span>
 <span class="sd">    :param string tmp_pkg_path: path where temp package is placed</span>
@@ -575,8 +584,8 @@
     <span class="n">c</span> <span class="o">=</span> <span class="n">component</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span> \
         <span class="k">else</span> <span class="n">get_component_config</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
 
-    <span class="c"># define params for packaging</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c"># define params for packaging process</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_NAME</span><span class="p">)</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_VERSION</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
     <span class="n">bootstrap_template</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_TEMPLATE_PATH</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
     <span class="n">bootstrap_script</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_PATH</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
@@ -584,13 +593,18 @@
         <span class="n">cwd</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span><span class="p">])</span> \
         <span class="k">if</span> <span class="n">defs</span><span class="o">.</span><span class="n">PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">else</span> <span class="bp">False</span>
     <span class="n">src_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCE_PACKAGE_TYPE</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPE</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">dst_pkg_types</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_DESTINATION_PACKAGE_TYPES</span><span class="p">,</span> <span class="p">[])</span>
     <span class="c"># identifies pkg type automatically if not specified explicitly</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">dst_pkg_type</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dst_pkg_types</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;destination package type ommitted&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">centos</span><span class="p">:</span>
-            <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="s">&#39;rpm&#39;</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;assuming default type: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">PACKAGE_TYPES</span><span class="p">[</span><span class="s">&#39;centos&#39;</span><span class="p">]))</span>
+            <span class="n">dst_pkg_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">PACKAGE_TYPES</span><span class="p">[</span><span class="s">&#39;centos&#39;</span><span class="p">]]</span>
         <span class="k">elif</span> <span class="n">debian</span><span class="p">:</span>
-            <span class="n">dst_pkg_type</span> <span class="o">=</span> <span class="s">&#39;deb&#39;</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;assuming default type: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">PACKAGE_TYPES</span><span class="p">[</span><span class="s">&#39;debian&#39;</span><span class="p">]))</span>
+            <span class="n">dst_pkg_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">PACKAGE_TYPES</span><span class="p">[</span><span class="s">&#39;debian&#39;</span><span class="p">]]</span>
     <span class="n">sources_path</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">defs</span><span class="o">.</span><span class="n">PARAM_SOURCES_PATH</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
     <span class="c"># TODO: (STPD) JEEZ... this archives thing is dumb...</span>
     <span class="c"># TODO: (STPD) replace it with a normal destination path</span>
@@ -605,17 +619,20 @@
     <span class="n">common</span> <span class="o">=</span> <span class="n">CommonHandler</span><span class="p">()</span>
     <span class="n">tmp_handler</span> <span class="o">=</span> <span class="n">TemplateHandler</span><span class="p">()</span>
 
+    <span class="c"># if the package_path doesn&#39;t exist, create it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="s">&#39;archives&#39;</span><span class="p">)):</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="s">&#39;archives&#39;</span><span class="p">))</span>
     <span class="c"># can&#39;t use sources_path == tmp_pkg_path for the package... duh!</span>
     <span class="k">if</span> <span class="n">sources_path</span> <span class="o">==</span> <span class="n">tmp_pkg_path</span><span class="p">:</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;source and destination paths must&#39;</span>
                   <span class="s">&#39; be different to avoid conflicts!&#39;</span><span class="p">)</span>
-
     <span class="c"># should the packaging process overwrite the previous packages?</span>
     <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;overwrite enabled. removing {0}/{1}* before packaging&#39;</span>
                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
         <span class="n">common</span><span class="o">.</span><span class="n">rm</span><span class="p">(</span><span class="s">&#39;{0}/{1}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-    <span class="c"># if the package is ...</span>
+    <span class="c"># if a package is supported to be created, cleanup prior to creation</span>
+    <span class="c"># TODO: (CHK) why did I do this?</span>
     <span class="k">if</span> <span class="n">src_pkg_type</span><span class="p">:</span>
         <span class="n">common</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">)</span>
         <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">)</span>
@@ -636,13 +653,14 @@
                                                <span class="n">bootstrap_template</span><span class="p">)</span>
             <span class="c"># if it&#39;s in_pkg, grant it exec permissions and copy it to the</span>
             <span class="c"># package&#39;s path.</span>
-            <span class="k">if</span> <span class="n">bootstrap_script_in_pkg</span><span class="p">:</span>
-                <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;granting execution permissions&#39;</span><span class="p">)</span>
-                <span class="n">do</span><span class="p">(</span><span class="s">&#39;chmod +x {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">))</span>
-                <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copying bootstrap script to package directory&#39;</span><span class="p">)</span>
-                <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;granting execution permissions&#39;</span><span class="p">)</span>
+            <span class="n">do</span><span class="p">(</span><span class="s">&#39;chmod +x {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">))</span>
+            <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;copying bootstrap script to package directory&#39;</span><span class="p">)</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="n">bootstrap_script_in_pkg</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;packing up component: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-    <span class="c"># if a package needs to be created (not just files copied)...</span>
+    <span class="c"># this checks if a package needs to be created. If no source package type</span>
+    <span class="c"># is supplied, the assumption is that packages are only being downloaded</span>
+    <span class="c"># so if there&#39;s a source package type...</span>
     <span class="k">if</span> <span class="n">src_pkg_type</span><span class="p">:</span>
         <span class="c"># if the source dir for the package exists</span>
         <span class="k">if</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">sources_path</span><span class="p">):</span>
@@ -650,17 +668,22 @@
             <span class="c"># accept (for now) a dst dir, but rather creates the package in</span>
             <span class="c"># the cwd.</span>
             <span class="k">with</span> <span class="n">lcd</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">):</span>
-                <span class="c"># these will handle the different packaging cases based on</span>
+                <span class="c"># this will handle the different packaging cases based on</span>
                 <span class="c"># the requirement. for instance, if a bootstrap script</span>
                 <span class="c"># exists, and there are dependencies for the package, run</span>
                 <span class="c"># fpm with the relevant flags.</span>
-                <span class="n">i</span> <span class="o">=</span> <span class="n">fpmHandler</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span>
-                               <span class="n">sources_path</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-                <span class="n">i</span><span class="o">.</span><span class="n">fpm</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">depends</span><span class="p">,</span>
-                      <span class="n">after_install</span><span class="o">=</span><span class="n">bootstrap_script</span><span class="p">,</span> <span class="n">chdir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                      <span class="n">before_install</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar.gz&quot;</span><span class="p">:</span>
-                    <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gzip {0}*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">dst_pkg_type</span> <span class="ow">in</span> <span class="n">dst_pkg_types</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">fpmHandler</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">src_pkg_type</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">,</span>
+                                   <span class="n">sources_path</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">fpm</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">depends</span><span class="o">=</span><span class="n">depends</span><span class="p">,</span>
+                          <span class="n">after_install</span><span class="o">=</span><span class="n">bootstrap_script</span><span class="p">,</span> <span class="n">chdir</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">before_install</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">dst_pkg_type</span> <span class="o">==</span> <span class="s">&quot;tar.gz&quot;</span><span class="p">:</span>
+                        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;converting tar to tar.gz...&#39;</span><span class="p">)</span>
+                        <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo gzip {0}.tar*&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                    <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;isolating archives...&quot;</span><span class="p">)</span>
+                    <span class="n">common</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
         <span class="c"># apparently, the src for creation the package doesn&#39;t exist...</span>
         <span class="c"># what can you do?</span>
         <span class="k">else</span><span class="p">:</span>
@@ -668,19 +691,20 @@
                       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sources_path</span><span class="p">))</span>
             <span class="c"># maybe bluntly exit since this is all irrelevant??</span>
             <span class="k">raise</span> <span class="n">PackagerError</span><span class="p">(</span><span class="s">&#39;sources dir missing&#39;</span><span class="p">)</span>
-
-    <span class="c"># make sure the final destination for the package exists..</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">common</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">package_path</span><span class="p">):</span>
-        <span class="n">common</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">package_path</span><span class="p">)</span>
-    <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;isolating archives...&quot;</span><span class="p">)</span>
-    <span class="c"># and then copy the final package over..</span>
-    <span class="n">common</span><span class="o">.</span><span class="n">cp</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
+    <span class="c"># and if a source package type isn&#39;t supplied, files will only</span>
+    <span class="c"># be copied to their corresponding destination locations.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;isolating archives...&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dst_pkg_type</span> <span class="ow">in</span> <span class="n">dst_pkg_types</span><span class="p">:</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="s">&#39;{0}/*.{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">tmp_pkg_path</span><span class="p">,</span> <span class="n">dst_pkg_type</span><span class="p">),</span> <span class="n">package_path</span><span class="p">)</span>
     <span class="n">lgr</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;package creation completed successfully!&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_sources</span><span class="p">:</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;removing sources...&#39;</span><span class="p">)</span>
         <span class="n">common</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">sources_path</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="do"><a class="viewcode-back" href="../../api.html#packman.packman.do">[docs]</a><span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<div class="viewcode-block" id="do"><a class="viewcode-back" href="../../api.html#packman.packman.do">[docs]</a><span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sleep_time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">accepted_err_codes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
        <span class="n">capture</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">combine_stderr</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;executes a command locally with retries on failure.</span>
 
@@ -703,13 +727,16 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;attempts must be at least 1&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sleep_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;sleep_time must be larger than 0&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">accepted_err_codes</span><span class="p">:</span>
+        <span class="n">accepted_err_codes</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">_execute</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">execution</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">attempts</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">settings</span><span class="p">(</span><span class="n">warn_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">local</span><span class="p">(</span><span class="s">&#39;sudo {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">),</span> <span class="n">capture</span><span class="p">)</span> <span class="k">if</span> <span class="n">sudo</span> \
-                    <span class="k">else</span> <span class="n">local</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">hide</span><span class="p">(</span><span class="s">&#39;warnings&#39;</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">local</span><span class="p">(</span><span class="s">&#39;sudo {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">),</span> <span class="n">capture</span><span class="p">)</span> <span class="k">if</span> <span class="n">sudo</span> \
+                        <span class="k">else</span> <span class="n">local</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">capture</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">return_code</span> <span class="ow">in</span> <span class="n">accepted_err_codes</span><span class="p">:</span>
                     <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;successfully executed: &#39;</span> <span class="o">+</span> <span class="n">command</span><span class="p">)</span>
                     <span class="k">return</span> <span class="n">x</span>
                 <span class="n">lgr</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;failed to run command: {0} -retrying ({1}/{2})&#39;</span>
@@ -819,6 +846,15 @@
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp -R {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span> <span class="k">if</span> <span class="n">recurse</span> \
             <span class="k">else</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;cp {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="CommonHandler.mv"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.mv">[docs]</a>    <span class="k">def</span> <span class="nf">mv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;moves files or directories</span>
+
+<span class="sd">        :param string src: source to copy</span>
+<span class="sd">        :param string dst: destination to copy to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;moving {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;mv {0} {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">),</span> <span class="n">sudo</span><span class="o">=</span><span class="n">sudo</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="CommonHandler.tar"><a class="viewcode-back" href="../../api.html#packman.packman.CommonHandler.tar">[docs]</a>    <span class="k">def</span> <span class="nf">tar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="s">&#39;zvf&#39;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;tars an input file or directory</span>
 
@@ -844,7 +880,7 @@
 
 </div></div>
 <div class="viewcode-block" id="fpmHandler"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler">[docs]</a><span class="k">class</span> <span class="nc">fpmHandler</span><span class="p">(</span><span class="n">CommonHandler</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;packaging handler</span>
+    <span class="sd">&quot;&quot;&quot;fpm handler to handle the packaging process</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">input_type</span><span class="p">,</span> <span class="n">output_type</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">sudo</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sudo</span> <span class="o">=</span> <span class="n">sudo</span>
@@ -856,6 +892,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="s">&#39;fpm -n {0} -s {1} -t {2} &#39;</span>
 
     <span class="k">def</span> <span class="nf">_build_fpm_cmd_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;this will build a command string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># TODO: add verbose mode to fpm runs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]:</span>
@@ -878,6 +917,8 @@
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;fpm cmd is: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">))</span>
 
 <div class="viewcode-block" id="fpmHandler.fpm"><a class="viewcode-back" href="../../api.html#packman.packman.fpmHandler.fpm">[docs]</a>    <span class="k">def</span> <span class="nf">fpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;runs fpm</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_fpm_cmd_string</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">do</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sudo</span><span class="p">)</span>
 
@@ -1010,8 +1051,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;checking if {0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -q {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">),</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">succeeded</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -qa | grep {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">package</span><span class="p">),</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">accepted_err_codes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;{0} is installed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">))</span>
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1041,11 +1083,13 @@
         <span class="c"># TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)</span>
         <span class="c"># TODO: (IMPRV) can be used to download deps. test to see if it works.</span>
         <span class="c"># if self.check_if_package_is_installed(package):</span>
-        <span class="c">#     return do(&#39;sudo yum -y reinstall --downloadonly &#39;</span>
-        <span class="c">#               &#39;--downloaddir={1}/archives {0}&#39;.format(package, dir))</span>
+        <span class="c"># return do(&#39;sudo yum -y reinstall --downloadonly &#39;</span>
+        <span class="c">#           &#39;--downloaddir={1}/archives {0}&#39;.format(</span>
+        <span class="c">#               package, dir), accepted_err_codes=[1])</span>
         <span class="c"># else:</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo yum -y install --downloadonly &#39;</span>
-                  <span class="s">&#39;--downloaddir={1}/archives {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+                  <span class="s">&#39;--downloaddir={1}/archives {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">),</span> <span class="n">accepted_err_codes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="YumHandler.installs"><a class="viewcode-back" href="../../api.html#packman.packman.YumHandler.installs">[docs]</a>    <span class="k">def</span> <span class="nf">installs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packages</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;yum installs a list of packages</span>
@@ -1078,7 +1122,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;adding source repository {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">source_repo</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.rpm&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -ivh {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_repo</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo rpm -ivh {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">source_repo</span><span class="p">),</span> <span class="n">accepted_err_codes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dl</span> <span class="o">=</span> <span class="n">WgetHandler</span><span class="p">()</span>
             <span class="n">dl</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">source_repo</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s">&#39;/etc/yum.repos.d/&#39;</span><span class="p">)</span>
@@ -1135,10 +1180,10 @@
         <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">sources_path</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="AptHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
+<div class="viewcode-block" id="AptHandler.download"><a class="viewcode-back" href="../../api.html#packman.packman.AptHandler.download">[docs]</a>    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;uses apt to download package debs from ubuntu&#39;s repo</span>
 
-<span class="sd">        :param string pkg: package to download</span>
+<span class="sd">        :param string package: package to download</span>
 <span class="sd">        :param string dir: dir to download to</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># TODO: (TEST) add an is-package-installed check. if it is</span>
@@ -1146,10 +1191,10 @@
         <span class="c"># TODO: (TEST) install.</span>
         <span class="c"># TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA</span>
         <span class="c"># TODO: (IMPRV) for downloading requirements</span>
-        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
-        <span class="c"># if self.check_if_package_is_installed(pkg):</span>
+        <span class="n">lgr</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;downloading {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+        <span class="c"># if self.check_if_package_is_installed(package):</span>
         <span class="k">return</span> <span class="n">do</span><span class="p">(</span><span class="s">&#39;sudo apt-get -y install {0} -d -o=dir::cache={1}&#39;</span>
-                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
+                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="nb">dir</span><span class="p">))</span>
         <span class="c"># else:</span>
         <span class="c">#     return do(&#39;sudo apt-get -y install --reinstall &#39;</span>
         <span class="c">#               &#39;{0} -d -o=dir::cache={1}&#39;.format(pkg, dir))</span>

@@ -22,11 +22,16 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
     html_theme = 'sphinx_rtd_theme'
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
+# General information about the project.
+project = 'packman'
+package = 'packman'
+author = 'nir0s'
+copyright = '2014, nir0s'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../packman'))
+sys.path.insert(0, os.path.abspath('../{}'.format(package)))
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -58,10 +63,6 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
-# General information about the project.
-project = 'packman'
-copyright = '2014, nir0s'
-
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
@@ -70,7 +71,7 @@ copyright = '2014, nir0s'
 
 import pkg_resources
 try:
-    release = pkg_resources.get_distribution("packman").version
+    release = pkg_resources.get_distribution(project).version
 except pkg_resources.DistributionNotFound:
     print 'To build the documentation, The distribution information of packm'
     print 'Has to be available.  Either install the package into your'
@@ -202,7 +203,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'packmandoc'
+htmlhelp_basename = '{0}doc'.format(project)
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -222,8 +223,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index', 'packman.tex', u'packman Documentation',
-     u'nir0s', 'manual'),
+    ('index', '{0}.tex'.format(project), u'{0} Documentation'.format(project),
+     u'{}'.format(author), 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -252,8 +253,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'packman', u'packman Documentation',
-     [u'nir0s'], 1)
+    ('index', project, u'{0} Documentation'.format(project),
+     [u'{}'.format(author)], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -266,8 +267,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'packman', u'packman Documentation',
-     u'nir0s', 'packman', 'One line description of project.',
+    ('index', project, u'{0} Documentation'.format(project),
+     u'{}'.format(author), project, 'One line description of project.',
      'Miscellaneous'),
 ]
 
