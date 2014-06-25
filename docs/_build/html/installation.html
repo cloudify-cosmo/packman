@@ -125,13 +125,16 @@
 <ul class="simple">
 <li>python-dev -<em>for pycrypto (ARG!)</em></li>
 <li>python-setuptools -<em>also to install packages on the ``packman`` instance</em></li>
+<li>ruby - <em>required for fpm</em></li>
 <li>fpm -<em>main packaging framework</em></li>
-<li>fabric -<em>to run it all</em></li>
-<li>pip &gt;1.5 -<em>to download python modules</em></li>
-<li>jinja2 -<em>to create scripts and configuration files from templates</em></li>
+<li>pip &gt;1.5 -<em>to download python modules (and install packman)</em></li>
 <li>virtualenv (OPTIONAL) -<em>to create python virtual environments.</em></li>
 <li>rubygems (OPTIONAL) -<em>to download ruby gems</em></li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the rest of the requirements are python modules which will be installed with <cite>packman</cite></p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">a <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/vagrant/provision.sh">script</a> is provided to install the above requirements.</p>

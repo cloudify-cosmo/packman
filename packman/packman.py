@@ -260,8 +260,11 @@ def packman_runner(action='pack', components_file=None, components=None,
                 overr_methods = _import_overriding_methods(action)
                 # replace hyphens with underscores and remove dots from the
                 # overriding methods names
+                # also, convert to lowercase to correspond with overriding
+                # method names.
                 component_re = component.replace('-', '_')
                 component_re = component_re.replace('.', '')
+                component_re = component_re.lower()
                 # if the method was found in the overriding file, run it.
                 if hasattr(overr_methods, '{}_{}'.format(
                         action, component_re)):
@@ -271,12 +274,10 @@ def packman_runner(action='pack', components_file=None, components=None,
                 # else run the default action method
                 else:
                     # TODO: check for bad action
-                    lgr.debug('testing...')
                     globals()[action](get_component_config(
                         component, components_file=components_file))
             # else run the default action method
             else:
-                lgr.debug('testing2...')
                 globals()[action](get_component_config(
                     component, components_file=components_file))
     else:
