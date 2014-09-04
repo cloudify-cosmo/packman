@@ -22,6 +22,7 @@
 
 import logging
 import logging.config
+import dictconfig
 
 import packman_config as pkm_conf
 import definitions as defs
@@ -81,7 +82,8 @@ def init_logger(base_level=DEFAULT_BASE_LOGGING_LEVEL,
         d = os.path.dirname(logfile)
         if not os.path.exists(d) and not len(d) == 0:
             os.makedirs(d)
-        logging.config.dictConfig(logging_config)
+        # logging.config.dictConfig(logging_config)
+        dictconfig.dictConfig(logging_config)
         lgr = logging.getLogger('user')
         # lgr.setLevel(base_level) if not pkm_conf.VERBOSE \
         lgr.setLevel(base_level)
