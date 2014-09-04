@@ -697,7 +697,7 @@ if PY3:
     _assertCountEqual = "assertCountEqual"
     _assertRaisesRegex = "assertRaisesRegex"
     _assertRegex = "assertRegex"
-    memoryview = memoryview
+    memoryview = memoryview  # NOQA
     buffer_types = (bytes, bytearray, memoryview)
 else:
     _assertCountEqual = "assertItemsEqual"
