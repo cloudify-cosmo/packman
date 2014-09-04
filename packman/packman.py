@@ -125,12 +125,12 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
     """
     set_global_verbosity_level(verbose)
     distro = get_distro()
-    lgr.debug('Distribution Identified: {}'.format(distro))
+    lgr.debug('Distribution Identified: {0}'.format(distro))
     if distro not in supported:
         lgr.error('Your distribution is not supported.'
                   'Supported Disributions are:')
         for distro in supported:
-            lgr.error('    {}'.format(distro))
+            lgr.error('    {0}'.format(distro))
         raise RuntimeError('distro not supported')
 
 
@@ -143,7 +143,7 @@ def _import_components_dict(components_file):
     # get components file path
     components_file = components_file or os.path.join(
         os.getcwd(), DEFAULT_COMPONENTS_FILE)
-    lgr.debug('components file is: {}'.format(components_file))
+    lgr.debug('components file is: {0}'.format(components_file))
     # append to path for importing
     sys.path.append(os.path.dirname(components_file))
     try:
@@ -239,23 +239,23 @@ def packman_runner(action='pack', components_file=None, components=None,
     def _import_overriding_methods(action):
         lgr.debug('importing overriding methods file...')
         return __import__(os.path.basename(os.path.splitext(
-            os.path.join(os.getcwd(), '{}.py'.format(action)))[0]))
+            os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
     set_global_verbosity_level(verbose)
     # import dict of all components
     components_dict = _import_components_dict(components_file)
     # append excluded components to list.
     xcom_list = _build_excluded_components_list(excluded)
-    lgr.debug('excluded components list: {}'.format(xcom_list))
+    lgr.debug('excluded components list: {0}'.format(xcom_list))
     # append components to list if a list is supplied
     com_list = _build_components_list(components, xcom_list, components_dict)
-    lgr.debug('components list: {}'.format(com_list))
+    lgr.debug('components list: {0}'.format(com_list))
     # if at least 1 component exists
     if com_list:
         # iterate and run action
         for component in com_list:
             # looks for the overriding methods file in the current path
-            if os.path.isfile(os.path.join(os.getcwd(), '{}.py'.format(
+            if os.path.isfile(os.path.join(os.getcwd(), '{0}.py'.format(
                     action))):
                 # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
@@ -268,10 +268,10 @@ def packman_runner(action='pack', components_file=None, components=None,
                 component_re = component_re.replace('.', '')
                 component_re = component_re.lower()
                 # if the method was found in the overriding file, run it.
-                if hasattr(overr_methods, '{}_{}'.format(
+                if hasattr(overr_methods, '{0}_{1}'.format(
                         action, component_re)):
                     getattr(
-                        overr_methods, '{}_{}'.format(
+                        overr_methods, '{0}_{1}'.format(
                             action, component_re))()
                 # else run the default action method
                 else:
@@ -364,7 +364,7 @@ def get(component):
     # if there's a source ppa to add... add it?
     if source_ppas:
         if not debian:
-            raise PackagerError('ppas not supported by {}'.format(
+            raise PackagerError('ppas not supported by {0}'.format(
                 get_distro()))
         repo_handler.add_ppa_repos(source_ppas)
     # get a key for the repo if it's required..
@@ -396,16 +396,16 @@ def get(component):
     for req in reqs:
         if type(req) is dict:
             home = os.path.expanduser('~')
-            common.mkdir('{}/tmp'.format(home), sudo=False)
+            common.mkdir('{0}/tmp'.format(home), sudo=False)
             dl_handler.download(
                 req['url'], file='{0}/tmp/{1}_reqs.tar.gz'.format(
                     home, name), sudo=False)
             common.untar('{0}/tmp'.format(home),
                          '{0}/tmp/{1}_reqs.tar.gz'.format(
                              home, name), strip=0, sudo=False)
-            cf = glob.glob('{}/tmp/packages.py'.format(home))
+            cf = glob.glob('{0}/tmp/packages.py'.format(home))
             if not cf:
-                cf = glob.glob('{}/tmp/**/packages.py'.format(home))
+                cf = glob.glob('{0}/tmp/**/packages.py'.format(home))
             # cfpath = os.path.splitext(cf[0])[0]
             print 'HAHAAAAAAAAAAAAAAAAAAAA', cf[0]
             cffile = name + '_' + os.path.basename(cf[0])
@@ -482,11 +482,11 @@ def pack(component):
     if not dst_pkg_types:
         lgr.debug('destination package type ommitted')
         if centos:
-            lgr.debug('assuming default type: {}'.format(
+            lgr.debug('assuming default type: {0}'.format(
                 PACKAGE_TYPES['centos']))
             dst_pkg_types = [PACKAGE_TYPES['centos']]
         elif debian:
-            lgr.debug('assuming default type: {}'.format(
+            lgr.debug('assuming default type: {0}'.format(
                 PACKAGE_TYPES['debian']))
             dst_pkg_types = [PACKAGE_TYPES['debian']]
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
@@ -782,14 +782,14 @@ class fpmHandler(CommonHandler):
         self.command = self.command.format(
             self.name, self.input_type, self.output_type)
         if kwargs['version']:
-            self.command += '-v {} '.format(kwargs['version'])
+            self.command += '-v {0} '.format(kwargs['version'])
         if kwargs['chdir']:
-            self.command += '-C {} '.format(kwargs['chdir'])
+            self.command += '-C {0} '.format(kwargs['chdir'])
         if kwargs['after_install']:
-            self.command += '--after-install {} '.format(
+            self.command += '--after-install {0} '.format(
                 os.path.join(os.getcwd(), kwargs['after_install']))
         if kwargs['before_install']:
-            self.command += '--before-install {} '.format(
+            self.command += '--before-install {0} '.format(
                 os.path.join(os.getcwd(), kwargs['before_install']))
         if kwargs['depends']:
             self.command += "-d " + " -d ".join(kwargs['depends'])
@@ -798,7 +798,7 @@ class fpmHandler(CommonHandler):
             self.command += '-f '
         # MUST BE LAST
         self.command += self.source
-        lgr.debug('fpm cmd is: {}'.format(self.command))
+        lgr.debug('fpm cmd is: {0}'.format(self.command))
 
     def fpm(self, **kwargs):
         """runs fpm
@@ -1273,11 +1273,11 @@ class TemplateHandler(CommonHandler):
             if defs.PARAM_CONFIG_TEMPALTES_FILE_OUTPUT_FILE in config_params \
             else '.'.join(template_file.split('.')[:-1])
         # and its path is...
-        output_path = '{}/{}/{}'.format(
+        output_path = '{0}/{1}/{2}'.format(
             component[defs.PARAM_SOURCES_PATH], config_dir, output_file)
         # create the directory to put the config in after it's
         # genserated
-        self.mkdir('{}/{}'.format(
+        self.mkdir('{0}/{1}'.format(
             component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
         # and then generate the config file. WOOHOO!
         self.generate_from_template(component,
@@ -1306,11 +1306,11 @@ class TemplateHandler(CommonHandler):
             for file in files:
                 template_file = file
                 output_file = '.'.join(template_file.split('.')[:-1])
-                output_path = '{}/{}/{}'.format(
+                output_path = '{0}/{1}/{2}'.format(
                     component[defs.PARAM_SOURCES_PATH], config_dir,
                     output_file)
 
-                self.mkdir('{}/{}'.format(
+                self.mkdir('{0}/{1}'.format(
                     component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
                 self.generate_from_template(component,
                                             output_path,
@@ -1332,7 +1332,7 @@ class TemplateHandler(CommonHandler):
         """
         config_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_DIR]
         files_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_PATH]
-        self.mkdir('{}/{}'.format(
+        self.mkdir('{0}/{1}'.format(
             component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
         # copy the static files to the destination config dir.
         # yep, simple as that...
