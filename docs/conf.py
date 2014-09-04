@@ -31,7 +31,7 @@ copyright = '2014, nir0s'
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../{}'.format(package)))
+sys.path.insert(0, os.path.abspath('../{0}'.format(package)))
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -130,7 +130,7 @@ pygments_style = 'sphinx'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+#html_theme_options = {0}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -170,7 +170,7 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+#html_sidebars = {0}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -224,7 +224,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     ('index', '{0}.tex'.format(project), u'{0} Documentation'.format(project),
-     u'{}'.format(author), 'manual'),
+     u'{0}'.format(author), 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -254,7 +254,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', project, u'{0} Documentation'.format(project),
-     [u'{}'.format(author)], 1)
+     [u'{0}'.format(author)], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -268,7 +268,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', project, u'{0} Documentation'.format(project),
-     u'{}'.format(author), project, 'One line description of project.',
+     u'{0}'.format(author), project, 'One line description of project.',
      'Miscellaneous'),
 ]
 
