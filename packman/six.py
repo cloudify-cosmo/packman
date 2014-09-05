@@ -692,7 +692,7 @@ def add_metaclass(metaclass):
     return wrapper
 
 
-# Additional customizations for Django ###
+# Additional customizations for Django
 if PY3:
     _assertCountEqual = "assertCountEqual"
     _assertRaisesRegex = "assertRaisesRegex"
