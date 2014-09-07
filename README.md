@@ -55,3 +55,4 @@ A vagrantfile is provided to load machines:
 
 ##### Automated Vagrant Testing Environment
 In future versions, an automated process of retrieval, packaging and installation will be implemented to check the entire process.
+
