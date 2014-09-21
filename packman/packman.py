@@ -829,10 +829,10 @@ class PythonHandler(CommonHandler):
         """
         lgr.debug('installing module {0}'.format(module))
         return do('{0}/bin/pip --default-timeout={2} install {1}'
-                  ' --process-dependency-links'.format(venv, module, timeout),
+                  .format(venv, module, timeout),
                   attempts=attempts, sudo=sudo) \
             if venv else do('pip --default-timeout={2} install {1}'
-                            ' --process-dependency-links'.format(
+                            .format(
                                 venv, module, timeout),
                             attempts=attempts, sudo=sudo)
 
@@ -857,10 +857,10 @@ class PythonHandler(CommonHandler):
         """
         lgr.debug('downloading module {0}'.format(module))
         return do('sudo {0}/pip install --no-use-wheel'
-                  ' --process-dependency-links --download "{1}/" {2}'
+                  ' --download "{1}/" {2}'
                   .format(venv, dir, module)) \
             if venv else do('sudo pip install --no-use-wheel'
-                            ' --process-dependency-links --download "{0}/" {1}'
+                            ' --download "{0}/" {1}'
                             .format(dir, module))
 
     def check_module_installed(self, name, dir=False):
