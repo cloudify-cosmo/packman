@@ -1,12 +1,76 @@
-from common import init_logger
-from common import do
-
+import logging
+import logger
 import os
 
-lgr = init_logger()
+import time
+import fabric.api as fab
 
 
-class CommonHandler():
+DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
+DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
+
+
+def do(command, attempts=2, sleep_time=3, accepted_err_codes=None,
+       capture=False, combine_stderr=False, sudo=False):
+    """executes a command locally with retries on failure.
+
+    if a `command` execution is successful, it will return a fabric
+    object with the output (x.stdout, x.stderr, x.succeeded, etc..)
+
+    else, it will retry an `attempts` number of attempts and if all fails
+    it will return the fabric output object.
+    obviously, `attempts` must be larger than 0...
+
+    :param string command: shell command to be executed
+    :param int attempts: number of attempts to perform on failure
+    :param int sleep_time: sleeptime between attempts
+    :param bool capture: should the output be captured for parsing?
+    :param bool combine_stderr: combine stdout and stderr (NOT YET IMPL)
+    :param bool sudo: run as sudo
+    :rtype: `responseObject` (for fabric operation)
+    """
+    if attempts < 1:
+        raise RuntimeError('attempts must be at least 1')
+    if not sleep_time > 0:
+        raise RuntimeError('sleep_time must be larger than 0')
+    if not accepted_err_codes:
+        accepted_err_codes = []
+
+    def _execute():
+        for execution in xrange(attempts):
+            with fab.settings(warn_only=True):
+                with fab.hide('warnings'):
+                    x = fab.local('sudo {0}'.format(command), capture) \
+                        if sudo else fab.local(command, capture)
+                if x.succeeded or x.return_code in accepted_err_codes:
+                    lgr.debug('successfully executed: ' + command)
+                    return x
+                lgr.warning('failed to run command: {0} -retrying ({1}/{2})'
+                            .format(command, execution + 1, attempts))
+                time.sleep(sleep_time)
+        lgr.error('failed to run command: {0} even after {1} attempts'
+                  ' with output: {2}'
+                  .format(command, execution, x.stdout))
+        return x
+
+    with fab.hide('running'):
+        return _execute()
+
+
+def set_global_verbosity_level(is_verbose_output=False):
+    """sets the global verbosity level for console and the lgr logger.
+
+    :param bool is_verbose_output: should be output be verbose
+    """
+    global verbose_output
+    verbose_output = is_verbose_output
+    if verbose_output:
+        lgr.setLevel(logging.DEBUG)
+    else:
+        lgr.setLevel(logging.INFO)
+
+
+class Handler():
     """common class to handle files and directories
     """
 
@@ -138,3 +202,6 @@ class CommonHandler():
         lgr.debug('untar-ing {0}'.format(input_file))
         return do('tar -C {0} -x{1} {2} --strip={3}'.format(
             chdir, opts, input_file, strip), sudo=sudo)
+
+
+lgr = logger.init()

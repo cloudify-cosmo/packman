@@ -24,7 +24,6 @@ PARAM_SOURCE_URLS = 'source_urls'  # an optional 'string' representing the sourc
 PARAM_SOURCE_REPOS = 'source_repos'  # an optional 'string' representing repos to add to the repos list
 PARAM_SOURCE_PPAS = 'source_ppas'  # an optional 'string' representing a ppa repository to add
 PARAM_SOURCE_KEYS = 'source_keys'  # an optional 'string' representing a key to download
-PARAM_KEY_FILES_PATH = 'key_files'  # an optional 'string' representing a key to add
 PARAM_REQS = 'reqs'  # an optional [list] of requirements to download from the local distributions repos
 PARAM_PREREQS = 'prereqs'  # an optional [list] of prerequirements to install from before retrieving the sources or packgaging
 PARAM_KEEP_SOURCES = 'keep_sources'  # an optional 'bool' representing whether to keep the retrieved sources after packaging
