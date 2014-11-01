@@ -30,6 +30,7 @@ import retrieve
 import apt
 import ruby
 import templater
+import fpm
 import exceptions as exc
 
 import definitions as defs
@@ -239,18 +240,15 @@ def get(component):
 
     :param dict package: dict representing package config
      as configured in packages.py
-    :param string name: package's name
      will be appended to the filename and to the package
      depending on its type
     :param string version: version to append to package
-    :param string source_url: source url to download
-    :param string source_repo: source repo to add for package retrieval
-    :param string source_ppa: source ppa to add for package retrieval
-    :param string source_key: source key to download
-    :param string key_file: key file path
+    :param list source_urls: source urls to download
+    :param list source_repos: source repos to add for package retrieval
+    :param list source_ppas: source ppas to add for package retrieval
+    :param list source_keys: source keys to download
     :param list reqs: list of apt requirements
-    :param string dst_path: path where downloaded source are placed
-    :param string package_path: path where final package is placed
+    :param string sources_path: path where downloaded source are placed
     :param list modules: list of python modules to download
     :param list gems: list of ruby gems to download
     :param bool overwrite: indicated whether the sources directory be
@@ -263,16 +261,15 @@ def get(component):
         else get_component_config(component)
 
     # define params for packaging
-    # name = c.get(defs.PARAM_NAME)
+    source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
     source_repos = c.get(defs.PARAM_SOURCE_REPOS, [])
     source_ppas = c.get(defs.PARAM_SOURCE_PPAS, [])
     source_keys = c.get(defs.PARAM_SOURCE_KEYS, [])
-    source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
     reqs = c.get(defs.PARAM_REQS, [])
     prereqs = c.get(defs.PARAM_PREREQS, [])
     modules = c.get(defs.PARAM_MODULES, [])
     gems = c.get(defs.PARAM_GEMS, [])
-    dst_path = c.get(defs.PARAM_SOURCES_PATH, False)
+    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
 
     common = utils.Handler()
@@ -287,15 +284,15 @@ def get(component):
     # should the source dir be removed before retrieving package contents?
     if overwrite:
         lgr.info('overwrite enabled. removing {0} before retrieval'.format(
-            dst_path))
-        common.rmdir(dst_path)
+            sources_path))
+        common.rmdir(sources_path)
     else:
-        if common.is_dir(dst_path):
+        if common.is_dir(sources_path):
             lgr.error('the destination directory for this package already '
                       'exists and overwrite is disabled.')
     # create the directories required for package creation...
-    if not common.is_dir(dst_path):
-        common.mkdir(dst_path)
+    if not common.is_dir(sources_path):
+        common.mkdir(sources_path)
 
     # TODO: (TEST) raise on "command not supported by distro"
     # TODO: (FEAT) add support for building packages from source
@@ -309,10 +306,10 @@ def get(component):
                 get_distro()))
         repo.add_ppa_repos(source_ppas)
     # get a key for the repo if it's required..
-    retr.download(source_keys, dir=dst_path)
+    retr.download(source_keys, dir=sources_path)
     for key in source_keys:
         key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
-        repo.add_key(os.path.join(dst_path, key_file))
+        repo.add_key(os.path.join(sources_path, key_file))
     # retrieve the source for the package
     for source_url in source_urls:
         # retrieve url file extension
@@ -326,15 +323,15 @@ def get(component):
             #     path, name = os.path.split(file)
             #     file = path + '/archives/' + file
             retr.download(source_url, dir=os.path.join(
-                dst_path, 'archives'))
+                sources_path, 'archives'))
         else:
-            retr.download(source_url, dir=dst_path)
+            retr.download(source_url, dir=sources_path)
     # download any other requirements if they exist
-    repo.download(reqs, dst_path)
+    repo.download(reqs, sources_path)
     # download relevant python modules...
-    py.get_modules(modules, dst_path)
+    py.get_modules(modules, sources_path)
     # download relevant ruby gems...
-    rb.get_gems(gems, dst_path)
+    rb.get_gems(gems, sources_path)
     lgr.info('package retrieval completed successfully!')
 
 
@@ -468,11 +465,11 @@ def pack(component):
                 # exists, and there are dependencies for the package, run
                 # fpm with the relevant flags.
                 for dst_pkg_type in dst_pkg_types:
-                    i = fpmHandler(name, src_pkg_type, dst_pkg_type,
-                                   sources_path, sudo=True)
-                    i.fpm(version=version, force=overwrite, depends=depends,
-                          after_install=bootstrap_script, chdir=False,
-                          before_install=None)
+                    i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
+                                    sources_path, sudo=True)
+                    i.execute(version=version, force=overwrite,
+                              depends=depends, after_install=bootstrap_script,
+                              chdir=False, before_install=None)
                     if dst_pkg_type == "tar.gz":
                         lgr.debug('converting tar to tar.gz...')
                         utils.do('sudo gzip {0}.tar*'.format(name))
@@ -497,50 +494,6 @@ def pack(component):
     if not keep_sources:
         lgr.debug('removing sources...')
         common.rmdir(sources_path)
-
-
-class fpmHandler(utils.Handler):
-    """fpm handler to handle the packaging process
-    """
-    def __init__(self, name, input_type, output_type, source, sudo):
-        self.sudo = sudo
-        self.name = name
-        self.output_type = 'tar' if output_type.startswith('tar') \
-            else output_type
-        self.input_type = input_type
-        self.source = source
-        self.command = 'fpm -n {0} -s {1} -t {2} '
-
-    def _build_fpm_cmd_string(self, **kwargs):
-        """this will build a command string
-        """
-        # TODO: add verbose mode to fpm runs
-        self.command = self.command.format(
-            self.name, self.input_type, self.output_type)
-        if kwargs['version']:
-            self.command += '-v {0} '.format(kwargs['version'])
-        if kwargs['chdir']:
-            self.command += '-C {0} '.format(kwargs['chdir'])
-        if kwargs['after_install']:
-            self.command += '--after-install {0} '.format(
-                os.path.join(os.getcwd(), kwargs['after_install']))
-        if kwargs['before_install']:
-            self.command += '--before-install {0} '.format(
-                os.path.join(os.getcwd(), kwargs['before_install']))
-        if kwargs['depends']:
-            self.command += "-d " + " -d ".join(kwargs['depends'])
-            self.command += " "
-        if kwargs['force']:
-            self.command += '-f '
-        # MUST BE LAST
-        self.command += self.source
-        lgr.debug('fpm cmd is: {0}'.format(self.command))
-
-    def fpm(self, **kwargs):
-        """runs fpm
-        """
-        self._build_fpm_cmd_string(**kwargs)
-        utils.do(self.command, sudo=self.sudo)
 
 
 def main():
