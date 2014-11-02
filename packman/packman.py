@@ -22,7 +22,6 @@
 
 import logger
 import utils
-from utils import set_global_verbosity_level
 
 import python
 import yum
@@ -66,7 +65,7 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
     :param tuple supported: tuple of supported distros
     :param bool verbose: verbosity level
     """
-    set_global_verbosity_level(verbose)
+    utils.set_global_verbosity_level(verbose)
     distro = get_distro()
     lgr.debug('Distribution Identified: {0}'.format(distro))
     if distro not in supported:
@@ -184,7 +183,7 @@ def packman_runner(action='pack', components_file=None, components=None,
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
-    set_global_verbosity_level(verbose)
+    utils.set_global_verbosity_level(verbose)
     # import dict of all components
     components_dict = _import_components_dict(components_file)
     # append excluded components to list.
@@ -386,7 +385,6 @@ def pack(component):
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
     dst_pkg_types = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPES, [])
-    # identifies pkg type automatically if not specified explicitly
     if not dst_pkg_types:
         lgr.debug('destination package type ommitted')
         if centos:
@@ -411,40 +409,31 @@ def pack(component):
     common = utils.Handler()
     templates = templater.Handler()
 
-    # if the package_path doesn't exist, create it
     if not common.is_dir(os.path.join(package_path, 'archives')):
         common.mkdir(os.path.join(package_path, 'archives'))
     # can't use sources_path == tmp_pkg_path for the package... duh!
     if sources_path == tmp_pkg_path:
         lgr.error('source and destination paths must'
                   ' be different to avoid conflicts!')
-    # should the packaging process overwrite the previous packages?
     if overwrite:
         lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
                  .format(package_path, name))
         common.rm('{0}/{1}*'.format(package_path, name))
-    # if a package is supported to be created, cleanup prior to creation
     # TODO: (CHK) why did I do this?
     if src_pkg_type:
         common.rmdir(tmp_pkg_path)
         common.mkdir(tmp_pkg_path)
 
     lgr.info('generating package scripts and config files...')
-    # if there are configuration templates to generate configs from...
     if config_templates:
         templates.generate_configs(c)
-    # if bootstrap scripts are required, generate them.
     if bootstrap_script or bootstrap_script_in_pkg:
-        # bootstrap_script - bootstrap script to be attached to the package
         if bootstrap_template and bootstrap_script:
             templates.generate_from_template(
                 c, bootstrap_script, bootstrap_template)
-        # bootstrap_script_in_pkg - same but for putting inside the package
         if bootstrap_template and bootstrap_script_in_pkg:
             templates.generate_from_template(
                 c, bootstrap_script_in_pkg, bootstrap_template)
-            # if it's in_pkg, grant it exec permissions and copy it to the
-            # package's path.
             lgr.debug('granting execution permissions')
             utils.do('chmod +x {0}'.format(bootstrap_script_in_pkg))
             lgr.debug('copying bootstrap script to package directory')
@@ -460,10 +449,6 @@ def pack(component):
             # accept (for now) a dst dir, but rather creates the package in
             # the cwd.
             with fab.lcd(tmp_pkg_path):
-                # this will handle the different packaging cases based on
-                # the requirement. for instance, if a bootstrap script
-                # exists, and there are dependencies for the package, run
-                # fpm with the relevant flags.
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
                                     sources_path, sudo=True)
@@ -476,15 +461,11 @@ def pack(component):
                     lgr.info("isolating archives...")
                     common.mv('{0}/*.{1}'.format(
                         tmp_pkg_path, dst_pkg_type), package_path)
-        # apparently, the src for creation the package doesn't exist...
-        # what can you do?
         else:
             lgr.error('sources dir {0} does\'nt exist, termintating...'
                       .format(sources_path))
             # maybe bluntly exit since this is all irrelevant??
             raise exc.PackagerError('sources dir missing')
-    # and if a source package type isn't supplied, files will only
-    # be copied to their corresponding destination locations.
     else:
         lgr.info("isolating archives...")
         for dst_pkg_type in dst_pkg_types:
