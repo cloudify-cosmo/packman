@@ -183,6 +183,16 @@ def packman_runner(action='pack', components_file=None, components=None,
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
+    def _rename_component(component):
+        # replace hyphens with underscores and remove dots from the
+        # overriding methods names
+        # also, convert to lowercase to correspond with overriding
+        # method names.
+        component_re = component.replace('-', '_')
+        component_re = component_re.replace('.', '')
+        component_re = component_re.lower()
+        return component_re
+
     utils.set_global_verbosity_level(verbose)
     # import dict of all components
     components_dict = _import_components_dict(components_file)
@@ -202,19 +212,14 @@ def packman_runner(action='pack', components_file=None, components=None,
                 # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
                 overr_methods = _import_overriding_methods(action)
-                # replace hyphens with underscores and remove dots from the
-                # overriding methods names
-                # also, convert to lowercase to correspond with overriding
-                # method names.
-                component_re = component.replace('-', '_')
-                component_re = component_re.replace('.', '')
-                component_re = component_re.lower()
+                # rename overriding component name by convention
+                component = _rename_component(component)
                 # if the method was found in the overriding file, run it.
                 if hasattr(overr_methods, '{0}_{1}'.format(
-                        action, component_re)):
+                        action, component)):
                     getattr(
                         overr_methods, '{0}_{1}'.format(
-                            action, component_re))()
+                            action, component))()
                 # else run the default action method
                 else:
                     # TODO: check for bad action
@@ -254,12 +259,28 @@ def get(component):
      erased before creating a new package
     :rtype: `None`
     """
+
+    def _handle_sources_path(sources_path, overwrite):
+        # should the source dir be removed before retrieving package contents?
+        u = utils.Handler()
+        if overwrite:
+            lgr.info('overwrite enabled. removing {0} before retrieval'.format(
+                sources_path))
+            u.rmdir(sources_path)
+        else:
+            if u.is_dir(sources_path):
+                lgr.error('the destination directory for this package already '
+                          'exists and overwrite is disabled.')
+        # create the directories required for package creation...
+        if not u.is_dir(sources_path):
+            u.mkdir(sources_path)
+
     # you can send the component dict directly, or retrieve it from
     # the packages.py file by sending its name
     c = component if type(component) is dict \
         else get_component_config(component)
 
-    # define params for packaging
+    # define params for retrieval process
     source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
     source_repos = c.get(defs.PARAM_SOURCE_REPOS, [])
     source_ppas = c.get(defs.PARAM_SOURCE_PPAS, [])
@@ -271,65 +292,38 @@ def get(component):
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
 
-    common = utils.Handler()
-    if centos:
+    if CENTOS:
         repo = yum.Handler()
-    elif debian:
+    elif DEBIAN:
         repo = apt.Handler()
     retr = retrieve.Handler()
     py = python.Handler()
     rb = ruby.Handler()
 
-    # should the source dir be removed before retrieving package contents?
-    if overwrite:
-        lgr.info('overwrite enabled. removing {0} before retrieval'.format(
-            sources_path))
-        common.rmdir(sources_path)
-    else:
-        if common.is_dir(sources_path):
-            lgr.error('the destination directory for this package already '
-                      'exists and overwrite is disabled.')
-    # create the directories required for package creation...
-    if not common.is_dir(sources_path):
-        common.mkdir(sources_path)
+    _handle_sources_path(sources_path, overwrite)
 
     # TODO: (TEST) raise on "command not supported by distro"
     # TODO: (FEAT) add support for building packages from source
     repo.install(prereqs)
-    # if there's a source repo to add... add it.
     repo.add_src_repos(source_repos)
-    # if there's a source ppa to add... add it?
-    if source_ppas:
-        if not debian:
-            raise exc.PackagerError('ppas not supported by {0}'.format(
-                get_distro()))
-        repo.add_ppa_repos(source_ppas)
-    # get a key for the repo if it's required..
+    repo.add_ppa_repos(source_ppas, DEBIAN, get_distro())
     retr.download(source_keys, dir=sources_path)
     for key in source_keys:
         key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
         repo.add_key(os.path.join(sources_path, key_file))
-    # retrieve the source for the package
     for source_url in source_urls:
-        # retrieve url file extension
         url_ext = os.path.splitext(source_url)[1]
         # if the source file is an rpm or deb, we want to download
         # it to the archives folder. yes, it's a dreadful solution...
         if url_ext in ('.rpm', '.deb'):
             lgr.debug('the file is a {0} file. we\'ll download it '
                       'to the archives folder'.format(url_ext))
-            # elif file:
-            #     path, name = os.path.split(file)
-            #     file = path + '/archives/' + file
             retr.download(source_url, dir=os.path.join(
                 sources_path, 'archives'))
         else:
             retr.download(source_url, dir=sources_path)
-    # download any other requirements if they exist
     repo.download(reqs, sources_path)
-    # download relevant python modules...
     py.get_modules(modules, sources_path)
-    # download relevant ruby gems...
     rb.get_gems(gems, sources_path)
     lgr.info('package retrieval completed successfully!')
 
@@ -368,6 +362,34 @@ def pack(component):
     :rtype: `None`
     """
 
+    def _handle_package_path(package_path, sources_path, tmp_pkg_path, name,
+                             overwrite):
+        if not common.is_dir(os.path.join(package_path, 'archives')):
+            common.mkdir(os.path.join(package_path, 'archives'))
+        # can't use sources_path == tmp_pkg_path for the package... duh!
+        if sources_path == tmp_pkg_path:
+            lgr.error('source and destination paths must'
+                      ' be different to avoid conflicts!')
+        if overwrite:
+            lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
+                     .format(package_path, name))
+            common.rm('{0}/{1}*'.format(package_path, name))
+        # TODO: (CHK) why did I do this?
+        if src_pkg_type:
+            common.rmdir(tmp_pkg_path)
+            common.mkdir(tmp_pkg_path)
+
+    def _set_dst_pkg_type():
+        lgr.debug('destination package type ommitted')
+        if CENTOS:
+            lgr.debug('assuming default type: {0}'.format(
+                PACKAGE_TYPES['centos']))
+            return [PACKAGE_TYPES['centos']]
+        elif DEBIAN:
+            lgr.debug('assuming default type: {0}'.format(
+                PACKAGE_TYPES['debian']))
+            return [PACKAGE_TYPES['debian']]
+
     # get the cwd since fpm will later change it.
     cwd = os.getcwd()
     # you can send the component dict directly, or retrieve it from
@@ -384,17 +406,8 @@ def pack(component):
         cwd, c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH]) \
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
-    dst_pkg_types = c.get(defs.PARAM_DESTINATION_PACKAGE_TYPES, [])
-    if not dst_pkg_types:
-        lgr.debug('destination package type ommitted')
-        if centos:
-            lgr.debug('assuming default type: {0}'.format(
-                PACKAGE_TYPES['centos']))
-            dst_pkg_types = [PACKAGE_TYPES['centos']]
-        elif debian:
-            lgr.debug('assuming default type: {0}'.format(
-                PACKAGE_TYPES['debian']))
-            dst_pkg_types = [PACKAGE_TYPES['debian']]
+    dst_pkg_types = c.get(
+        defs.PARAM_DESTINATION_PACKAGE_TYPES, _set_dst_pkg_type())
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
@@ -409,20 +422,8 @@ def pack(component):
     common = utils.Handler()
     templates = templater.Handler()
 
-    if not common.is_dir(os.path.join(package_path, 'archives')):
-        common.mkdir(os.path.join(package_path, 'archives'))
-    # can't use sources_path == tmp_pkg_path for the package... duh!
-    if sources_path == tmp_pkg_path:
-        lgr.error('source and destination paths must'
-                  ' be different to avoid conflicts!')
-    if overwrite:
-        lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
-                 .format(package_path, name))
-        common.rm('{0}/{1}*'.format(package_path, name))
-    # TODO: (CHK) why did I do this?
-    if src_pkg_type:
-        common.rmdir(tmp_pkg_path)
-        common.mkdir(tmp_pkg_path)
+    _handle_package_path(
+        package_path, sources_path, tmp_pkg_path, name, overwrite)
 
     lgr.info('generating package scripts and config files...')
     if config_templates:
@@ -443,29 +444,22 @@ def pack(component):
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...
     if src_pkg_type:
-        # if the source dir for the package exists
-        if common.is_dir(sources_path):
-            # change the path to the destination path, since fpm doesn't
-            # accept (for now) a dst dir, but rather creates the package in
-            # the cwd.
-            with fab.lcd(tmp_pkg_path):
-                for dst_pkg_type in dst_pkg_types:
-                    i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
-                                    sources_path, sudo=True)
-                    i.execute(version=version, force=overwrite,
-                              depends=depends, after_install=bootstrap_script,
-                              chdir=False, before_install=None)
-                    if dst_pkg_type == "tar.gz":
-                        lgr.debug('converting tar to tar.gz...')
-                        utils.do('sudo gzip {0}.tar*'.format(name))
-                    lgr.info("isolating archives...")
-                    common.mv('{0}/*.{1}'.format(
-                        tmp_pkg_path, dst_pkg_type), package_path)
-        else:
-            lgr.error('sources dir {0} does\'nt exist, termintating...'
-                      .format(sources_path))
-            # maybe bluntly exit since this is all irrelevant??
-            raise exc.PackagerError('sources dir missing')
+        # change the path to the destination path, since fpm doesn't
+        # accept (for now) a dst dir, but rather creates the package in
+        # the cwd.
+        with fab.lcd(tmp_pkg_path):
+            for dst_pkg_type in dst_pkg_types:
+                i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
+                                sources_path, sudo=True)
+                i.execute(version=version, force=overwrite,
+                          depends=depends, after_install=bootstrap_script,
+                          chdir=False, before_install=None)
+                if dst_pkg_type == "tar.gz":
+                    lgr.debug('converting tar to tar.gz...')
+                    utils.do('sudo gzip {0}.tar*'.format(name))
+                lgr.info("isolating archives...")
+                common.mv('{0}/*.{1}'.format(
+                    tmp_pkg_path, dst_pkg_type), package_path)
     else:
         lgr.info("isolating archives...")
         for dst_pkg_type in dst_pkg_types:
@@ -483,5 +477,5 @@ def main():
 if __name__ == '__main__':
     main()
 
-centos = get_distro() in ('centos')
-debian = get_distro() in ('Ubuntu', 'debian')
+CENTOS = get_distro() in ('centos')
+DEBIAN = get_distro() in ('Ubuntu', 'debian')

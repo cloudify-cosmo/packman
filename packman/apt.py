@@ -1,5 +1,6 @@
 import utils
 import logger
+import exceptions as exc
 
 lgr = logger.init()
 
@@ -68,14 +69,18 @@ class AptHandler(utils.Handler):
             utils.do('sudo sed -i "2i {0}" /etc/apt/sources.list'.format(
                 source_repo))
 
-    def add_ppa_repos(self, source_ppas):
+    def add_ppa_repos(self, source_ppas, debian, distro):
         """adds a list of ppa repos to the apt repo
 
         :param list source_ppas: ppa urls to add
         """
+        if source_ppas and not debian:
+            raise exc.PackagerError('ppas not supported by {0}'.format(distro))
         for source_ppa in source_ppas:
             lgr.debug('adding ppa repository {0}'.format(source_ppa))
             utils.do('add-apt-repository -y {0}'.format(source_ppa))
+        if source_ppas:
+            self.update()
 
     def add_key(self, key_file):
         """adds a list of keys to the local repo
@@ -85,8 +90,7 @@ class AptHandler(utils.Handler):
         lgr.debug('adding key {0}'.format(key_file))
         return utils.do('sudo apt-key add {0}'.format(key_file))
 
-    @staticmethod
-    def update():
+    def update(self):
         """runs apt-get update
         """
         lgr.debug('updating local apt repo')
