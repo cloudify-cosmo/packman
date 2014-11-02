@@ -1,4 +1,41 @@
-[33m0ab7e42[m[33m ([1;36mHEAD[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m added support for component names containing hyphens and dots when assigning them with alternative get and pack methods
+[33mbf79d76[m[33m ([1;36mHEAD[m[33m, [1;32mpkm-overhaul[m[33m)[m more doc...
+[33mb5528d2[m lots and lots of code optimizations
+[33mdb7506f[m minor shit
+[33mbed528f[m[33m ([1;31morigin/pkm-overhaul[m[33m)[m some documentation fixes. moved fpm handler
+[33m10357c7[m separated handlers, removed unnecessary code, lots of naming optimizations
+[33mbdc6518[m moved common class to common handler file
+[33m2433aa9[m moved some basic functions to common
+[33m5380022[m[33m ([1;33mtag: 3.1rc1[m[33m, [1;33mtag: 3.1m5[m[33m, [1;33mtag: 3.1m4[m[33m, [1;31morigin/master[m[33m, [1;31morigin/3.1m4-build[m[33m, [1;32mmaster[m[33m)[m Merge pull request #3 from cloudify-cosmo/CFY-1012-remove-dependency-links
+[33m9ab0230[m CFY-1012 remove dependency links
+[33m4050978[m[33m ([1;33mtag: 3.1m3[m[33m, [1;31morigin/3.1m3-build[m[33m)[m empty line to trigger travis build
+[33m70e02b2[m Merge pull request #2 from cloudify-cosmo/CFY-1277-adjust-packman-to-work-with-py26
+[33m90b88ef[m[33m ([1;31morigin/CFY-1277-adjust-packman-to-work-with-py26[m[33m)[m flake8 fix
+[33m78b647c[m more flake8
+[33m3f089c9[m flake8 fixes
+[33md077ede[m oops.. wtf?
+[33mdb9c949[m made some changes. .ready to travis
+[33mefc24b9[m added local six and dictconfig for cross python support
+[33md082895[m[33m ([1;33mtag: 1.1m3[m[33m, [1;33mtag: 1.1m2[m[33m, [1;33mtag: 1.1m1[m[33m, [1;33mtag: 1.0m2[m[33m, [1;33mtag: 1.0m1[m[33m, [1;31morigin/1.1m2-build[m[33m)[m Update .gitignore
+[33mad536b7[m Delete qb-scm.xml
+[33m3d69825[m[33m ([1;33mtag: 1.0[m[33m)[m merging develop branch by the builder - release 3.0
+[33ma239cd2[m[33m ([1;33mtag: 1.0rc1[m[33m, [1;33mtag: 1.0-rc1[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m fixed alternative methods uppercase names
+[33m1628187[m some gitignore changes
+[33mbc5c9fd[m dev-reqs
+[33m58b9678[m flake8 fixes
+[33m284b64b[m removed check_if_package_is_installed check for now
+[33m5e4f98b[m fixing logging problems with get method
+[33m002f970[m fixing logging problems with get method
+[33m50a4af8[m documentation changes
+[33mead0d39[m now removing temporary packages after packaging
+[33mbc2eaa8[m some doc changes and added the option to specify multiple destination package types
+[33me2f9f58[m fixing yum package installation bugs
+[33m478147d[m fixing yum package installation bugs
+[33m7e5e30b[m fixing yum package installation bugs
+[33m526995b[m hotfix
+[33mc63cef1[m hotfix
+[33m690489f[m some centos fixes
+[33mf4e33dc[m changed to standard structure of docstrings for sphinx
+[33m0ab7e42[m added support for component names containing hyphens and dots when assigning them with alternative get and pack methods
 [33m6e59628[m removed package_installed check due to a bug. testing
 [33m3bbe24c[m fixed bug when downloading non rpm/deb files
 [33m85fe0e0[m fixed bug when building the fpm string
@@ -79,7 +116,7 @@
 [33m98bbc7f[m fixing distribution support bugs
 [33m6b57c67[m now checking for distribution support
 [33mdbe4b01[m added shortcut to components file in cli
-[33m37c5b29[m[33m ([1;31morigin/master[m[33m, [1;32mmaster[m[33m)[m oops, added forgotten makefile from previous commit
+[33m37c5b29[m oops, added forgotten makefile from previous commit
 [33m1ade318[m lots of documentation changes, added makefile, fixed provision script
 [33mcd877c6[m added static doc
 [33m996336d[m continuing the documentation process

@@ -16,8 +16,6 @@
 
 # TODO: (FEAT) add http://megastep.org/makeself/ support
 # TODO: (FEAT) add http://semver.org/ support
-# TODO: (READ) review https://speakerdeck.com/schisamo/eat-the-whole-bowl-building-a-full-stack-installer-with-omnibus  # NOQA
-# TODO: (IMPRV) redo RepoHandler implementation with generic one. should pull all repo handling commands from config  # NOQA
 # TODO: (FEAT) add support to download and run from github repos so that "components" repos can be created  # NOQA
 
 import logger
@@ -94,11 +92,7 @@ def _import_components_dict(components_file):
     except ImportError:
         lgr.error('could not import packages.py file. please verify that '
                   'it exists in the specified path')
-        # TODO: (IMPRV) add conditional raising with verbosity dependency
-        # TODO: (IMPRV) throughout the code
-        # if int(lgr.getEffectiveLevel()) > DEFAULT_BASE_LOGGING_LEVEL:
         raise exc.PackagerError('missing components file')
-        # sys.exit(1)
 
 
 def get_component_config(component_name, components_dict=None,

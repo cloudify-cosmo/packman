@@ -10,7 +10,7 @@ import jinja2 as jinja
 lgr = logger.init()
 
 
-class TemplateHandler(utils.Handler):
+class Handler(utils.Handler):
 
     def generate_configs(self, component, sudo=True):
         """generates configuration files from templates

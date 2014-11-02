@@ -15,7 +15,7 @@ class Handler(utils.Handler):
         for url in urls:
             self.download(url, dir, sudo)
 
-    def download(self, url, dir, sudo):
+    def download(self, url, dir=False, file=False, sudo=False):
         options = '--timeout=30'
         # workaround for archives folder
         if (file and dir) or (not file and not dir):
@@ -24,7 +24,7 @@ class Handler(utils.Handler):
             raise exceptions.PackagerError('please specify either a directory'
                                            ' or file to download to.')
         lgr.debug('downloading {0} to {1}'.format(url, file or dir))
-        utils.do('wget {0} {1} -O {2}'.format(
+        return utils.do('wget {0} {1} -O {2}'.format(
             url, options, file), sudo=sudo) \
             if file else utils.do('wget {0} {1} -P {2}'.format(
                 url, options, dir), sudo=sudo)

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Using alternative implementations of get or pack methods &mdash; packman 0.1.1 documentation</title>
+  <title>Using alternative implementations of get or pack methods &mdash; packman 0.1.2 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   
 
   
-    <link rel="top" title="packman 0.1.1 documentation" href="index.html"/>
+    <link rel="top" title="packman 0.1.2 documentation" href="index.html"/>
         <link rel="next" title="Packman’s API" href="api.html"/>
         <link rel="prev" title="Template Handling" href="template_handling.html"/> 
 
@@ -122,11 +122,11 @@
 <p>packman provides a way to override the basic implementations for the get and pack methods for each component.</p>
 <p>let&#8217;s look at the example:</p>
 <ul class="simple">
-<li>we have a components file in our cwd with a <tt class="docutils literal"><span class="pre">riemann</span></tt> component.</li>
-<li>we want to run a different <tt class="docutils literal"><span class="pre">get</span></tt> method than the default one.</li>
-<li>we create a get.py file in our cwd with a function called <tt class="docutils literal"><span class="pre">get_riemann</span></tt>.</li>
-<li>this will override the get method when running <tt class="docutils literal"><span class="pre">pkm</span> <span class="pre">get</span> <span class="pre">-c</span> <span class="pre">riemann</span></tt></li>
-<li>same goes for the <tt class="docutils literal"><span class="pre">pack</span></tt> method.</li>
+<li>we have a components file in our cwd with a <code class="docutils literal"><span class="pre">riemann</span></code> component.</li>
+<li>we want to run a different <code class="docutils literal"><span class="pre">get</span></code> method than the default one.</li>
+<li>we create a get.py file in our cwd with a function called <code class="docutils literal"><span class="pre">get_riemann</span></code>.</li>
+<li>this will override the get method when running <code class="docutils literal"><span class="pre">pkm</span> <span class="pre">get</span> <span class="pre">-c</span> <span class="pre">riemann</span></code></li>
+<li>same goes for the <code class="docutils literal"><span class="pre">pack</span></code> method.</li>
 <li>of course, a user can create a specific get function only to extend the base get method by importing the <strong>*get*</strong> method from packman and adding to it.</li>
 </ul>
 <p>for an example, see an example <a class="reference external" href="https://github.com/cloudify-cosmo/packman/blob/develop/packman/examples/get.py">get</a> file.</p>
@@ -171,7 +171,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
