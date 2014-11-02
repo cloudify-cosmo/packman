@@ -129,7 +129,7 @@ def get_component_config(component_name, components_dict=None,
         raise exc.PackagerError('no config found for package')
 
 
-def packman_runner(action='pack', components_file=None, components=None,
+def packman_runner(action, components_file=None, components=None,
                    excluded=None, verbose=False):
     """logic for running packman. mainly called from the cli (pkm.py)
 
@@ -357,8 +357,8 @@ def pack(component):
      config files
     :param bool overwrite: indicates whether the destination directory be
      erased before creating a new package
-    :param bool mock: indicates whether a mock pack will be created
-     (for testing purposes. does not use fpm)
+    :param bool keep_sources: indicates whether the sources will be deleted
+     after the packaging process is done
     :rtype: `None`
     """
 
