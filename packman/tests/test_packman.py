@@ -13,8 +13,6 @@
 #    * See the License for the specific language governing permissions and
 #    * limitations under the License.
 
-__author__ = 'nir0s'
-
 from packman.packman import do
 from packman.packman import CommonHandler
 from packman.packman import PythonHandler
