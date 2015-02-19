@@ -5,7 +5,7 @@ packages:
     mock_package:
         name: test_package
         version: 3.1
-        sources_path: sources
+        sources_path: /home/nir0s/repos/packman/sources
         # prereqs:
         #     - curl
         # requires:

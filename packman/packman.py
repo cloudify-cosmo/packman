@@ -385,8 +385,9 @@ def pack(package):
     common = utils.Handler()
     templates = templater.Handler()
 
-    # handle_package_path(
-    #     package_path, sources_path, tmp_pkg_path, name, overwrite)
+    handle_package_path(
+        package_path, sources_path, package_path, name,
+        c.get(defs.PARAM_OVERWRITE_OUTPUT, False))
 
     lgr.info('generating package scripts and config files...')
     if c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False):
@@ -411,6 +412,7 @@ def pack(package):
             # change the path to the destination path, since fpm doesn't
             # accept (for now) a dst dir, but rather creates the package in
             # the cwd.
+            print os.getcwd()
             with fab.lcd(package_path):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
