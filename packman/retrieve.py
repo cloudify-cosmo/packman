@@ -28,8 +28,6 @@ class Handler(utils.Handler):
     def download(self, url, dir=False, file=False, sudo=False):
         options = '--timeout=30'
         # workaround for archives folder
-        print 'hhhhhhh', dir
-        print 'haaa', file
         if (file and dir) or (not file and not dir):
             lgr.warning('please specify either a directory'
                         ' or file to download to.')

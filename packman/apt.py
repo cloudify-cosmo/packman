@@ -50,6 +50,7 @@ class Handler(utils.Handler):
             # if self.check_if_package_is_installed(package):
             utils.do('sudo apt-get -y install {0} -d -o=dir::cache={1}'.format(
                 req, sources_path))
+            utils.do('sudo rm {0}/*.bin'.format(sources_path))
             # else:
             #     return do('sudo apt-get -y install --reinstall '
             #               '{0} -d -o=dir::cache={1}'.format(pkg, dir))

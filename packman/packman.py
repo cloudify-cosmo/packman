@@ -412,7 +412,6 @@ def pack(package):
             # change the path to the destination path, since fpm doesn't
             # accept (for now) a dst dir, but rather creates the package in
             # the cwd.
-            print os.getcwd()
             with fab.lcd(package_path):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
@@ -425,9 +424,9 @@ def pack(package):
                     if dst_pkg_type == "tar.gz":
                         lgr.debug('converting tar to tar.gz...')
                         utils.do('sudo gzip {0}.tar*'.format(name))
-                    lgr.info("isolating archives...")
-                    common.mv('{0}/*.{1}'.format(
-                        package_path, dst_pkg_type), package_path)
+                    # lgr.info("isolating archives...")
+                    # common.mv('{0}/*.{1}'.format(
+                    #     package_path, dst_pkg_type), package_path)
         else:
             lgr.error('Sources directory is empty. Nothing to package.')
             sys.exit(codes.mapping['sources_empty'])

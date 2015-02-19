@@ -8,8 +8,8 @@ packages:
         sources_path: /home/nir0s/repos/packman/sources
         # prereqs:
         #     - curl
-        # requires:
-        #     - make
+        requires:
+            - make
         # source_ppas:
         #     - ppa:chris-lea/node.js
         # source_urls:
@@ -17,11 +17,12 @@ packages:
         # source_repos:
         #     - deb http://nginx.org/packages/mainline/ubuntu/ precise nginx
         #     - deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
-        source_keys:
-            - http://nginx.org/keys/nginx_signing.key
-        # modules:
-        #     - pyyaml
-        package_path: tests/
+        # source_keys:
+        #     - http://nginx.org/keys/nginx_signing.key
+        modules:
+            - repex
+            - pyyaml
+        package_path: tests
         source_package_type: dir
         destination_package_type: tar.gz
         keep_sources: true

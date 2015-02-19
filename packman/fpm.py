@@ -23,20 +23,20 @@ class Handler(utils.Handler):
         # TODO: add verbose mode to fpm runs
         self.command = self.command.format(
             self.name, self.input_type, self.output_type)
-        if kwargs['version']:
+        if kwargs.get('version'):
             self.command += '-v {0} '.format(kwargs['version'])
-        if kwargs['chdir']:
+        if kwargs.get('chdir'):
             self.command += '-C {0} '.format(kwargs['chdir'])
-        if kwargs['after_install']:
+        if kwargs.get('after_install'):
             self.command += '--after-install {0} '.format(
                 os.path.join(os.getcwd(), kwargs['after_install']))
-        if kwargs['before_install']:
+        if kwargs.get('before_install'):
             self.command += '--before-install {0} '.format(
                 os.path.join(os.getcwd(), kwargs['before_install']))
-        if kwargs['depends']:
+        if kwargs.get('depends'):
             self.command += "-d " + " -d ".join(kwargs['depends'])
             self.command += " "
-        if kwargs['force']:
+        if kwargs.get('force'):
             self.command += '-f '
         # MUST BE LAST
         self.command += self.source
