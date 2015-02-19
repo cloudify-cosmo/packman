@@ -311,7 +311,7 @@ def get(package):
     repo.install(prereqs)
     repo.add_src_repos(source_repos)
     repo.add_ppa_repos(source_ppas, DEBIAN, get_distro())
-    retr.download(source_keys, dir=sources_path)
+    retr.downloads(source_keys, dir=sources_path)
     for key in source_keys:
         key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
         repo.add_key(os.path.join(sources_path, key_file))
@@ -448,22 +448,27 @@ def pack(package):
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...
     if src_pkg_type:
-        # change the path to the destination path, since fpm doesn't
-        # accept (for now) a dst dir, but rather creates the package in
-        # the cwd.
-        with fab.lcd(tmp_pkg_path):
-            for dst_pkg_type in dst_pkg_types:
-                i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
-                                sources_path, sudo=True)
-                i.execute(version=version, force=overwrite,
-                          depends=depends, after_install=bootstrap_script,
-                          chdir=False, before_install=None)
-                if dst_pkg_type == "tar.gz":
-                    lgr.debug('converting tar to tar.gz...')
-                    utils.do('sudo gzip {0}.tar*'.format(name))
-                lgr.info("isolating archives...")
-                common.mv('{0}/*.{1}'.format(
-                    tmp_pkg_path, dst_pkg_type), package_path)
+        if not os.listdir(sources_path) == []:
+            # change the path to the destination path, since fpm doesn't
+            # accept (for now) a dst dir, but rather creates the package in
+            # the cwd.
+            with fab.lcd(tmp_pkg_path):
+                for dst_pkg_type in dst_pkg_types:
+                    i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
+                                    sources_path, sudo=True)
+                    i.execute(version=version, force=overwrite,
+                              depends=depends, after_install=bootstrap_script,
+                              chdir=False, before_install=None)
+                    if dst_pkg_type == "tar.gz":
+                        lgr.debug('converting tar to tar.gz...')
+                        utils.do('sudo gzip {0}.tar*'.format(name))
+                    lgr.info("isolating archives...")
+                    common.mv('{0}/*.{1}'.format(
+                        tmp_pkg_path, dst_pkg_type), package_path)
+        else:
+            lgr.error('Sources directory is empty. '
+                      'There\'s nothing to package.')
+            sys.exit(codes.mapping['sources_empty'])
     else:
         lgr.info("isolating archives...")
         for dst_pkg_type in dst_pkg_types:

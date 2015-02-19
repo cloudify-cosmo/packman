@@ -13,4 +13,5 @@ mapping = {
     'excluded_conflict': 12,
     'packages_file_not_found': 13,
     'no_packages_defined': 14,
+    'sources_empty': 15
 }
