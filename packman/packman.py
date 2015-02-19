@@ -42,10 +42,7 @@ import platform
 
 SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 DEFAULT_PACKAGES_FILE = 'packages.yaml'
-PACKAGE_TYPES = {
-    "centos": "rpm",
-    "debian": "deb",
-}
+PACKAGE_TYPES = {"centos": "rpm", "debian": "deb"}
 
 
 lgr = logger.init()
@@ -71,7 +68,7 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
                   'Supported Disributions are:')
         for distro in supported:
             lgr.error('    {0}'.format(distro))
-        raise RuntimeError('distro not supported')
+        sys.exit(codes.mapping['distro not supported'])
 
 
 def _import_packages_dict(config_file=None):
@@ -108,7 +105,7 @@ def get_package_config(package_name, packages_dict=None,
                        packages_file=None):
     """returns a package's configuration
 
-    if `packages_dict` is not supplied, a packages.py file in the cwd will be
+    if `packages_dict` is not supplied, a packages.yaml file in the cwd will be
     assumed unless `packages_file` is explicitly given.
     after a `packages_dict` is defined, a `package_config` will be returned
     for the specified package_name.
@@ -136,7 +133,7 @@ def packman_runner(action, packages_file=None, packages=None,
                    excluded=None, verbose=False):
     """logic for running packman. mainly called from the cli (pkm.py)
 
-    if no `packages_file` is supplied, we will assume a local packages.py
+    if no `packages_file` is supplied, we will assume a local packages.yaml
     as `packages_file`.
 
     if `packages` are supplied, they will be iterated over.
@@ -236,13 +233,13 @@ def packman_runner(action, packages_file=None, packages=None,
 def get(package):
     """retrieves resources for packaging
 
-    .. note:: package params are defined in packages.py
+    .. note:: package params are defined in packages.yaml
 
-    .. note:: param names in packages.py can be overriden by editing
+    .. note:: param names in packages.yaml can be overriden by editing
      definitions.py which also has an explanation on each param.
 
     :param dict package: dict representing package config
-     as configured in packages.py
+     as configured in packages.yaml
      will be appended to the filename and to the package
      depending on its type
     :param string version: version to append to package
@@ -276,9 +273,8 @@ def get(package):
             u.mkdir(sources_path)
 
     # you can send the package dict directly, or retrieve it from
-    # the packages.py file by sending its name
-    c = package if isinstance(package, dict) \
-        else get_package_config(package)
+    # the packages.yaml file by sending its name
+    c = package if isinstance(package, dict) else get_package_config(package)
 
     # set handlers
     repo = yum.Handler() if CENTOS else apt.Handler() if DEBIAN else None
@@ -307,17 +303,17 @@ def get(package):
 
 def pack(package):
     """creates a package according to the provided package configuration
-    in packages.py
+    in packages.yaml
     uses fpm (https://github.com/jordansissel/fpm/wiki) to create packages.
 
-    .. note:: package params are defined in packages.py but can be passed
+    .. note:: package params are defined in packages.yaml but can be passed
      directly to the pack function as a dict.
 
-    .. note:: param names in packages.py can be overriden by editing
+    .. note:: param names in packages.yaml can be overriden by editing
      definitions.py which also has an explanation on each param.
 
     :param string|dict package: string or dict representing package
-     name or params (coorespondingly) as configured in packages.py
+     name or params (coorespondingly) as configured in packages.yaml
     :param string name: package's name
      will be appended to the filename and to the package
      depending on its type
@@ -357,7 +353,7 @@ def pack(package):
             common.mkdir(tmp_pkg_path)
 
     def set_dst_pkg_type():
-        lgr.debug('destination package type ommitted')
+        lgr.debug('destination package type omitted')
         if CENTOS:
             lgr.debug('assuming default type: {0}'.format(
                 PACKAGE_TYPES['centos']))
@@ -367,35 +363,24 @@ def pack(package):
                 PACKAGE_TYPES['debian']))
             return [PACKAGE_TYPES['debian']]
 
-    # get the cwd since fpm will later change it.
-    cwd = os.getcwd()
     # you can send the package dict directly, or retrieve it from
-    # the packages.py file by sending its name
-    c = package if type(package) is dict \
-        else get_package_config(package)
+    # the packages.yaml file by sending its name
+    c = package if isinstance(package, dict) else get_package_config(package)
 
     # define params for packaging process
     name = c.get(defs.PARAM_NAME)
-    version = c.get(defs.PARAM_VERSION, False)
     bootstrap_template = c.get(defs.PARAM_BOOTSTRAP_TEMPLATE_PATH, False)
     bootstrap_script = c.get(defs.PARAM_BOOTSTRAP_SCRIPT_PATH, False)
-    bootstrap_script_in_pkg = os.path.join(
-        cwd, c[defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH]) \
-        if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
     dst_pkg_types = c.get(
         defs.PARAM_DESTINATION_PACKAGE_TYPES, set_dst_pkg_type())
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
+    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
     # tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
     #     if defs.PARAM_SOURCES_PATH else False
     # tmp_pkg_path = c.get(defs.PARAM_PACKAGE_PATH, '.')
-    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
-    depends = c.get(defs.PARAM_DEPENDS, False)
-    config_templates = c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False)
-    overwrite = c.get(defs.PARAM_OVERWRITE_OUTPUT_PACKAGE, True)
-    keep_sources = c.get(defs.PARAM_KEEP_SOURCES, True)
 
     common = utils.Handler()
     templates = templater.Handler()
@@ -404,19 +389,19 @@ def pack(package):
     #     package_path, sources_path, tmp_pkg_path, name, overwrite)
 
     lgr.info('generating package scripts and config files...')
-    if config_templates:
+    if c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False):
         templates.generate_configs(c)
-    if bootstrap_script or bootstrap_script_in_pkg:
-        if bootstrap_template and bootstrap_script:
-            templates.generate_from_template(
-                c, bootstrap_script, bootstrap_template)
-        if bootstrap_template and bootstrap_script_in_pkg:
-            templates.generate_from_template(
-                c, bootstrap_script_in_pkg, bootstrap_template)
+    if bootstrap_script:
+        templates.generate_from_template(
+            c, bootstrap_script, bootstrap_template)
+        if len(dst_pkg_types) == 1 and \
+                (dst_pkg_types[0] == 'tar' or dst_pkg_types[0] == 'tar.gz'):
+            pass
+        else:
             lgr.debug('granting execution permissions')
-            utils.do('chmod +x {0}'.format(bootstrap_script_in_pkg))
+            utils.do('chmod +x {0}'.format(bootstrap_script))
             lgr.debug('copying bootstrap script to package directory')
-            common.cp(bootstrap_script_in_pkg, sources_path)
+            common.cp(bootstrap_script, sources_path)
     lgr.info('packing up package: {0}'.format(name))
     # this checks if a package needs to be created. If no source package type
     # is supplied, the assumption is that packages are only being downloaded
@@ -430,8 +415,10 @@ def pack(package):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
                                     sources_path, sudo=True)
-                    i.execute(version=version, force=overwrite,
-                              depends=depends, after_install=bootstrap_script,
+                    i.execute(version=c.get(defs.PARAM_VERSION, False),
+                              force=c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
+                              depends=c.get(defs.PARAM_DEPENDS, False),
+                              after_install=bootstrap_script,
                               chdir=False, before_install=None)
                     if dst_pkg_type == "tar.gz":
                         lgr.debug('converting tar to tar.gz...')
@@ -440,8 +427,7 @@ def pack(package):
                     common.mv('{0}/*.{1}'.format(
                         package_path, dst_pkg_type), package_path)
         else:
-            lgr.error('Sources directory is empty. '
-                      'There\'s nothing to package.')
+            lgr.error('Sources directory is empty. Nothing to package.')
             sys.exit(codes.mapping['sources_empty'])
     else:
         lgr.info("isolating archives...")
@@ -449,7 +435,7 @@ def pack(package):
             common.mv('{0}/*.{1}'.format(
                 package_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
-    if not keep_sources:
+    if not c.get(defs.PARAM_KEEP_SOURCES, True):
         lgr.debug('removing sources...')
         common.rmdir(sources_path)
 

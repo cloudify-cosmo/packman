@@ -15,4 +15,5 @@ mapping = {
     'no_packages_defined': 14,
     'sources_empty': 15,
     'path_already_exists_no_overwrite': 16,
+    'distro_not_supported': 17,
 }
