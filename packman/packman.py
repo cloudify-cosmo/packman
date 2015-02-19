@@ -273,6 +273,7 @@ def get(package):
             if u.is_dir(sources_path):
                 lgr.error('the destination directory for this package already '
                           'exists and overwrite is disabled.')
+                sys.exit(codes.mapping['path_already_exists_no_overwrite'])
         # create the directories required for package creation...
         if not u.is_dir(sources_path):
             u.mkdir(sources_path)
@@ -282,50 +283,27 @@ def get(package):
     c = package if isinstance(package, dict) \
         else get_package_config(package)
 
-    # define params for retrieval process
-    source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
-    source_repos = c.get(defs.PARAM_SOURCE_REPOS, [])
-    source_ppas = c.get(defs.PARAM_SOURCE_PPAS, [])
-    source_keys = c.get(defs.PARAM_SOURCE_KEYS, [])
-    reqs = c.get(defs.PARAM_REQS, [])
-    prereqs = c.get(defs.PARAM_PREREQS, [])
-    modules = c.get(defs.PARAM_MODULES, [])
-    gems = c.get(defs.PARAM_GEMS, [])
-    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
-    overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
-
     # set handlers
-    if CENTOS:
-        repo = yum.Handler()
-    elif DEBIAN:
-        repo = apt.Handler()
+    repo = yum.Handler() if CENTOS else apt.Handler() if DEBIAN else None
     retr = retrieve.Handler()
     py = python.Handler()
     rb = ruby.Handler()
 
-    handle_sources_path(sources_path, overwrite)
+    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
+    handle_sources_path(
+        sources_path, c.get(defs.PARAM_OVERWRITE_SOURCES, True))
 
     # TODO: (TEST) raise on "command not supported by distro"
     # TODO: (FEAT) add support for building packages from source
-    repo.install(prereqs)
-    repo.add_src_repos(source_repos)
-    repo.add_ppa_repos(source_ppas, DEBIAN, get_distro())
-    retr.downloads(source_keys, dir=sources_path)
-    repo.add_keys(source_keys, sources_path)
-    for source_url in source_urls:
-        url_ext = os.path.splitext(source_url)[1]
-        # if the source file is an rpm or deb, we want to download
-        # it to the archives folder. yes, it's a dreadful solution...
-        if url_ext in ('.rpm', '.deb'):
-            lgr.debug('the file is a {0} file. we\'ll download it '
-                      'to the archives folder'.format(url_ext))
-            retr.download(source_url, dir=os.path.join(
-                sources_path, 'archives'))
-        else:
-            retr.download(source_url, dir=sources_path)
-    repo.download(reqs, sources_path)
-    py.get_modules(modules, sources_path)
-    rb.get_gems(gems, sources_path)
+    repo.install(c.get(defs.PARAM_PREREQS, []))
+    repo.add_src_repos(c.get(defs.PARAM_SOURCE_REPOS, []))
+    repo.add_ppa_repos(c.get(defs.PARAM_SOURCE_PPAS, []), DEBIAN, get_distro())
+    retr.downloads(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
+    repo.add_keys(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
+    retr.downloads(c.get(defs.PARAM_SOURCE_URLS, []), sources_path)
+    repo.download(c.get(defs.PARAM_REQS, []), sources_path)
+    py.get_modules(c.get(defs.PARAM_MODULES, []), sources_path)
+    rb.get_gems(c.get(defs.PARAM_GEMS, []), sources_path)
     lgr.info('package retrieval completed successfully!')
 
 

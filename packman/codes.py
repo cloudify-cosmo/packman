@@ -13,5 +13,6 @@ mapping = {
     'excluded_conflict': 12,
     'packages_file_not_found': 13,
     'no_packages_defined': 14,
-    'sources_empty': 15
+    'sources_empty': 15,
+    'path_already_exists_no_overwrite': 16,
 }
