@@ -4,7 +4,7 @@ import logger
 lgr = logger.init()
 
 
-class RubyHandler(utils.Handler):
+class Handler(utils.Handler):
     def get_gems(self, gems, rbenv=False, dir=False):
         """downloads a list of ruby gems
 

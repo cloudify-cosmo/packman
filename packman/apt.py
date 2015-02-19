@@ -5,7 +5,7 @@ import exceptions as exc
 lgr = logger.init()
 
 
-class AptHandler(utils.Handler):
+class Handler(utils.Handler):
     def dpkg_name(self, dir):
         """renames deb files to conventional names
 

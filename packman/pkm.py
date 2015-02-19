@@ -39,12 +39,12 @@ Options:
 
 from __future__ import absolute_import
 from docopt import docopt
-from packman.packman import init_logger
+from packman import logger
 from packman.packman import packman_runner
 from packman.packman import check_distro
-from packman.packman import set_global_verbosity_level
+from packman import utils
 
-lgr = init_logger()
+lgr = logger.init()
 
 
 def ver_check():
@@ -89,7 +89,7 @@ def pkm(test_options=None):
     """Main entry point for script."""
     version = ver_check()
     options = test_options or docopt(__doc__, version=version)
-    set_global_verbosity_level(options.get('--verbose'))
+    utils.set_global_verbosity_level(options.get('--verbose'))
     check_distro(verbose=options.get('--verbose'))
     lgr.debug(options)
     pkm_run(options)

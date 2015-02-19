@@ -28,11 +28,12 @@ import apt
 import ruby
 import templater
 import fpm
-import exceptions as exc
+import codes
 
 import definitions as defs
 
 import os
+import yaml
 import fabric.api as fab
 import sys
 import platform
@@ -41,7 +42,7 @@ import urllib2
 # __all__ = ['list']
 
 SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
-DEFAULT_COMPONENTS_FILE = 'packages.py'
+DEFAULT_PACKAGES_FILE = 'packages.yaml'
 PACKAGE_TYPES = {
     "centos": "rpm",
     "debian": "deb",
@@ -74,100 +75,108 @@ def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
         raise RuntimeError('distro not supported')
 
 
-def _import_components_dict(components_file):
-    """returns a components file dictionary
+def _import_packages_dict(config_file=None):
+    """returns a configuration object
 
-    :param string components_file: components_file to search in
-    :rtype: `dict` with components configuration
+    :param string config_file: path to config file
     """
-    # get components file path
-    components_file = components_file or os.path.join(
-        os.getcwd(), DEFAULT_COMPONENTS_FILE)
-    lgr.debug('components file is: {0}'.format(components_file))
+    if config_file is None:
+        try:
+            with open(DEFAULT_PACKAGES_FILE, 'r') as c:
+                return yaml.safe_load(c.read())['packages']
+        except:
+            lgr.error('No config file defines and could not find '
+                      'packages.yaml in currect directory.')
+            sys.exit(codes.mapping['packages_file_not_found'])
+    # get config file path
+    lgr.debug('config file is: {}'.format(config_file))
     # append to path for importing
-    sys.path.append(os.path.dirname(components_file))
     try:
-        return __import__(os.path.basename(os.path.splitext(
-            components_file)[0])).PACKAGES
-    except ImportError:
-        lgr.error('could not import packages.py file. please verify that '
-                  'it exists in the specified path')
-        raise exc.PackagerError('missing components file')
+        lgr.info('importing config...')
+        with open(config_file, 'r') as c:
+            return yaml.safe_load(c.read())['packages']
+    except IOError as ex:
+        lgr.error(ex.message)
+        lgr.error('Cannot access config file')
+        sys.exit(codes.mapping['cannot_access_config_file'])
+    except (yaml.parser.ParserError, yaml.scanner.ScannerError) as ex:
+        lgr.error(ex.message)
+        lgr.error('Invalid yaml file')
+        sys.exit(codes.mapping['invalid_yaml_file'])
 
 
-def get_component_config(component_name, components_dict=None,
-                         components_file=None):
-    """returns a component's configuration
+def get_package_config(package_name, packages_dict=None,
+                       packages_file=None):
+    """returns a package's configuration
 
-    if `components_dict` is not supplied, a packages.py file in the cwd will be
-    assumed unless `components_file` is explicitly given.
-    after a `components_dict` is defined, a `component_config` will be returned
-    for the specified component_name.
+    if `packages_dict` is not supplied, a packages.py file in the cwd will be
+    assumed unless `packages_file` is explicitly given.
+    after a `packages_dict` is defined, a `package_config` will be returned
+    for the specified package_name.
 
-    :param string component: component name to retrieve config for.
-    :param dict components_dict: dict containing components configuration
-    :param string components_file: components file to search in
-    :rtype: `dict` representing component configuration
+    :param string package: package name to retrieve config for.
+    :param dict packages_dict: dict containing packages configuration
+    :param string packages_file: packages file to search in
+    :rtype: `dict` representing package configuration
     """
-    if components_dict is None:
-        components_dict = {}
-    lgr.debug('retrieving configuration for {0}'.format(component_name))
+    if packages_dict is None:
+        packages_dict = {}
+    lgr.debug('retrieving configuration for {0}'.format(package_name))
     try:
-        if not components_dict:
-            components_dict = _import_components_dict(components_file)
-        lgr.debug('{0} config retrieved successfully'.format(component_name))
-        return components_dict[component_name]
+        if not packages_dict:
+            packages_dict = _import_packages_dict(packages_file)
+        lgr.debug('{0} config retrieved successfully'.format(package_name))
+        return packages_dict[package_name]
     except KeyError:
         lgr.error('package configuration for'
-                  ' {0} was not found, terminating...'.format(component_name))
-        raise exc.PackagerError('no config found for package')
+                  ' {0} was not found, terminating...'.format(package_name))
+        sys.exit(codes.mapping['no_config_found_for_package'])
 
 
-def packman_runner(action, components_file=None, components=None,
+def packman_runner(action, packages_file=None, packages=None,
                    excluded=None, verbose=False):
     """logic for running packman. mainly called from the cli (pkm.py)
 
-    if no `components_file` is supplied, we will assume a local packages.py
-    as `components_file`.
+    if no `packages_file` is supplied, we will assume a local packages.py
+    as `packages_file`.
 
-    if `components` are supplied, they will be iterated over.
+    if `packages` are supplied, they will be iterated over.
     if `excluded` are supplied, they will be ignored.
 
-    if a pack.py or get.py files are present, and an action_component
+    if a pack.py or get.py files are present, and an action_package
     function exists in the files, those functions will be used.
     else, the base get and pack methods supplied with packman will be used.
-    so for instance, if you have a component named `x`, and you want to write
+    so for instance, if you have a package named `x`, and you want to write
     your own `get` function for it. Just write a get_x() function in get.py.
 
     :param string action: action to perform (get, pack)
-    :param string components_file: path to file containing component config
-    :param string components: comma delimited list of components to perform
+    :param string packages_file: path to file containing package config
+    :param string packages: comma delimited list of packages to perform
      `action` on.
-    :param string excluded: comma delimited list of components to exclude
+    :param string excluded: comma delimited list of packages to exclude
     :param bool verbose: determines output verbosity level
     :rtype: `None`
     """
-    def _build_excluded_components_list(excluded_components):
-        lgr.debug('building excluded components list...')
-        return filter(None, (excluded_components or "").split(','))
+    def _build_excluded_packages_list(excluded_packages):
+        lgr.debug('building excluded packages list...')
+        return filter(None, (excluded_packages or "").split(','))
 
-    def _build_components_list(components, xcom_list, components_dict):
-        lgr.debug('building components list...')
+    def _build_packages_list(packages, xcom_list, packages_dict):
+        lgr.debug('building packages list...')
         com_list = []
-        if components:
-            for component in components.split(','):
-                com_list.append(component)
-            # and raise if same component appears in both lists
+        if packages:
+            for package in packages.split(','):
+                com_list.append(package)
+            # and raise if same package appears in both lists
             if set(com_list) & set(xcom_list):
-                lgr.error('your components list and excluded components '
+                lgr.error('your packages list and excluded packages '
                           'list contain a similar item.')
-                raise exc.PackagerError('components list and excluded list '
-                                        'are conflicting')
-        # else iterate over all components in components file
+                sys.exit(codes.mapping['excluded_conflict'])
+        # else iterate over all packages in packages file
         else:
-            for component, values in components_dict.items():
-                com_list.append(component)
-            # and rewrite the list after removing excluded components
+            for package, values in packages_dict.items():
+                com_list.append(package)
+            # and rewrite the list after removing excluded packages
             for xcom in xcom_list:
                 com_list = [com for com in com_list if com != xcom]
         return com_list
@@ -177,61 +186,61 @@ def packman_runner(action, components_file=None, components=None,
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
-    def _rename_component(component):
+    def _rename_package(package):
         # replace hyphens with underscores and remove dots from the
         # overriding methods names
         # also, convert to lowercase to correspond with overriding
         # method names.
-        component_re = component.replace('-', '_')
-        component_re = component_re.replace('.', '')
-        component_re = component_re.lower()
-        return component_re
+        package_re = package.replace('-', '_')
+        package_re = package_re.replace('.', '')
+        package_re = package_re.lower()
+        return package_re
 
     utils.set_global_verbosity_level(verbose)
-    # import dict of all components
-    components_dict = _import_components_dict(components_file)
-    # append excluded components to list.
-    xcom_list = _build_excluded_components_list(excluded)
-    lgr.debug('excluded components list: {0}'.format(xcom_list))
-    # append components to list if a list is supplied
-    com_list = _build_components_list(components, xcom_list, components_dict)
-    lgr.debug('components list: {0}'.format(com_list))
-    # if at least 1 component exists
+    # import dict of all packages
+    packages_dict = _import_packages_dict(packages_file)
+    # append excluded packages to list.
+    xcom_list = _build_excluded_packages_list(excluded)
+    lgr.debug('excluded packages list: {0}'.format(xcom_list))
+    # append packages to list if a list is supplied
+    com_list = _build_packages_list(packages, xcom_list, packages_dict)
+    lgr.debug('packages list: {0}'.format(com_list))
+    # if at least 1 package exists
     if com_list:
         # iterate and run action
-        for component in com_list:
+        for package in com_list:
             # looks for the overriding methods file in the current path
             if os.path.isfile(os.path.join(os.getcwd(), '{0}.py'.format(
                     action))):
                 # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
                 overr_methods = _import_overriding_methods(action)
-                # rename overriding component name by convention
-                component = _rename_component(component)
+                # rename overriding package name by convention
+                package = _rename_package(package)
                 # if the method was found in the overriding file, run it.
                 if hasattr(overr_methods, '{0}_{1}'.format(
-                        action, component)):
+                        action, package)):
                     getattr(
                         overr_methods, '{0}_{1}'.format(
-                            action, component))()
+                            action, package))()
                 # else run the default action method
                 else:
                     # TODO: check for bad action
-                    globals()[action](get_component_config(
-                        component, components_file=components_file))
+                    globals()[action](get_package_config(
+                        package, packages_file=packages_file))
             # else run the default action method
             else:
-                globals()[action](get_component_config(
-                    component, components_file=components_file))
+                globals()[action](get_package_config(
+                    package, packages_file=packages_file))
     else:
-        raise exc.PackagerError('no components to handle,'
-                                ' check your components file')
+        lgr.error('no packages to handle, check your packages file')
+        sys.exit(codes.mapping['no_packages_defined'])
 
 
-def get(component):
+def get(package):
     """retrieves resources for packaging
 
-    .. note:: component params are defined in packages.py
+    .. note:: package params are defined in packages.py
 
     .. note:: param names in packages.py can be overriden by editing
      definitions.py which also has an explanation on each param.
@@ -269,10 +278,10 @@ def get(component):
         if not u.is_dir(sources_path):
             u.mkdir(sources_path)
 
-    # you can send the component dict directly, or retrieve it from
+    # you can send the package dict directly, or retrieve it from
     # the packages.py file by sending its name
-    c = component if type(component) is dict \
-        else get_component_config(component)
+    c = package if isinstance(package, dict) \
+        else get_package_config(package)
 
     # define params for retrieval process
     source_urls = c.get(defs.PARAM_SOURCE_URLS, [])
@@ -286,6 +295,7 @@ def get(component):
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     overwrite = c.get(defs.PARAM_OVERWRITE_SOURCES, True)
 
+    # set handlers
     if CENTOS:
         repo = yum.Handler()
     elif DEBIAN:
@@ -322,18 +332,18 @@ def get(component):
     lgr.info('package retrieval completed successfully!')
 
 
-def pack(component):
+def pack(package):
     """creates a package according to the provided package configuration
     in packages.py
     uses fpm (https://github.com/jordansissel/fpm/wiki) to create packages.
 
-    .. note:: component params are defined in packages.py but can be passed
+    .. note:: package params are defined in packages.py but can be passed
      directly to the pack function as a dict.
 
     .. note:: param names in packages.py can be overriden by editing
      definitions.py which also has an explanation on each param.
 
-    :param string|dict component: string or dict representing component
+    :param string|dict package: string or dict representing package
      name or params (coorespondingly) as configured in packages.py
     :param string name: package's name
      will be appended to the filename and to the package
@@ -386,10 +396,10 @@ def pack(component):
 
     # get the cwd since fpm will later change it.
     cwd = os.getcwd()
-    # you can send the component dict directly, or retrieve it from
+    # you can send the package dict directly, or retrieve it from
     # the packages.py file by sending its name
-    c = component if type(component) is dict \
-        else get_component_config(component)
+    c = package if type(package) is dict \
+        else get_package_config(package)
 
     # define params for packaging process
     name = c.get(defs.PARAM_NAME)
@@ -433,7 +443,7 @@ def pack(component):
             utils.do('chmod +x {0}'.format(bootstrap_script_in_pkg))
             lgr.debug('copying bootstrap script to package directory')
             common.cp(bootstrap_script_in_pkg, sources_path)
-    lgr.info('packing up component: {0}'.format(name))
+    lgr.info('packing up package: {0}'.format(name))
     # this checks if a package needs to be created. If no source package type
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...

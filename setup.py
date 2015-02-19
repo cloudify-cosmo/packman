@@ -16,7 +16,7 @@
 
 from setuptools import setup
 # from setuptools import find_packages
-from setuptools.command.test import test as TestCommand
+from setuptools.command.test import test as testcommand
 import sys
 import re
 import os
@@ -40,14 +40,14 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-class Tox(TestCommand):
+class Tox(testcommand):
     def finalize_options(self):
-        TestCommand.finalize_options(self)
+        testcommand.finalize_options(self)
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
-        #import here, cause outside the eggs aren't loaded
+        # import here, cause outside the eggs aren't loaded
         import tox
         errcode = tox.cmdline(self.test_args)
         sys.exit(errcode)
@@ -73,6 +73,7 @@ setup(
         "fabric==1.8.3",
         "jinja2==2.7.2",
         "docopt==.0.6.1",
+        "pyyaml==3.10",
         # "pika==0.9.13",
         # "infi.docopt_completion==0.2.1",
         # "sphinx-rtd-theme",
