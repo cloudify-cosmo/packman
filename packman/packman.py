@@ -37,7 +37,6 @@ import yaml
 import fabric.api as fab
 import sys
 import platform
-import urllib2
 
 # __all__ = ['list']
 
@@ -312,9 +311,7 @@ def get(package):
     repo.add_src_repos(source_repos)
     repo.add_ppa_repos(source_ppas, DEBIAN, get_distro())
     retr.downloads(source_keys, dir=sources_path)
-    for key in source_keys:
-        key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
-        repo.add_key(os.path.join(sources_path, key_file))
+    repo.add_keys(source_keys, sources_path)
     for source_url in source_urls:
         url_ext = os.path.splitext(source_url)[1]
         # if the source file is an rpm or deb, we want to download

@@ -2,6 +2,8 @@ import utils
 import logger
 import exceptions as exc
 import re
+import urllib2
+import os
 
 lgr = logger.init()
 
@@ -90,10 +92,19 @@ class Handler(utils.Handler):
         if source_ppas:
             self.update()
 
-    def add_key(self, key_file):
+    def add_keys(self, key_files, sources_path):
         """adds a list of keys to the local repo
 
         :param string key_files: key files paths
+        """
+        for key in key_files:
+            key_file = urllib2.unquote(key).decode('utf8').split('/')[-1]
+            self.add_key(os.path.join(sources_path, key_file))
+
+    def add_key(self, key_file):
+        """adds a of keys to the local repo
+
+        :param string key_file: key file path
         """
         lgr.debug('adding key {0}'.format(key_file))
         return utils.do('sudo apt-key add {0}'.format(key_file))

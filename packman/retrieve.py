@@ -13,11 +13,13 @@ class Handler(utils.Handler):
         :param string dir: download to dir...
         """
         for url in urls:
-            self.download(url, dir, sudo)
+            self.download(url, dir, sudo=sudo)
 
     def download(self, url, dir=False, file=False, sudo=False):
         options = '--timeout=30'
         # workaround for archives folder
+        print 'hhhhhhh', dir
+        print 'haaa', file
         if (file and dir) or (not file and not dir):
             lgr.warning('please specify either a directory'
                         ' or file to download to.')
