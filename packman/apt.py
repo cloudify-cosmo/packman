@@ -1,6 +1,7 @@
 import utils
 import logger
 import exceptions as exc
+import re
 
 lgr = logger.init()
 
@@ -65,9 +66,16 @@ class Handler(utils.Handler):
         :param list source_repos: repos to add to sources list
         """
         for source_repo in source_repos:
-            lgr.debug('adding source repository {0}'.format(source_repo))
-            utils.do('sudo sed -i "2i {0}" /etc/apt/sources.list'.format(
-                source_repo))
+            with open('/etc/apt/sources.list') as f:
+                if not re.search(source_repo, f.read()):
+                    lgr.debug('adding source repository {0}'.format(
+                        source_repo))
+                    utils.do(
+                        'sudo sed -i "2i {0}" /etc/apt/sources.list'.format(
+                            source_repo))
+                else:
+                    lgr.debug('Repo {0} already found in list.'.format(
+                        source_repo))
 
     def add_ppa_repos(self, source_ppas, debian, distro):
         """adds a list of ppa repos to the apt repo

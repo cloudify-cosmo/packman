@@ -263,7 +263,7 @@ def get(package):
     :rtype: `None`
     """
 
-    def _handle_sources_path(sources_path, overwrite):
+    def handle_sources_path(sources_path, overwrite):
         # should the source dir be removed before retrieving package contents?
         u = utils.Handler()
         if overwrite:
@@ -304,7 +304,7 @@ def get(package):
     py = python.Handler()
     rb = ruby.Handler()
 
-    _handle_sources_path(sources_path, overwrite)
+    handle_sources_path(sources_path, overwrite)
 
     # TODO: (TEST) raise on "command not supported by distro"
     # TODO: (FEAT) add support for building packages from source
@@ -366,8 +366,8 @@ def pack(package):
     :rtype: `None`
     """
 
-    def _handle_package_path(package_path, sources_path, tmp_pkg_path, name,
-                             overwrite):
+    def handle_package_path(package_path, sources_path, tmp_pkg_path, name,
+                            overwrite):
         if not common.is_dir(os.path.join(package_path, 'archives')):
             common.mkdir(os.path.join(package_path, 'archives'))
         # can't use sources_path == tmp_pkg_path for the package... duh!
@@ -383,7 +383,7 @@ def pack(package):
             common.rmdir(tmp_pkg_path)
             common.mkdir(tmp_pkg_path)
 
-    def _set_dst_pkg_type():
+    def set_dst_pkg_type():
         lgr.debug('destination package type ommitted')
         if CENTOS:
             lgr.debug('assuming default type: {0}'.format(
@@ -411,12 +411,13 @@ def pack(package):
         if defs.PARAM_BOOTSTRAP_SCRIPT_IN_PACKAGE_PATH in c else False
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
     dst_pkg_types = c.get(
-        defs.PARAM_DESTINATION_PACKAGE_TYPES, _set_dst_pkg_type())
+        defs.PARAM_DESTINATION_PACKAGE_TYPES, set_dst_pkg_type())
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
-    tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
-        if defs.PARAM_SOURCES_PATH else False
+    # tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
+    #     if defs.PARAM_SOURCES_PATH else False
+    # tmp_pkg_path = c.get(defs.PARAM_PACKAGE_PATH, '.')
     package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
     depends = c.get(defs.PARAM_DEPENDS, False)
     config_templates = c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False)
@@ -426,8 +427,8 @@ def pack(package):
     common = utils.Handler()
     templates = templater.Handler()
 
-    _handle_package_path(
-        package_path, sources_path, tmp_pkg_path, name, overwrite)
+    # handle_package_path(
+    #     package_path, sources_path, tmp_pkg_path, name, overwrite)
 
     lgr.info('generating package scripts and config files...')
     if config_templates:
@@ -452,7 +453,7 @@ def pack(package):
             # change the path to the destination path, since fpm doesn't
             # accept (for now) a dst dir, but rather creates the package in
             # the cwd.
-            with fab.lcd(tmp_pkg_path):
+            with fab.lcd(package_path):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
                                     sources_path, sudo=True)
@@ -464,7 +465,7 @@ def pack(package):
                         utils.do('sudo gzip {0}.tar*'.format(name))
                     lgr.info("isolating archives...")
                     common.mv('{0}/*.{1}'.format(
-                        tmp_pkg_path, dst_pkg_type), package_path)
+                        package_path, dst_pkg_type), package_path)
         else:
             lgr.error('Sources directory is empty. '
                       'There\'s nothing to package.')
@@ -473,7 +474,7 @@ def pack(package):
         lgr.info("isolating archives...")
         for dst_pkg_type in dst_pkg_types:
             common.mv('{0}/*.{1}'.format(
-                tmp_pkg_path, dst_pkg_type), package_path)
+                package_path, dst_pkg_type), package_path)
     lgr.info('package creation completed successfully!')
     if not keep_sources:
         lgr.debug('removing sources...')
