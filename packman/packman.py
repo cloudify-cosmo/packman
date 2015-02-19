@@ -209,19 +209,16 @@ def packman_runner(action, packages_file=None, packages=None,
         # iterate and run action
         for package in com_list:
             # looks for the overriding methods file in the current path
-            if os.path.isfile(os.path.join(os.getcwd(), '{0}.py'.format(
-                    action))):
+            if os.path.isfile(os.path.join(
+                    os.getcwd(), '{0}.py'.format(action))):
                 # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
                 overr_methods = _import_overriding_methods(action)
                 # rename overriding package name by convention
                 package = _rename_package(package)
                 # if the method was found in the overriding file, run it.
-                if hasattr(overr_methods, '{0}_{1}'.format(
-                        action, package)):
-                    getattr(
-                        overr_methods, '{0}_{1}'.format(
-                            action, package))()
+                if hasattr(overr_methods, '{0}_{1}'.format(action, package)):
+                    getattr(overr_methods, '{0}_{1}'.format(action, package))()
                 # else run the default action method
                 else:
                     # TODO: check for bad action
@@ -289,6 +286,7 @@ def get(package):
     py = python.Handler()
     rb = ruby.Handler()
 
+    # everything will be downloaded here
     sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
     handle_sources_path(
         sources_path, c.get(defs.PARAM_OVERWRITE_SOURCES, True))
