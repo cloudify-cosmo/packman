@@ -257,8 +257,12 @@ def get(package):
     """
 
     def handle_sources_path(sources_path, overwrite):
-        # should the source dir be removed before retrieving package contents?
+        if sources_path is None:
+            lgr.error('Sources path key is required under {0} '
+                      'in packages.yaml.'.format(defs.PARAM_SOURCES_PATH))
+            sys.exit(codes.mapping['sources_path_required'])
         u = utils.Handler()
+        # should the source dir be removed before retrieving package contents?
         if overwrite:
             lgr.info('overwrite enabled. removing {0} before retrieval'.format(
                 sources_path))
@@ -283,7 +287,7 @@ def get(package):
     rb = ruby.Handler()
 
     # everything will be downloaded here
-    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
+    sources_path = c.get(defs.PARAM_SOURCES_PATH, None)
     handle_sources_path(
         sources_path, c.get(defs.PARAM_OVERWRITE_SOURCES, True))
 
@@ -336,22 +340,22 @@ def pack(package):
     :rtype: `None`
     """
 
-    def handle_package_path(package_path, sources_path, tmp_pkg_path, name,
-                            overwrite):
+    def handle_package_path(package_path, sources_path, name, overwrite):
         if not common.is_dir(os.path.join(package_path, 'archives')):
             common.mkdir(os.path.join(package_path, 'archives'))
-        # can't use sources_path == tmp_pkg_path for the package... duh!
-        if sources_path == tmp_pkg_path:
-            lgr.error('source and destination paths must'
+        # can't use sources_path == package_path for the package... duh!
+        if sources_path == package_path:
+            lgr.error('Sources path and package paths must'
                       ' be different to avoid conflicts!')
+            sys.exit(codes.mapping['sources_and_package_paths_identical'])
         if overwrite:
-            lgr.info('overwrite enabled. removing {0}/{1}* before packaging'
-                     .format(package_path, name))
+            lgr.info('Overwrite enabled. Removing {0}/{1}* '
+                     'before packaging'.format(package_path, name))
             common.rm('{0}/{1}*'.format(package_path, name))
-        # TODO: (CHK) why did I do this?
-        if src_pkg_type:
-            common.rmdir(tmp_pkg_path)
-            common.mkdir(tmp_pkg_path)
+        # # TODO: (CHK) why did I do this?
+        # if src_pkg_type:
+        #     common.rmdir(package_path)
+        #     common.mkdir(package_path)
 
     def set_dst_pkg_type():
         lgr.debug('destination package type omitted')
@@ -375,8 +379,12 @@ def pack(package):
     src_pkg_type = c.get(defs.PARAM_SOURCE_PACKAGE_TYPE, False)
     dst_pkg_types = c.get(
         defs.PARAM_DESTINATION_PACKAGE_TYPES, set_dst_pkg_type())
-    sources_path = c.get(defs.PARAM_SOURCES_PATH, False)
-    package_path = c.get(defs.PARAM_PACKAGE_PATH, False)
+    try:
+        sources_path = c[defs.PARAM_SOURCES_PATH]
+    except KeyError:
+        lgr.error('Sources path key is required under {0} '
+                  'in packages.yaml.'.format(defs.PARAM_SOURCES_PATH))
+    package_path = c.get(defs.PARAM_PACKAGE_PATH, os.getcwd())
     # TODO: (STPD) JEEZ... this archives thing is dumb...
     # TODO: (STPD) replace it with a normal destination path
     # tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
@@ -387,7 +395,7 @@ def pack(package):
     templates = templater.Handler()
 
     handle_package_path(
-        package_path, sources_path, package_path, name,
+        package_path, sources_path, name,
         c.get(defs.PARAM_OVERWRITE_OUTPUT, False))
 
     lgr.info('generating package scripts and config files...')

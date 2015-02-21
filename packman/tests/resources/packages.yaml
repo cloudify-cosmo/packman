@@ -19,12 +19,12 @@ packages:
         #     - https://github.com/jaraco/path.py/archive/master.zip
         # requires:
         #     - make
-        modules:
+        python_modules:
             - repex
-            - pyyaml
-        gems:
-            - gosu
-        package_path: tests
+            # - pyyaml
+        # ruby_gems:
+        #     - gosu
+        # package_path: tests
         source_package_type: dir
         destination_package_type: tar.gz
         keep_sources: true
