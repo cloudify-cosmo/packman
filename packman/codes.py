@@ -17,5 +17,6 @@ mapping = {
     'path_already_exists_no_overwrite': 16,
     'distro_not_supported': 17,
     'sources_path_required': 18,
-    'sources_and_package_paths_identical': 19
+    'sources_and_package_paths_identical': 19,
+    'must_specify_file_or_dir': 20,
 }

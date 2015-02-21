@@ -104,7 +104,7 @@ class Handler():
             lgr.debug('{0} does not exist'.format(file))
             return False
 
-    def mkdir(self, dir, sudo=True):
+    def mkdir(self, dir):
         """creates (recursively) a directory
 
         :param string dir: directory to create
@@ -114,7 +114,7 @@ class Handler():
             else lgr.debug('directory already exists, skipping.')
         return False
 
-    def rmdir(self, dir, sudo=True):
+    def rmdir(self, dir):
         """deletes a directory
 
         :param string dir: directory to remove
@@ -125,13 +125,13 @@ class Handler():
         return False
 
     # TODO: (IMPRV) handle multiple files differently
-    # def rm(self, file, sudo=True):
+    # def rm(self, file):
     #     """deletes a file or a set of files
 
     #     :param string file(s): file(s) to remove
     #     """
     #     lgr.debug('removing files {0}'.format(file))
-    #     return do('rm {0}'.format(file), sudo=sudo) if os.path.isfile(file) \
+    #     return do('rm {0}'.format(file)) if os.path.isfile(file) \
     #         else lgr.debug('file(s) do(es)n\'t exist')
     #     return False
 
@@ -152,7 +152,7 @@ class Handler():
             else:
                 lgr.error('Copying failed. Error: {0}'.format(e))
 
-    def mv(self, src, dst, sudo=True):
+    def mv(self, src, dst):
         """moves files or directories
 
         :param string src: source to copy
@@ -161,7 +161,7 @@ class Handler():
         lgr.debug('moving {0} to {1}'.format(src, dst))
         return shutil.move(src, dst)
 
-    def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
+    def tar(self, chdir, output_file, input_path, opts='zvf'):
         """tars an input file or directory
 
         :param string chdir: change to this dir before archiving
@@ -171,9 +171,9 @@ class Handler():
         """
         lgr.debug('tar-ing {0}'.format(output_file))
         return do('tar -C {0} -c{1} {2} {3}'.format(
-            chdir, opts, output_file, input_path), sudo=sudo)
+            chdir, opts, output_file, input_path))
 
-    def untar(self, chdir, input_file, opts='zvf', strip=0, sudo=True):
+    def untar(self, chdir, input_file, opts='zvf', strip=0):
         """untars a file
 
         :param string chdir: change to this dir before extracting
@@ -182,7 +182,7 @@ class Handler():
         """
         lgr.debug('untar-ing {0}'.format(input_file))
         return do('tar -C {0} -x{1} {2} --strip={3}'.format(
-            chdir, opts, input_file, strip), sudo=sudo)
+            chdir, opts, input_file, strip))
 
 
 lgr = logger.init()

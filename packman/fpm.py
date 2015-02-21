@@ -8,8 +8,7 @@ lgr = logger.init()
 class Handler(utils.Handler):
     """fpm handler to handle the packaging process
     """
-    def __init__(self, name, input_type, output_type, source, sudo):
-        self.sudo = sudo
+    def __init__(self, name, input_type, output_type, source):
         self.name = name
         self.output_type = 'tar' if output_type.startswith('tar') \
             else output_type
@@ -46,4 +45,4 @@ class Handler(utils.Handler):
         """runs fpm
         """
         self._build_cmd_string(**kwargs)
-        utils.do(self.command, sudo=self.sudo)
+        utils.do(self.command)

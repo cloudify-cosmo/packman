@@ -8,8 +8,7 @@ lgr = logger.init()
 class Handler(utils.Handler):
     """python operations handler
     """
-    def install(self, modules, venv=False, attempts=5, sudo=True,
-                timeout='45'):
+    def install(self, modules, venv=False, attempts=5, timeout='45'):
         """pip installs a list of modules
 
         :param list modules: python modules to ``pip install``
@@ -19,10 +18,10 @@ class Handler(utils.Handler):
         for module in modules:
             lgr.debug('installing module {0}'.format(module))
             utils.do('{0}/bin/pip --default-timeout={2} install {1}'.format(
-                venv, module, timeout), attempts=attempts, sudo=sudo) \
+                venv, module, timeout), attempts=attempts) \
                 if venv else utils.do(
                     'pip --default-timeout={2} install {1}'.format(
-                        venv, module, timeout), attempts=attempts, sudo=sudo)
+                        venv, module, timeout), attempts=attempts)
 
     def get_modules(self, modules, dir=False, venv=False):
         """downloads python modules
@@ -34,10 +33,10 @@ class Handler(utils.Handler):
         """
         for module in modules:
             lgr.debug('downloading module {0}'.format(module))
-            return utils.do('sudo {0}/pip install --no-use-wheel'
+            return utils.do('{0}/pip install --no-use-wheel'
                             ' --download "{1}/" {2}'.format(
                                 venv, dir, module)) \
-                if venv else utils.do('sudo pip install --no-use-wheel'
+                if venv else utils.do('pip install --no-use-wheel'
                                       ' --download "{0}/" {1}'.format(
                                           dir, module))
 
@@ -60,10 +59,10 @@ class Handler(utils.Handler):
 
     # TODO: (FEAT) support virtualenv --relocate OR
     # TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-    def venv(self, venv_dir, sudo=True):
+    def venv(self, venv_dir):
         """creates a virtualenv
 
         :param string venv_dir: venv path to create
         """
         lgr.debug('creating virtualenv in {0}'.format(venv_dir))
-        return utils.do('virtualenv {0}'.format(venv_dir), sudo=sudo)
+        return utils.do('virtualenv {0}'.format(venv_dir))

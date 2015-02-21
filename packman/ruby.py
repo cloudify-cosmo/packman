@@ -15,8 +15,8 @@ class Handler(utils.Handler):
             lgr.debug('Downloading gem {0}'.format(gem))
             # TODO: (TEST) add support for ruby in different environments
             if rbenv:
-                utils.do('sudo {0}/bin/gem install --no-ri --no-rdoc'
+                utils.do('{0}/bin/gem install --no-ri --no-rdoc'
                          ' --install-dir {1} {2}'.format(rbenv, dir, gem))
             else:
-                utils.do('sudo gem install --no-ri --no-rdoc'
+                utils.do('gem install --no-ri --no-rdoc'
                          ' --install-dir {0} {1}'.format(dir, gem))

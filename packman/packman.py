@@ -386,7 +386,7 @@ def pack(package):
             with fab.lcd(package_path):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
-                                    os.path.abspath(sources_path), sudo=True)
+                                    os.path.abspath(sources_path))
                     i.execute(version=c.get(defs.PARAM_VERSION, False),
                               force=c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
                               depends=c.get(defs.PARAM_DEPENDS, False),
@@ -394,7 +394,7 @@ def pack(package):
                               chdir=False, before_install=None)
                     if dst_pkg_type == "tar.gz":
                         lgr.debug('Converting tar to tar.gz...')
-                        utils.do('sudo gzip {0}.tar*'.format(name))
+                        utils.do('gzip {0}.tar*'.format(name))
                     # lgr.info("isolating archives...")
                     # u.mv('{0}/*.{1}'.format(
                     #     package_path, dst_pkg_type), package_path)

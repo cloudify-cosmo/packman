@@ -12,7 +12,7 @@ lgr = logger.init()
 
 class Handler(utils.Handler):
 
-    def generate_configs(self, component, sudo=True):
+    def generate_configs(self, component):
         """generates configuration files from templates
 
         for every key in the configuration templates sub-dict, if a key
@@ -22,31 +22,29 @@ class Handler(utils.Handler):
         :param dict component: contains the params to use in the template
         """
         # iterate over the config_templates dict in the package's config
-        for key, value in \
-                component[defs.PARAM_CONFIG_TEMPLATE_CONFIG].items():
+        for key, value in component[defs.PARAM_CONFIG_TEMPLATE_CONFIG].items():
             # we'll make some assumptions regarding the structure of the config
             # placement. spliting and joining to make up the positions.
 
             # and find something to mark that you should generate a template
             # from a file
             if key.startswith(defs.PARAM_CONFIG_TEMPLATE_FILE):
-                self._generate_config_from_file(component, value, sudo=sudo)
+                self._generate_config_from_file(component, value)
             # or generate templates from a dir, where the difference
             # would be that the name of the output files will correspond
             # to the names of the template files (removing .template)
             elif key.startswith(defs.PARAM_CONFIG_TEMPLATE_DIR):
-                self._generate_configs_from_dir(component, value, sudo=sudo)
+                self._generate_configs_from_dir(component, value)
             # or just copy static config files...
             elif key.startswith(defs.PARAM_CONFIG_CONFIG_DIR):
-                self._generate_static_configs_from_dir(
-                    component, value, sudo=sudo)
+                self._generate_static_configs_from_dir(component, value)
             else:
                 # you can define arbitrary keys in the config_templates
                 # dict.. for your bidding,
                 # which can then be used as param references.
                 pass
 
-    def _generate_config_from_file(self, component, config_params, sudo=True):
+    def _generate_config_from_file(self, component, config_params):
         """generates a configuration file from a template file
 
         if the config directory for the component doesn't exist, it will be
@@ -77,14 +75,12 @@ class Handler(utils.Handler):
         # create the directory to put the config in after it's
         # genserated
         self.mkdir('{0}/{1}'.format(
-            component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
+            component[defs.PARAM_SOURCES_PATH], config_dir))
         # and then generate the config file. WOOHOO!
-        self.generate_from_template(component,
-                                    output_path,
-                                    template_file,
-                                    template_dir)
+        self.generate_from_template(
+            component, output_path, template_file, template_dir)
 
-    def _generate_configs_from_dir(self, component, config_params, sudo=True):
+    def _generate_configs_from_dir(self, component, config_params):
         """generates configuration files from a a templates directory
 
         if the config directory for the `component` doesn't exist, it will be
@@ -110,14 +106,11 @@ class Handler(utils.Handler):
                     output_file)
 
                 self.mkdir('{0}/{1}'.format(
-                    component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
-                self.generate_from_template(component,
-                                            output_path,
-                                            template_file,
-                                            template_dir)
+                    component[defs.PARAM_SOURCES_PATH], config_dir))
+                self.generate_from_template(
+                    component, output_path, template_file, template_dir)
 
-    def _generate_static_configs_from_dir(self, component, config_params,
-                                          sudo=True):
+    def _generate_static_configs_from_dir(self, component, config_params):
         """copies configuration files from a a configuration files directory
 
         if the config directory for the `component` doesn't exist, it will be
@@ -132,12 +125,11 @@ class Handler(utils.Handler):
         config_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_DIR]
         files_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_PATH]
         self.mkdir('{0}/{1}'.format(
-            component[defs.PARAM_SOURCES_PATH], config_dir), sudo=sudo)
+            component[defs.PARAM_SOURCES_PATH], config_dir))
         # copy the static files to the destination config dir.
         # yep, simple as that...
         self.cp(os.path.join(files_dir, '*'),
-                os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir),
-                sudo=sudo)
+                os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir))
 
     def generate_from_template(self, component_config, output_file,
                                template_file,
