@@ -74,9 +74,6 @@ class Handler():
     """common class to handle files and directories
     """
 
-    # def __init__(self, context):
-    #     self.context = context
-
     def find_in_dir(self, dir, pattern, sudo=True):
         """
         finds file/s in a dir
@@ -124,9 +121,8 @@ class Handler():
         :param string file: file to touch
         """
 
-        cmd = 'touch {0}'.format(file)
         lgr.debug('creating file {0}'.format(file))
-        return do(cmd, sudo=sudo)
+        return do('touch {0}'.format(file), sudo=sudo)
 
     def mkdir(self, dir, sudo=True):
         """creates (recursively) a directory
