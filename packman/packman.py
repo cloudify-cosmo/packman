@@ -296,8 +296,9 @@ def get(package):
     repo.add_keys(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     retr.downloads(c.get(defs.PARAM_SOURCE_URLS, []), sources_path)
     repo.download(c.get(defs.PARAM_REQS, []), sources_path)
-    py.get_modules(c.get(defs.PARAM_MODULES, []), sources_path)
-    rb.get_gems(c.get(defs.PARAM_GEMS, []), sources_path)
+    py.get_modules(c.get(defs.PARAM_PYTHON_MODULES, []), sources_path)
+    rb.get_gems(c.get(defs.PARAM_RUBY_GEMS, []), sources_path)
+    # nd.get_packages(c.get(defs.PARAM_NODE_PACKAGES, []), sources_path)
     lgr.info('package retrieval completed successfully!')
 
 
@@ -404,6 +405,7 @@ def pack(package):
             lgr.debug('copying bootstrap script to package directory')
             common.cp(bootstrap_script, sources_path)
     lgr.info('packing up package: {0}'.format(name))
+
     # this checks if a package needs to be created. If no source package type
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...
@@ -415,7 +417,7 @@ def pack(package):
             with fab.lcd(package_path):
                 for dst_pkg_type in dst_pkg_types:
                     i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
-                                    sources_path, sudo=True)
+                                    os.path.abspath(sources_path), sudo=True)
                     i.execute(version=c.get(defs.PARAM_VERSION, False),
                               force=c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
                               depends=c.get(defs.PARAM_DEPENDS, False),

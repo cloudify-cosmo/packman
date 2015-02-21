@@ -5,23 +5,25 @@ packages:
     mock_package:
         name: test_package
         version: 3.1
-        sources_path: /home/nir0s/repos/packman/sources
+        sources_path: sources
         # prereqs:
         #     - curl
-        requires:
-            - make
         # source_ppas:
         #     - ppa:chris-lea/node.js
-        # source_urls:
-        #     - https://github.com/jaraco/path.py/archive/master.zip
         # source_repos:
         #     - deb http://nginx.org/packages/mainline/ubuntu/ precise nginx
         #     - deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
         # source_keys:
         #     - http://nginx.org/keys/nginx_signing.key
+        # source_urls:
+        #     - https://github.com/jaraco/path.py/archive/master.zip
+        # requires:
+        #     - make
         modules:
             - repex
             - pyyaml
+        gems:
+            - gosu
         package_path: tests
         source_package_type: dir
         destination_package_type: tar.gz
