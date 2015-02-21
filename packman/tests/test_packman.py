@@ -13,8 +13,6 @@
 #    * See the License for the specific language governing permissions and
 #    * limitations under the License.
 
-__author__ = 'nir0s'
-
 import packman.exceptions as exc
 import packman.logger as logger
 import packman.packman as packman
@@ -22,6 +20,7 @@ import packman.python as py
 import packman.retrieve as retr
 import packman.utils as utils
 import packman.templater as templater
+
 
 import unittest
 import os
@@ -302,7 +301,7 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
         self.generate_from_template(component, TEST_FILE, template_file,
                                     templates=TEST_TEMPLATES_DIR)
         with open(TEST_FILE, 'r') as f:
-            self.assertIn('test_template_output', f.read())
+            self.assertTrue('test_template_output' in f.read())
 
     @mock_template
     def test_template_creation_template_file_missing(self):
@@ -372,10 +371,10 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
             }
         }
         self.generate_configs(component, sudo=False)
-        with open('{}/{}/{}'.format(component['sources_path'],
+        with open('{0}/{1}/{2}'.format(component['sources_path'],
                   component['config_templates']['__config_dir']['config_dir'],
                   config_file), 'r') as f:
-            self.assertIn(component['test_template_parameter'], f.read())
+            self.assertTrue(component['test_template_parameter'] in f.read())
 
     @dir
     @mock_template
@@ -392,10 +391,10 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
             }
         }
         self.generate_configs(component, sudo=False)
-        with open('{}/{}/{}'.format(component['sources_path'],
+        with open('{0}/{1}/{2}'.format(component['sources_path'],
                   component['config_templates']['__template_dir']['config_dir'],  # NOQA
                   config_file.split('.')[0:-1][0]), 'r') as f:
-            self.assertIn(component['test_template_parameter'], f.read())
+            self.assertTrue(component['test_template_parameter'] in f.read())
 
     @dir
     @mock_template
@@ -413,10 +412,10 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
             }
         }
         self.generate_configs(component, sudo=False)
-        with open('{}/{}/{}'.format(component['sources_path'],
+        with open('{0}/{1}/{2}'.format(component['sources_path'],
                   component['config_templates']['__template_file']['config_dir'],  # NOQA
                   config_file.split('.')[0:-1][0]), 'r') as f:
-            self.assertIn(component['test_template_parameter'], f.read())
+            self.assertTrue(component['test_template_parameter'] in f.read())
 
 
 class TestBaseMethods(unittest.TestCase):
@@ -455,7 +454,7 @@ class TestBaseMethods(unittest.TestCase):
         try:
             logger.init(logging_config={'x': 'y'})
         except SystemExit as ex:
-            self.assertIn('could not init', str(ex))
+            self.assertTrue('could not init' in str(ex))
 
     @log_capture()
     def test_set_global_verbosity_level(self, capture):
