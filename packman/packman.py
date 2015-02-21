@@ -85,7 +85,7 @@ def _import_packages_dict(config_file=None):
                       'packages.yaml in currect directory.')
             sys.exit(codes.mapping['packages_file_not_found'])
     # get config file path
-    lgr.debug('config file is: {}'.format(config_file))
+    lgr.debug('Config file is: {}'.format(config_file))
     # append to path for importing
     try:
         lgr.info('importing config...')
@@ -117,14 +117,14 @@ def get_package_config(package_name, packages_dict=None,
     """
     if packages_dict is None:
         packages_dict = {}
-    lgr.debug('retrieving configuration for {0}'.format(package_name))
+    lgr.debug('Retrieving configuration for {0}'.format(package_name))
     try:
         if not packages_dict:
             packages_dict = _import_packages_dict(packages_file)
         lgr.debug('{0} config retrieved successfully'.format(package_name))
         return packages_dict[package_name]
     except KeyError:
-        lgr.error('package configuration for'
+        lgr.error('Package configuration for'
                   ' {0} was not found, terminating...'.format(package_name))
         sys.exit(codes.mapping['no_config_found_for_package'])
 
@@ -154,18 +154,18 @@ def packman_runner(action, packages_file=None, packages=None,
     :rtype: `None`
     """
     def _build_excluded_packages_list(excluded_packages):
-        lgr.debug('building excluded packages list...')
+        lgr.debug('Building excluded packages list...')
         return filter(None, (excluded_packages or "").split(','))
 
     def _build_packages_list(packages, xcom_list, packages_dict):
-        lgr.debug('building packages list...')
+        lgr.debug('Building packages list...')
         com_list = []
         if packages:
             for package in packages.split(','):
                 com_list.append(package)
             # and raise if same package appears in both lists
             if set(com_list) & set(xcom_list):
-                lgr.error('your packages list and excluded packages '
+                lgr.error('Your packages list and excluded packages '
                           'list contain a similar item.')
                 sys.exit(codes.mapping['excluded_conflict'])
         # else iterate over all packages in packages file
@@ -178,7 +178,7 @@ def packman_runner(action, packages_file=None, packages=None,
         return com_list
 
     def _import_overriding_methods(action):
-        lgr.debug('importing overriding methods file...')
+        lgr.debug('Importing overriding methods file...')
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
@@ -197,10 +197,10 @@ def packman_runner(action, packages_file=None, packages=None,
     packages_dict = _import_packages_dict(packages_file)
     # append excluded packages to list.
     xcom_list = _build_excluded_packages_list(excluded)
-    lgr.debug('excluded packages list: {0}'.format(xcom_list))
+    lgr.debug('Excluded packages list: {0}'.format(xcom_list))
     # append packages to list if a list is supplied
     com_list = _build_packages_list(packages, xcom_list, packages_dict)
-    lgr.debug('packages list: {0}'.format(com_list))
+    lgr.debug('Packages list: {0}'.format(com_list))
     # if at least 1 package exists
     if com_list:
         # iterate and run action
@@ -226,7 +226,7 @@ def packman_runner(action, packages_file=None, packages=None,
                 globals()[action](get_package_config(
                     package, packages_file=packages_file))
     else:
-        lgr.error('no packages to handle, check your packages file')
+        lgr.error('No packages to handle, check your packages file')
         sys.exit(codes.mapping['no_packages_defined'])
 
 
@@ -242,17 +242,6 @@ def get(package):
      as configured in packages.yaml
      will be appended to the filename and to the package
      depending on its type
-    :param string version: version to append to package
-    :param list source_urls: source urls to download
-    :param list source_repos: source repos to add for package retrieval
-    :param list source_ppas: source ppas to add for package retrieval
-    :param list source_keys: source keys to download
-    :param list reqs: list of apt requirements
-    :param string sources_path: path where downloaded source are placed
-    :param list modules: list of python modules to download
-    :param list gems: list of ruby gems to download
-    :param bool overwrite: indicated whether the sources directory be
-     erased before creating a new package
     :rtype: `None`
     """
 
@@ -264,12 +253,12 @@ def get(package):
         u = utils.Handler()
         # should the source dir be removed before retrieving package contents?
         if overwrite:
-            lgr.info('overwrite enabled. removing {0} before retrieval'.format(
+            lgr.info('Overwrite enabled. removing {0} before retrieval'.format(
                 sources_path))
             u.rmdir(sources_path)
         else:
             if u.is_dir(sources_path):
-                lgr.error('the destination directory for this package already '
+                lgr.error('The destination directory for this package already '
                           'exists and overwrite is disabled.')
                 sys.exit(codes.mapping['path_already_exists_no_overwrite'])
         # create the directories required for package creation...
@@ -303,7 +292,7 @@ def get(package):
     py.get_modules(c.get(defs.PARAM_PYTHON_MODULES, []), sources_path)
     rb.get_gems(c.get(defs.PARAM_RUBY_GEMS, []), sources_path)
     # nd.get_packages(c.get(defs.PARAM_NODE_PACKAGES, []), sources_path)
-    lgr.info('package retrieval completed successfully!')
+    lgr.info('Package retrieval completed successfully!')
 
 
 def pack(package):
@@ -319,30 +308,12 @@ def pack(package):
 
     :param string|dict package: string or dict representing package
      name or params (coorespondingly) as configured in packages.yaml
-    :param string name: package's name
-     will be appended to the filename and to the package
-     depending on its type
-    :param string version: version to append to package
-    :param string src_pkg_type: package source type (as supported by fpm)
-    :param list dst_pkg_types: package destination types (as supported by fpm)
-    :param string src_path: path containing sources
-     from which package will be created
-    :param string tmp_pkg_path: path where temp package is placed
-    :param string package_path: path where final package is placed
-    :param string bootstrap_script: path to place generated script
-    :param string bootstrap_script_in_pkg:
-    :param dict config_templates: configuration dict for the package's
-     config files
-    :param bool overwrite: indicates whether the destination directory be
-     erased before creating a new package
-    :param bool keep_sources: indicates whether the sources will be deleted
-     after the packaging process is done
     :rtype: `None`
     """
 
     def handle_package_path(package_path, sources_path, name, overwrite):
-        if not common.is_dir(os.path.join(package_path, 'archives')):
-            common.mkdir(os.path.join(package_path, 'archives'))
+        if not common.is_dir(package_path):
+            common.mkdir(package_path)
         # can't use sources_path == package_path for the package... duh!
         if sources_path == package_path:
             lgr.error('Sources path and package paths must'
@@ -352,19 +323,15 @@ def pack(package):
             lgr.info('Overwrite enabled. Removing {0}/{1}* '
                      'before packaging'.format(package_path, name))
             common.rm('{0}/{1}*'.format(package_path, name))
-        # # TODO: (CHK) why did I do this?
-        # if src_pkg_type:
-        #     common.rmdir(package_path)
-        #     common.mkdir(package_path)
 
     def set_dst_pkg_type():
-        lgr.debug('destination package type omitted')
+        lgr.debug('Destination package type omitted')
         if CENTOS:
-            lgr.debug('assuming default type: {0}'.format(
+            lgr.debug('Assuming default type: {0}'.format(
                 PACKAGE_TYPES['centos']))
             return [PACKAGE_TYPES['centos']]
         elif DEBIAN:
-            lgr.debug('assuming default type: {0}'.format(
+            lgr.debug('Assuming default type: {0}'.format(
                 PACKAGE_TYPES['debian']))
             return [PACKAGE_TYPES['debian']]
 
@@ -385,12 +352,8 @@ def pack(package):
         lgr.error('Sources path key is required under {0} '
                   'in packages.yaml.'.format(defs.PARAM_SOURCES_PATH))
     package_path = c.get(defs.PARAM_PACKAGE_PATH, os.getcwd())
-    # TODO: (STPD) JEEZ... this archives thing is dumb...
-    # TODO: (STPD) replace it with a normal destination path
-    # tmp_pkg_path = '{0}/archives'.format(c[defs.PARAM_SOURCES_PATH]) \
-    #     if defs.PARAM_SOURCES_PATH else False
-    # tmp_pkg_path = c.get(defs.PARAM_PACKAGE_PATH, '.')
 
+    # set handlers
     common = utils.Handler()
     templates = templater.Handler()
 
@@ -398,22 +361,20 @@ def pack(package):
         package_path, sources_path, name,
         c.get(defs.PARAM_OVERWRITE_OUTPUT, False))
 
-    lgr.info('generating package scripts and config files...')
+    lgr.info('Generating package scripts and config files...')
     if c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False):
         templates.generate_configs(c)
     if bootstrap_script:
         templates.generate_from_template(
             c, bootstrap_script, bootstrap_template)
-        if len(dst_pkg_types) == 1 and \
-                (dst_pkg_types[0] == 'tar' or dst_pkg_types[0] == 'tar.gz'):
-            pass
-        else:
-            lgr.debug('granting execution permissions')
-            utils.do('chmod +x {0}'.format(bootstrap_script))
-            lgr.debug('copying bootstrap script to package directory')
-            common.cp(bootstrap_script, sources_path)
-    lgr.info('packing up package: {0}'.format(name))
+        for package in dst_pkg_types:
+            if package in ('tar', 'tar.gz'):
+                lgr.debug('Granting execution permissions to script.')
+                utils.do('chmod +x {0}'.format(bootstrap_script))
+                lgr.debug('Copying bootstrap script to package directory')
+                common.cp(bootstrap_script, sources_path)
 
+    lgr.info('Packaging: {0}'.format(name))
     # this checks if a package needs to be created. If no source package type
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...
@@ -432,7 +393,7 @@ def pack(package):
                               after_install=bootstrap_script,
                               chdir=False, before_install=None)
                     if dst_pkg_type == "tar.gz":
-                        lgr.debug('converting tar to tar.gz...')
+                        lgr.debug('Converting tar to tar.gz...')
                         utils.do('sudo gzip {0}.tar*'.format(name))
                     # lgr.info("isolating archives...")
                     # common.mv('{0}/*.{1}'.format(
@@ -441,18 +402,18 @@ def pack(package):
             lgr.error('Sources directory is empty. Nothing to package.')
             sys.exit(codes.mapping['sources_empty'])
     else:
-        lgr.info("isolating archives...")
+        lgr.info("Isolating archives...")
         for dst_pkg_type in dst_pkg_types:
             common.mv('{0}/*.{1}'.format(
                 package_path, dst_pkg_type), package_path)
-    lgr.info('package creation completed successfully!')
+    lgr.info('Package creation completed successfully!')
     if not c.get(defs.PARAM_KEEP_SOURCES, True):
-        lgr.debug('removing sources...')
+        lgr.debug('Removing sources...')
         common.rmdir(sources_path)
 
 
 def main():
-    lgr.debug('running in main...')
+    lgr.debug('Running in main...')
 
 if __name__ == '__main__':
     main()
