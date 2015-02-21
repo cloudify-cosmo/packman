@@ -1,6 +1,8 @@
 import utils
 import logger
-import exceptions as exc
+import codes
+
+import sys
 import re
 import urllib2
 import os
@@ -86,7 +88,8 @@ class Handler(utils.Handler):
         :param list source_ppas: ppa urls to add
         """
         if source_ppas and not debian:
-            raise exc.PackagerError('ppas not supported by {0}'.format(distro))
+            lgr.error('ppas not supported by {0}'.format(distro))
+            sys.exit(codes.mapping['ppa_not_supported_by_distro'])
         for source_ppa in source_ppas:
             lgr.debug('adding ppa repository {0}'.format(source_ppa))
             utils.do('add-apt-repository -y {0}'.format(source_ppa))

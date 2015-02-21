@@ -19,4 +19,5 @@ mapping = {
     'sources_path_required': 18,
     'sources_and_package_paths_identical': 19,
     'must_specify_file_or_dir': 20,
+    'ppa_not_supported_by_distro': 21,
 }
