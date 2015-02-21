@@ -5,17 +5,18 @@ lgr = logger.init()
 
 
 class Handler(utils.Handler):
-    def get_gems(self, gems, rbenv=False, dir=False):
+    def get_gems(self, gems, dir, rbenv=False):
         """downloads a list of ruby gems
 
         :param list gems: gems to download
         :param string dir: directory to download gems to
         """
         for gem in gems:
-            lgr.debug('downloading gem {0}'.format(gem))
+            lgr.debug('Downloading gem {0}'.format(gem))
             # TODO: (TEST) add support for ruby in different environments
-            utils.do('sudo {0}/bin/gem install --no-ri --no-rdoc'
-                     ' --install-dir {1} {2}'.format(rbenv, dir, gem)) \
-                if rbenv else utils.do('sudo gem install --no-ri --no-rdoc'
-                                       ' --install-dir {1} {2}'.format(
-                                           dir, gem))
+            if rbenv:
+                utils.do('sudo {0}/bin/gem install --no-ri --no-rdoc'
+                         ' --install-dir {1} {2}'.format(rbenv, dir, gem))
+            else:
+                utils.do('sudo gem install --no-ri --no-rdoc'
+                         ' --install-dir {0} {1}'.format(dir, gem))

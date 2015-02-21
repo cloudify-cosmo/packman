@@ -312,8 +312,8 @@ def pack(package):
     """
 
     def handle_package_path(package_path, sources_path, name, overwrite):
-        if not common.is_dir(package_path):
-            common.mkdir(package_path)
+        if not u.is_dir(package_path):
+            u.mkdir(package_path)
         # can't use sources_path == package_path for the package... duh!
         if sources_path == package_path:
             lgr.error('Sources path and package paths must'
@@ -322,7 +322,7 @@ def pack(package):
         if overwrite:
             lgr.info('Overwrite enabled. Removing {0}/{1}* '
                      'before packaging'.format(package_path, name))
-            common.rm('{0}/{1}*'.format(package_path, name))
+            u.rm('{0}/{1}*'.format(package_path, name))
 
     def set_dst_pkg_type():
         lgr.debug('Destination package type omitted')
@@ -354,7 +354,7 @@ def pack(package):
     package_path = c.get(defs.PARAM_PACKAGE_PATH, os.getcwd())
 
     # set handlers
-    common = utils.Handler()
+    u = utils.Handler()
     templates = templater.Handler()
 
     handle_package_path(
@@ -372,7 +372,7 @@ def pack(package):
                 lgr.debug('Granting execution permissions to script.')
                 utils.do('chmod +x {0}'.format(bootstrap_script))
                 lgr.debug('Copying bootstrap script to package directory')
-                common.cp(bootstrap_script, sources_path)
+                u.cp(bootstrap_script, sources_path)
 
     lgr.info('Packaging: {0}'.format(name))
     # this checks if a package needs to be created. If no source package type
@@ -396,7 +396,7 @@ def pack(package):
                         lgr.debug('Converting tar to tar.gz...')
                         utils.do('sudo gzip {0}.tar*'.format(name))
                     # lgr.info("isolating archives...")
-                    # common.mv('{0}/*.{1}'.format(
+                    # u.mv('{0}/*.{1}'.format(
                     #     package_path, dst_pkg_type), package_path)
         else:
             lgr.error('Sources directory is empty. Nothing to package.')
@@ -404,12 +404,12 @@ def pack(package):
     else:
         lgr.info("Isolating archives...")
         for dst_pkg_type in dst_pkg_types:
-            common.mv('{0}/*.{1}'.format(
+            u.mv('{0}/*.{1}'.format(
                 package_path, dst_pkg_type), package_path)
     lgr.info('Package creation completed successfully!')
     if not c.get(defs.PARAM_KEEP_SOURCES, True):
         lgr.debug('Removing sources...')
-        common.rmdir(sources_path)
+        u.rmdir(sources_path)
 
 
 def main():

@@ -17,23 +17,23 @@
 """Script to run packman via command line
 
 Usage:
-    pkm get [--components=<list> --components-file=<path> --exclude=<list> -v]
-    pkm pack [--components=<list> --components-file=<path> --exclude=<list> -v]
-    pkm make [--components=<list> --components-file=<path> --exclude=<list> -v]
+    pkm get [--packages=<list> --packages-file=<path> --exclude=<list> -v]
+    pkm pack [--packages=<list> --packages-file=<path> --exclude=<list> -v]
+    pkm make [--packages=<list> --packages-file=<path> --exclude=<list> -v]
     pkm --version
 
 Arguments:
-    pack     Packs component configured in components file
-    get      Gets component configured in components file
+    pack     Creates packages configured in packages file
+    get      Retrives resources for package configured in packages file
     make     Gets AND (yeah!) Packs.. don't ya kno!
 
 Options:
     -h --help                   Show this screen.
-    -c --components=<list>      Comma Separated list of component names
-    -x --exclude=<list>         Comma Separated list of excluded components
-    -f --components-file=<path> Components file path
+    -c --packages=<list>        Comma Separated list of package names
+    -x --exclude=<list>         Comma Separated list of excluded packages
+    -f --packages-file=<path> packages file path
     -v --verbose                a LOT of output
-    --version                   Display current version of sandman and exit
+    --version                   Display current version of package and exit
 
 """
 
@@ -62,25 +62,25 @@ def ver_check():
 def pkm_run(o):
     if o['pack']:
         packman_runner('pack',
-                       o.get('--components-file'),
-                       o.get('--components'),
+                       o.get('--packages-file'),
+                       o.get('--packages'),
                        o.get('--exclude'),
                        o.get('--verbose'))
     elif o['get']:
         packman_runner('get',
-                       o.get('--components-file'),
-                       o.get('--components'),
+                       o.get('--packages-file'),
+                       o.get('--packages'),
                        o.get('--exclude'),
                        o.get('--verbose'))
     elif o['make']:
         packman_runner('get',
-                       o.get('--components-file'),
-                       o.get('--components'),
+                       o.get('--packages-file'),
+                       o.get('--packages'),
                        o.get('--exclude'),
                        o.get('--verbose'))
         packman_runner('pack',
-                       o.get('--components-file'),
-                       o.get('--components'),
+                       o.get('--packages-file'),
+                       o.get('--packages'),
                        o.get('--exclude'),
                        o.get('--verbose'))
 
