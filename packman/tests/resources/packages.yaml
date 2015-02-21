@@ -22,8 +22,8 @@ packages:
         python_modules:
             - repex
             # - pyyaml
-        ruby_gems:
-            - gosu
+        # ruby_gems:
+        #     - gosu
         package_path: tests
         source_package_type: dir
         destination_package_type: tar.gz

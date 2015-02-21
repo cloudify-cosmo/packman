@@ -2,8 +2,10 @@ import logging
 import logger
 import os
 
+import shutil
 import time
 import fabric.api as fab
+import errno
 
 
 DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
@@ -74,19 +76,6 @@ class Handler():
     """common class to handle files and directories
     """
 
-    def find_in_dir(self, dir, pattern, sudo=True):
-        """
-        finds file/s in a dir
-
-        :param string dir: directory to look in
-        :param string patten: what to look for
-        :rtype: ``stdout`` `string` if found, else `None`
-        """
-        lgr.debug('looking for {0} in {1}'.format(pattern, dir))
-        x = do('find {0} -iname "{1}" -exec echo {{}} \;'
-               .format(dir, pattern), capture=True, sudo=sudo)
-        return x.stdout if x.succeeded else None
-
     def is_dir(self, dir):
         """checks if a directory exists
 
@@ -115,23 +104,13 @@ class Handler():
             lgr.debug('{0} does not exist'.format(file))
             return False
 
-    def touch(self, file, sudo=True):
-        """creates a file
-
-        :param string file: file to touch
-        """
-
-        lgr.debug('creating file {0}'.format(file))
-        return do('touch {0}'.format(file), sudo=sudo)
-
     def mkdir(self, dir, sudo=True):
         """creates (recursively) a directory
 
         :param string dir: directory to create
         """
         lgr.debug('creating directory {0}'.format(dir))
-        return do('mkdir -p {0}'.format(dir), sudo=sudo) \
-            if not os.path.isdir(dir) \
+        return os.makedirs(dir) if not os.path.isdir(dir) \
             else lgr.debug('directory already exists, skipping.')
         return False
 
@@ -141,22 +120,22 @@ class Handler():
         :param string dir: directory to remove
         """
         lgr.debug('attempting to remove directory {0}'.format(dir))
-        return do('rm -rf {0}'.format(dir), sudo=sudo) \
+        return shutil.rmtree(dir) \
             if os.path.isdir(dir) else lgr.debug('dir doesn\'t exist')
         return False
 
     # TODO: (IMPRV) handle multiple files differently
-    def rm(self, file, sudo=True):
-        """deletes a file or a set of files
+    # def rm(self, file, sudo=True):
+    #     """deletes a file or a set of files
 
-        :param string file(s): file(s) to remove
-        """
-        lgr.debug('removing files {0}'.format(file))
-        return do('rm {0}'.format(file), sudo=sudo) if os.path.isfile(file) \
-            else lgr.debug('file(s) do(es)n\'t exist')
-        return False
+    #     :param string file(s): file(s) to remove
+    #     """
+    #     lgr.debug('removing files {0}'.format(file))
+    #     return do('rm {0}'.format(file), sudo=sudo) if os.path.isfile(file) \
+    #         else lgr.debug('file(s) do(es)n\'t exist')
+    #     return False
 
-    def cp(self, src, dst, recurse=True, sudo=True):
+    def cp(self, src, dst):
         """copies (recuresively or not) files or directories
 
         :param string src: source to copy
@@ -164,8 +143,14 @@ class Handler():
         :param bool recurse: should the copying process be recursive?
         """
         lgr.debug('copying {0} to {1}'.format(src, dst))
-        return do('cp -R {0} {1}'.format(src, dst), sudo=sudo) if recurse \
-            else do('cp {0} {1}'.format(src, dst), sudo=sudo)
+        try:
+            shutil.copytree(src, dst)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            if e.errno == errno.ENOTDIR:
+                shutil.copy(src, dst)
+            else:
+                lgr.error('Copying failed. Error: {0}'.format(e))
 
     def mv(self, src, dst, sudo=True):
         """moves files or directories
@@ -174,7 +159,7 @@ class Handler():
         :param string dst: destination to copy to
         """
         lgr.debug('moving {0} to {1}'.format(src, dst))
-        return do('mv {0} {1}'.format(src, dst), sudo=sudo)
+        return shutil.move(src, dst)
 
     def tar(self, chdir, output_file, input_path, opts='zvf', sudo=True):
         """tars an input file or directory
