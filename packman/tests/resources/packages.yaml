@@ -6,6 +6,9 @@ packages:
         name: test_package
         version: 3.1
         sources_path: sources
+        depends:
+            - make
+            - g++
         # prereqs:
         #     - curl
         # source_ppas:

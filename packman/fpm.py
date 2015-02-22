@@ -1,6 +1,7 @@
 import utils
 import os
 import logger
+import sh
 
 lgr = logger.init()
 
@@ -10,39 +11,39 @@ class Handler(utils.Handler):
     """
     def __init__(self, name, input_type, output_type, source):
         self.name = name
-        self.output_type = 'tar' if output_type.startswith('tar') \
+        output_type = 'tar' if output_type.startswith('tar') \
             else output_type
-        self.input_type = input_type
+        input_type = input_type
         self.source = source
-        self.command = 'fpm -n {0} -s {1} -t {2} '
+        self.command = sh.fpm.bake(n=name, s=input_type, t=output_type)
 
-    def _build_cmd_string(self, **kwargs):
+    def _build_cmd_string(self, **fpm_params):
         """this will build a command string
         """
         # TODO: add verbose mode to fpm runs
-        self.command = self.command.format(
-            self.name, self.input_type, self.output_type)
-        if kwargs.get('version'):
-            self.command += '-v {0} '.format(kwargs['version'])
-        if kwargs.get('chdir'):
-            self.command += '-C {0} '.format(kwargs['chdir'])
-        if kwargs.get('after_install'):
-            self.command += '--after-install {0} '.format(
-                os.path.join(os.getcwd(), kwargs['after_install']))
-        if kwargs.get('before_install'):
-            self.command += '--before-install {0} '.format(
-                os.path.join(os.getcwd(), kwargs['before_install']))
-        if kwargs.get('depends'):
-            self.command += "-d " + " -d ".join(kwargs['depends'])
-            self.command += " "
-        if kwargs.get('force'):
-            self.command += '-f '
+        if fpm_params.get('version'):
+            self.command = self.command.bake(v=fpm_params['version'])
+        if fpm_params.get('chdir'):
+            self.command = self.command.bake(C=fpm_params['chdir'])
+        if fpm_params.get('after_install'):
+            self.command = self.command.bake(
+                'after-install', os.path.join(
+                    os.getcwd(), fpm_params['after_install']))
+        if fpm_params.get('before_install'):
+            self.command = self.command.bake(
+                'before-install', os.path.join(
+                    os.getcwd(), fpm_params['before_install']))
+        if fpm_params.get('depends'):
+            for depend in fpm_params['depends']:
+                self.command = self.command.bake(d=depend)
+        if fpm_params.get('force'):
+            self.command = self.command.bake('-f')
         # MUST BE LAST
-        self.command += self.source
+        self.command = self.command.bake(self.source)
         lgr.debug('fpm cmd is: {0}'.format(self.command))
 
-    def execute(self, **kwargs):
+    def execute(self, **fpm_params):
         """runs fpm
         """
-        self._build_cmd_string(**kwargs)
-        return utils.do(self.command)
+        self._build_cmd_string(**fpm_params)
+        return self.command()
