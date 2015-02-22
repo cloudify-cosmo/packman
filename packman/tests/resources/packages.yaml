@@ -18,10 +18,10 @@ packages:
         #     - deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
         # source_keys:
         #     - http://nginx.org/keys/nginx_signing.key
-        source_urls:
-            - https://github.com/jaraco/path.py/archive/master.zip
-        # requires:
-        #     - make
+        # source_urls:
+        #     - https://github.com/jaraco/path.py/archive/master.zip
+        requires:
+            - make
         # python_modules:
         #     - repex
             # - pyyaml

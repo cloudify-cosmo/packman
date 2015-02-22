@@ -6,6 +6,7 @@ import sys
 import re
 import urllib2
 import os
+import sh
 
 lgr = logger.init()
 
@@ -48,14 +49,13 @@ class Handler(utils.Handler):
             # TODO: (TEST) install.
             # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
             # TODO: (IMPRV) for downloading requirements
-            lgr.debug('downloading {0} to {1}'.format(req, sources_path))
-            # if self.check_if_package_is_installed(package):
-            utils.do('sudo apt-get -y install {0} -d -o=dir::cache={1}'.format(
-                req, sources_path))
-            utils.do('sudo rm {0}/*.bin'.format(sources_path))
-            # else:
-            #     return do('sudo apt-get -y install --reinstall '
-            #               '{0} -d -o=dir::cache={1}'.format(pkg, dir))
+            lgr.debug('Downloading {0} to {1}...'.format(req, sources_path))
+            o = sh.apt_get.install(
+                '-y', req, '-d', o='dir::cache={0}'.format(sources_path),
+                _iter=True)
+            for line in o:
+                lgr.debug(line)
+            sh.rm('{0}/*.bin'.format(sources_path))
 
     def autoremove(self, pkg):
         """autoremoves package dependencies

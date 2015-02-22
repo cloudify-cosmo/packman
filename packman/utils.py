@@ -95,7 +95,7 @@ class Handler():
         :param string dir: directory to check
         :rtype: `bool`
         """
-        lgr.debug('checking if {0} exists'.format(dir))
+        lgr.debug('Checking whether {0} exists'.format(dir))
         if os.path.isdir(dir):
             lgr.debug('{0} exists'.format(dir))
             return True
@@ -109,7 +109,7 @@ class Handler():
         :param string file: file to check
         :rtype: `bool`
         """
-        lgr.debug('checking if {0} exists'.format(file))
+        lgr.debug('Checking Whether {0} exists'.format(file))
         if os.path.isfile(file):
             lgr.debug('{0} exists'.format(file))
             return True
@@ -122,9 +122,9 @@ class Handler():
 
         :param string dir: directory to create
         """
-        lgr.debug('creating directory {0}'.format(dir))
+        lgr.debug('Creating directory {0}'.format(dir))
         return os.makedirs(dir) if not os.path.isdir(dir) \
-            else lgr.debug('directory already exists, skipping.')
+            else lgr.debug('Directory already exists, skipping.')
         return False
 
     def rmdir(self, dir):
@@ -132,9 +132,9 @@ class Handler():
 
         :param string dir: directory to remove
         """
-        lgr.debug('attempting to remove directory {0}'.format(dir))
+        lgr.debug('Attempting to remove directory {0}'.format(dir))
         return shutil.rmtree(dir) \
-            if os.path.isdir(dir) else lgr.debug('dir doesn\'t exist')
+            if os.path.isdir(dir) else lgr.debug('Dir doesn\'t exist')
         return False
 
     # TODO: (IMPRV) handle multiple files differently
@@ -155,7 +155,7 @@ class Handler():
         :param string dst: destination to copy to
         :param bool recurse: should the copying process be recursive?
         """
-        lgr.debug('copying {0} to {1}'.format(src, dst))
+        lgr.debug('Copying {0} to {1}'.format(src, dst))
         try:
             shutil.copytree(src, dst)
         except OSError as e:
@@ -171,7 +171,7 @@ class Handler():
         :param string src: source to copy
         :param string dst: destination to copy to
         """
-        lgr.debug('moving {0} to {1}'.format(src, dst))
+        lgr.debug('Moving {0} to {1}'.format(src, dst))
         return shutil.move(src, dst)
 
     def tar(self, chdir, output_file, input_path, opts='zvf'):
