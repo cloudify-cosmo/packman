@@ -23,7 +23,7 @@ packages:
         # requires:
         #     - make
         # python_modules:
-            # - repex
+        #     - repex
             # - pyyaml
         # ruby_gems:
         #     - gosu

@@ -21,4 +21,6 @@ mapping = {
     'must_specify_file_or_dir': 20,
     'ppa_not_supported_by_distro': 21,
     'failed_create_package': 22,
+    'module_could_not_be_installed': 23,
+    'failed_to_download_file': 24,
 }

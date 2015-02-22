@@ -87,7 +87,7 @@ def _import_packages_dict(config_file=None):
     lgr.debug('Config file is: {}'.format(config_file))
     # append to path for importing
     try:
-        lgr.info('importing config...')
+        lgr.info('Importing config...')
         with open(config_file, 'r') as c:
             return yaml.safe_load(c.read())['packages']
     except IOError as ex:
@@ -212,10 +212,14 @@ def packman_runner(action, packages_file=None, packages=None,
                 else:
                     # TODO: check for bad action
                     globals()[action](get_package_config(
-                        package, packages_file=packages_file))
+                        package_name=package,
+                        packages_dict=packages_dict,
+                        packages_file=packages_file))
             else:
                 globals()[action](get_package_config(
-                    package, packages_file=packages_file))
+                    package_name=package,
+                    packages_dict=packages_dict,
+                    packages_file=packages_file))
     else:
         lgr.error('No packages to handle, Verify that your packages file '
                   'contains packages and that you did not exclude '

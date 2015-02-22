@@ -1,6 +1,9 @@
 import logger
 import utils
 import re
+import sh
+import sys
+import codes
 
 lgr = logger.init()
 
@@ -15,15 +18,20 @@ class Handler(utils.Handler):
         :param string venv: (optional) if ommited, will use system python
          else, will use `venv` (for virtualenvs and such)
         """
+        pip = sh.Command('{0}/bin/pip'.format(venv)) \
+            if venv else sh.Command('pip')
         for module in modules:
-            lgr.debug('installing module {0}'.format(module))
-            utils.do('{0}/bin/pip --default-timeout={2} install {1}'.format(
-                venv, module, timeout), attempts=attempts) \
-                if venv else utils.do(
-                    'pip --default-timeout={2} install {1}'.format(
-                        venv, module, timeout), attempts=attempts)
+            lgr.debug('Installing module {0}'.format(module))
+            o = pip.install('--default-timeout', timeout, module, _iter=True)
+            for line in o:
+                lgr.debug(line)
+            installed = self.check_module_installed(module, venv)
+            if not installed:
+                lgr.error('Modules {0} could not be installed.'.format(module))
+                sys.exit(codes.mapping['module_could_not_be_installed'])
 
-    def get_modules(self, modules, dir=False, venv=False):
+    def get_modules(self, modules, dir=False, venv=False, attempts=5,
+                    timeout='45'):
         """downloads python modules
 
         :param list modules: python modules to download
@@ -31,30 +39,31 @@ class Handler(utils.Handler):
         :param string venv: (optional) if ommited, will use system python
          else, will use `dir` (for virtualenvs and such)
         """
+        pip = sh.Command('{0}/bin/pip'.format(venv)) \
+            if venv else sh.Command('pip')
         for module in modules:
-            lgr.debug('downloading module {0}'.format(module))
-            return utils.do('{0}/pip install --no-use-wheel'
-                            ' --download "{1}/" {2}'.format(
-                                venv, dir, module)) \
-                if venv else utils.do('pip install --no-use-wheel'
-                                      ' --download "{0}/" {1}'.format(
-                                          dir, module))
+            lgr.debug('Downloading module {0}'.format(module))
+            o = pip.install(
+                '--no-use-wheel', '--download', dir, module, _iter=True)
+            for line in o:
+                lgr.debug(line)
 
-    def check_module_installed(self, name, dir=False):
+    def check_module_installed(self, name, venv=False):
         """checks to see that a module is installed
 
         :param string name: module to check for
-        :param string dir: (optional) if ommited, will use system python
-         else, will use `dir` (for virtualenvs and such)
+        :param string venv: (optional) if ommited, will use system python
+         else, will use `venv` (for virtualenvs and such)
         """
-        lgr.debug('checking whether {0} is installed'.format(name))
-        x = utils.do('pip freeze', capture=True) if not dir else \
-            utils.do('{0}/pip freeze'.format(dir), capture=True)
-        if re.search(r'{0}'.format(name), x.stdout):
-            lgr.debug('module {0} is installed'.format(name))
+        pip = sh.Command('{0}/bin/pip'.format(venv)) \
+            if venv else sh.Command('pip')
+        lgr.debug('Checking whether {0} is installed'.format(name))
+        installed_modules = pip.freeze()
+        if re.search(r'{0}'.format(name), installed_modules):
+            lgr.debug('Module {0} is installed'.format(name))
             return True
         else:
-            lgr.debug('module {0} is not installed'.format(name))
+            lgr.debug('Module {0} is not installed'.format(name))
             return False
 
     # TODO: (FEAT) support virtualenv --relocate OR
@@ -65,4 +74,4 @@ class Handler(utils.Handler):
         :param string venv_dir: venv path to create
         """
         lgr.debug('creating virtualenv in {0}'.format(venv_dir))
-        return utils.do('virtualenv {0}'.format(venv_dir))
+        return sh.virtualenv(venv_dir)

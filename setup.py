@@ -73,6 +73,7 @@ setup(
         "docopt==.0.6.1",
         "pyyaml==3.10",
         "sh==1.11",
+        "requests==2.5.1",
     ],
     tests_require=['nose', 'tox'],
     test_suite='packman.test.test_packman',

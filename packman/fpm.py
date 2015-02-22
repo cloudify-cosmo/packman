@@ -18,7 +18,7 @@ class Handler(utils.Handler):
         self.command = sh.fpm.bake(n=name, s=input_type, t=output_type)
 
     def _build_cmd_string(self, **fpm_params):
-        """this will build a command string
+        """this will build an fpm command string
         """
         # TODO: add verbose mode to fpm runs
         if fpm_params.get('version'):

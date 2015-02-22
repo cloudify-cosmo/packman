@@ -3,8 +3,25 @@ import sys
 import logger
 import os
 import codes
+import requests
 
 lgr = logger.init()
+
+
+def download_file(url, destination):
+    """downloads a file to a destination
+    """
+    destination = destination if destination else url.split('/')[-1]
+    r = requests.get(url, stream=True)
+    if not r.status_code == 200:
+        lgr.error('Could not download file: {0}'.format(url))
+        return False
+    with open(destination, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:  # filter out keep-alive new chunks
+                f.write(chunk)
+                f.flush()
+    return True
 
 
 class Handler(utils.Handler):
@@ -26,13 +43,15 @@ class Handler(utils.Handler):
                 self.download(source_url, dir=dir)
 
     def download(self, url, dir=False, file=False):
-        options = '--timeout=30'
-        # workaround for archives folder
+        u = utils.Handler()
         if (file and dir) or (not file and not dir):
             lgr.warning('Please specify either a directory'
                         ' or file to download to.')
             sys.exit(codes.mapping['must_specify_file_or_dir'])
-        lgr.debug('Downloading {0} to {1}'.format(url, file or dir))
-        return utils.do('wget {0} {1} -O {2}'.format(url, options, file)) \
-            if file else utils.do('wget {0} {1} -P {2}'.format(
-                url, options, dir))
+        destination = dir or file
+        if u.is_dir(destination):
+            destination = os.path.join(dir, url.split('/')[-1])
+        lgr.debug('Downloading {0} to {1}'.format(url, destination))
+        outcome = download_file(url, destination)
+        if not outcome:
+            sys.exit(codes.mapping['failed_to_download_file'])
