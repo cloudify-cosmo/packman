@@ -34,7 +34,6 @@ import definitions as defs
 
 import os
 import yaml
-import fabric.api as fab
 import sys
 import platform
 
@@ -326,6 +325,10 @@ def pack(package):
                 PACKAGE_TYPES['debian']))
             return [PACKAGE_TYPES['debian']]
 
+    def convert_tar_to_targz(package_name):
+        lgr.debug('Converting tar to tar.gz...')
+        utils.do('gzip {0}.tar*'.format(name))
+
     # you can send the package dict directly, or retrieve it from
     # the packages.yaml file by sending its name
     c = package if isinstance(package, dict) else get_package_config(package)
@@ -337,7 +340,7 @@ def pack(package):
     dst_pkg_types = c.get(
         defs.PARAM_DESTINATION_PACKAGE_TYPES, set_dst_pkg_type())
     try:
-        sources_path = c[defs.PARAM_SOURCES_PATH]
+        sources_path = os.path.abspath(c[defs.PARAM_SOURCES_PATH])
     except KeyError:
         lgr.error('Sources path key is required under {0} '
                   'in packages.yaml.'.format(defs.PARAM_SOURCES_PATH))
@@ -357,6 +360,7 @@ def pack(package):
         templates.generate_from_template(
             c, bootstrap_script, bootstrap_template)
         for package in dst_pkg_types:
+            # when creating a deb or rpm, it isn't required to chmod the script
             if package in ('tar', 'tar.gz'):
                 lgr.debug('Granting execution permissions to script.')
                 utils.do('chmod +x {0}'.format(bootstrap_script))
@@ -367,35 +371,33 @@ def pack(package):
     # this checks if a package needs to be created. If no source package type
     # is supplied, the assumption is that packages are only being downloaded
     # so if there's a source package type...
-    if src_pkg_type:
-        if not os.listdir(sources_path) == []:
-            # change the path to the destination path, since fpm doesn't
-            # accept (for now) a dst dir, but rather creates the package in
-            # the cwd.
-            with fab.lcd(package_path):
-                for dst_pkg_type in dst_pkg_types:
-                    i = fpm.Handler(name, src_pkg_type, dst_pkg_type,
-                                    os.path.abspath(sources_path))
-                    i.execute(version=c.get(defs.PARAM_VERSION, False),
-                              force=c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
-                              depends=c.get(defs.PARAM_DEPENDS, False),
-                              after_install=bootstrap_script,
-                              chdir=False, before_install=None)
-                    if dst_pkg_type == "tar.gz":
-                        lgr.debug('Converting tar to tar.gz...')
-                        utils.do('gzip {0}.tar*'.format(name))
-                    # lgr.info("isolating archives...")
-                    # u.mv('{0}/*.{1}'.format(
-                    #     package_path, dst_pkg_type), package_path)
-        else:
-            lgr.error('Sources directory is empty. Nothing to package.')
-            sys.exit(codes.mapping['sources_empty'])
+    if not os.listdir(sources_path) == []:
+        fpm_params = {
+            'version': c.get(defs.PARAM_VERSION, False),
+            'force': c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
+            'depends': c.get(defs.PARAM_DEPENDS, False),
+            'after_install': bootstrap_script,
+            'chdir': False,
+            'before_install': None
+        }
+        # change the path to the destination path, since fpm doesn't
+        # accept (for now) a dst dir, but rather creates the package in
+        # the cwd.
+        with utils.chdir(os.path.abspath(package_path)):
+            for dst_pkg_type in dst_pkg_types:
+                packager = fpm.Handler(
+                    name, src_pkg_type, dst_pkg_type, sources_path)
+                result = packager.execute(**fpm_params)
+                if not result:
+                    lgr.error('Failed to create package.')
+                    sys.exit(codes.mapping['failed_create_package'])
+                if dst_pkg_type == "tar.gz":
+                    convert_tar_to_targz(name)
     else:
-        lgr.info("Isolating archives...")
-        for dst_pkg_type in dst_pkg_types:
-            u.mv('{0}/*.{1}'.format(
-                package_path, dst_pkg_type), package_path)
+        lgr.error('Sources directory is empty. Nothing to package.')
+        sys.exit(codes.mapping['sources_empty'])
     lgr.info('Package creation completed successfully!')
+
     if not c.get(defs.PARAM_KEEP_SOURCES, True):
         lgr.debug('Removing sources...')
         u.rmdir(sources_path)

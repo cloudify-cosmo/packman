@@ -19,8 +19,8 @@ packages:
             - https://github.com/jaraco/path.py/archive/master.zip
         # requires:
         #     - make
-        python_modules:
-            - repex
+        # python_modules:
+            # - repex
             # - pyyaml
         # ruby_gems:
         #     - gosu

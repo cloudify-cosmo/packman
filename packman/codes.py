@@ -20,4 +20,5 @@ mapping = {
     'sources_and_package_paths_identical': 19,
     'must_specify_file_or_dir': 20,
     'ppa_not_supported_by_distro': 21,
+    'failed_create_package': 22,
 }

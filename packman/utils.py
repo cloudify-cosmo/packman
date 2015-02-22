@@ -1,6 +1,8 @@
+from __future__ import with_statement  # only for python 2.5
 import logging
 import logger
 import os
+import contextlib
 
 import shutil
 import time
@@ -70,6 +72,17 @@ def set_global_verbosity_level(is_verbose_output=False):
         lgr.setLevel(logging.DEBUG)
     else:
         lgr.setLevel(logging.INFO)
+
+
+@contextlib.contextmanager
+def chdir(dirname=None):
+    curdir = os.getcwd()
+    try:
+        if dirname is not None:
+            os.chdir(dirname)
+            yield
+    finally:
+        os.chdir(curdir)
 
 
 class Handler():

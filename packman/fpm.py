@@ -45,4 +45,4 @@ class Handler(utils.Handler):
         """runs fpm
         """
         self._build_cmd_string(**kwargs)
-        utils.do(self.command)
+        return utils.do(self.command)
