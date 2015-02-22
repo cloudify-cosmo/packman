@@ -70,12 +70,12 @@ class Handler(utils.Handler):
             if defs.PARAM_CONFIG_TEMPALTES_FILE_OUTPUT_FILE in config_params \
             else '.'.join(template_file.split('.')[:-1])
         # and its path is...
-        output_path = '{0}/{1}/{2}'.format(
+        output_path = os.path.join(
             component[defs.PARAM_SOURCES_PATH], config_dir, output_file)
         # create the directory to put the config in after it's
         # genserated
-        self.mkdir('{0}/{1}'.format(
-            component[defs.PARAM_SOURCES_PATH], config_dir))
+        self.mkdir(
+            os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir))
         # and then generate the config file. WOOHOO!
         self.generate_from_template(
             component, output_path, template_file, template_dir)
@@ -98,14 +98,13 @@ class Handler(utils.Handler):
         # iterate over the files in the dir...
         # and just perform the same steps as in _generate_config_from_file
         for subdir, dirs, files in os.walk(template_dir):
-            for file in files:
-                template_file = file
+            for template_file in files:
                 output_file = '.'.join(template_file.split('.')[:-1])
-                output_path = '{0}/{1}/{2}'.format(
+                output_path = os.path.join(
                     component[defs.PARAM_SOURCES_PATH], config_dir,
                     output_file)
 
-                self.mkdir('{0}/{1}'.format(
+                self.mkdir(os.path.join(
                     component[defs.PARAM_SOURCES_PATH], config_dir))
                 self.generate_from_template(
                     component, output_path, template_file, template_dir)
@@ -124,7 +123,7 @@ class Handler(utils.Handler):
         """
         config_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_DIR]
         files_dir = config_params[defs.PARAM_CONFIG_FILES_CONFIGS_PATH]
-        self.mkdir('{0}/{1}'.format(
+        self.mkdir(os.path.join(
             component[defs.PARAM_SOURCES_PATH], config_dir))
         # copy the static files to the destination config dir.
         # yep, simple as that...
