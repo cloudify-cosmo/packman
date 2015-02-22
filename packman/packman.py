@@ -153,66 +153,59 @@ def packman_runner(action, packages_file=None, packages=None,
     :param bool verbose: determines output verbosity level
     :rtype: `None`
     """
-    def _build_excluded_packages_list(excluded_packages):
+    def build_excluded_packages_list(excluded_packages):
         lgr.debug('Building excluded packages list...')
         return filter(None, (excluded_packages or "").split(','))
 
-    def _build_packages_list(packages, xcom_list, packages_dict):
+    def build_packages_list(packages, xcluded_packages_list, packages_dict):
         lgr.debug('Building packages list...')
-        com_list = []
+        package_list = []
+        # if you specified a list of packages
         if packages:
-            for package in packages.split(','):
-                com_list.append(package)
-            # and raise if same package appears in both lists
-            if set(com_list) & set(xcom_list):
+            package_list = [p for p in packages.split(',')]
+            # raise if same package appears in both lists
+            if set(package_list) & set(xcluded_packages_list):
                 lgr.error('Your packages list and excluded packages '
                           'list contain a similar item.')
                 sys.exit(codes.mapping['excluded_conflict'])
         # else iterate over all packages in packages file
         else:
-            for package, values in packages_dict.items():
-                com_list.append(package)
+            package_list = [p for p in packages_dict.keys()]
             # and rewrite the list after removing excluded packages
-            for xcom in xcom_list:
-                com_list = [com for com in com_list if com != xcom]
-        return com_list
+            for xcld in xcluded_packages_list:
+                package_list = [pkg for pkg in package_list if pkg != xcld]
+        return package_list
 
-    def _import_overriding_methods(action):
+    def import_overriding_methods(action):
         lgr.debug('Importing overriding methods file...')
         return __import__(os.path.basename(os.path.splitext(
             os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
 
-    def _rename_package(package):
-        # replace hyphens with underscores and remove dots from the
-        # overriding methods names
-        # also, convert to lowercase to correspond with overriding
-        # method names.
+    def rename_package(package):
+        # this is meant to unify package names so that common
+        # dashes, hyphens, dots and case errors do not occur.
         package_re = package.replace('-', '_')
         package_re = package_re.replace('.', '')
         package_re = package_re.lower()
         return package_re
 
     utils.set_global_verbosity_level(verbose)
-    # import dict of all packages
     packages_dict = _import_packages_dict(packages_file)
-    # append excluded packages to list.
-    xcom_list = _build_excluded_packages_list(excluded)
-    lgr.debug('Excluded packages list: {0}'.format(xcom_list))
+    xcluded_packages_list = build_excluded_packages_list(excluded)
+    lgr.debug('Excluded packages list: {0}'.format(xcluded_packages_list))
     # append packages to list if a list is supplied
-    com_list = _build_packages_list(packages, xcom_list, packages_dict)
-    lgr.debug('Packages list: {0}'.format(com_list))
+    package_list = build_packages_list(
+        packages, xcluded_packages_list, packages_dict)
+    lgr.debug('Package list: {0}'.format(package_list))
     # if at least 1 package exists
-    if com_list:
-        # iterate and run action
-        for package in com_list:
+    if package_list:
+        for package in package_list:
             # looks for the overriding methods file in the current path
             if os.path.isfile(os.path.join(
                     os.getcwd(), '{0}.py'.format(action))):
-                # imports the overriding methods file
                 # TODO: allow sending parameters to the overriding methods
-                overr_methods = _import_overriding_methods(action)
-                # rename overriding package name by convention
-                package = _rename_package(package)
+                overr_methods = import_overriding_methods(action)
+                package = rename_package(package)
                 # if the method was found in the overriding file, run it.
                 if hasattr(overr_methods, '{0}_{1}'.format(action, package)):
                     getattr(overr_methods, '{0}_{1}'.format(action, package))()
@@ -221,12 +214,13 @@ def packman_runner(action, packages_file=None, packages=None,
                     # TODO: check for bad action
                     globals()[action](get_package_config(
                         package, packages_file=packages_file))
-            # else run the default action method
             else:
                 globals()[action](get_package_config(
                     package, packages_file=packages_file))
     else:
-        lgr.error('No packages to handle, check your packages file')
+        lgr.error('No packages to handle, Verify that your packages file '
+                  'contains packages and that you did not exclude '
+                  'all of them.')
         sys.exit(codes.mapping['no_packages_defined'])
 
 
@@ -269,13 +263,11 @@ def get(package):
     # the packages.yaml file by sending its name
     c = package if isinstance(package, dict) else get_package_config(package)
 
-    # set handlers
     repo = yum.Handler() if CENTOS else apt.Handler() if DEBIAN else None
     retr = retrieve.Handler()
     py = python.Handler()
     rb = ruby.Handler()
 
-    # everything will be downloaded here
     sources_path = c.get(defs.PARAM_SOURCES_PATH, None)
     handle_sources_path(
         sources_path, c.get(defs.PARAM_OVERWRITE_SOURCES, True))
@@ -314,7 +306,6 @@ def pack(package):
     def handle_package_path(package_path, sources_path, name, overwrite):
         if not u.is_dir(package_path):
             u.mkdir(package_path)
-        # can't use sources_path == package_path for the package... duh!
         if sources_path == package_path:
             lgr.error('Sources path and package paths must'
                       ' be different to avoid conflicts!')
@@ -339,7 +330,6 @@ def pack(package):
     # the packages.yaml file by sending its name
     c = package if isinstance(package, dict) else get_package_config(package)
 
-    # define params for packaging process
     name = c.get(defs.PARAM_NAME)
     bootstrap_template = c.get(defs.PARAM_BOOTSTRAP_TEMPLATE_PATH, False)
     bootstrap_script = c.get(defs.PARAM_BOOTSTRAP_SCRIPT_PATH, False)
@@ -353,7 +343,6 @@ def pack(package):
                   'in packages.yaml.'.format(defs.PARAM_SOURCES_PATH))
     package_path = c.get(defs.PARAM_PACKAGE_PATH, os.getcwd())
 
-    # set handlers
     u = utils.Handler()
     templates = templater.Handler()
 
