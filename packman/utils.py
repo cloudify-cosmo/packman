@@ -3,7 +3,7 @@ import logging
 import logger
 import os
 import contextlib
-
+import sh
 import shutil
 import time
 import fabric.api as fab
@@ -174,7 +174,7 @@ class Handler():
         lgr.debug('Moving {0} to {1}'.format(src, dst))
         return shutil.move(src, dst)
 
-    def tar(self, chdir, output_file, input_path, opts='zvf'):
+    def tar(self, chdir, output_file, input_path):
         """tars an input file or directory
 
         :param string chdir: change to this dir before archiving
@@ -183,10 +183,9 @@ class Handler():
         :param string opts: tar opts
         """
         lgr.debug('tar-ing {0}'.format(output_file))
-        return do('tar -C {0} -c{1} {2} {3}'.format(
-            chdir, opts, output_file, input_path))
+        return sh.tar('-czvf', output_file, input_path, C=chdir)
 
-    def untar(self, chdir, input_file, opts='zvf', strip=0):
+    def untar(self, chdir, input_file, strip=0):
         """untars a file
 
         :param string chdir: change to this dir before extracting
@@ -194,8 +193,7 @@ class Handler():
         :param string opts: tar opts
         """
         lgr.debug('untar-ing {0}'.format(input_file))
-        return do('tar -C {0} -x{1} {2} --strip={3}'.format(
-            chdir, opts, input_file, strip))
+        return sh.tar('-xzvf', input_file, C=chdir, strip=strip)
 
 
 lgr = logger.init()

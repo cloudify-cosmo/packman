@@ -18,8 +18,8 @@ class Handler(utils.Handler):
         :param string dir: dir to review
         """
 
-        lgr.debug('renaming deb files...')
-        return utils.do('dpkg-name {0}/*.deb'.format(dir))
+        lgr.debug('Renaming deb files...')
+        return sh.dpkg_name('{0}/*.deb'.format(dir))
 
     def check_if_package_is_installed(self, package):
         """checks if a package is installed
@@ -27,10 +27,10 @@ class Handler(utils.Handler):
         :param string package: package name to check
         :rtype: `bool` representing whether package is installed or not
         """
+        lgr.debug('Checking if {0} is installed'.format(package))
+        o = sh.dpkg('-s', package)
 
-        lgr.debug('checking if {0} is installed'.format(package))
-        x = utils.do('sudo dpkg -s {0}'.format(package), attempts=1)
-        if x.succeeded:
+        if not o.exit_code:
             lgr.debug('{0} is installed'.format(package))
             return True
         else:
@@ -50,9 +50,8 @@ class Handler(utils.Handler):
             # TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
             # TODO: (IMPRV) for downloading requirements
             lgr.debug('Downloading {0} to {1}...'.format(req, sources_path))
-            o = sh.apt_get.install(
-                '-y', req, '-d', o='dir::cache={0}'.format(sources_path),
-                _iter=True)
+            o = sh.apt_get.install('-y', req, '-d', o='dir::cache={0}'.format(
+                sources_path), _iter=True)
             for line in o:
                 lgr.debug(line)
             sh.rm('{0}/*.bin'.format(sources_path))
@@ -62,25 +61,25 @@ class Handler(utils.Handler):
 
         :param string pkg: package to remove
         """
-        lgr.debug('removing unnecessary dependencies...')
-        return utils.do('sudo apt-get -y autoremove {0}'.format(pkg))
+        lgr.debug('Removing unnecessary dependencies...')
+        return sh.apt_get.autoremove('-y', pkg)
 
     def add_src_repos(self, source_repos):
         """adds a list of source repos to the apt repo
 
         :param list source_repos: repos to add to sources list
         """
+        def add(source_repo, f, apt_file):
+            if not re.search(source_repo, f.read()):
+                lgr.debug('Adding source repository {0}'.format(source_repo))
+                sh.sed('-i', "2i {0}".format(source_repo), apt_file)
+            else:
+                lgr.debug('Repo {0} already added.'.format(source_repo))
+
+        apt_file = '/etc/apt/sources.list'
         for source_repo in source_repos:
-            with open('/etc/apt/sources.list') as f:
-                if not re.search(source_repo, f.read()):
-                    lgr.debug('adding source repository {0}'.format(
-                        source_repo))
-                    utils.do(
-                        'sudo sed -i "2i {0}" /etc/apt/sources.list'.format(
-                            source_repo))
-                else:
-                    lgr.debug('Repo {0} already found in list.'.format(
-                        source_repo))
+            with open(apt_file) as f:
+                add(source_repo, f, apt_file)
 
     def add_ppa_repos(self, source_ppas, debian, distro):
         """adds a list of ppa repos to the apt repo
@@ -91,8 +90,8 @@ class Handler(utils.Handler):
             lgr.error('ppas not supported by {0}'.format(distro))
             sys.exit(codes.mapping['ppa_not_supported_by_distro'])
         for source_ppa in source_ppas:
-            lgr.debug('adding ppa repository {0}'.format(source_ppa))
-            utils.do('add-apt-repository -y {0}'.format(source_ppa))
+            lgr.debug('Adding ppa repository {0}'.format(source_ppa))
+            sh.add_apt_repository('-y', source_ppa)
         if source_ppas:
             self.update()
 
@@ -110,14 +109,14 @@ class Handler(utils.Handler):
 
         :param string key_file: key file path
         """
-        lgr.debug('adding key {0}'.format(key_file))
-        return utils.do('sudo apt-key add {0}'.format(key_file))
+        lgr.debug('Adding key {0}'.format(key_file))
+        return sh.apt_key.add(key_file)
 
     def update(self):
         """runs apt-get update
         """
-        lgr.debug('updating local apt repo')
-        return utils.do('sudo apt-get update')
+        lgr.debug('Updating local apt repo')
+        return sh.apt_get.update()
 
     def install(self, packages):
         """apt-get installs a list of packages
@@ -125,8 +124,8 @@ class Handler(utils.Handler):
         :param list packages: packages to install
         """
         for package in packages:
-            lgr.debug('installing {0}'.format(package))
-            utils.do('sudo apt-get -y install {0}'.format(package))
+            lgr.debug('Installing {0}'.format(package))
+            sh.apt_get.install('-y', package)
 
     def purge(self, packages):
         """completely purges a list of packages from the local repo
@@ -134,5 +133,5 @@ class Handler(utils.Handler):
         :param list packages: packages name to purge
         """
         for package in packages:
-            lgr.debug('attemping to purge {0}'.format(package))
-            utils.do('sudo apt-get -y purge {0}'.format(package))
+            lgr.debug('Attemping to purge {0}'.format(package))
+            sh.apt_get.purge('-y', package)
