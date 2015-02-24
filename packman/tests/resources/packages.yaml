@@ -6,9 +6,9 @@ packages:
         name: test_package
         version: 3.1
         sources_path: sources
-        depends:
-            - make
-            - g++
+        # depends:
+        #     - make
+        #     - g++
         # prereqs:
         #     - curl
         # source_ppas:
@@ -20,10 +20,11 @@ packages:
         #     - http://nginx.org/keys/nginx_signing.key
         # source_urls:
         #     - https://github.com/jaraco/path.py/archive/master.zip
-        requires:
-            - make
-        # python_modules:
-        #     - repex
+        # requires:
+        #     - make
+        python_modules:
+              # - nonexistentmodule
+            - repex
             # - pyyaml
         # ruby_gems:
         #     - gosu

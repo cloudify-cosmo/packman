@@ -9,6 +9,7 @@ import time
 import fabric.api as fab
 import errno
 import sys
+from functools import wraps
 
 import codes
 
@@ -85,6 +86,36 @@ def chdir(dirname=None):
             yield
     finally:
         os.chdir(curdir)
+
+
+def retry(retries=4, delay=3, backoff=2):
+    """Retry calling the decorated function using an exponential backoff.
+
+    http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
+    original from: http://wiki.python.org/moin/PythonDecoratorLibrary#Retry
+
+    :param int retries: number of times to try (not retry) before giving up
+    :param int delay: initial delay between retries in seconds
+    :param int backoff: backoff multiplier e.g. value of 2 will double the
+     delay each retry
+    """
+    def retry_decorator(f):
+        @wraps(f)
+        def f_retry(*args, **kwargs):
+            mtries, mdelay = retries, delay
+            while mtries > 1:
+                try:
+                    return f(*args, **kwargs)
+                except SystemExit as e:
+                    msg = "{0}, Retrying in {1} seconds...".format(
+                        str(e), mdelay)
+                    lgr.warning(msg)
+                    time.sleep(mdelay)
+                    mtries -= 1
+                    mdelay *= backoff
+            return f(*args, **kwargs)
+        return f_retry
+    return retry_decorator
 
 
 # utils.execute(sh.ls, 3, 2, [0], '/var/log')

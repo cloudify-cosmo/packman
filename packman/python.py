@@ -30,8 +30,8 @@ class Handler(utils.Handler):
                 lgr.error('Modules {0} could not be installed.'.format(module))
                 sys.exit(codes.mapping['module_could_not_be_installed'])
 
-    def get_modules(self, modules, dir=False, venv=False, attempts=5,
-                    timeout='45'):
+    @utils.retry(retries=2, delay=3)
+    def get_modules(self, modules, dir=False, venv=False, timeout='45'):
         """downloads python modules
 
         :param list modules: python modules to download
@@ -42,11 +42,15 @@ class Handler(utils.Handler):
         pip = sh.Command('{0}/bin/pip'.format(venv)) \
             if venv else sh.Command('pip')
         for module in modules:
-            lgr.debug('Downloading module {0}'.format(module))
+            # returns a stream of the command
             o = pip.install(
                 '--no-use-wheel', '--download', dir, module, _iter=True)
-            for line in o:
-                lgr.debug(line)
+            try:
+                # this is where the command is actually executed
+                for line in o:
+                    lgr.debug(line)
+            except:
+                sys.exit('Failed to download module: {0}'.format(module))
 
     def check_module_installed(self, name, venv=False):
         """checks to see that a module is installed
