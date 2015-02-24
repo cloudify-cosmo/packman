@@ -32,6 +32,7 @@ import codes
 
 import definitions as defs
 
+import sh
 import os
 import yaml
 import sys
@@ -329,9 +330,9 @@ def pack(package):
                 PACKAGE_TYPES['debian']))
             return [PACKAGE_TYPES['debian']]
 
-    def convert_tar_to_targz(package_name):
+    def convert_tar_to_targz(tar_file):
         lgr.debug('Converting tar to tar.gz...')
-        utils.do('gzip {0}.tar*'.format(name))
+        sh.gzip(tar_file)
 
     # you can send the package dict directly, or retrieve it from
     # the packages.yaml file by sending its name
@@ -367,7 +368,7 @@ def pack(package):
             # when creating a deb or rpm, it isn't required to chmod the script
             if package in ('tar', 'tar.gz'):
                 lgr.debug('Granting execution permissions to script.')
-                utils.do('chmod +x {0}'.format(bootstrap_script))
+                sh.chmod('+x', bootstrap_script)
                 lgr.debug('Copying bootstrap script to package directory')
                 u.cp(bootstrap_script, sources_path)
 
@@ -396,7 +397,7 @@ def pack(package):
                     lgr.error('Failed to create package.')
                     sys.exit(codes.mapping['failed_create_package'])
                 if dst_pkg_type == "tar.gz":
-                    convert_tar_to_targz(name)
+                    convert_tar_to_targz('{0}.tar*'.format(name))
     else:
         lgr.error('Sources directory is empty. Nothing to package.')
         sys.exit(codes.mapping['sources_empty'])
