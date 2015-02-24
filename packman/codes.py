@@ -23,4 +23,5 @@ mapping = {
     'failed_create_package': 22,
     'module_could_not_be_installed': 23,
     'failed_to_download_file': 24,
+    'failed_to_execute_command': 25,
 }

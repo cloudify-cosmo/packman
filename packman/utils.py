@@ -8,7 +8,9 @@ import shutil
 import time
 import fabric.api as fab
 import errno
+import sys
 
+import codes
 
 DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
 DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
@@ -85,6 +87,25 @@ def chdir(dirname=None):
         os.chdir(curdir)
 
 
+# utils.execute(sh.ls, 3, 2, [0], '/var/log')
+def execute(func, attempts=1, sleep=3, accepted_err_codes=[0], *args):
+    if attempts < 1:
+        raise RuntimeError('Attempts must be at least 1')
+    if not sleep > 0:
+        raise RuntimeError('Sleep must be larger than 0')
+
+    for execution in xrange(attempts):
+        outcome = func(*args, _ok_code=accepted_err_codes)
+        if outcome.exit_code not in accepted_err_codes:
+            lgr.warning('Failed to execute: {0}'.format(func))
+            time.sleep(sleep)
+        else:
+            return outcome
+    lgr.error('Failed to run command even after {0} attempts'
+              ' with output: {1}'.format(execution, outcome))
+    sys.exit(codes.mapping['failed_to_execute_command'])
+
+
 class Handler():
     """common class to handle files and directories
     """
@@ -136,17 +157,6 @@ class Handler():
         return shutil.rmtree(dir) \
             if os.path.isdir(dir) else lgr.debug('Dir doesn\'t exist')
         return False
-
-    # TODO: (IMPRV) handle multiple files differently
-    # def rm(self, file):
-    #     """deletes a file or a set of files
-
-    #     :param string file(s): file(s) to remove
-    #     """
-    #     lgr.debug('removing files {0}'.format(file))
-    #     return do('rm {0}'.format(file)) if os.path.isfile(file) \
-    #         else lgr.debug('file(s) do(es)n\'t exist')
-    #     return False
 
     def cp(self, src, dst):
         """copies (recuresively or not) files or directories
