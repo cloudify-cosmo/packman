@@ -43,6 +43,7 @@ import platform
 SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 DEFAULT_PACKAGES_FILE = 'packages.yaml'
 PACKAGE_TYPES = {"centos": "rpm", "debian": "deb"}
+SUPPORTED_PACKAGE_TYPES = ['deb', 'rpm', 'tar', 'zip', 'tar.gz']
 
 
 lgr = logger.init()
@@ -200,6 +201,12 @@ def packman_runner(action, packages_file=None, packages=None,
     # if at least 1 package exists
     if package_list:
         for package in package_list:
+            package_dict = get_package_config(
+                package_name=package,
+                packages_dict=packages_dict,
+                packages_file=packages_file)
+            validate = Validate(package_dict)
+            validate.validate_package_properties()
             # looks for the overriding methods file in the current path
             if os.path.isfile(os.path.join(
                     os.getcwd(), '{0}.py'.format(action))):
@@ -212,15 +219,9 @@ def packman_runner(action, packages_file=None, packages=None,
                 # else run the default action method
                 else:
                     # TODO: check for bad action
-                    globals()[action](get_package_config(
-                        package_name=package,
-                        packages_dict=packages_dict,
-                        packages_file=packages_file))
+                    globals()[action](package_dict)
             else:
-                globals()[action](get_package_config(
-                    package_name=package,
-                    packages_dict=packages_dict,
-                    packages_file=packages_file))
+                globals()[action](package_dict)
     else:
         lgr.error('No packages to handle, Verify that your packages file '
                   'contains packages and that you did not exclude '
@@ -406,6 +407,29 @@ def pack(package):
     if not c.get(defs.PARAM_KEEP_SOURCES, True):
         lgr.debug('Removing sources...')
         u.rmdir(sources_path)
+
+
+class Validate():
+
+    def __init__(self, package):
+        self.package = package
+
+    def validate_package_properties(self):
+        if defs.PARAM_DESTINATION_PACKAGE_TYPES in self.package:
+            self.destination_package_types(
+                self.package[defs.PARAM_DESTINATION_PACKAGE_TYPES])
+
+    def destination_package_types(self, package_types):
+        if not isinstance(package_types, list):
+            lgr.error('{0} key must be of type "list".'.format(
+                defs.PARAM_DESTINATION_PACKAGE_TYPES))
+            sys.exit(codes.mapping['package_types_must_be_list'])
+        for package_type in package_types:
+            if package_type not in SUPPORTED_PACKAGE_TYPES:
+                lgr.error('{0} key must contain one of: {1}.'.format(
+                    defs.PARAM_DESTINATION_PACKAGE_TYPES,
+                    SUPPORTED_PACKAGE_TYPES))
+                sys.exit(codes.mapping['unsupported_package_type'])
 
 
 def main():
