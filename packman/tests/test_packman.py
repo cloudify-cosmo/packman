@@ -42,7 +42,7 @@ TEST_MOCK_MODULE = 'mockmodule'
 TEST_TEMPLATES_DIR = 'packman/tests/templates'
 TEST_TEMPLATE_FILE = 'mock_template.template'
 MOCK_TEMPLATE_CONTENTS = 'TEST={{ test_template_parameter }}'
-MOCK_PACKAGES_FILE = 'mock_packages.py'
+MOCK_PACKAGES_FILE = 'packages.yaml'
 MOCK_PACKAGES_CONTENTS = '''PACKAGES = {'test_component':'x'}'''
 MOCK_PACKAGES_DICT = {'test_component': 'x'}
 
@@ -126,24 +126,6 @@ class UtilsHandlerTest(unittest.TestCase, utils.Handler):
         with hide(HIDE_LEVEL):
             outcome = self.find_in_dir(TEST_DIR, TEST_FILE, sudo=False)
         self.assertEquals(outcome, None)
-
-    @dir
-    def test_is_dir(self):
-        outcome = self.is_dir(TEST_DIR)
-        self.assertTrue(outcome)
-
-    def test_is_not_dir(self):
-        outcome = self.is_dir(TEST_DIR)
-        self.assertFalse(outcome)
-
-    @file
-    def test_is_file(self):
-        outcome = self.is_file(TEST_FILE)
-        self.assertTrue(outcome)
-
-    def test_is_not_file(self):
-        outcome = self.is_file(TEST_FILE)
-        self.assertFalse(outcome)
 
     @dir
     def test_touch(self):

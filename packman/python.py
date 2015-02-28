@@ -66,7 +66,7 @@ class Handler(utils.Handler):
             if venv else sh.Command('pip')
         lgr.debug('Checking whether {0} is installed'.format(name))
         installed_modules = pip.freeze()
-        if re.search(r'{0}'.format(name.lower()),
+        if re.search(r'{0}'.format(name.lower()) + '==',
                      str(installed_modules).lower()):
             lgr.debug('Module {0} is installed'.format(name))
             return True
@@ -81,5 +81,5 @@ class Handler(utils.Handler):
 
         :param string venv_dir: venv path to create
         """
-        lgr.debug('creating virtualenv in {0}'.format(venv_dir))
+        lgr.debug('Creating virtualenv in {0}'.format(venv_dir))
         return sh.virtualenv(venv_dir)
