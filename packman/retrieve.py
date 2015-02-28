@@ -50,13 +50,12 @@ class Handler(utils.Handler):
             if not download_file(url, destination):
                 sys.exit(codes.mapping['failed_to_download_file'])
 
-        u = utils.Handler()
         if (file and dir) or (not file and not dir):
             lgr.warning('Please specify either a directory'
                         ' or file to download to.')
             sys.exit(codes.mapping['must_specify_file_or_dir'])
         destination = dir or file
-        if u.is_dir(destination):
+        if os.path.isdir(destination):
             destination = os.path.join(dir, url.split('/')[-1])
         lgr.debug('Downloading {0} to {1}'.format(url, destination))
         _download(url, destination)

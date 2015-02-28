@@ -256,12 +256,12 @@ def get(package):
                 sources_path))
             u.rmdir(sources_path)
         else:
-            if u.is_dir(sources_path):
+            if os.path.isdir(sources_path):
                 lgr.error('The destination directory for this package already '
                           'exists and overwrite is disabled.')
                 sys.exit(codes.mapping['path_already_exists_no_overwrite'])
         # create the directories required for package creation...
-        if not u.is_dir(sources_path):
+        if not os.path.isdir(sources_path):
             u.mkdir(sources_path)
 
     # you can send the package dict directly, or retrieve it from
@@ -314,7 +314,7 @@ def pack(package):
     """
 
     def handle_package_path(package_path, sources_path, name, overwrite):
-        if not u.is_dir(package_path):
+        if not os.path.isdir(package_path):
             u.mkdir(package_path)
         if sources_path == package_path:
             lgr.error('Sources path and package paths must'
@@ -402,10 +402,17 @@ def pack(package):
                 if not result:
                     lgr.error('Failed to create package.')
                     sys.exit(codes.mapping['failed_create_package'])
-        if dst_pkg_type == "tar.gz":
-            convert_tar_to_targz(
-                os.path.join(os.path.abspath(package_path),
-                             sh.glob('{0}.tar*'.format(name))))
+            if dst_pkg_type == "tar.gz":
+                tar_file = '{0}.tar'.format(name)
+                targz_file = tar_file + '.gz'
+                if os.path.isfile(targz_file):
+                    if c.get(defs.PARAM_OVERWRITE_OUTPUT):
+                        u.rm(targz_file)
+                    else:
+                        lgr.error('{0} already exists and overwrite '
+                                  'is false.'.format(targz_file))
+                        sys.exit(codes.mapping['targz_exists'])
+                convert_tar_to_targz(tar_file)
     else:
         lgr.error('Sources directory is empty. Nothing to package.')
         sys.exit(codes.mapping['sources_empty'])

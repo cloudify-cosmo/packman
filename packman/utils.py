@@ -146,34 +146,6 @@ class Handler():
     """common class to handle files and directories
     """
 
-    def is_dir(self, dir):
-        """checks if a directory exists
-
-        :param string dir: directory to check
-        :rtype: `bool`
-        """
-        lgr.debug('Checking whether {0} exists'.format(dir))
-        if os.path.isdir(dir):
-            lgr.debug('{0} exists'.format(dir))
-            return True
-        else:
-            lgr.debug('{0} does not exist'.format(dir))
-            return False
-
-    def is_file(self, file):
-        """checks if a file exists
-
-        :param string file: file to check
-        :rtype: `bool`
-        """
-        lgr.debug('Checking Whether {0} exists'.format(file))
-        if os.path.isfile(file):
-            lgr.debug('{0} exists'.format(file))
-            return True
-        else:
-            lgr.debug('{0} does not exist'.format(file))
-            return False
-
     def mkdir(self, dir):
         """creates (recursively) a directory
 
@@ -192,6 +164,17 @@ class Handler():
         lgr.debug('Attempting to remove directory {0}'.format(dir))
         return shutil.rmtree(dir) \
             if os.path.isdir(dir) else lgr.debug('Dir doesn\'t exist')
+        return False
+
+    def rm(self, file):
+        """deletes a file or a set of files
+        :param string file(s): file(s) to remove
+        """
+        lgr.debug('removing files {0}'.format(file))
+        if os.path.isfile(file):
+            os.remove(file)
+        else:
+            lgr.debug('File(s) do(es)n\'t exist')
         return False
 
     def cp(self, src, dst):
