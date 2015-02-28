@@ -19,6 +19,7 @@ PARAM_OVERWRITE_SOURCES = 'overwrite_sources'  # an optional bool representing w
 PARAM_CONFIG_TEMPLATE_CONFIG = 'config_templates'  # an optional {dict} of config files and templates
 PARAM_PYTHON_MODULES = 'python_modules'  # an optional [list] of python modules to install into a virtualenv
 PARAM_RUBY_GEMS = 'ruby_gems'  # an optional [list] of ruby gems to download
+PARAM_VIRTUALENV = 'virtualenv'  # an optional {dict} containing a venv path and a [list] of modules to install
 PARAM_NODE_PACKAGES = 'node_packages'  # an optional [list] of node packages to download
 PARAM_SOURCE_URLS = 'source_urls'  # an optional 'string' representing the sources to download # TOOD: REPLACE WIT [LIST]!
 PARAM_SOURCE_REPOS = 'source_repos'  # an optional 'string' representing repos to add to the repos list

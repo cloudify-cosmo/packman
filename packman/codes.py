@@ -26,5 +26,6 @@ mapping = {
     'failed_to_execute_command': 25,
     'package_types_must_be_list': 26,
     'unsupported_package_type': 27,
+    'failed_to_download_module': 28,
 
 }

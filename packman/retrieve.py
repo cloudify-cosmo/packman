@@ -1,4 +1,5 @@
 import utils
+from utils import retry
 import sys
 import logger
 import os
@@ -43,6 +44,12 @@ class Handler(utils.Handler):
                 self.download(source_url, dir=dir)
 
     def download(self, url, dir=False, file=False):
+
+        @retry(retries=3, delay_multipler=1)
+        def _download(url, destination):
+            if not download_file(url, destination):
+                sys.exit(codes.mapping['failed_to_download_file'])
+
         u = utils.Handler()
         if (file and dir) or (not file and not dir):
             lgr.warning('Please specify either a directory'
@@ -52,6 +59,4 @@ class Handler(utils.Handler):
         if u.is_dir(destination):
             destination = os.path.join(dir, url.split('/')[-1])
         lgr.debug('Downloading {0} to {1}'.format(url, destination))
-        outcome = download_file(url, destination)
-        if not outcome:
-            sys.exit(codes.mapping['failed_to_download_file'])
+        _download(url, destination)

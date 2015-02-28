@@ -22,9 +22,13 @@ packages:
         #     - https://github.com/jaraco/path.py/archive/master.zip
         # requires:
         #     - make
-        python_modules:
+        virtualenv:
+            path: venv
+            modules:
+                - pyyaml
+        # python_modules:
               # - nonexistentmodule
-            - cloudify
+            # - cloudify
             # - pyyaml
         # ruby_gems:
         #     - gosu

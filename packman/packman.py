@@ -286,6 +286,11 @@ def get(package):
     repo.add_keys(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     retr.downloads(c.get(defs.PARAM_SOURCE_URLS, []), sources_path)
     repo.download(c.get(defs.PARAM_REQS, []), sources_path)
+    if c.get(defs.PARAM_VIRTUALENV):
+        with utils.chdir(os.path.abspath(sources_path)):
+            py.make_venv(c['virtualenv']['path'])
+        py.install(c['virtualenv']['modules'], c['virtualenv']['path'],
+                   sources_path)
     py.get_modules(c.get(defs.PARAM_PYTHON_MODULES, []), sources_path)
     rb.get_gems(c.get(defs.PARAM_RUBY_GEMS, []), sources_path)
     # nd.get_packages(c.get(defs.PARAM_NODE_PACKAGES, []), sources_path)
@@ -397,8 +402,10 @@ def pack(package):
                 if not result:
                     lgr.error('Failed to create package.')
                     sys.exit(codes.mapping['failed_create_package'])
-                if dst_pkg_type == "tar.gz":
-                    convert_tar_to_targz('{0}.tar*'.format(name))
+        if dst_pkg_type == "tar.gz":
+            convert_tar_to_targz(
+                os.path.join(os.path.abspath(package_path),
+                             sh.glob('{0}.tar*'.format(name))))
     else:
         lgr.error('Sources directory is empty. Nothing to package.')
         sys.exit(codes.mapping['sources_empty'])
