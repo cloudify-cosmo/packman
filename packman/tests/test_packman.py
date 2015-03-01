@@ -22,11 +22,11 @@ import packman.utils as utils
 import packman.templater as templater
 import packman.codes as codes
 
+import sys
 import sh
 import testtools
 import os
 from functools import wraps
-from fabric.api import hide
 from testfixtures import log_capture
 import logging
 from platform import dist
@@ -176,6 +176,50 @@ class UtilsHandlerTest(testtools.TestCase, utils.Handler):
         sh.touch(TEST_FILE_NAME)
         self.mv(TEST_FILE_NAME, TEST_DIR)
         self.assertTrue(os.path.isfile(os.path.join(TEST_DIR, TEST_FILE_NAME)))
+
+    def test_retry(self):
+        @utils.retry(retries=2, delay_multiplier=1, backoff=2)
+        def bad_action():
+            sys.exit(1)
+        ex = self.assertRaises(SystemExit, bad_action)
+        self.assertEqual(ex.message, 1)
+
+    def test_retry_retries_less_than_zero(self):
+        @utils.retry(-1)
+        def bad_action():
+            sys.exit(1)
+        ex = self.assertRaises(ValueError, bad_action)
+        self.assertEqual(ex.message, 'retries must be at least 0')
+
+    def test_retry_delay_less_than_zero(self):
+        @utils.retry(delay_multiplier=0)
+        def bad_action():
+            sys.exit(1)
+        ex = self.assertRaises(ValueError, bad_action)
+        self.assertEqual(ex.message, 'delay_multiplier must be larger than 0')
+
+    def test_retry_backoff_less_than_one(self):
+        @utils.retry(backoff=1)
+        def bad_action():
+            sys.exit(1)
+        ex = self.assertRaises(ValueError, bad_action)
+        self.assertEqual(ex.message, 'backoff must be greater than 1')
+
+    @log_capture()
+    def test_set_global_verbosity_level(self, capture):
+        lgr = logger.init(base_level=logging.INFO)
+
+        utils.set_global_verbosity_level(is_verbose_output=False)
+        lgr.debug('TEST_LOGGER_OUTPUT')
+        capture.check()
+        lgr.info('TEST_LOGGER_OUTPUT')
+        capture.check(('user', 'INFO', 'TEST_LOGGER_OUTPUT'))
+
+        utils.set_global_verbosity_level(is_verbose_output=True)
+        lgr.debug('TEST_LOGGER_OUTPUT')
+        capture.check(
+            ('user', 'INFO', 'TEST_LOGGER_OUTPUT'),
+            ('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
 
     # @file
     # def test_tar(self):
@@ -400,30 +444,6 @@ class TemplateHandlerTest(testtools.TestCase, templater.Handler,
 
 class TestBaseMethods(testtools.TestCase):
 
-    def test_do(self):
-        with hide(HIDE_LEVEL):
-            outcome = utils.do('uname -n', sudo=False)
-        self.assertTrue(outcome.succeeded)
-
-    def test_do_failure(self):
-        with hide(HIDE_LEVEL):
-            outcome = utils.do('illegal operation', attempts=1, sudo=False)
-        self.assertTrue(outcome.failed)
-
-    def test_do_zero_attempts(self):
-        try:
-            with hide(HIDE_LEVEL):
-                utils.do('uname -n', attempts=0, sudo=False)
-        except RuntimeError as ex:
-            self.assertEqual(str(ex), 'attempts must be at least 1')
-
-    def test_do_zero_sleeper(self):
-        try:
-            with hide(HIDE_LEVEL):
-                utils.do('uname -n', sleep_time=0, sudo=False)
-        except RuntimeError as ex:
-            self.assertEqual(str(ex), 'sleep_time must be larger than 0')
-
     @log_capture()
     def test_logger(self, capture):
         lgr = logger.init(base_level=logging.DEBUG)
@@ -435,22 +455,6 @@ class TestBaseMethods(testtools.TestCase):
             logger.init(logging_config={'x': 'y'})
         except SystemExit as ex:
             self.assertTrue('could not init' in str(ex))
-
-    @log_capture()
-    def test_set_global_verbosity_level(self, capture):
-        lgr = logger.init(base_level=logging.INFO)
-
-        utils.set_global_verbosity_level(is_verbose_output=False)
-        lgr.debug('TEST_LOGGER_OUTPUT')
-        capture.check()
-        lgr.info('TEST_LOGGER_OUTPUT')
-        capture.check(('user', 'INFO', 'TEST_LOGGER_OUTPUT'))
-
-        utils.set_global_verbosity_level(is_verbose_output=True)
-        lgr.debug('TEST_LOGGER_OUTPUT')
-        capture.check(
-            ('user', 'INFO', 'TEST_LOGGER_OUTPUT'),
-            ('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
 
     def test_get_component_config_dict(self):
         c = packman.get_component_config('test_component', MOCK_PACKAGES_DICT)

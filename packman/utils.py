@@ -103,7 +103,7 @@ def retry(retries=4, delay_multiplier=3, backoff=2):
         @wraps(f)
         def f_retry(*args, **kwargs):
             if retries < 0:
-                raise ValueError('retries must be at least 1')
+                raise ValueError('retries must be at least 0')
             if delay_multiplier <= 0:
                 raise ValueError('delay_multiplier must be larger than 0')
             if backoff <= 1:
@@ -123,23 +123,23 @@ def retry(retries=4, delay_multiplier=3, backoff=2):
     return retry_decorator
 
 
-# utils.execute(sh.ls, 3, 2, [0], '/var/log')
-def execute(func, attempts=1, sleep=3, accepted_err_codes=[0], *args):
-    if attempts < 1:
-        raise RuntimeError('Attempts must be at least 1')
-    if not sleep > 0:
-        raise RuntimeError('Sleep must be larger than 0')
+# # utils.execute(sh.ls, 3, 2, [0], '/var/log')
+# def execute(func, attempts=1, sleep=3, accepted_err_codes=[0], *args):
+#     if attempts < 1:
+#         raise RuntimeError('Attempts must be at least 1')
+#     if not sleep > 0:
+#         raise RuntimeError('Sleep must be larger than 0')
 
-    for execution in xrange(attempts):
-        outcome = func(*args, _ok_code=accepted_err_codes)
-        if outcome.exit_code not in accepted_err_codes:
-            lgr.warning('Failed to execute: {0}'.format(func))
-            time.sleep(sleep)
-        else:
-            return outcome
-    lgr.error('Failed to run command even after {0} attempts'
-              ' with output: {1}'.format(execution, outcome))
-    sys.exit(codes.mapping['failed_to_execute_command'])
+#     for execution in xrange(attempts):
+#         outcome = func(*args, _ok_code=accepted_err_codes)
+#         if outcome.exit_code not in accepted_err_codes:
+#             lgr.warning('Failed to execute: {0}'.format(func))
+#             time.sleep(sleep)
+#         else:
+#             return outcome
+#     lgr.error('Failed to run command even after {0} attempts'
+#               ' with output: {1}'.format(execution, outcome))
+#     sys.exit(codes.mapping['failed_to_execute_command'])
 
 
 class Handler():
@@ -167,9 +167,11 @@ class Handler():
         :param string dir: directory to remove
         """
         lgr.debug('Attempting to remove directory {0}'.format(dir))
-        return shutil.rmtree(dir) \
-            if os.path.isdir(dir) else lgr.debug('Dir doesn\'t exist')
-        return False
+        if os.path.isdir(dir):
+            shutil.rmtree(dir)
+        else:
+            lgr.debug('Dir doesn\'t exist')
+            return False
 
     def rm(self, file):
         """deletes a file or a set of files
