@@ -162,7 +162,7 @@ class Handler(utils.Handler):
         """
         if type(template_dir) is not str:
             raise exc.PackagerError('template_dir must be of type string')
-        if self.is_dir(template_dir):
+        if os.path.isdir(template_dir):
             env = jinja.Environment(loader=jinja.FileSystemLoader(
                 template_dir))
         else:
@@ -170,7 +170,7 @@ class Handler(utils.Handler):
             raise exc.PackagerError('template dir missing')
         if type(template_file) is not str:
             raise exc.PackagerError('template_file must be of type string')
-        if self.is_file(os.path.join(template_dir, template_file)):
+        if os.path.isfile(os.path.join(template_dir, template_file)):
             template = env.get_template(template_file)
         else:
             lgr.error('template file missing')

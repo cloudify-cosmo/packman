@@ -41,7 +41,7 @@ TEST_VENV = '{0}/test_venv'.format(os.path.expanduser("~"))
 TEST_MODULE = 'xmltodict'
 TEST_MISSING_MODULE = 'mockmodule'
 TEST_TEMPLATES_DIR = 'packman/tests/templates'
-TEST_TEMPLATE_FILE = 'mock_template.template'
+TEST_TEMPLATE_FILE = 'mock_template.j2'
 TEST_DL_FILE = 'https://github.com/cloudify-cosmo/packman/archive/master.zip'
 TEST_DL_DEB = 'http://ftp.us.debian.org/debian/pool/main/w/wget-el/wget-el_0.5.0-8_all.deb'  # NOQA
 TEST_PACKAGES_FILE = 'packman/tests/resources/packages.yaml'
@@ -402,15 +402,15 @@ class TemplateHandlerTest(testtools.TestCase, templater.Handler,
             "sources_path": TEST_DIR,
             "test_template_parameter": "test_template_parameter",
             "config_templates": {
-                "__config_dir": {
+                "config_dir": {
                     "files": TEST_TEMPLATES_DIR,
                     "config_dir": "config",
                 }
             }
         }
         self.generate_configs(component)
-        with open('{0}/{1}/{2}'.format(component['sources_path'],
-                  component['config_templates']['__config_dir']['config_dir'],
+        with open(os.path.join(component['sources_path'],
+                  component['config_templates']['config_dir']['config_dir'],
                   config_file), 'r') as f:
             self.assertTrue(component['test_template_parameter'] in f.read())
 
@@ -422,15 +422,15 @@ class TemplateHandlerTest(testtools.TestCase, templater.Handler,
             "sources_path": TEST_DIR,
             "test_template_parameter": "test_template_output",
             "config_templates": {
-                "__template_dir": {
+                "template_dir": {
                     "templates": TEST_TEMPLATES_DIR,
                     "config_dir": "config",
                 }
             }
         }
-        self.generate_configs(component, sudo=False)
-        with open('{0}/{1}/{2}'.format(component['sources_path'],
-                  component['config_templates']['__template_dir']['config_dir'],  # NOQA
+        self.generate_configs(component)
+        with open(os.path.join(component['sources_path'],
+                  component['config_templates']['template_dir']['config_dir'],  # NOQA
                   config_file.split('.')[0:-1][0]), 'r') as f:
             self.assertTrue(component['test_template_parameter'] in f.read())
 
@@ -442,16 +442,16 @@ class TemplateHandlerTest(testtools.TestCase, templater.Handler,
             "sources_path": TEST_DIR,
             "test_template_parameter": "test_template_output",
             "config_templates": {
-                "__template_file": {
+                "template_file": {
                     "template": TEST_TEMPLATES_DIR + '/' + config_file,
                     "output_file": config_file.split('.')[0:-1][0],
                     "config_dir": "config",
                 }
             }
         }
-        self.generate_configs(component, sudo=False)
-        with open('{0}/{1}/{2}'.format(component['sources_path'],
-                  component['config_templates']['__template_file']['config_dir'],  # NOQA
+        self.generate_configs(component)
+        with open(os.path.join(component['sources_path'],
+                  component['config_templates']['template_file']['config_dir'],  # NOQA
                   config_file.split('.')[0:-1][0]), 'r') as f:
             self.assertTrue(component['test_template_parameter'] in f.read())
 
@@ -517,16 +517,16 @@ class TestBaseMethods(testtools.TestCase):
     #         # "bootstrap_script": 'bootstrap_script.sh',
     #         # "bootstrap_template": template_file,
     #         "config_templates": {
-    #             "__template_file": {
+    #             "template_file": {
     #                 "template": TEST_TEMPLATES_DIR + '/' + config_file,
     #                 "output_file": config_file.split('.')[0:-1][0],
     #                 "config_dir": "config",
     #             },
-    #             # "__template_dir": {
+    #             # "template_dir": {
     #             #     "templates": TEST_TEMPLATES_DIR,
     #             #     "config_dir": "config",
     #             # },
-    #             # "__config_dir": {
+    #             # "config_dir": {
     #             #     "files": TEST_TEMPLATES_DIR,
     #             #     "config_dir": "config",
     #             # }
