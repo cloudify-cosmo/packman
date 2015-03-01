@@ -13,14 +13,15 @@
 #    * See the License for the specific language governing permissions and
 #    * limitations under the License.
 
-import packman.exceptions as exc
 import packman.logger as logger
 import packman.packman as packman
 import packman.python as py
+import packman.fpm as fpm
 import packman.retrieve as retr
 import packman.utils as utils
 import packman.templater as templater
 import packman.codes as codes
+import packman.definitions as defs
 
 import sys
 import sh
@@ -30,13 +31,14 @@ from functools import wraps
 from testfixtures import log_capture
 import logging
 from platform import dist
+import shutil
 
 
 TEST_DIR = '{0}/test_dir'.format(os.path.expanduser("~"))
 TEST_FILE_NAME = 'test_file'
-TEST_FILE = TEST_DIR + '/' + TEST_FILE_NAME
+TEST_FILE = os.path.join(TEST_DIR, TEST_FILE_NAME)
 TEST_TAR_NAME = 'test_tar.tar.gz'
-TEST_TAR = TEST_DIR + '/' + TEST_TAR_NAME
+TEST_TAR = os.path.join(TEST_DIR, TEST_TAR_NAME)
 TEST_VENV = '{0}/test_venv'.format(os.path.expanduser("~"))
 TEST_MODULE = 'xmltodict'
 TEST_MISSING_MODULE = 'mockmodule'
@@ -62,7 +64,6 @@ def file(func):
         sh.touch(TEST_FILE)
         func(*args, **kwargs)
         client.rmdir(TEST_DIR)
-
     return execution_handler
 
 
@@ -74,7 +75,6 @@ def dir(func):
         client.mkdir(TEST_DIR)
         func(*args, **kwargs)
         client.rmdir(TEST_DIR)
-
     return execution_handler
 
 
@@ -86,35 +86,52 @@ def venv(func):
         client.make_venv(TEST_VENV)
         func(*args, **kwargs)
         client.rmdir(TEST_VENV)
-
     return execution_handler
 
 
-def mock_template(func):
-    @wraps(func)
-    def execution_handler(*args, **kwargs):
-        client = utils.Handler()
-        template_file = TEST_TEMPLATES_DIR + '/' + TEST_TEMPLATE_FILE
-        client.mkdir(TEST_TEMPLATES_DIR)
-        with open(template_file, 'w+') as f:
-            f.write(MOCK_TEMPLATE_CONTENTS)
-        func(*args, **kwargs)
-        client.rm(template_file)
-    return execution_handler
+class TestBaseMethods(testtools.TestCase):
 
+    @log_capture()
+    def test_logger(self, capture):
+        lgr = logger.init(base_level=logging.DEBUG)
+        lgr.debug('TEST_LOGGER_OUTPUT')
+        capture.check(('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
 
-def mock_packages(func):
-    @wraps(func)
-    def execution_handler(*args, **kwargs):
-        client = utils.Handler()
-        packages_file = TEST_TEMPLATES_DIR + '/' + MOCK_PACKAGES_FILE
-        client.mkdir(TEST_TEMPLATES_DIR)
-        with open(packages_file, 'w+') as f:
-            f.write(MOCK_PACKAGES_CONTENTS)
-        func(*args, **kwargs)
-        client.rm(packages_file)
-        client.rm(packages_file + 'c')
-    return execution_handler
+    def test_logger_bad_config(self):
+        try:
+            logger.init(logging_config={'x': 'y'})
+        except SystemExit as ex:
+            self.assertTrue('could not init' in str(ex))
+
+    def test_get_package_config_dict(self):
+        c = packman.get_package_config('test_component', MOCK_PACKAGES_DICT)
+        self.assertEqual(c, 'x')
+
+    def test_get_package_config_dict_missing_component(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'WRONG', MOCK_PACKAGES_DICT)
+        self.assertEqual(
+            ex.message, codes.mapping['no_config_found_for_package'])
+
+    def test_get_package_config_file(self):
+        c = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        self.assertEqual(c['name'], 'test_package')
+
+    def test_get_package_config_file_missing_component(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'WRONG', packages_file=TEST_PACKAGES_FILE)
+        self.assertEqual(
+            ex.message, codes.mapping['no_config_found_for_package'])
+
+    def test_get_package_config_missing_file(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'test_component', packages_file='x')
+        self.assertEqual(
+            ex.message, codes.mapping['cannot_access_config_file'])
 
 
 class UtilsHandlerTest(testtools.TestCase, utils.Handler):
@@ -332,173 +349,150 @@ class TemplateHandlerTest(testtools.TestCase, templater.Handler,
                           utils.Handler):
 
     @file
-    @mock_template
     def test_template_creation(self):
         component = {'test_template_parameter': 'test_template_output'}
         template_file = TEST_TEMPLATE_FILE
         self.generate_from_template(component, TEST_FILE, template_file,
                                     templates=TEST_TEMPLATES_DIR)
         with open(TEST_FILE, 'r') as f:
-            self.assertTrue('test_template_output' in f.read())
+            self.assertIn('test_template_output', f.read())
 
-    @mock_template
     def test_template_creation_template_file_missing(self):
         component = {'test_template_parameter': 'test_template_output'}
         template_file = 'mock_template'
-        try:
-            self.generate_from_template(component, TEST_FILE, template_file,
-                                        templates=TEST_TEMPLATES_DIR)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'template file missing')
+        ex = self.assertRaises(
+            SystemExit, self.generate_from_template, component,
+            TEST_FILE, template_file, templates=TEST_TEMPLATES_DIR)
+        self.assertEqual(ex.message, codes.mapping['template_file_missing'])
 
-    @mock_template
     def test_template_creation_template_dir_missing(self):
         component = {'test_template_parameter': 'test_template_output'}
         template_file = TEST_TEMPLATE_FILE
-        try:
-            self.generate_from_template(component, TEST_FILE, template_file,
-                                        templates='')
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'template dir missing')
+        ex = self.assertRaises(
+            SystemExit, self.generate_from_template, component,
+            TEST_FILE, template_file, templates='')
+        self.assertEqual(ex.message, codes.mapping['template_dir_missing'])
 
     @file
-    @mock_template
     def test_template_creation_invalid_component_dict(self):
         component = ''
         template_file = TEST_TEMPLATE_FILE
-        try:
-            self.generate_from_template(component, TEST_FILE, template_file,
-                                        templates=TEST_TEMPLATES_DIR)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'component must be of type dict')
+        ex = self.assertRaises(
+            SystemExit, self.generate_from_template, component,
+            TEST_FILE, template_file, templates=TEST_TEMPLATES_DIR)
+        self.assertEqual(
+            ex.message, codes.mapping['package_must_be_of_type_dict'])
 
     @file
-    @mock_template
     def test_template_creation_template_file_not_string(self):
         component = {'test_template_parameter': 'test_template_output'}
         template_file = False
-        try:
-            self.generate_from_template(component, TEST_FILE, template_file,
-                                        templates=TEST_TEMPLATES_DIR)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'template_file must be of type string')
+        ex = self.assertRaises(
+            SystemExit, self.generate_from_template, component,
+            TEST_FILE, template_file, templates=TEST_TEMPLATES_DIR)
+        self.assertEqual(
+            ex.message, codes.mapping['template_file_must_be_of_type_string'])
 
     @file
-    @mock_template
     def test_template_creation_template_dir_not_string(self):
         component = {'test_template_parameter': 'test_template_output'}
         template_file = TEST_TEMPLATE_FILE
-        try:
-            self.generate_from_template(component, TEST_FILE, template_file,
-                                        templates=False)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'template_dir must be of type string')
+        ex = self.assertRaises(
+            SystemExit, self.generate_from_template, component,
+            TEST_FILE, template_file, templates=False)
+        self.assertEqual(
+            ex.message, codes.mapping['template_dir_must_be_of_type_string'])
 
     @dir
-    @mock_template
     def test_config_generation_from_config_dir(self):
-        config_file = TEST_TEMPLATE_FILE
-        component = {
-            "sources_path": TEST_DIR,
-            "test_template_parameter": "test_template_parameter",
-            "config_templates": {
-                "config_dir": {
-                    "files": TEST_TEMPLATES_DIR,
-                    "config_dir": "config",
-                }
-            }
-        }
-        self.generate_configs(component)
-        with open(os.path.join(component['sources_path'],
-                  component['config_templates']['config_dir']['config_dir'],
-                  config_file), 'r') as f:
-            self.assertTrue(component['test_template_parameter'] in f.read())
-
-    @dir
-    @mock_template
-    def test_config_generation_from_template_dir(self):
-        config_file = TEST_TEMPLATE_FILE
-        component = {
-            "sources_path": TEST_DIR,
-            "test_template_parameter": "test_template_output",
-            "config_templates": {
-                "template_dir": {
-                    "templates": TEST_TEMPLATES_DIR,
-                    "config_dir": "config",
-                }
-            }
-        }
-        self.generate_configs(component)
-        with open(os.path.join(component['sources_path'],
-                  component['config_templates']['template_dir']['config_dir'],  # NOQA
-                  config_file.split('.')[0:-1][0]), 'r') as f:
-            self.assertTrue(component['test_template_parameter'] in f.read())
-
-    @dir
-    @mock_template
-    def test_config_generation_from_template_file(self):
-        config_file = TEST_TEMPLATE_FILE
-        component = {
-            "sources_path": TEST_DIR,
-            "test_template_parameter": "test_template_output",
-            "config_templates": {
-                "template_file": {
-                    "template": TEST_TEMPLATES_DIR + '/' + config_file,
-                    "output_file": config_file.split('.')[0:-1][0],
-                    "config_dir": "config",
-                }
-            }
-        }
-        self.generate_configs(component)
-        with open(os.path.join(component['sources_path'],
-                  component['config_templates']['template_file']['config_dir'],  # NOQA
-                  config_file.split('.')[0:-1][0]), 'r') as f:
-            self.assertTrue(component['test_template_parameter'] in f.read())
-
-
-class TestBaseMethods(testtools.TestCase):
-
-    @log_capture()
-    def test_logger(self, capture):
-        lgr = logger.init(base_level=logging.DEBUG)
-        lgr.debug('TEST_LOGGER_OUTPUT')
-        capture.check(('user', 'DEBUG', 'TEST_LOGGER_OUTPUT'))
-
-    def test_logger_bad_config(self):
-        try:
-            logger.init(logging_config={'x': 'y'})
-        except SystemExit as ex:
-            self.assertTrue('could not init' in str(ex))
-
-    def test_get_package_config_dict(self):
-        c = packman.get_package_config('test_component', MOCK_PACKAGES_DICT)
-        self.assertEqual(c, 'x')
-
-    def test_get_package_config_dict_missing_component(self):
-        ex = self.assertRaises(
-            SystemExit, packman.get_package_config,
-            'WRONG', MOCK_PACKAGES_DICT)
-        self.assertEqual(
-            ex.message, codes.mapping['no_config_found_for_package'])
-
-    def test_get_package_config_file(self):
-        c = packman.get_package_config(
+        package = packman.get_package_config(
             'mock_package', packages_file=TEST_PACKAGES_FILE)
-        self.assertEqual(c['name'], 'test_package')
+        del package['config_templates']['template_dir']
+        del package['config_templates']['template_file']
+        self.generate_configs(package)
+        with open(os.path.join(package['sources_path'],
+                  package['config_templates']['config_dir']['config_dir'],
+                  TEST_TEMPLATE_FILE), 'r') as f:
+            self.assertTrue('test_template_parameter' in f.read())
+        shutil.rmtree(package['sources_path'])
 
-    def test_get_package_config_file_missing_component(self):
-        ex = self.assertRaises(
-            SystemExit, packman.get_package_config,
-            'WRONG', packages_file=TEST_PACKAGES_FILE)
-        self.assertEqual(
-            ex.message, codes.mapping['no_config_found_for_package'])
+    @dir
+    def test_config_generation_from_template_dir(self):
+        package = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        del package['config_templates']['template_file']
+        del package['config_templates']['config_dir']
+        self.generate_configs(package)
+        with open(os.path.join(package['sources_path'],
+                  package['config_templates']['template_dir']['config_dir'],  # NOQA
+                  TEST_TEMPLATE_FILE.split('.')[0:-1][0]), 'r') as f:
+            self.assertIn(package['test_template_parameter'], f.read())
+        shutil.rmtree(package['sources_path'])
 
-    def test_get_package_config_missing_file(self):
-        ex = self.assertRaises(
-            SystemExit, packman.get_package_config,
-            'test_component', packages_file='x')
-        self.assertEqual(
-            ex.message, codes.mapping['cannot_access_config_file'])
+    @dir
+    def test_config_generation_from_template_file(self):
+        package = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        del package['config_templates']['template_dir']
+        del package['config_templates']['config_dir']
+        self.generate_configs(package)
+        with open(os.path.join(package['sources_path'],
+                  package['config_templates']['template_file']['config_dir'],  # NOQA
+                  package['config_templates']['template_file']['output_file']),
+                  'r') as f:
+            self.assertIn(package['test_template_parameter'], f.read())
+        shutil.rmtree(package['sources_path'])
+
+    @dir
+    def test_config_generation_from_template_file_no_perm(self):
+        package = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        del package['config_templates']['template_dir']
+        del package['config_templates']['config_dir']
+        self.generate_configs(package)
+        with open(os.path.join(package['sources_path'],
+                  package['config_templates']['template_file']['config_dir'],  # NOQA
+                  package['config_templates']['template_file']['output_file']),
+                  'r') as f:
+            self.assertIn(package['test_template_parameter'], f.read())
+        shutil.rmtree(package['sources_path'])
+
+
+class TestFpmString(testtools.TestCase, fpm.Handler):
+
+    def test_fpm_string_creation(self):
+        package = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        fpm_params = {
+            'version': package.get(defs.PARAM_VERSION, False),
+            'force': package.get(defs.PARAM_OVERWRITE_OUTPUT, True),
+            'depends': package.get(defs.PARAM_DEPENDS, False),
+            'after_install':
+            package.get(defs.PARAM_BOOTSTRAP_SCRIPT_PATH, False),
+            # need to add these to the test
+            'chdir': False,
+            'before_install': None
+        }
+        packager = fpm.Handler(
+            package['name'], package['source_package_type'],
+            package['destination_package_types'][0],
+            package['sources_path'])
+        fpm_command_string = packager._build_cmd_string(**fpm_params)
+        self.assertIn('fpm -s {0} -t {1} -n {2} '
+                      '-v {3} after-install {4}'
+                      ' -d {5} -d {6} -f {7}'.format(
+                          package['source_package_type'],
+                          # we cut the string since the string builder
+                          # adjusts tar.gz types to tar for fpm.
+                          package['destination_package_types'][0][0:-3],
+                          package['name'],
+                          package['version'],
+                          os.path.join(
+                              os.getcwd(), package['bootstrap_script']),
+                          package['depends'][0],
+                          package['depends'][1],
+                          package['sources_path']),
+                      str(fpm_command_string))
 
     # @dir
     # def test_pack(self):

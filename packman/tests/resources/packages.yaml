@@ -6,9 +6,9 @@ packages:
         name: test_package
         version: 3.1
         sources_path: sources
-        # depends:
-        #     - make
-        #     - g++
+        depends:
+            - make
+            - g++
         # prereqs:
         #     - curl
         # source_ppas:
@@ -37,9 +37,18 @@ packages:
         destination_package_types:
             - tar.gz
         keep_sources: true
+        bootstrap_script: packman/tests/templates/mock_template.j2
+        bootstrap_template:
         test_template_parameter: test_template_output
-        # config_templates:
-        #     template_file:
-        #         path: tests/templates/mock_template.template
-        #         output: mock_template
-        #         config_directory:
+        config_templates:
+            template_file:
+                template: packman/tests/templates/mock_template.j2
+                output_file: mock_template.output
+                config_dir: config
+            template_dir:
+                templates: packman/tests/templates
+                config_dir: config
+            config_dir:
+                files: packman/tests/templates
+                config_dir: config
+            params: param

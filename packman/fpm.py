@@ -41,6 +41,7 @@ class Handler(utils.Handler):
         # MUST BE LAST
         self.command = self.command.bake(self.source)
         lgr.debug('fpm cmd is: {0}'.format(self.command))
+        return self.command
 
     def execute(self, **fpm_params):
         """runs fpm

@@ -345,8 +345,9 @@ def pack(package):
     if c.get(defs.PARAM_CONFIG_TEMPLATE_CONFIG, False):
         templates.generate_configs(c)
     if bootstrap_script:
-        templates.generate_from_template(
-            c, bootstrap_script, bootstrap_template)
+        if bootstrap_template:
+            templates.generate_from_template(
+                c, bootstrap_script, bootstrap_template)
         for package in dst_pkg_types:
             # when creating a deb or rpm, it isn't required to chmod the script
             if package in ('tar', 'tar.gz'):

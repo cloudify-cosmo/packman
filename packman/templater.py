@@ -3,8 +3,10 @@ import os
 import utils
 import definitions as defs
 import logger
-import exceptions as exc
+import sys
+import codes
 import jinja2 as jinja
+# import glob
 
 
 lgr = logger.init()
@@ -127,8 +129,14 @@ class Handler(utils.Handler):
             component[defs.PARAM_SOURCES_PATH], config_dir))
         # copy the static files to the destination config dir.
         # yep, simple as that...
-        self.cp(os.path.join(files_dir, '*'),
-                os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir))
+        # import glob
+        # print 'xxxxxxxxxxx', glob.glob(os.path.join(files_dir, '*'))
+        # self.cp(glob.glob(os.path.join(files_dir, '*')),
+        #         os.path.join(component[defs.PARAM_SOURCES_PATH], config_dir))
+        for obj in os.listdir(files_dir):
+            self.cp(os.path.join(files_dir, obj),
+                    os.path.join(component[defs.PARAM_SOURCES_PATH],
+                    config_dir))
 
     def generate_from_template(self, component_config, output_file,
                                template_file,
@@ -142,10 +150,10 @@ class Handler(utils.Handler):
         :param string template_file: template file name
         :param string templates: template files directory
         """
-        lgr.debug('generating config file...')
+        lgr.debug('Generating config file...')
         if type(component_config) is not dict:
-            lgr.error('component must be of type dict')
-            raise exc.PackagerError('component must be of type dict')
+            lgr.error('Package must be of type dict.')
+            sys.exit(codes.mapping['package_must_be_of_type_dict'])
         formatted_text = self._template_formatter(
             templates, template_file, component_config)
         self._make_file(output_file, formatted_text)
@@ -161,28 +169,28 @@ class Handler(utils.Handler):
         :rtype: generated template content
         """
         if type(template_dir) is not str:
-            raise exc.PackagerError('template_dir must be of type string')
+            sys.exit(codes.mapping['template_dir_must_be_of_type_string'])
         if os.path.isdir(template_dir):
             env = jinja.Environment(loader=jinja.FileSystemLoader(
                 template_dir))
         else:
-            lgr.error('template dir missing')
-            raise exc.PackagerError('template dir missing')
+            lgr.error('Template dir missing.')
+            sys.exit(codes.mapping['template_dir_missing'])
         if type(template_file) is not str:
-            raise exc.PackagerError('template_file must be of type string')
+            sys.exit(codes.mapping['template_file_must_be_of_type_string'])
         if os.path.isfile(os.path.join(template_dir, template_file)):
             template = env.get_template(template_file)
         else:
-            lgr.error('template file missing')
-            raise exc.PackagerError('template file missing')
+            lgr.error('Template file missing.')
+            sys.exit(codes.mapping['template_file_missing'])
 
         try:
-            lgr.debug('generating template from {0}/{1}'.format(
+            lgr.debug('Generating template from {0}/{1}.'.format(
                       template_dir, template_file))
             return template.render(var_dict)
         except Exception as e:
-            lgr.error('could not generate template ({0})'.format(e))
-            raise exc.PackagerError('could not generate template')
+            lgr.error('Could not generate template ({0}).'.format(e))
+            sys.exit(codes.mapping['could_not_generate_template'])
 
     def _make_file(self, output_path, content):
         """creates a file from content
@@ -191,12 +199,7 @@ class Handler(utils.Handler):
          file to
         :param content: content to write to file
         """
-        lgr.debug('creating file: {0} with content: \n{1}'.format(
+        lgr.debug('Creating file: {0} with content: \n{1}'.format(
                   output_path, content))
-        try:
-            with open(output_path, 'w+') as f:
-                f.write(content)
-        except IOError:
-            lgr.error('could not write to file')
-            raise exc.PackagerError('could not write to file {0}'.format(
-                output_path))
+        with open(output_path, 'w+') as f:
+            f.write(content)

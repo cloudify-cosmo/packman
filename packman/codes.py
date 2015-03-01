@@ -30,5 +30,12 @@ mapping = {
     'targz_exists': 29,
     'failed_to_mkdir': 30,
     'distro not supported': 31,
+    'package_must_be_of_type_dict': 32,
+    'template_dir_must_be_of_type_string': 33,
+    'template_dir_missing': 34,
+    'template_file_must_be_of_type_string': 35,
+    'template_file_missing': 36,
+    'could_not_generate_template': 37,
+    'could_not_write_to_file': 38,
 
 }
