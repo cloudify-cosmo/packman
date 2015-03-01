@@ -29,5 +29,6 @@ mapping = {
     'failed_to_download_module': 28,
     'targz_exists': 29,
     'failed_to_mkdir': 30,
+    'distro not supported': 31,
 
 }

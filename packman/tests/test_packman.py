@@ -44,6 +44,7 @@ TEST_TEMPLATES_DIR = 'packman/tests/templates'
 TEST_TEMPLATE_FILE = 'mock_template.template'
 TEST_DL_FILE = 'https://github.com/cloudify-cosmo/packman/archive/master.zip'
 TEST_DL_DEB = 'http://ftp.us.debian.org/debian/pool/main/w/wget-el/wget-el_0.5.0-8_all.deb'  # NOQA
+TEST_PACKAGES_FILE = 'packman/tests/resources/packages.yaml'
 MOCK_TEMPLATE_CONTENTS = 'TEST={{ test_template_parameter }}'
 MOCK_PACKAGES_FILE = 'packages.yaml'
 MOCK_PACKAGES_CONTENTS = '''PACKAGES = {'test_component':'x'}'''
@@ -94,11 +95,11 @@ def mock_template(func):
     def execution_handler(*args, **kwargs):
         client = utils.Handler()
         template_file = TEST_TEMPLATES_DIR + '/' + TEST_TEMPLATE_FILE
-        utils.do('mkdir -p ' + TEST_TEMPLATES_DIR, sudo=False)
+        client.mkdir(TEST_TEMPLATES_DIR)
         with open(template_file, 'w+') as f:
             f.write(MOCK_TEMPLATE_CONTENTS)
         func(*args, **kwargs)
-        client.rm(template_file, sudo=False)
+        client.rm(template_file)
     return execution_handler
 
 
@@ -107,16 +108,29 @@ def mock_packages(func):
     def execution_handler(*args, **kwargs):
         client = utils.Handler()
         packages_file = TEST_TEMPLATES_DIR + '/' + MOCK_PACKAGES_FILE
-        utils.do('mkdir -p ' + TEST_TEMPLATES_DIR, sudo=False)
+        client.mkdir(TEST_TEMPLATES_DIR)
         with open(packages_file, 'w+') as f:
             f.write(MOCK_PACKAGES_CONTENTS)
         func(*args, **kwargs)
-        client.rm(packages_file, sudo=False)
-        client.rm(packages_file + 'c', sudo=False)
+        client.rm(packages_file)
+        client.rm(packages_file + 'c')
     return execution_handler
 
 
 class UtilsHandlerTest(testtools.TestCase, utils.Handler):
+
+    def test_get_distro(self):
+        test_distro = dist()[0]
+        distro = utils.get_distro()
+        self.assertEqual(distro, test_distro)
+
+    def test_check_distro_success(self):
+        utils.check_distro()
+
+    def test_check_distro_fail(self):
+        ex = self.assertRaises(
+            SystemExit, utils.check_distro, supported='nodistro')
+        self.assertEqual(ex.message, codes.mapping['distro not supported'])
 
     def test_make_dir(self):
         self.mkdir(TEST_DIR)
@@ -456,52 +470,35 @@ class TestBaseMethods(testtools.TestCase):
         except SystemExit as ex:
             self.assertTrue('could not init' in str(ex))
 
-    def test_get_component_config_dict(self):
-        c = packman.get_component_config('test_component', MOCK_PACKAGES_DICT)
+    def test_get_package_config_dict(self):
+        c = packman.get_package_config('test_component', MOCK_PACKAGES_DICT)
         self.assertEqual(c, 'x')
 
-    def test_get_component_config_dict_missing_component(self):
-        try:
-            packman.get_component_config('WRONG', MOCK_PACKAGES_DICT)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'no config found for package')
+    def test_get_package_config_dict_missing_component(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'WRONG', MOCK_PACKAGES_DICT)
+        self.assertEqual(
+            ex.message, codes.mapping['no_config_found_for_package'])
 
-    @mock_packages
-    def test_get_component_config_file(self):
-        packages_file = TEST_TEMPLATES_DIR + '/' + MOCK_PACKAGES_FILE
-        c = packman.get_component_config(
-            'test_component', components_file=packages_file)
-        self.assertEqual(c, 'x')
+    def test_get_package_config_file(self):
+        c = packman.get_package_config(
+            'mock_package', packages_file=TEST_PACKAGES_FILE)
+        self.assertEqual(c['name'], 'test_package')
 
-    @mock_packages
-    def test_get_component_config_file_missing_component(self):
-        packages_file = TEST_TEMPLATES_DIR + '/' + MOCK_PACKAGES_FILE
-        try:
-            packman.get_component_config(
-                'WRONG', components_file=packages_file)
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'no config found for package')
+    def test_get_package_config_file_missing_component(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'WRONG', packages_file=TEST_PACKAGES_FILE)
+        self.assertEqual(
+            ex.message, codes.mapping['no_config_found_for_package'])
 
-    def test_get_component_config_missing_file(self):
-        try:
-            packman.get_component_config(
-                'test_component', components_file='x')
-        except exc.PackagerError as ex:
-            self.assertEqual(str(ex), 'missing components file')
-
-    def test_get_distro(self):
-        test_distro = dist()[0]
-        distro = packman.get_distro()
-        self.assertEqual(distro, test_distro)
-
-    def test_check_distro_success(self):
-        packman.check_distro()
-
-    def test_check_distro_fail(self):
-        try:
-            packman.check_distro(supported='nodistro')
-        except RuntimeError as ex:
-            self.assertEqual(str(ex), 'distro not supported')
+    def test_get_package_config_missing_file(self):
+        ex = self.assertRaises(
+            SystemExit, packman.get_package_config,
+            'test_component', packages_file='x')
+        self.assertEqual(
+            ex.message, codes.mapping['cannot_access_config_file'])
 
     # @dir
     # def test_pack(self):

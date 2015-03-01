@@ -10,9 +10,11 @@ import time
 import errno
 import sys
 from functools import wraps
+import platform
 
 import codes
 
+SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
 DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
 
@@ -62,6 +64,29 @@ DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
 
 #     with fab.hide('running'):
 #         return _execute()
+
+
+def get_distro():
+    """returns the machine's distro
+    """
+    return platform.dist()[0]
+
+
+def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
+    """checks that the machine's distro is supported
+
+    :param tuple supported: tuple of supported distros
+    :param bool verbose: verbosity level
+    """
+    set_global_verbosity_level(verbose)
+    distro = get_distro()
+    lgr.debug('Distribution Identified: {0}'.format(distro))
+    if distro not in supported:
+        lgr.error('Your distribution is not supported.'
+                  'Supported Disributions are:')
+        for distro in supported:
+            lgr.error('    {0}'.format(distro))
+        sys.exit(codes.mapping['distro not supported'])
 
 
 def set_global_verbosity_level(is_verbose_output=False):

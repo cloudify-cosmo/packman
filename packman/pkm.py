@@ -41,7 +41,7 @@ from __future__ import absolute_import
 from docopt import docopt
 from packman import logger
 from packman.packman import packman_runner
-from packman.packman import check_distro
+from packman.utils import check_distro
 from packman import utils
 
 lgr = logger.init()

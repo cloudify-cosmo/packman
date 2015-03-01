@@ -36,7 +36,6 @@ import sh
 import os
 import yaml
 import sys
-import platform
 
 # __all__ = ['list']
 
@@ -47,29 +46,6 @@ SUPPORTED_PACKAGE_TYPES = ['deb', 'rpm', 'tar', 'zip', 'tar.gz']
 
 
 lgr = logger.init()
-
-
-def get_distro():
-    """returns the machine's distro
-    """
-    return platform.dist()[0]
-
-
-def check_distro(supported=SUPPORTED_DISTROS, verbose=False):
-    """checks that the machine's distro is supported
-
-    :param tuple supported: tuple of supported distros
-    :param bool verbose: verbosity level
-    """
-    utils.set_global_verbosity_level(verbose)
-    distro = get_distro()
-    lgr.debug('Distribution Identified: {0}'.format(distro))
-    if distro not in supported:
-        lgr.error('Your distribution is not supported.'
-                  'Supported Disributions are:')
-        for distro in supported:
-            lgr.error('    {0}'.format(distro))
-        sys.exit(codes.mapping['distro not supported'])
 
 
 def _import_packages_dict(config_file=None):
@@ -281,7 +257,8 @@ def get(package):
     # TODO: (FEAT) add support for building packages from source
     repo.install(c.get(defs.PARAM_PREREQS, []))
     repo.add_src_repos(c.get(defs.PARAM_SOURCE_REPOS, []))
-    repo.add_ppa_repos(c.get(defs.PARAM_SOURCE_PPAS, []), DEBIAN, get_distro())
+    repo.add_ppa_repos(
+        c.get(defs.PARAM_SOURCE_PPAS, []), DEBIAN, utils.get_distro())
     retr.downloads(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     repo.add_keys(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     retr.downloads(c.get(defs.PARAM_SOURCE_URLS, []), sources_path)
@@ -452,5 +429,5 @@ def main():
 if __name__ == '__main__':
     main()
 
-CENTOS = get_distro() in ('centos')
-DEBIAN = get_distro() in ('Ubuntu', 'debian')
+CENTOS = utils.get_distro() in ('centos')
+DEBIAN = utils.get_distro() in ('Ubuntu', 'debian')
