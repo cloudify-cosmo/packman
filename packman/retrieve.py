@@ -39,20 +39,20 @@ class Handler(utils.Handler):
             if url_ext in ('.rpm', '.deb'):
                 lgr.debug('The file is a {0} file. we\'ll download it '
                           'to the archives folder'.format(url_ext))
+                self.mkdir(os.path.join(dir, 'archives'))
                 self.download(source_url, dir=os.path.join(dir, 'archives'))
             else:
                 self.download(source_url, dir=dir)
 
     def download(self, url, dir=False, file=False):
-
-        @retry(retries=3, delay_multipler=1)
+        @retry(retries=3, delay_multiplier=1)
         def _download(url, destination):
             if not download_file(url, destination):
                 sys.exit(codes.mapping['failed_to_download_file'])
 
         if (file and dir) or (not file and not dir):
-            lgr.warning('Please specify either a directory'
-                        ' or file to download to.')
+            lgr.error('Please specify either a directory'
+                      ' or file to download to.')
             sys.exit(codes.mapping['must_specify_file_or_dir'])
         destination = dir or file
         if os.path.isdir(destination):

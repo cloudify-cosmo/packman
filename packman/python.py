@@ -26,15 +26,19 @@ class Handler(utils.Handler):
         for module in modules:
             lgr.debug('Installing module {0}'.format(module))
             o = pip.install('--default-timeout', timeout, module, _iter=True)
-            for line in o:
-                lgr.debug(line)
-            installed = self.check_module_installed(module, venv_path)
-            if not installed:
-                lgr.error('Modules {0} could not be installed.'.format(module))
+            try:
+                for line in o:
+                    lgr.debug(line)
+                if not self.check_module_installed(module, venv_path):
+                    lgr.error('Module {0} could not be installed.'.format(
+                        module))
+                    sys.exit(codes.mapping['module_could_not_be_installed'])
+            except:
+                lgr.error('Module {0} could not be installed.'.format(module))
                 sys.exit(codes.mapping['module_could_not_be_installed'])
 
     @retry(retries=3, delay_multiplier=1)
-    def get_modules(self, modules, dir=False, venv=False, timeout='45'):
+    def get_modules(self, modules, dir, venv=False, timeout='45'):
         """downloads python modules
 
         :param list modules: python modules to download

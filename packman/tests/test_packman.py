@@ -20,9 +20,10 @@ import packman.python as py
 import packman.retrieve as retr
 import packman.utils as utils
 import packman.templater as templater
+import packman.codes as codes
 
-
-import unittest
+import sh
+import testtools
 import os
 from functools import wraps
 from fabric.api import hide
@@ -38,9 +39,11 @@ TEST_TAR_NAME = 'test_tar.tar.gz'
 TEST_TAR = TEST_DIR + '/' + TEST_TAR_NAME
 TEST_VENV = '{0}/test_venv'.format(os.path.expanduser("~"))
 TEST_MODULE = 'xmltodict'
-TEST_MOCK_MODULE = 'mockmodule'
+TEST_MISSING_MODULE = 'mockmodule'
 TEST_TEMPLATES_DIR = 'packman/tests/templates'
 TEST_TEMPLATE_FILE = 'mock_template.template'
+TEST_DL_FILE = 'https://github.com/cloudify-cosmo/packman/archive/master.zip'
+TEST_DL_DEB = 'http://ftp.us.debian.org/debian/pool/main/w/wget-el/wget-el_0.5.0-8_all.deb'  # NOQA
 MOCK_TEMPLATE_CONTENTS = 'TEST={{ test_template_parameter }}'
 MOCK_PACKAGES_FILE = 'packages.yaml'
 MOCK_PACKAGES_CONTENTS = '''PACKAGES = {'test_component':'x'}'''
@@ -53,11 +56,11 @@ def file(func):
     @wraps(func)
     def execution_handler(*args, **kwargs):
         client = utils.Handler()
-        client.rmdir(TEST_DIR, sudo=False)
-        utils.do('mkdir -p ' + TEST_DIR, sudo=False)
-        utils.do('touch ' + TEST_FILE, sudo=False)
+        client.rmdir(TEST_DIR)
+        client.mkdir(TEST_DIR)
+        sh.touch(TEST_FILE)
         func(*args, **kwargs)
-        client.rmdir(TEST_DIR, sudo=False)
+        client.rmdir(TEST_DIR)
 
     return execution_handler
 
@@ -66,10 +69,10 @@ def dir(func):
     @wraps(func)
     def execution_handler(*args, **kwargs):
         client = utils.Handler()
-        client.rmdir(TEST_DIR, sudo=False)
-        utils.do('mkdir -p ' + TEST_DIR, sudo=False)
+        client.rmdir(TEST_DIR)
+        client.mkdir(TEST_DIR)
         func(*args, **kwargs)
-        client.rmdir(TEST_DIR, sudo=False)
+        client.rmdir(TEST_DIR)
 
     return execution_handler
 
@@ -78,11 +81,10 @@ def venv(func):
     @wraps(func)
     def execution_handler(*args, **kwargs):
         client = py.Handler()
-        with hide(HIDE_LEVEL):
-            client.install('virtualenv==1.11.4', sudo=False)
-            client.venv(TEST_VENV, sudo=False)
+        client.install(['virtualenv'])
+        client.make_venv(TEST_VENV)
         func(*args, **kwargs)
-        client.rmdir(TEST_VENV, sudo=False)
+        client.rmdir(TEST_VENV)
 
     return execution_handler
 
@@ -114,166 +116,162 @@ def mock_packages(func):
     return execution_handler
 
 
-class UtilsHandlerTest(unittest.TestCase, utils.Handler):
-
-    @file
-    def test_find_in_dir_found(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.find_in_dir(TEST_DIR, TEST_FILE_NAME, sudo=False)
-        self.assertEquals(outcome, TEST_FILE)
-
-    def test_find_in_dir_not_found(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.find_in_dir(TEST_DIR, TEST_FILE, sudo=False)
-        self.assertEquals(outcome, None)
-
-    @dir
-    def test_touch(self):
-        outcome = self.touch(TEST_FILE, sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertTrue(self.is_file(TEST_FILE))
+class UtilsHandlerTest(testtools.TestCase, utils.Handler):
 
     def test_make_dir(self):
-        outcome = self.mkdir(TEST_DIR, sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertTrue(self.is_dir(TEST_DIR))
+        self.mkdir(TEST_DIR)
+        self.assertTrue(os.path.isdir(TEST_DIR))
+        self.assertIsNone(self.rmdir(TEST_DIR))
 
     @dir
     def test_make_dir_already_exists(self):
-        outcome = self.mkdir(TEST_DIR, sudo=False)
-        self.assertFalse(outcome)
-        self.assertTrue(self.is_dir(TEST_DIR))
+        self.mkdir(TEST_DIR)
+        self.assertTrue(os.path.isdir(TEST_DIR))
+
+    @dir
+    def test_make_impossible_dir(self):
+        ex = self.assertRaises(SystemExit, self.mkdir, '/impossible')
+        self.assertEqual(ex.message, codes.mapping['failed_to_mkdir'])
 
     @dir
     def test_remove_dir(self):
-        outcome = self.rmdir(TEST_DIR, sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertFalse(self.is_dir(TEST_DIR))
+        self.rmdir(TEST_DIR)
+        self.assertFalse(os.path.isdir(TEST_DIR))
 
     def test_remove_nonexistent_dir(self):
-        outcome = self.rmdir(TEST_DIR, sudo=False)
+        outcome = self.rmdir(TEST_DIR)
         self.assertFalse(outcome)
-        self.assertFalse(self.is_dir(TEST_DIR))
+        self.assertFalse(os.path.isdir(TEST_DIR))
 
     @file
     def test_remove(self):
-        outcome = self.rm(TEST_FILE, sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertFalse(self.is_file(TEST_FILE))
+        self.rm(TEST_FILE)
+        self.assertFalse(os.path.isfile(TEST_FILE))
 
     def test_remove_nonexistent_file(self):
-        outcome = self.rm(TEST_FILE, sudo=False)
+        outcome = self.rm(TEST_FILE)
         self.assertFalse(outcome)
-        self.assertFalse(self.is_file(TEST_FILE))
+        self.assertFalse(os.path.isfile(TEST_FILE))
 
     @file
     def test_copy(self):
-        outcome = self.cp(TEST_FILE, '.', sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertTrue(self.is_file('./' + TEST_FILE_NAME))
-        self.assertTrue(self.rm('./' + TEST_FILE_NAME, sudo=False).succeeded)
+        self.cp(TEST_FILE, '.')
+        self.assertTrue(os.path.isfile('./' + TEST_FILE_NAME))
+        self.assertIsNone(self.rm(TEST_FILE_NAME))
 
     def test_copy_noexistent_file(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.cp(TEST_FILE, '.', sudo=False)
-        self.assertTrue(outcome.failed)
-        self.assertFalse(self.is_file('./' + TEST_FILE_NAME))
+        outcome = self.cp(TEST_FILE, '.')
+        self.assertFalse(outcome)
+        self.assertFalse(os.path.isfile('./' + TEST_FILE_NAME))
 
-    @file
-    def test_tar(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.tar('.', './' + TEST_FILE_NAME, TEST_DIR,
-                               sudo=False)
-        self.assertTrue(outcome.succeeded)
-        self.assertTrue(self.is_file('./' + TEST_FILE_NAME))
-        self.assertTrue(self.rm('./' + TEST_FILE_NAME, sudo=False).succeeded)
+    @dir
+    def test_chdir(self):
+        cwd = os.getcwd()
+        with utils.chdir(TEST_DIR):
+            self.assertEqual(os.getcwd(), TEST_DIR)
+        self.assertEqual(cwd, os.getcwd())
 
-    def test_tar_bad_options(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.tar('.', './' + TEST_FILE_NAME, TEST_DIR,
-                               'ttt', sudo=False)
-        self.assertTrue(outcome.failed)
-        self.assertFalse(self.is_file('./' + TEST_FILE_NAME))
+    @dir
+    def test_move(self):
+        sh.touch(TEST_FILE_NAME)
+        self.mv(TEST_FILE_NAME, TEST_DIR)
+        self.assertTrue(os.path.isfile(os.path.join(TEST_DIR, TEST_FILE_NAME)))
+
+    # @file
+    # def test_tar(self):
+    #     outcome = self.tar('.', './' + TEST_FILE_NAME, TEST_DIR)
+    #     self.assertTrue(outcome.succeeded)
+    #     self.assertTrue(self.is_file('./' + TEST_FILE_NAME))
+    #     self.assertTrue(self.rm('./' + TEST_FILE_NAME).succeeded)
+
+    # def test_tar_bad_options(self):
+    #     with hide(HIDE_LEVEL):
+    #         outcome = self.tar('.', './' + TEST_FILE_NAME, TEST_DIR,
+    #                            'ttt')
+    #     self.assertTrue(outcome.failed)
+    #     self.assertFalse(self.is_file('./' + TEST_FILE_NAME))
 
 
-class PythonHandlerTest(unittest.TestCase, py.Handler, utils.Handler):
+class PythonHandlerTest(testtools.TestCase, py.Handler, utils.Handler):
 
     def test_pip_existent_module(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.install(TEST_MODULE, sudo=False)
-        self.assertTrue(outcome.succeeded)
+        self.install([TEST_MODULE])
 
-#     def test_pip_nonexistent_module(self):
-#         with hide(HIDE_LEVEL):
-#             outcome = self.install(
-#                 TEST_MOCK_MODULE, attempts=1, sudo=False, timeout=2)
-#         self.assertTrue(outcome.failed)
+    def test_pip_nonexistent_module(self):
+        ex = self.assertRaises(
+            SystemExit, self.install, [TEST_MISSING_MODULE], timeout=2)
+        self.assertEqual(
+            ex.message, codes.mapping['module_could_not_be_installed'])
 
-#     @venv
-#     def test_venv(self):
-#         with hide(HIDE_LEVEL):
-#             self.install('virtualenv==1.11.4', sudo=False)
-#         outcome = self.is_file('{0}/bin/python'.format(TEST_VENV))
-#         self.assertTrue(outcome)
+    @venv
+    def test_pip_existent_module_in_venv(self):
+        self.install([TEST_MODULE], TEST_VENV)
 
-#     @venv
-#     def test_pip_existent_module_in_venv(self):
-#         with hide(HIDE_LEVEL):
-#             outcome = self.install(TEST_MODULE, TEST_VENV, sudo=False)
-#         self.assertTrue(outcome.succeeded)
+    @venv
+    def test_pip_nonexistent_module_in_venv(self):
+        ex = self.assertRaises(
+            SystemExit, self.install, [TEST_MISSING_MODULE],
+            TEST_VENV, timeout=2)
+        self.assertEqual(
+            ex.message, codes.mapping['module_could_not_be_installed'])
 
-#     @venv
-#     def test_pip_nonexistent_module_in_venv(self):
-#         with hide(HIDE_LEVEL):
-#             outcome = self.install(
-#                 TEST_MOCK_MODULE, TEST_VENV, attempts=1, sudo=False)
-#         self.assertTrue(outcome.failed)
+    def test_check_module_not_installed(self):
+        outcome = self.check_module_installed(TEST_MISSING_MODULE)
+        self.assertFalse(outcome)
 
-#     def test_check_module_not_installed(self):
-#         with hide(HIDE_LEVEL):
-#             outcome = self.check_module_installed(TEST_MOCK_MODULE)
-#         self.assertFalse(outcome)
-
-#     def test_check_module_installed(self):
-#         with hide(HIDE_LEVEL):
-#             self.install(TEST_MODULE, sudo=False)
-#         outcome = self.check_module_installed(TEST_MODULE)
-#         self.assertTrue(outcome)
-
-
-class RetrieveHandlerTest(unittest.TestCase, retr.Handler, utils.Handler):
-
-    @dir
-    def test_wgets_file_to_dir(self):
-        with hide(HIDE_LEVEL):
-            self.downloads(['www.google.com'], dir=TEST_DIR, sudo=False)
-        outcome = self.is_file('{0}/index.html'.format(TEST_DIR))
+    def test_check_module_installed(self):
+        self.install([TEST_MODULE])
+        outcome = self.check_module_installed(TEST_MODULE)
         self.assertTrue(outcome)
 
-    @dir
-    def test_wget_file_to_dir(self):
-        with hide(HIDE_LEVEL):
-            self.download('www.google.com', dir=TEST_DIR, sudo=False)
-        outcome = self.is_file('{0}/index.html'.format(TEST_DIR))
-        self.assertTrue(outcome)
+    def test_get_module(self):
+        cwd = os.getcwd()
+        self.get_modules([TEST_MODULE], cwd)
+        found = [f for f in os.listdir(cwd) if f.startswith(TEST_MODULE)]
+        self.assertTrue(len(found) > 0)
+        os.remove(found[0])
+
+    def test_get_nonexisting_module(self):
+        cwd = os.getcwd()
+        ex = self.assertRaises(
+            SystemExit, self.get_modules, [TEST_MISSING_MODULE],
+            cwd, timeout=2)
+        self.assertEqual(
+            ex.message, codes.mapping['failed_to_download_module'])
+
+
+class RetrieveHandlerTest(testtools.TestCase, retr.Handler, utils.Handler):
 
     @dir
-    def test_wget_file_to_file(self):
-        with hide(HIDE_LEVEL):
-            self.download('www.google.com', file=TEST_FILE, sudo=False)
-        outcome = self.is_file(TEST_FILE)
-        self.assertTrue(outcome)
+    def test_download_file_to_dir(self):
+        self.downloads([TEST_DL_FILE], dir=TEST_DIR)
+        self.assertTrue(os.path.isfile('{0}/master.zip'.format(TEST_DIR)))
 
-    def test_wget_nonexistent_url(self):
-        with hide(HIDE_LEVEL):
-            outcome = self.download('www.google.comd', dir=TEST_DIR,
-                                    sudo=False)
-        self.assertTrue(outcome.failed)
+    @dir
+    def test_download_deb_to_dir(self):
+        self.downloads([TEST_DL_DEB], dir=TEST_DIR)
+        found = [f for f in os.listdir(
+            os.path.join(TEST_DIR, 'archives')) if f.startswith('wget')]
+        self.assertTrue(len(found) > 0)
 
-    # TODO: (TEST) add wget archives dir test
+    @dir
+    def test_download_file_to_file(self):
+        self.download(TEST_DL_FILE, file=TEST_FILE)
+        self.assertTrue(os.path.isfile(TEST_FILE))
+
+    def test_download_no_file_no_dir(self):
+        ex = self.assertRaises(SystemExit, self.download, TEST_DL_FILE)
+        self.assertEqual(ex.message, codes.mapping['must_specify_file_or_dir'])
+
+    def test_download_nonexistent_url(self):
+        ex = self.assertRaises(
+            SystemExit, self.download,
+            'http://www.google.com/x.x', dir=TEST_DIR)
+        self.assertEqual(ex.message, codes.mapping['failed_to_download_file'])
 
 
-class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
+class TemplateHandlerTest(testtools.TestCase, templater.Handler,
+                          utils.Handler):
 
     @file
     @mock_template
@@ -352,7 +350,7 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
                 }
             }
         }
-        self.generate_configs(component, sudo=False)
+        self.generate_configs(component)
         with open('{0}/{1}/{2}'.format(component['sources_path'],
                   component['config_templates']['__config_dir']['config_dir'],
                   config_file), 'r') as f:
@@ -400,7 +398,7 @@ class TemplateHandlerTest(unittest.TestCase, templater.Handler, utils.Handler):
             self.assertTrue(component['test_template_parameter'] in f.read())
 
 
-class TestBaseMethods(unittest.TestCase):
+class TestBaseMethods(testtools.TestCase):
 
     def test_do(self):
         with hide(HIDE_LEVEL):

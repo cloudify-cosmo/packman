@@ -3,10 +3,10 @@ import logging
 import logger
 import os
 import contextlib
-import sh
+# import sh
 import shutil
 import time
-import fabric.api as fab
+# import fabric.api as fab
 import errno
 import sys
 from functools import wraps
@@ -17,51 +17,51 @@ DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
 DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
 
 
-def do(command, attempts=2, sleep_time=3, accepted_err_codes=None,
-       capture=False, combine_stderr=False, sudo=False):
-    """executes a command locally with retries on failure.
+# def do(command, attempts=2, sleep_time=3, accepted_err_codes=None,
+#        capture=False, combine_stderr=False, sudo=False):
+#     """executes a command locally with retries on failure.
 
-    if a `command` execution is successful, it will return a fabric
-    object with the output (x.stdout, x.stderr, x.succeeded, etc..)
+#     if a `command` execution is successful, it will return a fabric
+#     object with the output (x.stdout, x.stderr, x.succeeded, etc..)
 
-    else, it will retry an `attempts` number of attempts and if all fails
-    it will return the fabric output object.
-    obviously, `attempts` must be larger than 0...
+#     else, it will retry an `attempts` number of attempts and if all fails
+#     it will return the fabric output object.
+#     obviously, `attempts` must be larger than 0...
 
-    :param string command: shell command to be executed
-    :param int attempts: number of attempts to perform on failure
-    :param int sleep_time: sleeptime between attempts
-    :param bool capture: should the output be captured for parsing?
-    :param bool combine_stderr: combine stdout and stderr (NOT YET IMPL)
-    :param bool sudo: run as sudo
-    :rtype: `responseObject` (for fabric operation)
-    """
-    if attempts < 1:
-        raise RuntimeError('attempts must be at least 1')
-    if not sleep_time > 0:
-        raise RuntimeError('sleep_time must be larger than 0')
-    if not accepted_err_codes:
-        accepted_err_codes = []
+#     :param string command: shell command to be executed
+#     :param int attempts: number of attempts to perform on failure
+#     :param int sleep_time: sleeptime between attempts
+#     :param bool capture: should the output be captured for parsing?
+#     :param bool combine_stderr: combine stdout and stderr (NOT YET IMPL)
+#     :param bool sudo: run as sudo
+#     :rtype: `responseObject` (for fabric operation)
+#     """
+#     if attempts < 1:
+#         raise RuntimeError('attempts must be at least 1')
+#     if not sleep_time > 0:
+#         raise RuntimeError('sleep_time must be larger than 0')
+#     if not accepted_err_codes:
+#         accepted_err_codes = []
 
-    def _execute():
-        for execution in xrange(attempts):
-            with fab.settings(warn_only=True):
-                with fab.hide('warnings'):
-                    x = fab.local('sudo {0}'.format(command), capture) \
-                        if sudo else fab.local(command, capture)
-                if x.succeeded or x.return_code in accepted_err_codes:
-                    lgr.debug('successfully executed: ' + command)
-                    return x
-                lgr.warning('failed to run command: {0} -retrying ({1}/{2})'
-                            .format(command, execution + 1, attempts))
-                time.sleep(sleep_time)
-        lgr.error('failed to run command: {0} even after {1} attempts'
-                  ' with output: {2}'
-                  .format(command, execution, x.stdout))
-        return x
+#     def _execute():
+#         for execution in xrange(attempts):
+#             with fab.settings(warn_only=True):
+#                 with fab.hide('warnings'):
+#                     x = fab.local('sudo {0}'.format(command), capture) \
+#                         if sudo else fab.local(command, capture)
+#                 if x.succeeded or x.return_code in accepted_err_codes:
+#                     lgr.debug('successfully executed: ' + command)
+#                     return x
+#                 lgr.warning('failed to run command: {0} -retrying ({1}/{2})'
+#                             .format(command, execution + 1, attempts))
+#                 time.sleep(sleep_time)
+#         lgr.error('failed to run command: {0} even after {1} attempts'
+#                   ' with output: {2}'
+#                   .format(command, execution, x.stdout))
+#         return x
 
-    with fab.hide('running'):
-        return _execute()
+#     with fab.hide('running'):
+#         return _execute()
 
 
 def set_global_verbosity_level(is_verbose_output=False):
@@ -113,7 +113,7 @@ def retry(retries=4, delay_multiplier=3, backoff=2):
                 try:
                     return f(*args, **kwargs)
                 except SystemExit:
-                    msg = "Retrying in {1} seconds...".format(mdelay)
+                    msg = "Retrying in {0} seconds...".format(mdelay)
                     lgr.warning(msg)
                     time.sleep(mdelay)
                     mtries -= 1
@@ -151,10 +151,15 @@ class Handler():
 
         :param string dir: directory to create
         """
-        lgr.debug('Creating directory {0}'.format(dir))
-        return os.makedirs(dir) if not os.path.isdir(dir) \
-            else lgr.debug('Directory already exists, skipping.')
-        return False
+        if not os.path.isdir(dir):
+            lgr.debug('Creating directory {0}'.format(dir))
+            try:
+                os.makedirs(dir)
+            except OSError as ex:
+                lgr.error('Failed to create {0} ({1})'.format(dir, str(ex)))
+                sys.exit(codes.mapping['failed_to_mkdir'])
+        else:
+            lgr.debug('Directory already exists, skipping.')
 
     def rmdir(self, dir):
         """deletes a directory
@@ -175,7 +180,7 @@ class Handler():
             os.remove(file)
         else:
             lgr.debug('File(s) do(es)n\'t exist')
-        return False
+            return False
 
     def cp(self, src, dst):
         """copies (recuresively or not) files or directories
@@ -193,6 +198,7 @@ class Handler():
                 shutil.copy(src, dst)
             else:
                 lgr.error('Copying failed. Error: {0}'.format(e))
+                return False
 
     def mv(self, src, dst):
         """moves files or directories
@@ -203,26 +209,26 @@ class Handler():
         lgr.debug('Moving {0} to {1}'.format(src, dst))
         return shutil.move(src, dst)
 
-    def tar(self, chdir, output_file, input_path):
-        """tars an input file or directory
+    # def tar(self, chdir, output_file, input_path):
+    #     """tars an input file or directory
 
-        :param string chdir: change to this dir before archiving
-        :param string output_file: tar output file path
-        :param string input: input path to create tar from
-        :param string opts: tar opts
-        """
-        lgr.debug('tar-ing {0}'.format(output_file))
-        return sh.tar('-czvf', output_file, input_path, C=chdir)
+    #     :param string chdir: change to this dir before archiving
+    #     :param string output_file: tar output file path
+    #     :param string input: input path to create tar from
+    #     :param string opts: tar opts
+    #     """
+    #     lgr.debug('tar-ing {0}'.format(output_file))
+    #     return sh.tar('-czvf', output_file, input_path, C=chdir)
 
-    def untar(self, chdir, input_file, strip=0):
-        """untars a file
+    # def untar(self, chdir, input_file, strip=0):
+    #     """untars a file
 
-        :param string chdir: change to this dir before extracting
-        :param string input_file: file to untar
-        :param string opts: tar opts
-        """
-        lgr.debug('untar-ing {0}'.format(input_file))
-        return sh.tar('-xzvf', input_file, C=chdir, strip=strip)
+    #     :param string chdir: change to this dir before extracting
+    #     :param string input_file: file to untar
+    #     :param string opts: tar opts
+    #     """
+    #     lgr.debug('untar-ing {0}'.format(input_file))
+    #     return sh.tar('-xzvf', input_file, C=chdir, strip=strip)
 
 
 lgr = logger.init()

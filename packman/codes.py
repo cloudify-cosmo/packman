@@ -28,5 +28,6 @@ mapping = {
     'unsupported_package_type': 27,
     'failed_to_download_module': 28,
     'targz_exists': 29,
+    'failed_to_mkdir': 30,
 
 }
