@@ -37,5 +37,6 @@ mapping = {
     'template_file_missing': 36,
     'could_not_generate_template': 37,
     'could_not_write_to_file': 38,
+    'failed_to_download_gem': 39,
 
 }

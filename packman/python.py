@@ -20,6 +20,7 @@ class Handler(utils.Handler):
         :param string venv: (optional) if ommited, will use system python
          else, will use `venv` (for virtualenvs and such)
         """
+        # this allows us to use the 'virtualenv' feature.
         venv_path = os.path.join(sources_path, venv) if sources_path else venv
         pip = sh.Command('{0}/bin/pip'.format(venv_path)) \
             if venv else sh.Command('pip')
