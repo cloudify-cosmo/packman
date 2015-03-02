@@ -1,18 +1,18 @@
 import os
-import utils
 import retrieve
 import logger
+import sh
 
 lgr = logger.init()
 
 
-class Handler(utils.Handler, retrieve.Handler):
+class Handler(retrieve.Handler):
     @staticmethod
     def update():
         """runs yum update
         """
-        lgr.debug('updating local yum repo')
-        return utils.do('sudo yum update')
+        lgr.debug('Updating local yum repo')
+        return sh.yum.update()
 
     def check_if_package_is_installed(self, package):
         """checks if a package is installed
@@ -22,9 +22,8 @@ class Handler(utils.Handler, retrieve.Handler):
         """
 
         lgr.debug('checking if {0} is installed'.format(package))
-        x = utils.do('sudo rpm -qa | grep {0}'.format(
-            package), attempts=1, accepted_err_codes=[1])
-        if x.return_code == 0:
+        r = sh.grep(sh.rpm('-qa', _ok_code=[0, 1]), package)
+        if r.exit_code == 0:
             lgr.debug('{0} is installed'.format(package))
             return True
         else:
@@ -39,7 +38,7 @@ class Handler(utils.Handler, retrieve.Handler):
         """
         for req in reqs:
             # TODO: (TEST) run yum reinstall instead of yum install.
-            lgr.debug('downloading {0} to {1}'.format(req, sources_path))
+            lgr.debug('Downloading {0} to {1}...'.format(req, sources_path))
             # TODO: (FIX) yum download exits with an error even if the download
             # TODO: (FIX) succeeded due to a non-zero error message.
             # TODO: (FEAT) add yum enable-repo option
@@ -50,10 +49,11 @@ class Handler(utils.Handler, retrieve.Handler):
             # return do('sudo yum -y reinstall --downloadonly '
             #           '--downloaddir={1}/archives {0}'.format(
             #               package, dir), accepted_err_codes=[1])
-            # else:
-            utils.do('sudo yum -y install --downloadonly '
-                     '--downloaddir={1}/archives {0}'.format(
-                         req, sources_path), accepted_err_codes=[1])
+            o = sh.yum.install(
+                '-y', req, '--downloadonly', downloaddir=os.path.join(
+                    sources_path, 'archives'), _iter=True, _ok_code=[0, 1])
+            for line in o:
+                lgr.debug(line)
 
     def install(self, packages):
         """yum installs a list of packages
@@ -61,8 +61,8 @@ class Handler(utils.Handler, retrieve.Handler):
         :param list package: packages to install
         """
         for package in packages:
-            lgr.debug('installing {0}'.format(package))
-            utils.do('sudo yum -y install {0}'.format(package))
+            lgr.debug('Installing {0}'.format(package))
+            sh.yum.install('-y', package)
 
     def add_src_repos(self, source_repos):
         """adds a list of source repos to the apt repo
@@ -70,10 +70,9 @@ class Handler(utils.Handler, retrieve.Handler):
         :param list source_repos: repos to add to sources list
         """
         for source_repo in source_repos:
-            lgr.debug('adding source repository {0}'.format(source_repo))
+            lgr.debug('Adding source repository {0}'.format(source_repo))
             if os.path.splitext(source_repo)[1] == '.rpm':
-                utils.do('sudo rpm -ivh {0}'.format(
-                    source_repo), accepted_err_codes=[1])
+                sh.rpm('-ivh', source_repo, _ok_code=[0, 1])
             else:
                 self.download(source_repo, dir='/etc/yum.repos.d/')
 
@@ -82,5 +81,6 @@ class Handler(utils.Handler, retrieve.Handler):
 
         :param string key_files: key files paths
         """
-        lgr.debug('adding key {0}'.format(key_file))
-        utils.do('sudo rpm --import {0}'.format(key_file))
+        lgr.debug('Adding key {0}'.format(key_file))
+        # can't do import=key_file as import is unusable as an argument
+        sh.rpm('--import', key_file)
