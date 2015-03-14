@@ -21,7 +21,7 @@ class Handler(retrieve.Handler):
         :rtype: `bool` representing whether package is installed or not
         """
 
-        lgr.debug('checking if {0} is installed'.format(package))
+        lgr.debug('Checking if {0} is installed'.format(package))
         r = sh.grep(sh.rpm('-qa', _ok_code=[0, 1]), package)
         if r.exit_code == 0:
             lgr.debug('{0} is installed'.format(package))
