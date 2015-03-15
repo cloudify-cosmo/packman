@@ -67,7 +67,6 @@ setup(
         ]
     },
     install_requires=[
-        "fabric==1.8.3",
         "jinja2==2.7.2",
         "docopt==.0.6.1",
         "pyyaml==3.10",

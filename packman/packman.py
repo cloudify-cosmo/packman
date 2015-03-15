@@ -29,7 +29,7 @@ import ruby
 import templater
 import fpm
 import codes
-import importlib
+# import importlib
 
 import definitions as defs
 
@@ -37,8 +37,6 @@ import sh
 import os
 import yaml
 import sys
-
-# __all__ = ['list']
 
 SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
 DEFAULT_PACKAGES_FILE = 'packages.yaml'
@@ -157,7 +155,7 @@ def packman_runner(action, packages_file=None, packages=None,
     def import_overriding_methods(action):
         lgr.debug('Importing overriding methods file...')
         sys.path.append(os.getcwd())
-        return importlib.import_module(action)
+        return __import__(action)
 
     def rename_package(package):
         # this is meant to unify package names so that common
