@@ -29,6 +29,7 @@ import ruby
 import templater
 import fpm
 import codes
+import importlib
 
 import definitions as defs
 
@@ -155,8 +156,8 @@ def packman_runner(action, packages_file=None, packages=None,
 
     def import_overriding_methods(action):
         lgr.debug('Importing overriding methods file...')
-        return __import__(os.path.basename(os.path.splitext(
-            os.path.join(os.getcwd(), '{0}.py'.format(action)))[0]))
+        sys.path.append(os.getcwd())
+        return importlib.import_module(action)
 
     def rename_package(package):
         # this is meant to unify package names so that common

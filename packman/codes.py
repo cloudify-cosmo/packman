@@ -38,5 +38,6 @@ mapping = {
     'could_not_generate_template': 37,
     'could_not_write_to_file': 38,
     'failed_to_download_gem': 39,
+    'overriding_modules_import_error': 40,
 
 }
