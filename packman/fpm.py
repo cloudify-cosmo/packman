@@ -27,11 +27,11 @@ class Handler(utils.Handler):
             self.command = self.command.bake(C=fpm_params['chdir'])
         if fpm_params.get('after_install'):
             self.command = self.command.bake(
-                'after-install', os.path.join(
+                '--after-install', os.path.join(
                     os.getcwd(), fpm_params['after_install']))
         if fpm_params.get('before_install'):
             self.command = self.command.bake(
-                'before-install', os.path.join(
+                '--before-install', os.path.join(
                     os.getcwd(), fpm_params['before_install']))
         if fpm_params.get('depends'):
             for depend in fpm_params['depends']:
