@@ -26,7 +26,6 @@ class Handler(utils.Handler):
         if fpm_params.get('chdir'):
             self.command = self.command.bake(C=fpm_params['chdir'])
         if fpm_params.get('after_install'):
-            print 'xxxx', os.getcwd()
             self.command = self.command.bake(
                 '--after-install', os.path.abspath(
                     fpm_params['after_install']))

@@ -366,7 +366,8 @@ def pack(package):
             'version': c.get(defs.PARAM_VERSION, False),
             'force': c.get(defs.PARAM_OVERWRITE_OUTPUT, True),
             'depends': c.get(defs.PARAM_DEPENDS, False),
-            'after_install': os.path.abspath(bootstrap_script),
+            'after_install': False if not bootstrap_script
+            else os.path.abspath(bootstrap_script),
             'chdir': False,
             'before_install': None
         }
