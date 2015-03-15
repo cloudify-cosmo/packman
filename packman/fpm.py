@@ -1,5 +1,6 @@
 import utils
 import logger
+import os
 import sh
 
 lgr = logger.init()
@@ -26,10 +27,12 @@ class Handler(utils.Handler):
             self.command = self.command.bake(C=fpm_params['chdir'])
         if fpm_params.get('after_install'):
             self.command = self.command.bake(
-                '--after-install', fpm_params['after_install'])
+                '--after-install', os.path.abspath(
+                    fpm_params['after_install']))
         if fpm_params.get('before_install'):
             self.command = self.command.bake(
-                '--before-install', fpm_params['before_install'])
+                '--before-install', os.path.abspath(
+                    fpm_params['before_install']))
         if fpm_params.get('depends'):
             for depend in fpm_params['depends']:
                 self.command = self.command.bake(d=depend)
