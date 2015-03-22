@@ -1,8 +1,6 @@
 import utils
 import logger
-import codes
 
-import sys
 import re
 import urllib2
 import os
@@ -81,14 +79,11 @@ class Handler(utils.Handler):
             with open(apt_file) as f:
                 add(source_repo, f, apt_file)
 
-    def add_ppa_repos(self, source_ppas, debian, distro):
+    def add_ppa_repos(self, source_ppas):
         """adds a list of ppa repos to the apt repo
 
         :param list source_ppas: ppa urls to add
         """
-        if source_ppas and not debian:
-            lgr.error('ppas not supported by {0}'.format(distro))
-            sys.exit(codes.mapping['ppa_not_supported_by_distro'])
         for source_ppa in source_ppas:
             lgr.debug('Adding ppa repository {0}'.format(source_ppa))
             sh.add_apt_repository('-y', source_ppa)

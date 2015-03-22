@@ -256,8 +256,10 @@ def get(package):
     # TODO: (FEAT) add support for building packages from source
     repo.install(c.get(defs.PARAM_PREREQS, []))
     repo.add_src_repos(c.get(defs.PARAM_SOURCE_REPOS, []))
-    repo.add_ppa_repos(
-        c.get(defs.PARAM_SOURCE_PPAS, []), DEBIAN, utils.get_distro())
+    if c.get(defs.PARAM_SOURCE_PPAS, []) and not DEBIAN:
+        lgr.error('ppas not supported by {0}'.format(utils.get_distro()))
+        sys.exit(codes.mapping['ppa_not_supported_by_distro'])
+    repo.add_ppa_repos(c.get(defs.PARAM_SOURCE_PPAS, []))
     retr.downloads(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     repo.add_keys(c.get(defs.PARAM_SOURCE_KEYS, []), sources_path)
     retr.downloads(c.get(defs.PARAM_SOURCE_URLS, []), sources_path)
@@ -430,5 +432,6 @@ def main():
 if __name__ == '__main__':
     main()
 
+# TODO: fail on Windows
 CENTOS = utils.get_distro() in ('centos')
 DEBIAN = utils.get_distro() in ('Ubuntu', 'debian')
