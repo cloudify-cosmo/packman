@@ -479,7 +479,7 @@ class TestFpmString(testtools.TestCase, fpm.Handler):
             package['sources_path'])
         fpm_command_string = packager._build_cmd_string(**fpm_params)
         self.assertIn('fpm -s {0} -t {1} -n {2} '
-                      '-v {3} after-install {4}'
+                      '-v {3} --after-install {4}'
                       ' -d {5} -d {6} -f {7}'.format(
                           package['source_package_type'],
                           # we cut the string since the string builder
