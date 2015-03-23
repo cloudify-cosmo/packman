@@ -61,7 +61,7 @@ def _import_packages_dict(config_file=None):
                       'packages.yaml in currect directory.')
             sys.exit(codes.mapping['packages_file_not_found'])
     # get config file path
-    lgr.debug('Config file is: {}'.format(config_file))
+    lgr.debug('Config file is: {0}'.format(config_file))
     # append to path for importing
     try:
         lgr.info('Importing config...')
