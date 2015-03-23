@@ -1,7 +1,7 @@
 packman
 =======
 
-[![Build Status](https://travis-ci.org/cloudify-cosmo/packman.svg?branch=develop)](https://travis-ci.org/cloudify-cosmo/packman)
+[![Build Status](https://travis-ci.org/cloudify-cosmo/packman.svg?branch=master)](https://travis-ci.org/cloudify-cosmo/packman)
 
 [![Gitter chat](https://badges.gitter.im/cloudify-cosmo/packman.png)](https://gitter.im/cloudify-cosmo/packman)
 
@@ -26,14 +26,14 @@ see [packman requirements](http://packman.readthedocs.org/en/latest/installation
 ```shell
  pip install packman
  # or, for dev:
- pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/develop.tar.gz
+ pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/master.tar.gz
 ```
 
 ### Usage Examples
 see [Packages Configuration](http://packman.readthedocs.org/en/latest/component_config.html) to configure your `packages file`
 ```shell
  # `pkm get` retrieves package sources
- pkm get --packages my_package --packages_file /my_packages_file.py
+ pkm get --packages my_package --packages_file /my_packages_file.yaml
  # `pkm pack` packages sources, scripts and configs.
  pkm pack -c my_package,my_other_package
  # `pkm make` ... does both one after the other
@@ -45,14 +45,3 @@ see [Packages Configuration](http://packman.readthedocs.org/en/latest/component_
 - [Alternative Implementations](http://packman.readthedocs.org/en/latest/alternative_methods.html)
 - [Template Handling](http://packman.readthedocs.org/en/latest/template_handling.html)
 - [packman API](http://packman.readthedocs.org/en/latest/api.html)
-
-### Vagrant
-A vagrantfile is provided to load machines:
-
-- a packman host (which, by default, is ready to package packages)
-- a tester host (which, by default, is a clean machine to test the package installation on)
-- REHL based distros are partially supported...
-
-##### Automated Vagrant Testing Environment
-In future versions, an automated process of retrieval, packaging and installation will be implemented to check the entire process.
-

@@ -1,43 +1,28 @@
-- nose-1.3.3-py2.7.egg/nose/util.py:34:    #  TODO: empty directories look like non-directory files
-- nose-1.3.3-py2.7.egg/nose/plugins/attrib.py:235:    #  TODO: is there a need for case-sensitive value comparison?
-- nose-1.3.3-py2.7.egg/nose/plugins/prof.py:135:    #  TODO: is this trying to catch just the case where not
-- nose-1.3.3-py2.7.egg/nose/loader.py:199:    #  TODO: is this try/except needed?
-- nose-1.3.3-py2.7.egg/nose/loader.py:545:    #  TODO: is this try/except needed?
-- nose-1.3.3-py2.7.egg/nose/inspector.py:160:    #  TODO
-- nose-1.3.3-py2.7.egg/nose/inspector.py:163:    #  TODO
 - packman/fpm.py:23:    #  TODO: add verbose mode to fpm runs
 - packman/logger.py:60:    #  TODO: (IMPRV) only perform file related actions if file handler is
 - packman/logger.py:61:    #  TODO: (IMPRV) defined.
-- packman/common.py:88:    #  TODO: (IMPRV) handle multiple files differently
-- packman/python.py:61:    #  TODO: (FEAT) support virtualenv --relocate OR
-- packman/python.py:62:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/apt.py:41:    #  TODO: (TEST) add an is-package-installed check. if it is
-- packman/apt.py:42:    #  TODO: (TEST) run apt-get install --reinstall instead of apt-get
-- packman/apt.py:43:    #  TODO: (TEST) install.
-- packman/apt.py:44:    #  TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-- packman/apt.py:45:    #  TODO: (IMPRV) for downloading requirements
-- packman/tests/test_packman.py:292:    #  TODO: (TEST) add wget archives dir test
-- packman/tests/test_packman.py:557:    #  TODO: (TEST) add apt handler tests
-- packman/tests/test_packman.py:558:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
-- packman/ruby.py:16:    #  TODO: (TEST) add support for ruby in different environments
+- packman/python.py:82:    #  TODO: (FEAT) support virtualenv --relocate OR
+- packman/python.py:83:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/apt.py:45:    #  TODO: (TEST) add an is-package-installed check. if it is
+- packman/apt.py:46:    #  TODO: (TEST) run apt-get install --reinstall instead of apt-get
+- packman/apt.py:47:    #  TODO: (TEST) install.
+- packman/apt.py:48:    #  TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+- packman/apt.py:49:    #  TODO: (IMPRV) for downloading requirements
+- packman/tests/test_packman.py:540:    #  TODO: (TEST) add apt handler tests
+- packman/tests/test_packman.py:541:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
+- packman/ruby.py:20:    #  TODO: (TEST) add support for ruby in different environments
 - packman/packman.py:17:    #  TODO: (FEAT) add http://megastep.org/makeself/ support
 - packman/packman.py:18:    #  TODO: (FEAT) add http://semver.org/ support
 - packman/packman.py:19:    #  TODO: (FEAT) add support to download and run from github repos so that "components" repos can be created  # NOQA
-- packman/packman.py:207:    #  TODO: allow sending parameters to the overriding methods
-- packman/packman.py:219:    #  TODO: check for bad action
-- packman/packman.py:299:    #  TODO: (TEST) raise on "command not supported by distro"
-- packman/packman.py:300:    #  TODO: (FEAT) add support for building packages from source
-- packman/packman.py:371:    #  TODO: (CHK) why did I do this?
-- packman/packman.py:406:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
-- packman/packman.py:407:    #  TODO: (STPD) replace it with a normal destination path
-- packman/yum.py:41:    #  TODO: (TEST) run yum reinstall instead of yum install.
-- packman/yum.py:43:    #  TODO: (FIX) yum download exits with an error even if the download
-- packman/yum.py:44:    #  TODO: (FIX) succeeded due to a non-zero error message.
-- packman/yum.py:45:    #  TODO: (FEAT) add yum enable-repo option
-- packman/yum.py:46:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
-- packman/yum.py:47:    #  TODO: (IMPRV) can be used to download deps.
-- packman/yum.py:48:    #  TODO: (IMPRV) test to see if it works.
-- packman/utils.py:152:    #  TODO: (IMPRV) handle multiple files differently
-- vagrant/provision.sh:19:    #  TODO: add virtualenv to provisioning process
-- vagrant/provision.sh:22:    #  TODO: add bash completion support using docopt-completion
-- virtualenv-1.11.6-py2.7.egg/virtualenv.py:2340:    # # TODO:
+- packman/packman.py:188:    #  TODO: allow sending parameters to the overriding methods
+- packman/packman.py:196:    #  TODO: check for bad action
+- packman/packman.py:255:    #  TODO: (TEST) raise on "command not supported by distro"
+- packman/packman.py:256:    #  TODO: (FEAT) add support for building packages from source
+- packman/packman.py:435:    #  TODO: fail on Windows
+- packman/yum.py:40:    #  TODO: (TEST) run yum reinstall instead of yum install.
+- packman/yum.py:42:    #  TODO: (FIX) yum download exits with an error even if the download
+- packman/yum.py:43:    #  TODO: (FIX) succeeded due to a non-zero error message.
+- packman/yum.py:44:    #  TODO: (FEAT) add yum enable-repo option
+- packman/yum.py:45:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+- packman/yum.py:46:    #  TODO: (IMPRV) can be used to download deps.
+- packman/yum.py:47:    #  TODO: (IMPRV) test to see if it works.

@@ -1,24 +1,87 @@
-[33mbf79d76[m[33m ([1;36mHEAD[m[33m, [1;32mpkm-overhaul[m[33m)[m more doc...
+[33mc4bc05b[m[33m ([1;36mHEAD[m[33m, [1;31morigin/pkm-overhaul[m[33m, [1;32mpkm-overhaul[m[33m)[m fixing tests
+[33m2781c46[m py26 fixes
+[33m13b128e[m attemping to install fpm for tests
+[33m795ebbb[m updated version to 0.5.0
+[33meb475ff[m redoing examples
+[33m6074fd9[m fixed tests
+[33mf39895f[m moved ppa-only-on-debian verification to main
+[33m5142f34[m attempting to use packman without fabric and __import__ instead of importlib
+[33m87ee05c[m still attempting to fix fpm
+[33m3103809[m still attempting to fix fpm
+[33m1f5a260[m still attempting to fix fpm
+[33mc856843[m still attempting to fix fpm
+[33m350fa4a[m fixed fpm
+[33m39515bb[m fixed bad flag definition in fpm
+[33mb6d7b33[m fixed overriding methods importing
+[33mfc68202[m err!
+[33m86ccd1e[m cap
+[33m33a002f[m removed fabric from ruby handler
+[33ma76915f[m removed fabric from yum. untested
+[33m7ece57d[m redundant script
+[33m9ef3b41[m um... too much stuff
+[33m3c87d98[m fixing templater tests
+[33m9373e84[m moved distro stuff to utils and fixed more tests
+[33mab7362e[m finalized lots of tests
+[33mf0974fd[m extended coverage report in tox
+[33m1bcf885[m added .coveragerc file
+[33m95a42a4[m starting to fix tests
+[33m47a2cb1[m some cleanup and now handling gzip output correctly
+[33mc7d3369[m adding virtualenv creation and gzip handling
+[33m79526f8[m started adding package dict validation
+[33m2d451fa[m retries decorator now works, need to use
+[33m3c584fe[m first attempt at adding retries to sh
+[33maf5206f[m removed fabric dependency from main packman file
+[33m4994386[m removing more fabric, adding more sh
+[33me90ed6b[m some logging optimizations and more attempts to replace fabric with sh
+[33mefacbdb[m os.path.join dude!
+[33m05a72af[m fixed multiple imports of packages file, replaced fabric with sh in file downloader and python handler
+[33m659796c[m now using sh in pkm
+[33mf9ba111[m optimizations, optimizations, optimizations (oh, and began to remove fabric
+[33mc431194[m lots of cleanup and code optimization
+[33m78fa376[m more cleanup
+[33m6226cbf[m removed most of the default sudo executions and cleaned up lots of code
+[33mac1d491[m utils cleanup. not tested yet
+[33mb2766db[m removed unnecessary common file
+[33m7ae9af1[m merged master, mainly
+[33m70cb52e[m Documentation optimizations and some other minor stuff
+[33m6c4fc61[m some output cleanup and now handling bootstrap scripts correctly
+[33mda723d5[m now defaulting to local directory when package_path is not supplied
+[33m5b97b91[m some fixes and optimizations
+[33m60a9613[m fixed unnecessary binary files downloaded when downloading from apt
+[33m6eda1ce[m opts?
+[33mb3845ac[m MOAR optimizations
+[33mea90302[m some more optimization
+[33m334b205[m cleaned up get method
+[33mef43960[m optimizations
+[33ma725ddd[m now will only add repo to local repo list if it wasn't added before
+[33m23de1b6[m now checking if the sources directory is empty before packaging
+[33m8e569bc[m converted config to yaml, mainly
+[33ma9245b1[m[33m ([1;33mtag: 3.2m5[m[33m, [1;33mtag: 3.2m4[m[33m, [1;31morigin/master[m[33m, [1;31morigin/HEAD[m[33m, [1;32mmaster[m[33m)[m flake8
+[33mee8a0eb[m[33m ([1;33mtag: 3.2m3[m[33m)[m Merge pull request #4 from cloudify-cosmo/py26-fix
+[33m067cbe2[m fix py26 test
+[33m017ca82[m hardcode coverage version + move py26 into tox
+[33m9ec131e[m fixing tests
+[33mbf79d76[m more doc...
 [33mb5528d2[m lots and lots of code optimizations
 [33mdb7506f[m minor shit
-[33mbed528f[m[33m ([1;31morigin/pkm-overhaul[m[33m)[m some documentation fixes. moved fpm handler
+[33mbed528f[m some documentation fixes. moved fpm handler
 [33m10357c7[m separated handlers, removed unnecessary code, lots of naming optimizations
 [33mbdc6518[m moved common class to common handler file
 [33m2433aa9[m moved some basic functions to common
-[33m5380022[m[33m ([1;33mtag: 3.1rc1[m[33m, [1;33mtag: 3.1m5[m[33m, [1;33mtag: 3.1m4[m[33m, [1;31morigin/master[m[33m, [1;31morigin/3.1m4-build[m[33m, [1;32mmaster[m[33m)[m Merge pull request #3 from cloudify-cosmo/CFY-1012-remove-dependency-links
+[33m5380022[m[33m ([1;33mtag: 3.2m2[m[33m, [1;33mtag: 3.2m1[m[33m, [1;33mtag: 3.1rc2[m[33m, [1;33mtag: 3.1rc1[m[33m, [1;33mtag: 3.1m5[m[33m, [1;33mtag: 3.1m4[m[33m, [1;33mtag: 3.1[m[33m)[m Merge pull request #3 from cloudify-cosmo/CFY-1012-remove-dependency-links
 [33m9ab0230[m CFY-1012 remove dependency links
-[33m4050978[m[33m ([1;33mtag: 3.1m3[m[33m, [1;31morigin/3.1m3-build[m[33m)[m empty line to trigger travis build
+[33m4050978[m[33m ([1;33mtag: 3.1m3[m[33m)[m empty line to trigger travis build
 [33m70e02b2[m Merge pull request #2 from cloudify-cosmo/CFY-1277-adjust-packman-to-work-with-py26
-[33m90b88ef[m[33m ([1;31morigin/CFY-1277-adjust-packman-to-work-with-py26[m[33m)[m flake8 fix
+[33m90b88ef[m flake8 fix
 [33m78b647c[m more flake8
 [33m3f089c9[m flake8 fixes
 [33md077ede[m oops.. wtf?
 [33mdb9c949[m made some changes. .ready to travis
 [33mefc24b9[m added local six and dictconfig for cross python support
-[33md082895[m[33m ([1;33mtag: 1.1m3[m[33m, [1;33mtag: 1.1m2[m[33m, [1;33mtag: 1.1m1[m[33m, [1;33mtag: 1.0m2[m[33m, [1;33mtag: 1.0m1[m[33m, [1;31morigin/1.1m2-build[m[33m)[m Update .gitignore
+[33md082895[m[33m ([1;33mtag: 1.1m3[m[33m, [1;33mtag: 1.1m2[m[33m, [1;33mtag: 1.1m1[m[33m, [1;33mtag: 1.0m2[m[33m, [1;33mtag: 1.0m1[m[33m)[m Update .gitignore
 [33mad536b7[m Delete qb-scm.xml
 [33m3d69825[m[33m ([1;33mtag: 1.0[m[33m)[m merging develop branch by the builder - release 3.0
-[33ma239cd2[m[33m ([1;33mtag: 1.0rc1[m[33m, [1;33mtag: 1.0-rc1[m[33m, [1;31morigin/develop[m[33m, [1;32mdevelop[m[33m)[m fixed alternative methods uppercase names
+[33ma239cd2[m[33m ([1;33mtag: 1.0rc1[m[33m, [1;33mtag: 1.0-rc1[m[33m)[m fixed alternative methods uppercase names
 [33m1628187[m some gitignore changes
 [33mbc5c9fd[m dev-reqs
 [33m58b9678[m flake8 fixes

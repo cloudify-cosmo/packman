@@ -9,9 +9,9 @@ packman
 
 |PypI|
 
-packman creates packages.
+``packman`` creates packages.
 
-You can write a ``components file`` containing your packages'
+You can write a ``packages file`` containing your packages'
 configuration and packman will retrieve the resources and create the
 packages accordingly.
 
@@ -46,18 +46,18 @@ before installing packman
 Usage Examples
 ~~~~~~~~~~~~~~
 
-see `Components
+see `Packages
 Configuration <http://packman.readthedocs.org/en/latest/component_config.html>`__
-to configure your ``components file``
+to configure your ``packages file``
 
 .. code:: shell
 
-     # `pkm get` retrieves component sources
-     pkm get --components my_component --components_file /my_components_file.py
+     # `pkm get` retrieves package sources
+     pkm get --packages my_package --packages_file /my_packages_file.py
      # `pkm pack` packages sources, scripts and configs.
-     pkm pack -c my_component,my_other_component
+     pkm pack -c my_package,my_other_package
      # `pkm make` ... does both one after the other
-     pkm make -x excluded_component
+     pkm make -x excluded_package,excluded_package2
 
 Additional Information
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -74,10 +74,10 @@ Vagrant
 
 A vagrantfile is provided to load machines:
 
--  a packman host (which, by default, is ready to package components)
+-  a packman host (which, by default, is ready to package packages)
 -  a tester host (which, by default, is a clean machine to test the
    package installation on)
--  CentOS and other distribs are being added...
+-  REHL based distros are partially supported...
 
 Automated Vagrant Testing Environment
 '''''''''''''''''''''''''''''''''''''
