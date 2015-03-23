@@ -478,21 +478,30 @@ class TestFpmString(testtools.TestCase, fpm.Handler):
             package['destination_package_types'][0],
             package['sources_path'])
         fpm_command_string = packager._build_cmd_string(**fpm_params)
-        self.assertIn('fpm -s {0} -t {1} -n {2} '
-                      '-v {3} --after-install {4}'
-                      ' -d {5} -d {6} -f {7}'.format(
-                          package['source_package_type'],
-                          # we cut the string since the string builder
-                          # adjusts tar.gz types to tar for fpm.
-                          package['destination_package_types'][0][0:-3],
-                          package['name'],
-                          package['version'],
-                          os.path.join(
-                              os.getcwd(), package['bootstrap_script']),
-                          package['depends'][0],
-                          package['depends'][1],
-                          package['sources_path']),
-                      str(fpm_command_string))
+        self.assertIn('-s {0}'.format(package['source_package_type']), str(fpm_command_string))  # NOQA
+        self.assertIn('-t {0}'.format(package['destination_package_types'][0][0:-3]), str(fpm_command_string))  # NOQA
+        self.assertIn('-n {0}'.format(package['name']), str(fpm_command_string))  # NOQA
+        self.assertIn('-v {0}'.format(package['version']), str(fpm_command_string))  # NOQA
+        self.assertIn('--after-install {0}'.format(os.path.join(os.getcwd(), package['bootstrap_script'])), str(fpm_command_string))  # NOQA
+        self.assertIn('-d {0}'.format(package['depends'][0]), str(fpm_command_string))  # NOQA
+        self.assertIn('-d {0}'.format(package['depends'][1]), str(fpm_command_string))  # NOQA
+        self.assertIn('-f', str(fpm_command_string))
+        self.assertIn(package['sources_path'], str(fpm_command_string))
+        # self.assertIn('fpm -s {0} -t {1} -n {2} '
+        #               '-v {3} --after-install {4}'
+        #               ' -d {5} -d {6} -f {7}'.format(
+        #                   package['source_package_type'],
+        #                   # we cut the string since the string builder
+        #                   # adjusts tar.gz types to tar for fpm.
+        #                   package['destination_package_types'][0][0:-3],
+        #                   package['name'],
+        #                   package['version'],
+        #                   os.path.join(
+        #                       os.getcwd(), package['bootstrap_script']),
+        #                   package['depends'][0],
+        #                   package['depends'][1],
+        #                   package['sources_path']),
+        #               str(fpm_command_string))
 
     # @dir
     # def test_pack(self):
