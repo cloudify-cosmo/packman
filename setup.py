@@ -78,7 +78,6 @@ setup(
     cmdclass={'test': Tox},
     classifiers=[
         'Programming Language :: Python',
-        'Development Status :: 2 - Beta',
         'Natural Language :: English',
         'Environment :: Console',
         'Intended Audience :: Developers',
