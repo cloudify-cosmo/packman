@@ -386,7 +386,7 @@ def pack(package):
                 tar_file = '{0}.tar'.format(name)
                 targz_file = tar_file + '.gz'
                 if os.path.isfile(targz_file):
-                    if c.get(defs.PARAM_OVERWRITE_OUTPUT):
+                    if fpm_params['force']:
                         u.rm(targz_file)
                     else:
                         lgr.error('{0} already exists and overwrite '
