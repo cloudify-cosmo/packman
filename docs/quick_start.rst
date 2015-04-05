@@ -6,7 +6,7 @@ Quick Start
 - install `VirtualBox <https://www.virtualbox.org/wiki/Downloads>`_.
 - clone the github repo::
 
-    git clone git@github.com:cloudify-cosmo/cloudify-packager.git
+    git clone git@github.com:cloudify-cosmo/packman.git
 
 - go to the vagrant directory
 
@@ -14,10 +14,10 @@ Quick Start
 
     vagrant up packman
     vagrant ssh packman
-    cd ~/examples
+    cd examples
     sudo su
     pkm make
 
 - review the retrieved resources in /sources
 - review the created deb files in /packages
-- start playing around with ~/examples/packages.py
+- start playing around with ~/examples/packages.yaml

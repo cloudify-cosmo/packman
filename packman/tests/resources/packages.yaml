@@ -1,0 +1,54 @@
+variables:
+    x: y
+
+packages:
+    mock_package:
+        name: test_package
+        version: 3.1
+        sources_path: sources
+        depends:
+            - make
+            - g++
+        # prereqs:
+        #     - curl
+        # source_ppas:
+        #     - ppa:chris-lea/node.js
+        # source_repos:
+        #     - deb http://nginx.org/packages/mainline/ubuntu/ precise nginx
+        #     - deb-src http://nginx.org/packages/mainline/ubuntu/ precise nginx
+        # source_keys:
+        #     - http://nginx.org/keys/nginx_signing.key
+        # source_urls:
+        #     - https://github.com/jaraco/path.py/archive/master.zip
+        # requires:
+        #     - make
+        virtualenv:
+            path: venv
+            modules:
+                - pyyaml
+        # python_modules:
+              # - nonexistentmodule
+            # - cloudify
+            # - pyyaml
+        # ruby_gems:
+        #     - gosu
+        package_path: tests
+        source_package_type: dir
+        destination_package_types:
+            - tar.gz
+        keep_sources: true
+        bootstrap_script: packman/tests/templates/mock_template.j2
+        bootstrap_template:
+        test_template_parameter: test_template_output
+        config_templates:
+            template_file:
+                template: packman/tests/templates/mock_template.j2
+                output_file: mock_template.output
+                config_dir: config
+            template_dir:
+                templates: packman/tests/templates
+                config_dir: config
+            config_dir:
+                files: packman/tests/templates
+                config_dir: config
+            params: param

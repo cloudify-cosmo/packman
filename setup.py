@@ -1,4 +1,3 @@
-
 ########
 # Copyright (c) 2014 GigaSpaces Technologies Ltd. All rights reserved
 #
@@ -16,7 +15,7 @@
 
 from setuptools import setup
 # from setuptools import find_packages
-from setuptools.command.test import test as TestCommand
+from setuptools.command.test import test as testcommand
 import sys
 import re
 import os
@@ -40,9 +39,9 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-class Tox(TestCommand):
+class Tox(testcommand):
     def finalize_options(self):
-        TestCommand.finalize_options(self)
+        testcommand.finalize_options(self)
         self.test_args = []
         self.test_suite = True
 
@@ -56,11 +55,9 @@ setup(
     name='packman',
     version=find_version('packman', '__init__.py'),
     url='https://github.com/cloudify-cosmo/packman',
-    download_url='https://github.com/cloudify-cosmo/packman/tarball/0.1',
     author='nir0s',
     author_email='nir36g@gmail.com',
     license='LICENSE',
-    platforms='Ubuntu',
     description='Package Generator',
     long_description=read('README.rst'),
     packages=['packman'],
@@ -70,19 +67,17 @@ setup(
         ]
     },
     install_requires=[
-        "fabric==1.8.3",
         "jinja2==2.7.2",
         "docopt==.0.6.1",
-        # "pika==0.9.13",
-        # "infi.docopt_completion==0.2.1",
-        # "sphinx-rtd-theme",
+        "pyyaml==3.10",
+        "sh==1.11",
+        "requests==2.5.1",
     ],
     tests_require=['nose', 'tox'],
     test_suite='packman.test.test_packman',
     cmdclass={'test': Tox},
     classifiers=[
         'Programming Language :: Python',
-        'Development Status :: 3 - Alpha',
         'Natural Language :: English',
         'Environment :: Console',
         'Intended Audience :: Developers',

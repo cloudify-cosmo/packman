@@ -1,34 +1,28 @@
-- packman/tests/test_packman.py:297:    #  TODO: (TEST) add wget archives dir test
-- packman/tests/test_packman.py:563:    #  TODO: (TEST) add apt handler tests
-- packman/tests/test_packman.py:564:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
+- packman/fpm.py:23:    #  TODO: add verbose mode to fpm runs
+- packman/logger.py:60:    #  TODO: (IMPRV) only perform file related actions if file handler is
+- packman/logger.py:61:    #  TODO: (IMPRV) defined.
+- packman/python.py:82:    #  TODO: (FEAT) support virtualenv --relocate OR
+- packman/python.py:83:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
+- packman/apt.py:45:    #  TODO: (TEST) add an is-package-installed check. if it is
+- packman/apt.py:46:    #  TODO: (TEST) run apt-get install --reinstall instead of apt-get
+- packman/apt.py:47:    #  TODO: (TEST) install.
+- packman/apt.py:48:    #  TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
+- packman/apt.py:49:    #  TODO: (IMPRV) for downloading requirements
+- packman/tests/test_packman.py:540:    #  TODO: (TEST) add apt handler tests
+- packman/tests/test_packman.py:541:    #  TODO: (TEST) add yum handler tests (hrm.. how to?)
+- packman/ruby.py:20:    #  TODO: (TEST) add support for ruby in different environments
 - packman/packman.py:17:    #  TODO: (FEAT) add http://megastep.org/makeself/ support
 - packman/packman.py:18:    #  TODO: (FEAT) add http://semver.org/ support
-- packman/packman.py:19:    #  TODO: (READ) review https://speakerdeck.com/schisamo/eat-the-whole-bowl-building-a-full-stack-installer-with-omnibus  # NOQA
-- packman/packman.py:20:    #  TODO: (IMPRV) redo RepoHandler implementation with generic one. should pull all repo handling commands from config  # NOQA
-- packman/packman.py:21:    #  TODO: (FEAT) add support to download and run from github repos so that "components" repos can be created  # NOQA
-- packman/packman.py:61:    #  TODO: (IMPRV) only perform file related actions if file handler is
-- packman/packman.py:62:    #  TODO: (IMPRV) defined.
-- packman/packman.py:240:    #  TODO: the list is written with this in mind. maybe we can remove?
-- packman/packman.py:246:    #  TODO: enable sending parameters to the overriding methods
-- packman/packman.py:263:    #  TODO: check for bad action
-- packman/packman.py:348:    #  TODO: (TEST) raise on "command not supported by distro"
-- packman/packman.py:349:    #  TODO: (FEAT) add support for building packages from source
-- packman/packman.py:476:    #  TODO: (STPD) JEEZ... this archives thing is dumb...
-- packman/packman.py:477:    #  TODO: (STPD) replace it with a normal destination path
-- packman/packman.py:681:    #  TODO: (IMPRV) handle multiple files differently
-- packman/packman.py:839:    #  TODO: (FEAT) support virtualenv --relocate OR
-- packman/packman.py:840:    #  TODO: (FEAT) support whack http://mike.zwobble.org/2013/09/relocatable-python-virtualenvs-using-whack/ # NOQA
-- packman/packman.py:871:    #  TODO: (TEST) add support for ruby in different environments
-- packman/packman.py:917:    #  TODO: (TEST) run yum reinstall instead of yum install.
-- packman/packman.py:919:    #  TODO: (FIX) yum download exits with an error even if the download
-- packman/packman.py:920:    #  TODO: (FIX) succeeded due to a non-zero error message.
-- packman/packman.py:921:    #  TODO: (FEAT) add yum enable-repo option
-- packman/packman.py:922:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
-- packman/packman.py:923:    #  TODO: (IMPRV) can be used to download deps. test to see if it works.
-- packman/packman.py:1025:    #  TODO: (TEST) add an is-package-installed check. if it is
-- packman/packman.py:1026:    #  TODO: (TEST) run apt-get install --reinstall instead of apt-get
-- packman/packman.py:1027:    #  TODO: (TEST) install.
-- packman/packman.py:1028:    #  TODO: (IMPRV) try http://askubuntu.com/questions/219828/getting-deb-package-dependencies-for-an-offline-ubuntu-computer-through-windows  # NOQA
-- packman/packman.py:1029:    #  TODO: (IMPRV) for downloading requirements
-- vagrant/provision.sh:19:    #  TODO: add virtualenv to provisioning process
-- vagrant/provision.sh:22:    #  TODO: add bash completion support using docopt-completion
+- packman/packman.py:19:    #  TODO: (FEAT) add support to download and run from github repos so that "components" repos can be created  # NOQA
+- packman/packman.py:188:    #  TODO: allow sending parameters to the overriding methods
+- packman/packman.py:196:    #  TODO: check for bad action
+- packman/packman.py:255:    #  TODO: (TEST) raise on "command not supported by distro"
+- packman/packman.py:256:    #  TODO: (FEAT) add support for building packages from source
+- packman/packman.py:435:    #  TODO: fail on Windows
+- packman/yum.py:40:    #  TODO: (TEST) run yum reinstall instead of yum install.
+- packman/yum.py:42:    #  TODO: (FIX) yum download exits with an error even if the download
+- packman/yum.py:43:    #  TODO: (FIX) succeeded due to a non-zero error message.
+- packman/yum.py:44:    #  TODO: (FEAT) add yum enable-repo option
+- packman/yum.py:45:    #  TODO: (IMPRV) $(repoquery --requires --recursive --resolve pkg)
+- packman/yum.py:46:    #  TODO: (IMPRV) can be used to download deps.
+- packman/yum.py:47:    #  TODO: (IMPRV) test to see if it works.

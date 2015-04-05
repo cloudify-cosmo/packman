@@ -9,9 +9,9 @@ packman
 
 |PypI|
 
-packman creates packages.
+``packman`` creates packages.
 
-You can write a ``components file`` containing your packages'
+You can write a ``packages file`` containing your packages'
 configuration and packman will retrieve the resources and create the
 packages accordingly.
 
@@ -41,23 +41,23 @@ before installing packman
 
      pip install packman
      # or, for dev:
-     pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/develop.tar.gz
+     pip install https://github.com/cloudify-cosmo/cloudify-packager/archive/master.tar.gz
 
 Usage Examples
 ~~~~~~~~~~~~~~
 
-see `Components
+see `Packages
 Configuration <http://packman.readthedocs.org/en/latest/component_config.html>`__
-to configure your ``components file``
+to configure your ``packages file``
 
 .. code:: shell
 
-     # `pkm get` retrieves component sources
-     pkm get --components my_component --components_file /my_components_file.py
+     # `pkm get` retrieves package sources
+     pkm get --packages my_package --packages_file /my_packages_file.yaml
      # `pkm pack` packages sources, scripts and configs.
-     pkm pack -c my_component,my_other_component
+     pkm pack -c my_package,my_other_package
      # `pkm make` ... does both one after the other
-     pkm make -x excluded_component
+     pkm make -x excluded_package,excluded_package2
 
 Additional Information
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -69,23 +69,7 @@ Additional Information
    Handling <http://packman.readthedocs.org/en/latest/template_handling.html>`__
 -  `packman API <http://packman.readthedocs.org/en/latest/api.html>`__
 
-Vagrant
-~~~~~~~
-
-A vagrantfile is provided to load machines:
-
--  a packman host (which, by default, is ready to package components)
--  a tester host (which, by default, is a clean machine to test the
-   package installation on)
--  CentOS and other distribs are being added...
-
-Automated Vagrant Testing Environment
-'''''''''''''''''''''''''''''''''''''
-
-In future versions, an automated process of retrieval, packaging and
-installation will be implemented to check the entire process.
-
-.. |Build Status| image:: https://travis-ci.org/cloudify-cosmo/packman.svg?branch=develop
+.. |Build Status| image:: https://travis-ci.org/cloudify-cosmo/packman.svg?branch=master
    :target: https://travis-ci.org/cloudify-cosmo/packman
 .. |Gitter chat| image:: https://badges.gitter.im/cloudify-cosmo/packman.png
    :target: https://gitter.im/cloudify-cosmo/packman
