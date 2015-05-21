@@ -14,7 +14,7 @@ import platform
 
 import codes
 
-SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
+SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos', 'redhat')
 DEFAULT_BASE_LOGGING_LEVEL = logging.INFO
 DEFAULT_VERBOSE_LOGGING_LEVEL = logging.DEBUG
 

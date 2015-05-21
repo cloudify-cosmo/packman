@@ -38,9 +38,9 @@ import os
 import yaml
 import sys
 
-SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos')
+SUPPORTED_DISTROS = ('Ubuntu', 'debian', 'centos', 'redhat')
 DEFAULT_PACKAGES_FILE = 'packages.yaml'
-PACKAGE_TYPES = {"centos": "rpm", "debian": "deb"}
+PACKAGE_TYPES = {"centos": "rpm", "debian": "deb", "redhat": "rpm"}
 SUPPORTED_PACKAGE_TYPES = ['deb', 'rpm', 'tar', 'zip', 'tar.gz']
 
 
@@ -433,5 +433,5 @@ if __name__ == '__main__':
     main()
 
 # TODO: fail on Windows
-CENTOS = utils.get_distro() in ('centos')
+CENTOS = utils.get_distro() in ('centos', 'redhat')
 DEBIAN = utils.get_distro() in ('Ubuntu', 'debian')
