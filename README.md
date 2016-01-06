@@ -1,6 +1,8 @@
 packman
 =======
 
+* Master [![Circle CI](https://circleci.com/gh/cloudify-cosmo/packman/tree/master.svg?style=shield)](https://circleci.com/gh/cloudify-cosmo/packman/tree/master)
+
 [![Build Status](https://travis-ci.org/cloudify-cosmo/packman.svg?branch=master)](https://travis-ci.org/cloudify-cosmo/packman)
 
 [![Gitter chat](https://badges.gitter.im/cloudify-cosmo/packman.png)](https://gitter.im/cloudify-cosmo/packman)
